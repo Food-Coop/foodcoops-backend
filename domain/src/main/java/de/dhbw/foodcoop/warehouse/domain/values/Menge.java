@@ -5,11 +5,11 @@ import org.apache.commons.lang3.Validate;
 import java.util.Objects;
 
 public final class Menge {
-    private final String einheit;
+    private final Einheit einheit;
     private final Integer menge;
 
-    public Menge(String einheit, Integer menge) {
-        Validate.notBlank(einheit);
+    public Menge(Einheit einheit, Integer menge) {
+        Validate.notNull(einheit);
         Validate.inclusiveBetween(0, Integer.MAX_VALUE, (Comparable<Integer>) menge);
         this.einheit = einheit;
         this.menge = menge;
