@@ -4,6 +4,6 @@ import de.dhbw.foodcoop.warehouse.domain.entities.Lagerbestand;
 
 import java.util.List;
 
-public interface LagerbestandAnsicht {
+public interface LagerbestandUIService {
     List<Lagerbestand> betrachteAlleLagerbestand();
 }
