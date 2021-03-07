@@ -2,7 +2,7 @@ package de.dhbw.foodcoop.warehouse.domain.repositories;
 
 import de.dhbw.foodcoop.warehouse.domain.entities.Lagerbestand;
 import de.dhbw.foodcoop.warehouse.domain.values.Menge;
-import de.dhbw.foodcoop.warehouse.domain.values.Produkt;
+import de.dhbw.foodcoop.warehouse.domain.entities.Produkt;
 
 import java.util.List;
 

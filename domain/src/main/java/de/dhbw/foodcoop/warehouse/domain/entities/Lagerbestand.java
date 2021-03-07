@@ -1,7 +1,6 @@
 package de.dhbw.foodcoop.warehouse.domain.entities;
 
 import de.dhbw.foodcoop.warehouse.domain.values.Menge;
-import de.dhbw.foodcoop.warehouse.domain.values.Produkt;
 import org.apache.commons.lang3.Validate;
 
 import java.util.UUID;
