@@ -15,6 +15,14 @@ public final class Menge {
         this.menge = menge;
     }
 
+    public Einheit getEinheit() {
+        return einheit;
+    }
+
+    public Integer getMenge() {
+        return menge;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
