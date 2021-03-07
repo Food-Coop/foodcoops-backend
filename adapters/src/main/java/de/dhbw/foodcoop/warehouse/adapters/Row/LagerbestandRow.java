@@ -1,14 +1,13 @@
 package de.dhbw.foodcoop.warehouse.adapters.Row;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
 
 @Entity
 public class LagerbestandRow {
     @Id
     private final String id;
-    @OneToOne
-    @JoinColumn(name = "produkt_id")
-    private final ProduktRow produktRow;
     @Column
     private final Integer istLagerbestand;
     @Column
@@ -17,9 +16,8 @@ public class LagerbestandRow {
     private final String einheit;
 
 
-    public LagerbestandRow(String id, ProduktRow produktRow, Integer istLagerbestand, Integer sollLagerbestand, String einheit) {
+    public LagerbestandRow(String id, Integer istLagerbestand, Integer sollLagerbestand, String einheit) {
         this.id = id;
-        this.produktRow = produktRow;
         this.istLagerbestand = istLagerbestand;
         this.sollLagerbestand = sollLagerbestand;
         this.einheit = einheit;
@@ -27,10 +25,6 @@ public class LagerbestandRow {
 
     public String getId() {
         return id;
-    }
-
-    public ProduktRow getProduktRow() {
-        return produktRow;
     }
 
     public Integer getIstLagerbestand() {

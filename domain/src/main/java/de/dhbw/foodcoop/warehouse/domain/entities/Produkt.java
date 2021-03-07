@@ -13,10 +13,14 @@ public class Produkt {
     private final Lagerbestand lagerbestand;
 
     public Produkt(String name, Kategorie kategorie, Lagerbestand lagerbestand) {
+        this(UUID.randomUUID().toString(), name, kategorie, lagerbestand);
+    }
+
+    public Produkt(String id, String name, Kategorie kategorie, Lagerbestand lagerbestand) {
         Validate.notBlank(name);
         Validate.notNull(kategorie);
         Validate.notNull(lagerbestand);
-        this.id = UUID.randomUUID().toString();
+        this.id = id;
         this.name = name;
         this.kategorie = kategorie;
         this.lagerbestand = lagerbestand;

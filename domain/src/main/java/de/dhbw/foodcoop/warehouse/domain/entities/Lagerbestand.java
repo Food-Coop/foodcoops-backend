@@ -7,26 +7,24 @@ import java.util.UUID;
 
 public class Lagerbestand {
     private final String id;
-    private final Produkt produkt;
     private final Menge istLagerbestand;
     private final Menge sollLagerbestand;
 
-    public Lagerbestand(Produkt produkt, Menge istLagerbestand, Menge sollLagerbestand) {
-        Validate.notNull(produkt);
+    public Lagerbestand(String id, Menge istLagerbestand, Menge sollLagerbestand) {
+        Validate.notNull(id);
         Validate.notNull(istLagerbestand);
         Validate.notNull(sollLagerbestand);
-        this.id = UUID.randomUUID().toString();
-        this.produkt = produkt;
+        this.id = id;
         this.istLagerbestand = istLagerbestand;
         this.sollLagerbestand = sollLagerbestand;
     }
 
-    public String getId() {
-        return id;
+    public Lagerbestand(Menge istLagerbestand, Menge sollLagerbestand) {
+        this(UUID.randomUUID().toString(), istLagerbestand, sollLagerbestand);
     }
 
-    public Produkt getProdukt() {
-        return produkt;
+    public String getId() {
+        return id;
     }
 
     public Menge getIstLagerbestand() {

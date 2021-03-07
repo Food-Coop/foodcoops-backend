@@ -1,7 +1,5 @@
 package de.dhbw.foodcoop.warehouse.adapters.Resource;
 
-import de.dhbw.foodcoop.warehouse.adapters.Row.ProduktRow;
-import de.dhbw.foodcoop.warehouse.domain.entities.Lagerbestand;
 import de.dhbw.foodcoop.warehouse.domain.entities.Produkt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -10,7 +8,7 @@ import java.util.function.Function;
 
 @Component
 public class ProduktToProduktResourceMapper implements Function<Produkt, ProduktResource> {
-    private LagerbestandToLagerbestandResourceMapper lagerbestandToLagerbestandResourceMapper;
+    private final LagerbestandToLagerbestandResourceMapper lagerbestandToLagerbestandResourceMapper;
 
     @Autowired
     public ProduktToProduktResourceMapper(LagerbestandToLagerbestandResourceMapper lagerbestandToLagerbestandResourceMapper) {
