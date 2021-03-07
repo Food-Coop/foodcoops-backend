@@ -12,4 +12,7 @@ public interface LagerbestandRepository {
     Lagerbestand sollLagerbestandAktualisieren(Produkt produkt, Menge neuerSollLagerbestand);
 
     List<Lagerbestand> abrufenAlleLagerbestand();
+
+    //dummyMethod
+    Lagerbestand saveLagerbestand(Lagerbestand lagerbestand);
 }
