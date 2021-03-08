@@ -1,5 +1,6 @@
-package de.dhbw.foodcoop.warehouse.adapters.Row;
+package de.dhbw.foodcoop.warehouse.adapters.Row.Converter;
 
+import de.dhbw.foodcoop.warehouse.adapters.Row.LagerbestandRow;
 import de.dhbw.foodcoop.warehouse.domain.entities.Lagerbestand;
 import de.dhbw.foodcoop.warehouse.domain.values.Einheit;
 import de.dhbw.foodcoop.warehouse.domain.values.Menge;

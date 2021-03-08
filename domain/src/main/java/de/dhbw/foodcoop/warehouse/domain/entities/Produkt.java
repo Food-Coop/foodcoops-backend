@@ -1,6 +1,5 @@
 package de.dhbw.foodcoop.warehouse.domain.entities;
 
-import de.dhbw.foodcoop.warehouse.domain.values.Kategorie;
 import org.apache.commons.lang3.Validate;
 
 import java.util.Objects;

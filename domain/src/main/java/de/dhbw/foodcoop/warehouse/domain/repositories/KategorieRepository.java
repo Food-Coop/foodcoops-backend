@@ -1,6 +1,6 @@
 package de.dhbw.foodcoop.warehouse.domain.repositories;
 
-import de.dhbw.foodcoop.warehouse.domain.values.Kategorie;
+import de.dhbw.foodcoop.warehouse.domain.entities.Kategorie;
 
 public interface KategorieRepository {
     Kategorie kategorieAnlegen(Kategorie kategorie);

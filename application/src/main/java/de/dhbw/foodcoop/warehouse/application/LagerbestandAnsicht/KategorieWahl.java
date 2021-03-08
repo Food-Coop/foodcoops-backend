@@ -1,6 +1,6 @@
 package de.dhbw.foodcoop.warehouse.application.LagerbestandAnsicht;
 
-import de.dhbw.foodcoop.warehouse.domain.values.Kategorie;
+import de.dhbw.foodcoop.warehouse.domain.entities.Kategorie;
 
 import java.util.List;
 

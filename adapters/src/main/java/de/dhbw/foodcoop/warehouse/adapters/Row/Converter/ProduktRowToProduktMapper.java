@@ -1,7 +1,7 @@
-package de.dhbw.foodcoop.warehouse.adapters.Row;
+package de.dhbw.foodcoop.warehouse.adapters.Row.Converter;
 
+import de.dhbw.foodcoop.warehouse.adapters.Row.ProduktRow;
 import de.dhbw.foodcoop.warehouse.domain.entities.Produkt;
-import de.dhbw.foodcoop.warehouse.domain.values.Kategorie;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -9,10 +9,13 @@ import java.util.function.Function;
 
 @Component
 public class ProduktRowToProduktMapper implements Function<ProduktRow, Produkt> {
+    private final KategorieRowToKategorieMapper kategorieRowToKategorieMapper;
     private final LagerbestandRowToLagerbestandMapper lagerbestandRowToLagerbestandMapper;
 
     @Autowired
-    public ProduktRowToProduktMapper(LagerbestandRowToLagerbestandMapper lagerbestandRowToLagerbestandMapper) {
+    public ProduktRowToProduktMapper(KategorieRowToKategorieMapper kategorieRowToKategorieMapper,
+                                     LagerbestandRowToLagerbestandMapper lagerbestandRowToLagerbestandMapper) {
+        this.kategorieRowToKategorieMapper = kategorieRowToKategorieMapper;
         this.lagerbestandRowToLagerbestandMapper = lagerbestandRowToLagerbestandMapper;
     }
 
@@ -25,7 +28,7 @@ public class ProduktRowToProduktMapper implements Function<ProduktRow, Produkt> 
         return new Produkt(
                 produktRow.getId(),
                 produktRow.getName(),
-                new Kategorie(produktRow.getKategorie()),
+                kategorieRowToKategorieMapper.apply(produktRow.getKategorie()),
                 lagerbestandRowToLagerbestandMapper.apply(produktRow.getLagerbestand())
         );
     }
