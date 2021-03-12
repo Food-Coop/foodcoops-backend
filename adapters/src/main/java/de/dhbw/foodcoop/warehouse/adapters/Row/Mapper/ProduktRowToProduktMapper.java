@@ -1,4 +1,4 @@
-package de.dhbw.foodcoop.warehouse.adapters.Row.Converter;
+package de.dhbw.foodcoop.warehouse.adapters.Row.Mapper;
 
 import de.dhbw.foodcoop.warehouse.adapters.Row.ProduktRow;
 import de.dhbw.foodcoop.warehouse.domain.entities.Kategorie;

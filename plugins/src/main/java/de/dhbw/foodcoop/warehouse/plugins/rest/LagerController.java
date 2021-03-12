@@ -1,9 +1,9 @@
 package de.dhbw.foodcoop.warehouse.plugins.rest;
 
-import de.dhbw.foodcoop.warehouse.adapters.Resource.ProduktResource;
-import de.dhbw.foodcoop.warehouse.adapters.Resource.Mapper.ProduktToProduktResourceMapper;
+import de.dhbw.foodcoop.warehouse.adapters.Resource.KategorieResource;
+import de.dhbw.foodcoop.warehouse.adapters.Resource.Mapper.KategorieToKategorieResourceMapper;
 import de.dhbw.foodcoop.warehouse.application.LagerService.LagerResourceService;
-import de.dhbw.foodcoop.warehouse.domain.entities.Produkt;
+import de.dhbw.foodcoop.warehouse.domain.entities.Kategorie;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -16,17 +16,17 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/lager")
 public class LagerController {
     private final LagerResourceService LagerResourceService;
-    private final ProduktToProduktResourceMapper mapper;
+    private final KategorieToKategorieResourceMapper mapper;
 
     @Autowired
-    public LagerController(LagerResourceService LagerResourceService, ProduktToProduktResourceMapper mapper) {
+    public LagerController(LagerResourceService LagerResourceService, KategorieToKategorieResourceMapper mapper) {
         this.LagerResourceService = LagerResourceService;
         this.mapper = mapper;
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public List<ProduktResource> getAllProdukts() {
-        List<Produkt> produkts = LagerResourceService.getAllProdukts();
-        return produkts.stream().map(mapper).collect(Collectors.toList());
+    public List<KategorieResource> getAllProdukts() {
+        List<Kategorie> kategories = LagerResourceService.getAllKategories();
+        return kategories.stream().map(mapper).collect(Collectors.toList());
     }
 }

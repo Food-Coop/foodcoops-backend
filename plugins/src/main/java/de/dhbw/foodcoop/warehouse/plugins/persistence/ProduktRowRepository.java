@@ -1,7 +1,7 @@
 package de.dhbw.foodcoop.warehouse.plugins.persistence;
 
 import de.dhbw.foodcoop.warehouse.adapters.Row.ProduktRow;
-import de.dhbw.foodcoop.warehouse.adapters.Row.Converter.ProduktRowToProduktMapper;
+import de.dhbw.foodcoop.warehouse.adapters.Row.Mapper.ProduktRowToProduktMapper;
 import de.dhbw.foodcoop.warehouse.domain.entities.Produkt;
 import de.dhbw.foodcoop.warehouse.domain.repositories.ProduktRepository;
 import org.springframework.beans.factory.annotation.Autowired;

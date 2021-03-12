@@ -1,7 +1,7 @@
 package de.dhbw.foodcoop.warehouse.application.LagerService;
 
-import de.dhbw.foodcoop.warehouse.domain.entities.Produkt;
-import de.dhbw.foodcoop.warehouse.domain.repositories.ProduktRepository;
+import de.dhbw.foodcoop.warehouse.domain.entities.Kategorie;
+import de.dhbw.foodcoop.warehouse.domain.repositories.KategorieRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -9,15 +9,14 @@ import java.util.List;
 
 @Service
 public class LagerResourceService {
-    private final ProduktRepository produktRepository;
+    private final KategorieRepository kategorieRepository;
 
     @Autowired
-    public LagerResourceService(ProduktRepository produktRepository) {
-        this.produktRepository = produktRepository;
+    public LagerResourceService(KategorieRepository kategorieRepository) {
+        this.kategorieRepository = kategorieRepository;
     }
 
-
-    public List<Produkt> getAllProdukts() {
-        return produktRepository.alleProdukteAbrufen();
+    public List<Kategorie> getAllKategories() {
+        return kategorieRepository.alleKategorienAbrufen();
     }
 }
