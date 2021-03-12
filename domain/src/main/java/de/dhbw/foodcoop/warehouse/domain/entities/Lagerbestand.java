@@ -21,7 +21,7 @@ public class Lagerbestand {
         this.sollLagerbestand = sollLagerbestand;
     }
 
-    public Lagerbestand(String id, Menge istLagerbestand, Menge sollLagerbestand) {
+    public Lagerbestand(Menge istLagerbestand, Menge sollLagerbestand) {
         this(UUID.randomUUID().toString(), null, istLagerbestand, sollLagerbestand);
     }
 

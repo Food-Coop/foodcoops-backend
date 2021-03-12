@@ -4,6 +4,7 @@ import org.apache.commons.lang3.Validate;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 public final class Kategorie {
     private final String id;
@@ -20,6 +21,10 @@ public final class Kategorie {
         this.name = name;
         this.icon = icon;
         this.produkte = produkte;
+    }
+
+    public Kategorie(String name, String icon, List<Produkt> produkte) {
+        this(UUID.randomUUID().toString(), name, icon, produkte);
     }
 
     public String getId() {

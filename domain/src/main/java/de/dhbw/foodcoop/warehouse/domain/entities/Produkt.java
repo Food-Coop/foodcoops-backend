@@ -22,7 +22,6 @@ public class Produkt {
 
     public Produkt(String name, Kategorie kategorie, Lagerbestand lagerbestand) {
         this(UUID.randomUUID().toString(), name, kategorie, lagerbestand);
-        Validate.notNull(kategorie);
     }
 
     public Produkt(String id, String name, Lagerbestand lagerbestand) {

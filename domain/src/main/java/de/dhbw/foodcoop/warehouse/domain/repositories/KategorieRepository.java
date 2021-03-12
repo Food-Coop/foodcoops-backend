@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface KategorieRepository {
     List<Kategorie> alleKategorienAbrufen();
+
+    Kategorie speichern(Kategorie initKategorieGemuese);
 }

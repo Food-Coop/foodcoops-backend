@@ -1,5 +1,6 @@
 package de.dhbw.foodcoop.warehouse.plugins.persistence;
 
+import de.dhbw.foodcoop.warehouse.adapters.Row.KategorieRow;
 import de.dhbw.foodcoop.warehouse.adapters.Row.Mapper.KategorieRowToKategorieMapper;
 import de.dhbw.foodcoop.warehouse.domain.entities.Kategorie;
 import de.dhbw.foodcoop.warehouse.domain.repositories.KategorieRepository;
@@ -27,5 +28,12 @@ public class KategorieRowRepository implements KategorieRepository {
                 findAll().stream().
                 map(kategorieRowToKategorieMapper)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public Kategorie speichern(Kategorie kategorie) {
+        KategorieRow attempt = kategorieToKategorieRowMapper.apply(kategorie);
+        KategorieRow success = springDataKategorieRowRepository.save(attempt);
+        return kategorieRowToKategorieMapper.apply(success);
     }
 }

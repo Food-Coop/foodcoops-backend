@@ -1,7 +1,6 @@
 package de.dhbw.foodcoop.warehouse.adapters.Row.Mapper;
 
 import de.dhbw.foodcoop.warehouse.adapters.Row.ProduktRow;
-import de.dhbw.foodcoop.warehouse.domain.entities.Kategorie;
 import de.dhbw.foodcoop.warehouse.domain.entities.Lagerbestand;
 import de.dhbw.foodcoop.warehouse.domain.entities.Produkt;
 import org.springframework.beans.factory.annotation.Autowired;

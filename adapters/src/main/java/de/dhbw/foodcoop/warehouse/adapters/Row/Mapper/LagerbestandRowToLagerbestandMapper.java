@@ -21,6 +21,7 @@ public class LagerbestandRowToLagerbestandMapper implements Function<Lagerbestan
     private Lagerbestand map(LagerbestandRow lagerbestandRow) {
         return new Lagerbestand(
                 lagerbestandRow.getId(),
+                null,
                 new Menge(new Einheit(lagerbestandRow.getEinheit()), lagerbestandRow.getIstLagerbestand()),
                 new Menge(new Einheit(lagerbestandRow.getEinheit()), lagerbestandRow.getSollLagerbestand())
         );
