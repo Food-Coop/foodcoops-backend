@@ -11,13 +11,10 @@ import java.util.function.Function;
 
 @Component
 public class ProduktRowToProduktMapper implements Function<ProduktRow, Produkt> {
-    private final KategorieRowToKategorieMapper kategorieRowToKategorieMapper;
     private final LagerbestandRowToLagerbestandMapper lagerbestandRowToLagerbestandMapper;
 
     @Autowired
-    public ProduktRowToProduktMapper(KategorieRowToKategorieMapper kategorieRowToKategorieMapper,
-                                     LagerbestandRowToLagerbestandMapper lagerbestandRowToLagerbestandMapper) {
-        this.kategorieRowToKategorieMapper = kategorieRowToKategorieMapper;
+    public ProduktRowToProduktMapper(LagerbestandRowToLagerbestandMapper lagerbestandRowToLagerbestandMapper) {
         this.lagerbestandRowToLagerbestandMapper = lagerbestandRowToLagerbestandMapper;
     }
 
@@ -27,12 +24,10 @@ public class ProduktRowToProduktMapper implements Function<ProduktRow, Produkt> 
     }
 
     private Produkt map(ProduktRow produktRow) {
-        Kategorie kategorie = kategorieRowToKategorieMapper.apply(produktRow.getKategorie());
         Lagerbestand lagerbestand = lagerbestandRowToLagerbestandMapper.apply(produktRow.getLagerbestand());
         Produkt produkt = new Produkt(
                 produktRow.getId(),
                 produktRow.getName(),
-                kategorie,
                 lagerbestand
         );
         lagerbestand.setProdukt(produkt);

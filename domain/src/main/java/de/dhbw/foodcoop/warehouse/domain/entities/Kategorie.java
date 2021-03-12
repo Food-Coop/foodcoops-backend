@@ -2,20 +2,24 @@ package de.dhbw.foodcoop.warehouse.domain.entities;
 
 import org.apache.commons.lang3.Validate;
 
+import java.util.List;
 import java.util.Objects;
 
 public final class Kategorie {
     private final String id;
     private final String name;
     private final String icon;
+    private final List<Produkt> produkte;
 
-    public Kategorie(String id, String name, String icon) {
+    public Kategorie(String id, String name, String icon, List<Produkt> produkte) {
         Validate.notNull(id);
         Validate.notBlank(name);
         Validate.notNull(icon);
+        Validate.notNull(produkte);
         this.id = id;
         this.name = name;
         this.icon = icon;
+        this.produkte = produkte;
     }
 
     public String getId() {

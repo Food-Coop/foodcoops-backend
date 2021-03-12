@@ -11,18 +11,22 @@ public class Produkt {
     private final Kategorie kategorie;
     private final Lagerbestand lagerbestand;
 
-    public Produkt(String name, Kategorie kategorie, Lagerbestand lagerbestand) {
-        this(UUID.randomUUID().toString(), name, kategorie, lagerbestand);
-    }
-
     public Produkt(String id, String name, Kategorie kategorie, Lagerbestand lagerbestand) {
         Validate.notBlank(name);
-        Validate.notNull(kategorie);
         Validate.notNull(lagerbestand);
         this.id = id;
         this.name = name;
         this.kategorie = kategorie;
         this.lagerbestand = lagerbestand;
+    }
+
+    public Produkt(String name, Kategorie kategorie, Lagerbestand lagerbestand) {
+        this(UUID.randomUUID().toString(), name, kategorie, lagerbestand);
+        Validate.notNull(kategorie);
+    }
+
+    public Produkt(String id, String name, Lagerbestand lagerbestand) {
+        this(id, name, null, lagerbestand);
     }
 
     public String getId() {
