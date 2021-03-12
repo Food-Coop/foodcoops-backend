@@ -3,8 +3,10 @@ package de.dhbw.foodcoop.warehouse.adapters.Row;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity
+@Table(name = "lagerbestand")
 public class LagerbestandRow {
     @Id
     private final String id;

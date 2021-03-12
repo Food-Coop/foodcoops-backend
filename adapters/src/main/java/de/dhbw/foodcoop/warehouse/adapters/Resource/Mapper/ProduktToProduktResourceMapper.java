@@ -1,5 +1,7 @@
-package de.dhbw.foodcoop.warehouse.adapters.Resource;
+package de.dhbw.foodcoop.warehouse.adapters.Resource.Mapper;
 
+import de.dhbw.foodcoop.warehouse.adapters.Resource.Mapper.LagerbestandToLagerbestandResourceMapper;
+import de.dhbw.foodcoop.warehouse.adapters.Resource.ProduktResource;
 import de.dhbw.foodcoop.warehouse.domain.entities.Produkt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -24,7 +26,6 @@ public class ProduktToProduktResourceMapper implements Function<Produkt, Produkt
         return new ProduktResource(
                 produkt.getId(),
                 produkt.getName(),
-                produkt.getKategorie().getName(),
                 lagerbestandToLagerbestandResourceMapper.apply(produkt.getLagerbestand()));
     }
 }

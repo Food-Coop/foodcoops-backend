@@ -1,4 +1,4 @@
-package de.dhbw.foodcoop.warehouse.application.LagerbestandAnsicht;
+package de.dhbw.foodcoop.warehouse.application.LagerService;
 
 import de.dhbw.foodcoop.warehouse.domain.entities.Produkt;
 import de.dhbw.foodcoop.warehouse.domain.repositories.ProduktRepository;
@@ -8,11 +8,11 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class ProduktUIService {
+public class LagerResourceService {
     private final ProduktRepository produktRepository;
 
     @Autowired
-    public ProduktUIService(ProduktRepository produktRepository) {
+    public LagerResourceService(ProduktRepository produktRepository) {
         this.produktRepository = produktRepository;
     }
 

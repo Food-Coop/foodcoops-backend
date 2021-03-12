@@ -1,5 +1,6 @@
-package de.dhbw.foodcoop.warehouse.adapters.Resource;
+package de.dhbw.foodcoop.warehouse.adapters.Resource.Mapper;
 
+import de.dhbw.foodcoop.warehouse.adapters.Resource.LagerbestandResource;
 import de.dhbw.foodcoop.warehouse.domain.entities.Lagerbestand;
 import org.springframework.stereotype.Component;
 

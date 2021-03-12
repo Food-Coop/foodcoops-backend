@@ -25,21 +25,6 @@ public class ProduktRowRepository implements ProduktRepository {
     }
 
     @Override
-    public Produkt produktAnlegen(Produkt produkt) {
-        return null;
-    }
-
-    @Override
-    public Produkt produktAktualisieren(Produkt produkt) {
-        return null;
-    }
-
-    @Override
-    public Produkt produktLoeschen(Produkt produkt) {
-        return null;
-    }
-
-    @Override
     public List<Produkt> alleProdukteAbrufen() {
         List<ProduktRow> produktRows = springDataProduktRowRepository.findAll();
         return produktRows.stream().map(mapper).collect(Collectors.toList());

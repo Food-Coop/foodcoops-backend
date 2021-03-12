@@ -2,13 +2,15 @@ package de.dhbw.foodcoop.warehouse.adapters.Row;
 
 import javax.persistence.*;
 
-@Entity(name = "produkt")
+@Entity
+@Table(name = "produkt")
 public class ProduktRow {
     @Id
     private String id;
     @Column
     private String name;
     @ManyToOne
+    @JoinColumn(name = "kategorie_id")
     private KategorieRow kategorie;
     @OneToOne
     @JoinColumn(name = "lagerbestand_id")

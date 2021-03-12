@@ -1,4 +1,4 @@
-package de.dhbw.foodcoop.warehouse.application.LagerbestandAnsicht;
+package de.dhbw.foodcoop.warehouse.application.LagerService;
 
 import de.dhbw.foodcoop.warehouse.domain.entities.Kategorie;
 
