@@ -39,6 +39,10 @@ public final class Kategorie {
         return icon;
     }
 
+    public List<Produkt> getProdukte() {
+        return produkte;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

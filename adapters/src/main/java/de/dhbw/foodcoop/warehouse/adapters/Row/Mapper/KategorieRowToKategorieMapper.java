@@ -26,9 +26,11 @@ public class KategorieRowToKategorieMapper implements Function<KategorieRow, Kat
 
     private Kategorie map(KategorieRow kategorieRow) {
         List<Produkt> produkte = kategorieRow.getProduktRows().stream().map(produktMapper).collect(Collectors.toList());
-        return new Kategorie(kategorieRow.getId(),
+        Kategorie kategorie = new Kategorie(kategorieRow.getId(),
                 kategorieRow.getName(),
                 kategorieRow.getIcon(),
                 produkte);
+        produkte.forEach(produkt -> produkt.setKategorie(kategorie));
+        return kategorie;
     }
 }

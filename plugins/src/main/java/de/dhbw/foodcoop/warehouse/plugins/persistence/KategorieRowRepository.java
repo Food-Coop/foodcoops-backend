@@ -2,8 +2,10 @@ package de.dhbw.foodcoop.warehouse.plugins.persistence;
 
 import de.dhbw.foodcoop.warehouse.adapters.Row.KategorieRow;
 import de.dhbw.foodcoop.warehouse.adapters.Row.Mapper.KategorieRowToKategorieMapper;
+import de.dhbw.foodcoop.warehouse.adapters.Row.Mapper.KategorieToKategorieRowMapper;
 import de.dhbw.foodcoop.warehouse.domain.entities.Kategorie;
 import de.dhbw.foodcoop.warehouse.domain.repositories.KategorieRepository;
+import de.dhbw.foodcoop.warehouse.domain.repositories.ProduktRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -12,14 +14,19 @@ import java.util.stream.Collectors;
 
 @Repository
 public class KategorieRowRepository implements KategorieRepository {
+    private final ProduktRepository produktRepository;
     private final SpringDataKategorieRowRepository springDataKategorieRowRepository;
     private final KategorieRowToKategorieMapper kategorieRowToKategorieMapper;
+    private final KategorieToKategorieRowMapper kategorieToKategorieRowMapper;
 
     @Autowired
-    public KategorieRowRepository(SpringDataKategorieRowRepository springDataKategorieRowRepository,
-                                  KategorieRowToKategorieMapper kategorieRowToKategorieMapper) {
+    public KategorieRowRepository(ProduktRepository produktRepository,
+                                  SpringDataKategorieRowRepository springDataKategorieRowRepository, KategorieRowToKategorieMapper kategorieRowToKategorieMapper,
+                                  KategorieToKategorieRowMapper kategorieToKategorieRowMapper) {
+        this.produktRepository = produktRepository;
         this.springDataKategorieRowRepository = springDataKategorieRowRepository;
         this.kategorieRowToKategorieMapper = kategorieRowToKategorieMapper;
+        this.kategorieToKategorieRowMapper = kategorieToKategorieRowMapper;
     }
 
     @Override
@@ -32,8 +39,9 @@ public class KategorieRowRepository implements KategorieRepository {
 
     @Override
     public Kategorie speichern(Kategorie kategorie) {
-        KategorieRow attempt = kategorieToKategorieRowMapper.apply(kategorie);
-        KategorieRow success = springDataKategorieRowRepository.save(attempt);
+        KategorieRow conversion = kategorieToKategorieRowMapper.apply(kategorie);
+        kategorie.getProdukte().forEach(produktRepository::speichern);
+        KategorieRow success = springDataKategorieRowRepository.save(conversion);
         return kategorieRowToKategorieMapper.apply(success);
     }
 }

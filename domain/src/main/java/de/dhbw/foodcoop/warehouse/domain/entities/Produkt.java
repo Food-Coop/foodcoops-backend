@@ -8,7 +8,7 @@ import java.util.UUID;
 public class Produkt {
     private final String id;
     private final String name;
-    private final Kategorie kategorie;
+    private Kategorie kategorie;
     private final Lagerbestand lagerbestand;
 
     public Produkt(String id, String name, Kategorie kategorie, Lagerbestand lagerbestand) {
@@ -38,6 +38,10 @@ public class Produkt {
 
     public Kategorie getKategorie() {
         return kategorie;
+    }
+
+    public void setKategorie(Kategorie kategorie) {
+        this.kategorie = kategorie;
     }
 
     public Lagerbestand getLagerbestand() {

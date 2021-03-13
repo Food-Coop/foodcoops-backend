@@ -14,7 +14,10 @@ public class Lagerbestand {
     public Lagerbestand(String id, Produkt produkt, Menge istLagerbestand, Menge sollLagerbestand) {
         Validate.notNull(id);
         Validate.notNull(istLagerbestand);
+        Validate.isTrue(istLagerbestand.getMenge() >= 0);
         Validate.notNull(sollLagerbestand);
+        Validate.isTrue(sollLagerbestand.getMenge() >= 0);
+        Validate.isTrue(istLagerbestand.getMenge() <= sollLagerbestand.getMenge());
         this.id = id;
         this.produkt = produkt;
         this.istLagerbestand = istLagerbestand;

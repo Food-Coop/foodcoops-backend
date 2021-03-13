@@ -9,13 +9,16 @@ import java.util.UUID;
 @Table(name = "kategorie")
 public class KategorieRow {
     @Id
-    private final String id;
+    private String id;
     @Column
-    private final String name;
+    private String name;
     @Column
-    private final String icon;
+    private String icon;
     @OneToMany(mappedBy = "kategorie")
     private List<ProduktRow> produktRows;
+
+    public KategorieRow() {
+    }
 
     public KategorieRow(String id, String name, String icon, List<ProduktRow> produktRows) {
         this.id = id;

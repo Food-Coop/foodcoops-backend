@@ -9,14 +9,16 @@ import javax.persistence.Table;
 @Table(name = "lagerbestand")
 public class LagerbestandRow {
     @Id
-    private final String id;
+    private String id;
     @Column
-    private final Integer istLagerbestand;
+    private Integer istLagerbestand;
     @Column
-    private final Integer sollLagerbestand;
+    private Integer sollLagerbestand;
     @Column
-    private final String einheit;
+    private String einheit;
 
+    public LagerbestandRow() {
+    }
 
     public LagerbestandRow(String id, Integer istLagerbestand, Integer sollLagerbestand, String einheit) {
         this.id = id;

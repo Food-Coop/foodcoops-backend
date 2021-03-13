@@ -26,6 +26,10 @@ public class ProduktRow {
         this.lagerbestand = lagerbestand;
     }
 
+    public ProduktRow(String id, String name, LagerbestandRow lagerbestand) {
+        this(id, name, null, lagerbestand);
+    }
+
     public String getId() {
         return id;
     }
@@ -36,6 +40,10 @@ public class ProduktRow {
 
     public KategorieRow getKategorie() {
         return kategorie;
+    }
+
+    public void setKategorie(KategorieRow kategorie) {
+        this.kategorie = kategorie;
     }
 
     public LagerbestandRow getLagerbestand() {

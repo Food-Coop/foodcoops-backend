@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface ProduktRepository {
     List<Produkt> alleProdukteAbrufen();
+
+    Produkt speichern(Produkt produkt);
 }
