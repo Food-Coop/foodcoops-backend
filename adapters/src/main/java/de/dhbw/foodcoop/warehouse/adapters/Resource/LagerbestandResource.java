@@ -13,5 +13,19 @@ public class LagerbestandResource {
         this.einheit = einheit;
     }
 
+    public String getId() {
+        return id;
+    }
 
+    public Integer getIstLagerbestand() {
+        return istLagerbestand;
+    }
+
+    public Integer getSollLagerbestand() {
+        return sollLagerbestand;
+    }
+
+    public String getEinheit() {
+        return einheit;
+    }
 }

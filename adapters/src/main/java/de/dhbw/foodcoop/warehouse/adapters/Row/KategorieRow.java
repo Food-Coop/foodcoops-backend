@@ -3,7 +3,6 @@ package de.dhbw.foodcoop.warehouse.adapters.Row;
 import javax.persistence.*;
 import java.util.List;
 import java.util.Objects;
-import java.util.UUID;
 
 @Entity
 @Table(name = "kategorie")
@@ -14,7 +13,7 @@ public class KategorieRow {
     private String name;
     @Column
     private String icon;
-    @OneToMany(mappedBy = "kategorie")
+    @OneToMany(mappedBy = "kategorie", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProduktRow> produktRows;
 
     public KategorieRow() {
@@ -25,10 +24,6 @@ public class KategorieRow {
         this.name = name;
         this.icon = icon;
         this.produktRows = produktRows;
-    }
-
-    public KategorieRow(String name, String icon) {
-        this(UUID.randomUUID().toString(), name, icon, null);
     }
 
     public String getId() {

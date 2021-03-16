@@ -15,10 +15,6 @@ public class KategorieResource {
         this.produktResources = produktResources;
     }
 
-    public KategorieResource(String id, String name, String icon) {
-        this(id, name, icon, null);
-    }
-
     public String getId() {
         return id;
     }
@@ -35,3 +31,4 @@ public class KategorieResource {
         return produktResources;
     }
 }
+

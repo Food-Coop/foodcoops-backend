@@ -1,6 +1,5 @@
 package de.dhbw.foodcoop.warehouse.adapters.Resource.Mapper;
 
-import de.dhbw.foodcoop.warehouse.adapters.Resource.Mapper.LagerbestandToLagerbestandResourceMapper;
 import de.dhbw.foodcoop.warehouse.adapters.Resource.ProduktResource;
 import de.dhbw.foodcoop.warehouse.domain.entities.Produkt;
 import org.springframework.beans.factory.annotation.Autowired;

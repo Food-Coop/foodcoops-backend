@@ -1,13 +1,12 @@
 package de.dhbw.foodcoop.warehouse.adapters.Resource.Mapper;
 
 import de.dhbw.foodcoop.warehouse.adapters.Resource.KategorieResource;
-import de.dhbw.foodcoop.warehouse.adapters.Resource.ProduktResource;
 import de.dhbw.foodcoop.warehouse.domain.entities.Kategorie;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Component
 public class KategorieToKategorieResourceMapper implements Function<Kategorie, KategorieResource> {
@@ -24,6 +23,12 @@ public class KategorieToKategorieResourceMapper implements Function<Kategorie, K
     }
 
     private KategorieResource map(Kategorie kategorie) {
-        return new KategorieResource(kategorie.getId(), kategorie.getName(), kategorie.getIcon());
+        return new KategorieResource(kategorie.getId(),
+                kategorie.getName(),
+                kategorie.getIcon(),
+                kategorie.getProdukte()
+                        .stream()
+                        .map(produktToProduktResourceMapper)
+                        .collect(Collectors.toList()));
     }
 }
