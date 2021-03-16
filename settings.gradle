@@ -1,9 +1,0 @@
-rootProject.name = 'warehouse'
-include 'abstraction'
-include 'domain'
-include 'application'
-include 'adapters'
-include 'plugins'
-include 'adapters'
-include 'adapters'
-
