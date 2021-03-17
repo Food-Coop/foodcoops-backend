@@ -1,8 +1,8 @@
 package de.dhbw.foodcoop.warehouse.plugins.persistence;
 
+import de.dhbw.foodcoop.warehouse.adapters.Row.Mapper.ProduktRowToProduktMapper;
 import de.dhbw.foodcoop.warehouse.adapters.Row.Mapper.ProduktToProduktRowMapper;
 import de.dhbw.foodcoop.warehouse.adapters.Row.ProduktRow;
-import de.dhbw.foodcoop.warehouse.adapters.Row.Mapper.ProduktRowToProduktMapper;
 import de.dhbw.foodcoop.warehouse.domain.entities.Produkt;
 import de.dhbw.foodcoop.warehouse.domain.repositories.LagerbestandRepository;
 import de.dhbw.foodcoop.warehouse.domain.repositories.ProduktRepository;

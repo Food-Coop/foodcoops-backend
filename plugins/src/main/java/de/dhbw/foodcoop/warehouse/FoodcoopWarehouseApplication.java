@@ -20,7 +20,7 @@ public class FoodcoopWarehouseApplication {
         SpringApplication.run(FoodcoopWarehouseApplication.class, args);
     }
 
-    @Bean
+  @Bean
     public CommandLineRunner demo(KategorieRepository repository) {
         return (args) -> repository.speichern(initKategorieGemuese());
     }
@@ -31,10 +31,7 @@ public class FoodcoopWarehouseApplication {
         Lagerbestand lagerbestand2 = new Lagerbestand(new Menge(einheit, 3), new Menge(einheit, 5));
         Produkt karrotten = new Produkt("Karrotten", (Kategorie) null, lagerbestand1);
         Produkt roteBeete = new Produkt("Rote Beete", (Kategorie) null, lagerbestand2);
-        List<Produkt> produkts = new ArrayList<>();
-        produkts.add(karrotten);
-        produkts.add(roteBeete);
-        Kategorie gemuese = new Kategorie("Gemüse", "13f5d66a", produkts);
+        Kategorie gemuese = new Kategorie("Gemüse", "13f5d66a", List.of(karrotten, roteBeete));
         karrotten.setKategorie(gemuese);
         roteBeete.setKategorie(gemuese);
         return gemuese;
