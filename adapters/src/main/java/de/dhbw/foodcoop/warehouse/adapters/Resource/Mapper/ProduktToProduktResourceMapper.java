@@ -25,6 +25,7 @@ public class ProduktToProduktResourceMapper implements Function<Produkt, Produkt
         return new ProduktResource(
                 produkt.getId(),
                 produkt.getName(),
+                produkt.getKategorie().getId(),
                 lagerbestandToLagerbestandResourceMapper.apply(produkt.getLagerbestand()));
     }
 }
