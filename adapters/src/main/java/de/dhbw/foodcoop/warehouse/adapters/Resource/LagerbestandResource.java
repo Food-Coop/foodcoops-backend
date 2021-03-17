@@ -1,20 +1,14 @@
 package de.dhbw.foodcoop.warehouse.adapters.Resource;
 
-public class LagerbestandResource {
-    private final String id;
+public final class LagerbestandResource {
     private final Integer istLagerbestand;
     private final Integer sollLagerbestand;
     private final String einheit;
 
-    public LagerbestandResource(String id, Integer istLagerbestand, Integer sollLagerbestand, String einheit) {
-        this.id = id;
+    public LagerbestandResource(Integer istLagerbestand, Integer sollLagerbestand, String einheit) {
         this.istLagerbestand = istLagerbestand;
         this.sollLagerbestand = sollLagerbestand;
         this.einheit = einheit;
-    }
-
-    public String getId() {
-        return id;
     }
 
     public Integer getIstLagerbestand() {

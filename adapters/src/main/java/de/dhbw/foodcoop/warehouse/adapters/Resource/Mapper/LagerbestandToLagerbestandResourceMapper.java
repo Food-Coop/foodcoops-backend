@@ -1,7 +1,7 @@
 package de.dhbw.foodcoop.warehouse.adapters.Resource.Mapper;
 
 import de.dhbw.foodcoop.warehouse.adapters.Resource.LagerbestandResource;
-import de.dhbw.foodcoop.warehouse.domain.entities.Lagerbestand;
+import de.dhbw.foodcoop.warehouse.domain.values.Lagerbestand;
 import org.springframework.stereotype.Component;
 
 import java.util.function.Function;
@@ -17,9 +17,9 @@ public class LagerbestandToLagerbestandResourceMapper implements Function<Lagerb
     }
 
     private LagerbestandResource map(Lagerbestand lagerbestand) {
-        return new LagerbestandResource(lagerbestand.getId(),
-                lagerbestand.getIstLagerbestand().getMenge(),
-                lagerbestand.getSollLagerbestand().getMenge(),
-                lagerbestand.getIstLagerbestand().getEinheit().getName());
+        return new LagerbestandResource(
+                lagerbestand.getIstLagerbestand(),
+                lagerbestand.getSollLagerbestand(),
+                lagerbestand.getEinheit().getName());
     }
 }
