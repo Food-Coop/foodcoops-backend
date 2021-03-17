@@ -14,11 +14,11 @@ public class Produkt {
     private final String id;
     @Column
     private final String name;
-    @Embedded
-    private final Lagerbestand lagerbestand;
     @ManyToOne
     @JoinColumn(name = "kategorie_id")
     private Kategorie kategorie;
+    @Embedded
+    private final Lagerbestand lagerbestand;
 
     public Produkt(String id, String name, Kategorie kategorie, Lagerbestand lagerbestand) {
         Validate.notBlank(id);
@@ -30,7 +30,7 @@ public class Produkt {
         this.lagerbestand = lagerbestand;
     }
 
-    public Produkt(String name, Lagerbestand lagerbestand, Kategorie kategorie) {
+    public Produkt(String name, Kategorie kategorie, Lagerbestand lagerbestand) {
         this(UUID.randomUUID().toString(), name, kategorie, lagerbestand);
     }
 
