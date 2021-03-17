@@ -11,6 +11,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @SpringBootApplication
@@ -30,7 +31,10 @@ public class FoodcoopWarehouseApplication {
         Lagerbestand lagerbestand2 = new Lagerbestand(new Menge(einheit, 3), new Menge(einheit, 5));
         Produkt karrotten = new Produkt("Karrotten", (Kategorie) null, lagerbestand1);
         Produkt roteBeete = new Produkt("Rote Beete", (Kategorie) null, lagerbestand2);
-        Kategorie gemuese = new Kategorie("Gemüse", "13f5d66a", List.of(karrotten, roteBeete));
+        List<Produkt> produkts = new ArrayList<>();
+        produkts.add(karrotten);
+        produkts.add(roteBeete);
+        Kategorie gemuese = new Kategorie("Gemüse", "13f5d66a", produkts);
         karrotten.setKategorie(gemuese);
         roteBeete.setKategorie(gemuese);
         return gemuese;
