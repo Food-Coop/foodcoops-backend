@@ -1,5 +1,7 @@
 package de.dhbw.foodcoop.warehouse.adapters.Resource;
 
+import java.util.UUID;
+
 public class ProduktResource {
     private final String id;
     private final String name;
@@ -13,12 +15,20 @@ public class ProduktResource {
         this.lagerbestandResource = lagerbestandResource;
     }
 
+    public ProduktResource() {
+        this(UUID.randomUUID().toString(), "undefined", UUID.randomUUID().toString(), new LagerbestandResource());
+    }
+
     public String getId() {
         return id;
     }
 
     public String getName() {
         return name;
+    }
+
+    public String getKategorieId() {
+        return kategorieId;
     }
 
     public LagerbestandResource getLagerbestandResource() {

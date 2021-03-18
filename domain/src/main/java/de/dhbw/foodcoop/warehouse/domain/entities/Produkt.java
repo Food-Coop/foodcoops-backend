@@ -76,6 +76,7 @@ public class Produkt {
         return "Produkt{" +
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
+                ", kategorie= '" + kategorie.getName() + '\'' +
                 ", lagerbestand=" + lagerbestand +
                 '}';
     }

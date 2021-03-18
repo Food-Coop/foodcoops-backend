@@ -1,5 +1,7 @@
 package de.dhbw.foodcoop.warehouse.adapters.Resource;
 
+import de.dhbw.foodcoop.warehouse.domain.values.Lagerbestand;
+
 public final class LagerbestandResource {
     private final Integer istLagerbestand;
     private final Integer sollLagerbestand;
@@ -9,6 +11,10 @@ public final class LagerbestandResource {
         this.istLagerbestand = istLagerbestand;
         this.sollLagerbestand = sollLagerbestand;
         this.einheit = einheit;
+    }
+
+    public LagerbestandResource() {
+        this(0, 0, "undefined");
     }
 
     public Integer getIstLagerbestand() {
