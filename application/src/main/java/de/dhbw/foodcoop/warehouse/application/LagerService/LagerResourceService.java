@@ -23,4 +23,8 @@ public class LagerResourceService {
                 .stream().sorted(Comparator.comparing(Kategorie::getName))
                 .collect(Collectors.toList());
     }
+
+    public void addKategorie(Kategorie kategorie) {
+        kategorieRepository.speichern(kategorie);
+    }
 }

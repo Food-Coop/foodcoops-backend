@@ -1,7 +1,6 @@
 package de.dhbw.foodcoop.warehouse.application.LagerService;
 
 import de.dhbw.foodcoop.warehouse.domain.entities.Kategorie;
-import de.dhbw.foodcoop.warehouse.domain.entities.Produkt;
 import de.dhbw.foodcoop.warehouse.domain.repositories.KategorieRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
