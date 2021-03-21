@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 class LagerbestandToLagerbestandResourceMapperTest {
-    final LagerbestandToLagerbestandResourceMapper toBeTested = new LagerbestandToLagerbestandResourceMapper();
+    private final LagerbestandToLagerbestandResourceMapper toBeTested = new LagerbestandToLagerbestandResourceMapper();
 
     @Test
     void applyWithSuccess() {

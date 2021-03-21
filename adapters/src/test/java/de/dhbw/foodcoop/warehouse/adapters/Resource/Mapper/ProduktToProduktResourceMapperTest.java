@@ -16,7 +16,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class ProduktToProduktResourceMapperTest {
+class ProduktToProduktResourceMapperTest {
     @Mock
     private LagerbestandToLagerbestandResourceMapper mockMapper;
 
@@ -24,7 +24,7 @@ public class ProduktToProduktResourceMapperTest {
     private ProduktToProduktResourceMapper toBeTested;
 
     @Test
-    public void applySuccessfully() {
+    void applySuccessfully() {
         Kategorie givenKategorie = new Kategorie();
         Lagerbestand givenLagerbestand = new Lagerbestand();
         Produkt given = new Produkt("uuid", "name", givenKategorie, givenLagerbestand);
