@@ -24,7 +24,7 @@ public class LagerResourceService {
                 .collect(Collectors.toList());
     }
 
-    public void addKategorie(Kategorie kategorie) {
-        kategorieRepository.speichern(kategorie);
+    public Kategorie addKategorie(Kategorie kategorie) {
+        return kategorieRepository.speichern(kategorie);
     }
 }

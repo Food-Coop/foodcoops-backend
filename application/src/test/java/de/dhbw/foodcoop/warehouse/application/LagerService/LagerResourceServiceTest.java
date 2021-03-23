@@ -2,6 +2,7 @@ package de.dhbw.foodcoop.warehouse.application.LagerService;
 
 import de.dhbw.foodcoop.warehouse.domain.entities.Kategorie;
 import de.dhbw.foodcoop.warehouse.domain.repositories.KategorieRepository;
+import de.dhbw.foodcoop.warehouse.domain.utils.TestUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,9 +25,9 @@ public class LagerResourceServiceTest {
 
     @Test
     public void getAllKategoriesSorted() {
-        Kategorie a = new Kategorie("A", "undefined", new ArrayList<>());
-        Kategorie b = new Kategorie("B", "undefined", new ArrayList<>());
-        Kategorie uea = new Kategorie("Üa", "undefined",new ArrayList<>());
+        Kategorie a = new Kategorie("A", TestUtils.BASICICON, new ArrayList<>());
+        Kategorie b = new Kategorie("B", TestUtils.BASICICON, new ArrayList<>());
+        Kategorie uea = new Kategorie("Üa", TestUtils.BASICICON, new ArrayList<>());
 
         when(mockRepository.alleKategorienAbrufen()).thenReturn(Arrays.asList(uea, b, a));
         List<Kategorie> whenReturn = toBeTested.getAllKategories();

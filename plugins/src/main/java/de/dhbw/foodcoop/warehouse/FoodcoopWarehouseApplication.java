@@ -3,6 +3,7 @@ package de.dhbw.foodcoop.warehouse;
 import de.dhbw.foodcoop.warehouse.domain.entities.Kategorie;
 import de.dhbw.foodcoop.warehouse.domain.entities.Produkt;
 import de.dhbw.foodcoop.warehouse.domain.repositories.KategorieRepository;
+import de.dhbw.foodcoop.warehouse.domain.utils.TestUtils;
 import de.dhbw.foodcoop.warehouse.domain.values.Einheit;
 import de.dhbw.foodcoop.warehouse.domain.values.Lagerbestand;
 import org.springframework.boot.CommandLineRunner;
@@ -14,6 +15,7 @@ import java.util.Arrays;
 
 @SpringBootApplication
 public class FoodcoopWarehouseApplication {
+
     public static void main(String[] args) {
         SpringApplication.run(FoodcoopWarehouseApplication.class, args);
     }
@@ -29,7 +31,9 @@ public class FoodcoopWarehouseApplication {
         Lagerbestand lagerbestand2 = new Lagerbestand(einheit, 13, 18);
         Produkt karrotten = new Produkt("Karrotten", null, lagerbestand1);
         Produkt roteBeete = new Produkt("Rote Beete", null, lagerbestand2);
-        Kategorie gemuese = new Kategorie("Gemüse", "13f5d66a", Arrays.asList(karrotten, roteBeete));
+        Kategorie gemuese = new Kategorie("Gemüse"
+                , TestUtils.GEMUESEICON
+                , Arrays.asList(karrotten, roteBeete));
         karrotten.setKategorie(gemuese);
         roteBeete.setKategorie(gemuese);
         return gemuese;

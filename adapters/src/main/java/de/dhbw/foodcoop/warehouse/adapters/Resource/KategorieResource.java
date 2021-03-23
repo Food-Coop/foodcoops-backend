@@ -1,5 +1,6 @@
 package de.dhbw.foodcoop.warehouse.adapters.Resource;
 
+import java.util.Base64;
 import java.util.List;
 
 public class KategorieResource {

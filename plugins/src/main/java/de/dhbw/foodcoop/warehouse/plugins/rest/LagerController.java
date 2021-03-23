@@ -34,15 +34,11 @@ public class LagerController {
         return kategories.stream().map(toResource).collect(Collectors.toList());
     }
 
-    @RequestMapping(name = "/kategorie", method = RequestMethod.PUT)
-    public void addKategorie(@RequestParam(value = "kategorieResource"
-            , defaultValue =
-            "[{\"id\":\"068bb23c-020b-4e53-92a3-fbd65ac9f6e7\"" +
-                    ",\"name\":\"Gemüse\"" +
-                    ",\"icon\":\"13f5d66a\"" +
-                    ", \"null\"}]"
+    @RequestMapping(name = "/kategorie", method = RequestMethod.POST)
+    public KategorieResource addKategorie(@RequestParam(value = "kategorieResource"
     ) KategorieResource in) {
-        Kategorie kategorie = toKategorie.apply(in);
-        lagerResourceService.addKategorie(kategorie);
+        Kategorie kategorieIn = toKategorie.apply(in);
+        Kategorie kategorieOut = lagerResourceService.addKategorie(kategorieIn);
+        return toResource.apply(kategorieOut);
     }
 }

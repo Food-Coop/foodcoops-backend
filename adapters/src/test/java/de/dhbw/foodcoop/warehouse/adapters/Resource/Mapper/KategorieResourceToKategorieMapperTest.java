@@ -2,6 +2,7 @@ package de.dhbw.foodcoop.warehouse.adapters.Resource.Mapper;
 
 import de.dhbw.foodcoop.warehouse.adapters.Resource.KategorieResource;
 import de.dhbw.foodcoop.warehouse.domain.entities.Kategorie;
+import de.dhbw.foodcoop.warehouse.domain.utils.TestUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -13,20 +14,20 @@ class KategorieResourceToKategorieMapperTest {
 
     @Test
     void applySuccessfullyNoId() {
-        KategorieResource given = new KategorieResource(null, "test", "123abd", new ArrayList<>());
+        KategorieResource given = new KategorieResource(null, "test", TestUtils.BASICICON, new ArrayList<>());
         Kategorie when = toBeTested.apply(given);
         Assertions.assertNotNull(when.getId());
         Assertions.assertEquals("test", when.getName());
-        Assertions.assertEquals("123abd", when.getIcon());
+        Assertions.assertEquals(TestUtils.BASICICON, when.getIcon());
     }
 
     @Test
     void applySuccessfullyWithId() {
         String uuid = UUID.randomUUID().toString();
-        KategorieResource given = new KategorieResource(uuid, "test", "123abd", new ArrayList<>());
+        KategorieResource given = new KategorieResource(uuid, "test", TestUtils.GEMUESEICON, new ArrayList<>());
         Kategorie when = toBeTested.apply(given);
         Assertions.assertEquals(uuid, when.getId());
         Assertions.assertEquals("test", when.getName());
-        Assertions.assertEquals("123abd", when.getIcon());
+        Assertions.assertEquals(TestUtils.GEMUESEICON, when.getIcon());
     }
 }

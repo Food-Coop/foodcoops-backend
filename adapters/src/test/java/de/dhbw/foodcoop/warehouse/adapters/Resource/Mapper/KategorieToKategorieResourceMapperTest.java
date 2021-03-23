@@ -4,6 +4,7 @@ import de.dhbw.foodcoop.warehouse.adapters.Resource.KategorieResource;
 import de.dhbw.foodcoop.warehouse.adapters.Resource.ProduktResource;
 import de.dhbw.foodcoop.warehouse.domain.entities.Kategorie;
 import de.dhbw.foodcoop.warehouse.domain.entities.Produkt;
+import de.dhbw.foodcoop.warehouse.domain.utils.TestUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -28,7 +29,7 @@ class KategorieToKategorieResourceMapperTest {
         Produkt givenProdukt = new Produkt();
         Kategorie given = new Kategorie("asdfkwgwiwn3ak"
                 , "drinks"
-                , "asdiconwe"
+                , TestUtils.BASICICON
                 , Collections.singletonList(
                 givenProdukt));
 
@@ -37,7 +38,7 @@ class KategorieToKategorieResourceMapperTest {
 
         Assertions.assertEquals("asdfkwgwiwn3ak", when.getId());
         Assertions.assertEquals("drinks", when.getName());
-        Assertions.assertEquals("asdiconwe", when.getIcon());
+        Assertions.assertEquals(TestUtils.BASICICON, when.getIcon());
         Mockito.verify(mockMapper).apply(givenProdukt);
     }
 }
