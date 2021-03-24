@@ -8,11 +8,11 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public class KategorieRepositoryImpl implements KategorieRepository {
+public class KategorieRepositoryBridge implements KategorieRepository {
     private final SpringDataKategorieRepository springDataKategorieRepository;
 
     @Autowired
-    public KategorieRepositoryImpl(SpringDataKategorieRepository springDataKategorieRepository) {
+    public KategorieRepositoryBridge(SpringDataKategorieRepository springDataKategorieRepository) {
         this.springDataKategorieRepository = springDataKategorieRepository;
     }
 
