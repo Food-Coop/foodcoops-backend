@@ -17,11 +17,11 @@ import java.util.List;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class LagerResourceServiceTest {
+public class KategorieServiceTest {
     @Mock
     private KategorieRepository mockRepository;
     @InjectMocks
-    private LagerResourceService toBeTested;
+    private KategorieService toBeTested;
 
     @Test
     public void getAllKategoriesSorted() {
@@ -30,7 +30,7 @@ public class LagerResourceServiceTest {
         Kategorie uea = new Kategorie("Üa", TestUtils.BASICICON, new ArrayList<>());
 
         when(mockRepository.alleKategorienAbrufen()).thenReturn(Arrays.asList(uea, b, a));
-        List<Kategorie> whenReturn = toBeTested.getAllKategories();
+        List<Kategorie> whenReturn = toBeTested.all();
 
         Assertions.assertEquals("A", whenReturn.get(0).getName());
         Assertions.assertEquals("B", whenReturn.get(1).getName());

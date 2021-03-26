@@ -20,7 +20,6 @@
         <module>abstraction</module>
         <module>domain</module>
         <module>application</module>
-        <module>adapters</module>
         <module>plugins</module>
     </modules>
 

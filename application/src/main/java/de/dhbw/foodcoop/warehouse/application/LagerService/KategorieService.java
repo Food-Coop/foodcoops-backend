@@ -11,26 +11,26 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-public class LagerResourceService {
-    private final KategorieRepository kategorieRepository;
+public class KategorieService {
+    private final KategorieRepository repository;
 
     @Autowired
-    public LagerResourceService(KategorieRepository kategorieRepository) {
-        this.kategorieRepository = kategorieRepository;
+    public KategorieService(KategorieRepository repository) {
+        this.repository = repository;
     }
 
-    public List<Kategorie> getAllKategories() {
-        return kategorieRepository.alleKategorienAbrufen()
+    public List<Kategorie> all() {
+        return repository.alleKategorienAbrufen()
                 .stream().sorted(Comparator.comparing(Kategorie::getName))
                 .collect(Collectors.toList());
     }
 
-    public Kategorie addKategorie(Kategorie kategorie) {
-        return kategorieRepository.speichern(kategorie);
+    public Kategorie create(Kategorie kategorie) {
+        return repository.speichern(kategorie);
     }
 
     public Optional<Kategorie> findById(String id) {
-        return kategorieRepository.findenPerId(id);
+        return repository.findenPerId(id);
     }
 
 }

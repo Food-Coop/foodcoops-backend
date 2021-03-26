@@ -1,6 +1,6 @@
 package de.dhbw.foodcoop.warehouse.plugins.rest;
 
-import de.dhbw.foodcoop.warehouse.application.LagerService.LagerResourceService;
+import de.dhbw.foodcoop.warehouse.application.LagerService.KategorieService;
 import de.dhbw.foodcoop.warehouse.domain.entities.Kategorie;
 import de.dhbw.foodcoop.warehouse.plugins.rest.assembler.KategorieModelAssembler;
 import de.dhbw.foodcoop.warehouse.plugins.rest.exceptions.KategorieNotFoundException;
@@ -19,11 +19,11 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
 public class KategorieController {
-    private final LagerResourceService service;
+    private final KategorieService service;
     private final KategorieModelAssembler assembler;
 
     @Autowired
-    public KategorieController(LagerResourceService service, KategorieModelAssembler assembler) {
+    public KategorieController(KategorieService service, KategorieModelAssembler assembler) {
         this.service = service;
         this.assembler = assembler;
     }
@@ -37,7 +37,7 @@ public class KategorieController {
 
     @GetMapping("/kategorie")
     public CollectionModel<EntityModel<Kategorie>> all() {
-        List<EntityModel<Kategorie>> kategories = service.getAllKategories().stream()
+        List<EntityModel<Kategorie>> kategories = service.all().stream()
                 .map(assembler::toModel)
                 .collect(Collectors.toList());
         return CollectionModel.of(kategories,
