@@ -46,8 +46,8 @@ public class Produkt {
         return name;
     }
 
-    public Kategorie getKategorie() {
-        return kategorie;
+    public String getKategorie() {
+        return kategorie.getId();
     }
 
     public void setKategorie(Kategorie kategorie) {

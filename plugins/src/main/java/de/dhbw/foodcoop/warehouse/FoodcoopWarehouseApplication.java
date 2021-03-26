@@ -21,8 +21,13 @@ public class FoodcoopWarehouseApplication {
     }
 
     @Bean
-    public CommandLineRunner demo(KategorieRepository repository) {
+    public CommandLineRunner demoGemuese(KategorieRepository repository) {
         return (args) -> repository.speichern(initKategorieGemuese());
+    }
+
+    @Bean
+    public CommandLineRunner demoTeigwaren(KategorieRepository repository) {
+        return (args) -> repository.speichern(initKategorieTeigwaren());
     }
 
     private Kategorie initKategorieGemuese() {
@@ -37,5 +42,19 @@ public class FoodcoopWarehouseApplication {
         karrotten.setKategorie(gemuese);
         roteBeete.setKategorie(gemuese);
         return gemuese;
+    }
+
+    private Kategorie initKategorieTeigwaren() {
+        Einheit einheit = new Einheit("kg");
+        Lagerbestand lagerbestand1 = new Lagerbestand(einheit, 12, 15);
+        Lagerbestand lagerbestand2 = new Lagerbestand(einheit, 13, 18);
+        Produkt weissbrot = new Produkt("Kasten Weißbrot", null, lagerbestand1);
+        Produkt roggenbrot = new Produkt("Roggenbrot", null, lagerbestand2);
+        Kategorie teigwaren = new Kategorie("Teigwaren"
+                , TestUtils.TEIGWARENICON
+                , Arrays.asList(weissbrot, roggenbrot));
+        weissbrot.setKategorie(teigwaren);
+        roggenbrot.setKategorie(teigwaren);
+        return teigwaren;
     }
 }

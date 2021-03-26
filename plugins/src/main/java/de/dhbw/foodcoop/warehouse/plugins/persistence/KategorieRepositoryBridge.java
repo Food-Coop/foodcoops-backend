@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class KategorieRepositoryBridge implements KategorieRepository {
@@ -24,5 +25,10 @@ public class KategorieRepositoryBridge implements KategorieRepository {
     @Override
     public Kategorie speichern(Kategorie kategorie) {
         return springDataKategorieRepository.save(kategorie);
+    }
+
+    @Override
+    public Optional<Kategorie> findenPerId(String id) {
+        return springDataKategorieRepository.findById(id);
     }
 }

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -27,4 +28,9 @@ public class LagerResourceService {
     public Kategorie addKategorie(Kategorie kategorie) {
         return kategorieRepository.speichern(kategorie);
     }
+
+    public Optional<Kategorie> findById(String id) {
+        return kategorieRepository.findenPerId(id);
+    }
+
 }
