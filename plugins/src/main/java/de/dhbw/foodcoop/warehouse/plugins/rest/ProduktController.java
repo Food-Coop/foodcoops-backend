@@ -7,9 +7,9 @@ import de.dhbw.foodcoop.warehouse.plugins.rest.exceptions.ProduktNotFoundExcepti
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.hateoas.IanaLinkRelations;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -42,5 +42,13 @@ public class ProduktController {
                 .collect(Collectors.toList());
         return CollectionModel.of(produkts,
                 linkTo(methodOn(ProduktController.class).all()).withSelfRel());
+    }
+
+    @PostMapping("/produkt")
+    ResponseEntity<?> newProdukt(@RequestBody Produkt newProdukt) {
+        EntityModel<Produkt> entityModel = assembler.toModel(service.create(newProdukt));
+        return ResponseEntity
+                .created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri())
+                .body(entityModel);
     }
 }

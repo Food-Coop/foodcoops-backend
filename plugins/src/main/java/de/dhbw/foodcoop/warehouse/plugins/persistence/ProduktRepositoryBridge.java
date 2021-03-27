@@ -9,12 +9,12 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public class ProduktRepositoryImpl implements ProduktRepository {
+public class ProduktRepositoryBridge implements ProduktRepository {
 
     private final SpringDataProduktRepository springDataProduktRepository;
 
     @Autowired
-    public ProduktRepositoryImpl(SpringDataProduktRepository springDataProduktRepository) {
+    public ProduktRepositoryBridge(SpringDataProduktRepository springDataProduktRepository) {
         this.springDataProduktRepository = springDataProduktRepository;
     }
 

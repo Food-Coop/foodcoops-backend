@@ -24,4 +24,8 @@ public class ProduktService {
     public List<Produkt> all() {
         return repository.alle();
     }
+
+    public Produkt create(Produkt newProdukt) {
+        return repository.speichern(newProdukt);
+    }
 }
