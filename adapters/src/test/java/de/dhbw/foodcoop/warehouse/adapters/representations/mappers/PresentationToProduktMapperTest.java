@@ -1,6 +1,6 @@
-package de.dhbw.foodcoop.warehouse.adapters.presentations.mappers;
+package de.dhbw.foodcoop.warehouse.adapters.representations.mappers;
 
-import de.dhbw.foodcoop.warehouse.adapters.presentations.ProduktPresentation;
+import de.dhbw.foodcoop.warehouse.adapters.representations.ProduktRepresentation;
 import de.dhbw.foodcoop.warehouse.application.LagerService.KategorieService;
 import de.dhbw.foodcoop.warehouse.domain.entities.Kategorie;
 import de.dhbw.foodcoop.warehouse.domain.entities.Produkt;
@@ -8,6 +8,7 @@ import de.dhbw.foodcoop.warehouse.domain.repositories.exceptions.KategorieNotFou
 import de.dhbw.foodcoop.warehouse.domain.utils.TestUtils;
 import de.dhbw.foodcoop.warehouse.domain.values.Lagerbestand;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -23,12 +24,13 @@ class PresentationToProduktMapperTest {
     @Mock
     private KategorieService kategorieService;
     @InjectMocks
-    private PresentationToProduktMapper mapper;
+    private RepresentationToProduktMapper mapper;
 
     @Test
+    @DisplayName("RepresentationToProduktMapper Works Test")
     void applySuccessfully() {
         Kategorie kategorie = new Kategorie();
-        ProduktPresentation given = new ProduktPresentation(TestUtils.PRODUKT_TEST_ID, "abc", kategorie.getId(), new Lagerbestand());
+        ProduktRepresentation given = new ProduktRepresentation(TestUtils.PRODUKT_TEST_ID, "abc", kategorie.getId(), new Lagerbestand());
 
         when(kategorieService.findById(kategorie.getId())).thenReturn(Optional.of(kategorie));
         Produkt then = mapper.apply(given);
@@ -42,14 +44,15 @@ class PresentationToProduktMapperTest {
     }
 
     @Test
+    @DisplayName("RepresentationToProduktMapper Throws Exception Test")
     void applyWithException() {
         Kategorie kategorie = new Kategorie();
-        ProduktPresentation given = new ProduktPresentation(TestUtils.PRODUKT_TEST_ID, "abc", kategorie.getId(), new Lagerbestand());
+        ProduktRepresentation given = new ProduktRepresentation(TestUtils.PRODUKT_TEST_ID, "abc", kategorie.getId(), new Lagerbestand());
 
         when(kategorieService.findById(kategorie.getId())).thenReturn(Optional.empty());
 
         Assertions.assertThrows(KategorieNotFoundException.class,
-                () -> { mapper.apply(given); },
+                () -> mapper.apply(given),
                 "Could not find Kategorie " + kategorie.getId());
     }
 }

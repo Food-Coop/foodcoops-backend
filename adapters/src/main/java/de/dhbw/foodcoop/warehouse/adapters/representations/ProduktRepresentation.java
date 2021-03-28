@@ -1,14 +1,14 @@
-package de.dhbw.foodcoop.warehouse.adapters.presentations;
+package de.dhbw.foodcoop.warehouse.adapters.representations;
 
 import de.dhbw.foodcoop.warehouse.domain.values.Lagerbestand;
 
-public final class ProduktPresentation {
+public final class ProduktRepresentation {
     private final String id;
     private final String name;
     private final String kategorie;
     private final Lagerbestand lagerbestand;
 
-    public ProduktPresentation(String id, String name, String kategorie, Lagerbestand lagerbestand) {
+    public ProduktRepresentation(String id, String name, String kategorie, Lagerbestand lagerbestand) {
         this.id = id;
         this.name = name;
         this.kategorie = kategorie;

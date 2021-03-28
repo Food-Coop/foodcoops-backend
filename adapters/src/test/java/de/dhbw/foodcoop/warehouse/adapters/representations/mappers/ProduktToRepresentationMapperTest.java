@@ -1,19 +1,19 @@
-package de.dhbw.foodcoop.warehouse.adapters.presentations.mappers;
+package de.dhbw.foodcoop.warehouse.adapters.representations.mappers;
 
-import de.dhbw.foodcoop.warehouse.adapters.presentations.ProduktPresentation;
+import de.dhbw.foodcoop.warehouse.adapters.representations.ProduktRepresentation;
 import de.dhbw.foodcoop.warehouse.domain.entities.Produkt;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-class ProduktToPresentationMapperTest {
-    private  final ProduktToPresentationMapper mapper = new ProduktToPresentationMapper();
+class ProduktToRepresentationMapperTest {
+    private  final ProduktToRepresentationMapper mapper = new ProduktToRepresentationMapper();
 
     @Test
+    @DisplayName("ProduktToRepresentationMapper Works Test")
     void applySuccessfully() {
         Produkt given = new Produkt();
-        ProduktPresentation when = mapper.apply(given);
+        ProduktRepresentation when = mapper.apply(given);
         Assertions.assertNotNull(when.getId());
         Assertions.assertEquals("undefined", when.getName());
         Assertions.assertEquals(given.getKategorie().getId(), when.getKategorie());
