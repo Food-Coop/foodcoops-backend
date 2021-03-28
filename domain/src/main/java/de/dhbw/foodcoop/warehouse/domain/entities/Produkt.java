@@ -34,6 +34,7 @@ public class Produkt {
         this(UUID.randomUUID().toString(), name, kategorie, lagerbestand);
     }
 
+    //for unittests
     public Produkt() {
         this(UUID.randomUUID().toString(), "undefined", new Kategorie(), new Lagerbestand());
     }
@@ -46,12 +47,12 @@ public class Produkt {
         return name;
     }
 
-    public String getKategorie() {
-        return kategorie.getId();
-    }
-
     public void setKategorie(Kategorie kategorie) {
         this.kategorie = kategorie;
+    }
+
+    public Kategorie getKategorie() {
+        return kategorie;
     }
 
     public Lagerbestand getLagerbestand() {

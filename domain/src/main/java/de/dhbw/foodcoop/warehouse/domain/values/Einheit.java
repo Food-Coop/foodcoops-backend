@@ -1,5 +1,6 @@
 package de.dhbw.foodcoop.warehouse.domain.values;
 
+import de.dhbw.foodcoop.warehouse.domain.utils.TestUtils;
 import org.apache.commons.lang3.Validate;
 
 import javax.persistence.Column;
@@ -29,7 +30,7 @@ public final class Einheit {
     }
 
     public Einheit() {
-        this("undefined");
+        this(TestUtils.EINHEIT_TEST_ID, "undefined");
     }
 
     public String getId() {

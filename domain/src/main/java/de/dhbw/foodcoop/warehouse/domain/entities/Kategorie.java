@@ -35,7 +35,7 @@ public final class Kategorie {
     }
 
     public Kategorie() {
-        this(UUID.randomUUID().toString()
+        this(TestUtils.KATEGORIE_TEST_ID
                 , "undefined"
                 , TestUtils.BASICICON
                 , new ArrayList<>());

@@ -1,4 +1,4 @@
-package de.dhbw.foodcoop.warehouse.plugins.rest.exceptions;
+package de.dhbw.foodcoop.warehouse.domain.repositories.exceptions;
 
 public class KategorieNotFoundException extends RuntimeException {
     public KategorieNotFoundException(String id) {

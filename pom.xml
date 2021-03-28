@@ -21,6 +21,7 @@
         <module>domain</module>
         <module>application</module>
         <module>plugins</module>
+        <module>adapters</module>
     </modules>
 
     <properties>

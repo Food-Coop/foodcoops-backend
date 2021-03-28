@@ -1,4 +1,4 @@
-package de.dhbw.foodcoop.warehouse.plugins.rest.exceptions;
+package de.dhbw.foodcoop.warehouse.domain.repositories.exceptions;
 
 public class ProduktNotFoundException extends RuntimeException {
     public ProduktNotFoundException(String id) {

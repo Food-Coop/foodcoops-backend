@@ -1,9 +1,12 @@
 package de.dhbw.foodcoop.warehouse.plugins.rest;
 
+import de.dhbw.foodcoop.warehouse.adapters.presentations.ProduktPresentation;
+import de.dhbw.foodcoop.warehouse.adapters.presentations.mappers.PresentationToProduktMapper;
+import de.dhbw.foodcoop.warehouse.adapters.presentations.mappers.ProduktToPresentationMapper;
 import de.dhbw.foodcoop.warehouse.application.LagerService.ProduktService;
 import de.dhbw.foodcoop.warehouse.domain.entities.Produkt;
 import de.dhbw.foodcoop.warehouse.plugins.rest.assembler.ProduktModelAssembler;
-import de.dhbw.foodcoop.warehouse.plugins.rest.exceptions.ProduktNotFoundException;
+import de.dhbw.foodcoop.warehouse.domain.repositories.exceptions.ProduktNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
@@ -20,24 +23,30 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @RestController
 public class ProduktController {
     private final ProduktService service;
+    private final PresentationToProduktMapper toProdukt;
+    private final ProduktToPresentationMapper toPresentation;
     private final ProduktModelAssembler assembler;
 
     @Autowired
-    public ProduktController(ProduktService service, ProduktModelAssembler assembler) {
+    public ProduktController(ProduktService service, PresentationToProduktMapper toProdukt, ProduktToPresentationMapper toPresentation, ProduktModelAssembler assembler) {
         this.service = service;
+        this.toProdukt = toProdukt;
+        this.toPresentation = toPresentation;
         this.assembler = assembler;
     }
 
     @GetMapping("/produkt/{id}")
-    public EntityModel<Produkt> one(@PathVariable String id) {
+    public EntityModel<ProduktPresentation> one(@PathVariable String id) {
         Produkt produkt = service.findById(id)
                 .orElseThrow(() -> new ProduktNotFoundException(id));
-        return assembler.toModel(produkt);
+        ProduktPresentation presentation = toPresentation.apply(produkt);
+        return assembler.toModel(presentation);
     }
 
     @GetMapping("/produkt")
-    public CollectionModel<EntityModel<Produkt>> all() {
-        List<EntityModel<Produkt>> produkts = service.all().stream()
+    public CollectionModel<EntityModel<ProduktPresentation>> all() {
+        List<EntityModel<ProduktPresentation>> produkts = service.all().stream()
+                .map(toPresentation)
                 .map(assembler::toModel)
                 .collect(Collectors.toList());
         return CollectionModel.of(produkts,
@@ -45,8 +54,9 @@ public class ProduktController {
     }
 
     @PostMapping("/produkt")
-    ResponseEntity<?> newProdukt(@RequestBody Produkt newProdukt) {
-        EntityModel<Produkt> entityModel = assembler.toModel(service.create(newProdukt));
+    ResponseEntity<?> newProdukt(@RequestBody ProduktPresentation newProdukt) {
+        Produkt produkt = service.create(toProdukt.apply(newProdukt));
+        EntityModel<ProduktPresentation> entityModel = assembler.toModel(toPresentation.apply(produkt));
         return ResponseEntity
                 .created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri())
                 .body(entityModel);
