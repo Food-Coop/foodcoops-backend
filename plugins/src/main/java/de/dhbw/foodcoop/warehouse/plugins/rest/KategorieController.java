@@ -46,9 +46,27 @@ public class KategorieController {
 
     @PostMapping("/kategorie")
     ResponseEntity<?> newKategorie(@RequestBody Kategorie newKategorie) {
-        EntityModel<Kategorie> entityModel = assembler.toModel(service.create(newKategorie));
+        EntityModel<Kategorie> entityModel = assembler.toModel(service.save(newKategorie));
         return ResponseEntity
                 .created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri())
+                .body(entityModel);
+    }
+
+    @PutMapping("/kategorie/{id}")
+    ResponseEntity<?> replace(@RequestBody Kategorie newKategorie, @PathVariable String id) {
+
+        Kategorie old = service.findById(id).orElseThrow(() -> new KategorieNotFoundException(id));
+        Kategorie replacement = new Kategorie(id,
+                newKategorie.getName(),
+                newKategorie.getIcon(),
+                newKategorie.getProdukte());
+
+        Kategorie saved = service.save(replacement);
+
+        EntityModel<Kategorie> entityModel = assembler.toModel(saved);
+
+        return ResponseEntity //
+                .created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri()) //
                 .body(entityModel);
     }
 }

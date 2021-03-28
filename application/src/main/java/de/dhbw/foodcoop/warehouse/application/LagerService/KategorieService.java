@@ -25,7 +25,7 @@ public class KategorieService {
                 .collect(Collectors.toList());
     }
 
-    public Kategorie create(Kategorie kategorie) {
+    public Kategorie save(Kategorie kategorie) {
         return repository.speichern(kategorie);
     }
 
