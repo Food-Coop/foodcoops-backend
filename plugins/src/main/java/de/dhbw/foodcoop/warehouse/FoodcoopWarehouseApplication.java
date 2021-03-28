@@ -31,7 +31,7 @@ public class FoodcoopWarehouseApplication {
     }
 
     private Kategorie initKategorieGemuese() {
-        Einheit einheit = new Einheit("kg");
+        Einheit einheit = new Einheit(TestUtils.EINHEIT_TEST_ID, "kg");
         Lagerbestand lagerbestand1 = new Lagerbestand(einheit, 12, 15);
         Lagerbestand lagerbestand2 = new Lagerbestand(einheit, 13, 18);
         Produkt karrotten = new Produkt("Karrotten", null, lagerbestand1);

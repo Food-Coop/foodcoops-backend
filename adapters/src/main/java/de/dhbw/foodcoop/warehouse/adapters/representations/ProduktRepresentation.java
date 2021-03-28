@@ -1,6 +1,7 @@
 package de.dhbw.foodcoop.warehouse.adapters.representations;
 
 import de.dhbw.foodcoop.warehouse.domain.values.Lagerbestand;
+import org.apache.commons.lang3.Validate;
 
 public final class ProduktRepresentation {
     private final String id;

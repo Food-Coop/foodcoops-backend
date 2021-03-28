@@ -1,12 +1,12 @@
 package de.dhbw.foodcoop.warehouse.plugins.rest;
 
 import de.dhbw.foodcoop.warehouse.adapters.representations.ProduktRepresentation;
-import de.dhbw.foodcoop.warehouse.adapters.representations.mappers.RepresentationToProduktMapper;
 import de.dhbw.foodcoop.warehouse.adapters.representations.mappers.ProduktToRepresentationMapper;
+import de.dhbw.foodcoop.warehouse.adapters.representations.mappers.RepresentationToProduktMapper;
 import de.dhbw.foodcoop.warehouse.application.LagerService.ProduktService;
 import de.dhbw.foodcoop.warehouse.domain.entities.Produkt;
-import de.dhbw.foodcoop.warehouse.plugins.rest.assembler.ProduktModelAssembler;
 import de.dhbw.foodcoop.warehouse.domain.repositories.exceptions.ProduktNotFoundException;
+import de.dhbw.foodcoop.warehouse.plugins.rest.assembler.ProduktModelAssembler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
@@ -55,10 +55,27 @@ public class ProduktController {
 
     @PostMapping("/produkt")
     ResponseEntity<?> newProdukt(@RequestBody ProduktRepresentation newProdukt) {
-        Produkt produkt = service.create(toProdukt.apply(newProdukt));
+        Produkt produkt = service.save(toProdukt.apply(newProdukt));
         EntityModel<ProduktRepresentation> entityModel = assembler.toModel(toPresentation.apply(produkt));
         return ResponseEntity
                 .created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri())
+                .body(entityModel);
+    }
+
+    @PutMapping("/produkt/{id}")
+    ResponseEntity<?> replace(@RequestBody ProduktRepresentation newProdukt, @PathVariable String id) {
+        Produkt old = service.findById(id).orElseThrow(() -> new ProduktNotFoundException(id));
+        ProduktRepresentation replacement = new ProduktRepresentation(old.getId(),
+                newProdukt.getName(),
+                newProdukt.getKategorie(),
+                newProdukt.getLagerbestand());
+
+        Produkt saved = service.save(toProdukt.apply(replacement));
+
+        EntityModel<ProduktRepresentation> entityModel = assembler.toModel(toPresentation.apply(saved));
+
+        return ResponseEntity //
+                .created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri()) //
                 .body(entityModel);
     }
 }

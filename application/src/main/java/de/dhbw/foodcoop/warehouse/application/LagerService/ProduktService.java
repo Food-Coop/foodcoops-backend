@@ -25,7 +25,7 @@ public class ProduktService {
         return repository.alle();
     }
 
-    public Produkt create(Produkt newProdukt) {
+    public Produkt save(Produkt newProdukt) {
         return repository.speichern(newProdukt);
     }
 }
