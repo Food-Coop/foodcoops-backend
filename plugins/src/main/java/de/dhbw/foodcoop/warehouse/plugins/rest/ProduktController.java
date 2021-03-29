@@ -64,8 +64,8 @@ public class ProduktController {
 
     @PutMapping("/produkt/{id}")
     ResponseEntity<?> replace(@RequestBody ProduktRepresentation newProdukt, @PathVariable String id) {
-        Produkt old = service.findById(id).orElseThrow(() -> new ProduktNotFoundException(id));
-        ProduktRepresentation replacement = new ProduktRepresentation(old.getId(),
+        service.findById(id).orElseThrow(() -> new ProduktNotFoundException(id));
+        ProduktRepresentation replacement = new ProduktRepresentation(id,
                 newProdukt.getName(),
                 newProdukt.getKategorie(),
                 newProdukt.getLagerbestand());
