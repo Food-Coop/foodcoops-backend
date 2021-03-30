@@ -1,10 +1,10 @@
 # Food-Coop-Warehouse
 
 Food-coop warehouse management software.
-### Installing, starting and stopping the application
+## Installing, starting and stopping the application
 
-Food-coop warehouse comes prepackaged with its maven wrapper. In the terminal you go to directory with the binaries.
-Build the app with thus:
+Food-coop warehouse comes prepackaged with its maven wrapper. Go to the project directory.<br>
+Building the app:
 ```
 mvnw clean install
 ```
@@ -12,8 +12,18 @@ Starting the app:
 ```
 mvnw -pl plugins spring-boot:run
 ```
-Stop the with ```ctrl c```
+Stopping the app: 
+```
+ctrl c
+```
 ___
+
+##Domain Driven Design
+
+Domain Driven Design (DDD) describes an approach to model complex software. The term was coined by Eric Evans in 2004 
+[[1]](#1). A domain model is collaboratively extracted from the business domain by software engineers and domain 
+experts. The model maps core concepts and relationships in the domain language.<br>
+This guide uses the terminology as defined in Eric Evans' "Domain-driven design reference" [[2]](#2).
 
 ### Ubiquitous language
 
@@ -87,12 +97,21 @@ and is supposed to be turned into a PDF document by the client.
 
 ---
 
-### Lager
+### Kategorie
 
 This API allows a consumer to get information on all *Kategorien* with all their
-*Produkte* and their respective *Lagerbestand* in one JSON (in production it will be the information will depend on the
+*Produkte* and their respective *Lagerbestand* in one JSON (in production the information will depend on the
 role via authentication). Try it yourself:
 
 ```
 curl <address>/kategorien
 ``` 
+
+---
+
+## References
+<a id="1">[1]</a>
+Evans, Eric. Domain-driven design: tackling complexity in the heart of software. 
+Addison-Wesley Professional, 2004.<br>
+<a id="2">[2]</a>
+Evans, Eric. "Domain-driven design reference." Definitions and Pattern Summaries. März (2015).
