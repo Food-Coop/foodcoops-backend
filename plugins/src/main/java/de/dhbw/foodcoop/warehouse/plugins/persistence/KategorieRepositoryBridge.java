@@ -18,7 +18,7 @@ public class KategorieRepositoryBridge implements KategorieRepository {
     }
 
     @Override
-    public List<Kategorie> alleKategorienAbrufen() {
+    public List<Kategorie> alle() {
         return springDataKategorieRepository.findAll();
     }
 
@@ -28,7 +28,7 @@ public class KategorieRepositoryBridge implements KategorieRepository {
     }
 
     @Override
-    public Optional<Kategorie> findenPerId(String id) {
+    public Optional<Kategorie> findeMitId(String id) {
         return springDataKategorieRepository.findById(id);
     }
 }

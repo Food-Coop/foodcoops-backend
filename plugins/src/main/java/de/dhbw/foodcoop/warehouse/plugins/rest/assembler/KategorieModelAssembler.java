@@ -1,15 +1,10 @@
 package de.dhbw.foodcoop.warehouse.plugins.rest.assembler;
 
 import de.dhbw.foodcoop.warehouse.adapters.representations.KategorieRepresentation;
-import de.dhbw.foodcoop.warehouse.domain.entities.Kategorie;
 import de.dhbw.foodcoop.warehouse.plugins.rest.KategorieController;
-import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.RepresentationModelAssembler;
 import org.springframework.stereotype.Component;
-
-import java.util.Iterator;
-import java.util.List;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;

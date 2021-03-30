@@ -6,9 +6,9 @@ import java.util.List;
 import java.util.Optional;
 
 public interface KategorieRepository {
-    List<Kategorie> alleKategorienAbrufen();
+    List<Kategorie> alle();
 
     Kategorie speichern(Kategorie initKategorieGemuese);
 
-    Optional<Kategorie> findenPerId(String id);
+    Optional<Kategorie> findeMitId(String id);
 }

@@ -31,7 +31,7 @@ public class KategorieServiceTest {
         Kategorie b = new Kategorie("B", TestUtils.BASICICON, new ArrayList<>());
         Kategorie uea = new Kategorie("Üa", TestUtils.BASICICON, new ArrayList<>());
 
-        when(mockRepository.alleKategorienAbrufen()).thenReturn(Arrays.asList(uea, b, a));
+        when(mockRepository.alle()).thenReturn(Arrays.asList(uea, b, a));
         List<Kategorie> whenReturn = toBeTested.all();
 
         Assertions.assertEquals("A", whenReturn.get(0).getName());

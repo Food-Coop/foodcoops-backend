@@ -20,7 +20,7 @@ public class KategorieService {
     }
 
     public List<Kategorie> all() {
-        return repository.alleKategorienAbrufen()
+        return repository.alle()
                 .stream().sorted(Comparator.comparing(Kategorie::getName))
                 .collect(Collectors.toList());
     }
@@ -30,7 +30,7 @@ public class KategorieService {
     }
 
     public Optional<Kategorie> findById(String id) {
-        return repository.findenPerId(id);
+        return repository.findeMitId(id);
     }
 
 }
