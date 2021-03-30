@@ -1,6 +1,18 @@
 # Food-Coop-Warehouse
 
 Food-coop warehouse management software.
+### Installing, starting and stopping the application
+
+Food-coop warehouse comes prepackaged with its maven wrapper. In the terminal you go to directory with the binaries.
+Build the app with thus:
+```
+mvnw clean install
+```
+Starting the app:
+```
+mvnw -pl plugins spring-boot:run
+```
+Stop the with ```ctrl c```
 ___
 
 ### Ubiquitous language
@@ -82,5 +94,5 @@ This API allows a consumer to get information on all *Kategorien* with all their
 role via authentication). Try it yourself:
 
 ```
-curl <address>/api/lager
+curl <address>/kategorien
 ``` 
