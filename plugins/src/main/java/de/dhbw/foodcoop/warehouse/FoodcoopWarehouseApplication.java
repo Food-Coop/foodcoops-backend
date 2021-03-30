@@ -34,9 +34,10 @@ public class FoodcoopWarehouseApplication {
         Einheit einheit = new Einheit(TestUtils.EINHEIT_TEST_ID, "kg");
         Lagerbestand lagerbestand1 = new Lagerbestand(einheit, 12, 15);
         Lagerbestand lagerbestand2 = new Lagerbestand(einheit, 13, 18);
-        Produkt karrotten = new Produkt("Karrotten", null, lagerbestand1);
+        Produkt karrotten = new Produkt(TestUtils.PRODUKT_TEST_ID, "Karrotten", null, lagerbestand1);
         Produkt roteBeete = new Produkt("Rote Beete", null, lagerbestand2);
-        Kategorie gemuese = new Kategorie("Gemüse"
+        Kategorie gemuese = new Kategorie(TestUtils.KATEGORIE_TEST_ID
+                ,"Gemüse"
                 , TestUtils.GEMUESEICON
                 , Arrays.asList(karrotten, roteBeete));
         karrotten.setKategorie(gemuese);
