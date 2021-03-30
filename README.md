@@ -114,7 +114,7 @@ will depend on the user role via authentication).
 ```
 curl -X GET --location "http://localhost:8080/kategorie" -H "Content-Type: application/json"
 ``` 
-####Get specific Kategorie
+####Get one Kategorie
 ```
 curl -X GET --location "http://localhost:8080/kategorie/6abeec3f-fdc4-49b1-b64e-e005b45051cb" \
     -H "Content-Type: application/json"
@@ -130,7 +130,7 @@ curl -X POST --location "http://localhost:8080/kategorie" \
 \"produkte\":[]
 }"
 ```
-####Put updated Kategorie
+####Put update Kategorie
 ```
 curl -X PUT --location "http://localhost:8080/kategorie/1631c92e-a31e-45f2-89c9-32c90ff91b90" \
 -H "Content-Type: application/json" \
@@ -140,6 +140,52 @@ curl -X PUT --location "http://localhost:8080/kategorie/1631c92e-a31e-45f2-89c9-
 \"icon\":\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABmJLR0QA/wD/AP+gvaeTAAAHMUlEQVR4nO2ba2wVRRTHfy2F0halPIUShCgiRVCBEsEHiii+CFYoikoERSMYHxCNGCIq4AeiYlFE0GiigiZKUAGViA8M8pBQg0qJr4impCgU5FVKKbT1w7nLPbt39+7s3ntLE+8/OcntznnMnN2ZOefMFNJII4000kgjjTTS+H8iI8X6zweKgaFAF6ANsA/4CVgDrAXqU9yH04JC4GOg0Yf+AMb76OoGzAS+Av4G6oAqYBvwInB58rufGMYDNfgPXtO7QGuHnnxgIXDCQH4DcFEKx2SMe4AGoh2rB1YAE4BLgAHIlFgMHMQ+iM+ALKXrC4I5sRaYlMrB+WEocFx1aDvQPw5/B2A59kHMVe3l6vlG4C6gB9AOaA9cD7yB/QtpiPA1OTKAMtWRMuAMQ9nFSu539fxCZAoU+8j3AX5ROo4BfU07niyMVh2oBroHkM0C3gb2A9ND2u8A/Kz6sDakntBYqozPa2rjERRhnw7xpt8pZPmzGGGE+v1eALkM5BMegnzy+cgcPwbsQba975FVvtZHVxmykI6O/D0GWYdSjpbIat+I7NGZBjI9gWeBSsxW+KPI4Ip99N+iZEqDDyUcOimj//rwtgdeI+qwMFQO3O6hPxOYBSwBzkJeTsqRjX3vb+vBNxbYS+yAtgLzgXHApcAFwCDgZuARJI5wC6xWIA51QxegAjgMXJvI4JzoCcwG1iNv0vLwb6pjI1zkZmJ30glk+zNaqIA8JMLcht0Ju4DLXPjnKZ6F6nlWpG0TMNLQNiBveT4yx3UHrMEuUc8+chh8yyGzEVnwwiADuB95s14RYB6ypVrt10We5yPbo/V8s6nRPOSNOz/B3UDnCM8Q9bwe+QQzkEhNy7xEcnaeQiRo0rpnRNqmqmflkX6chz1YagSeNjXmDFe/QbaYPAff6kh7DdAReNgh90SgIfqjAPvUawSewj7Qe4Hh2L+I+iB9KSZ2EF41hDOBB5Gkpy/yaVpyzwUZWQD0BY44+mjRXuQl6GlbjX9obcNGJbwkgNw6Jbee5AVcbpiAuwOc2WYFcHEQxZ2I7tfHic53P4xQRuuA3kGMhsQm3J1g0XdAVyAHGIZMjQI/pXogGwJ05kMltyiAXCIYiffg/wFeQZykp4NvmFyimFcYdqQN0aClAakJNgV6YI8zTOgviB9XH1S/zzbsyCjkMwPx+K+GconiIcwLvPuQWKXEj7GAqFePYbYG6KBnlmGHkgFdjHGjHcAUJMwOVAnXihcY8G9R/MOCGEoQzxPfAYcIVqQ5hTuUkgbEi/FwSPF3DGMwJFoAq4jvhDVhFGcAnzsUrQb6ufB2VTwHwhhLELnIdhfPCWODKi0BfnRRdByp5Gj0Vu07I89ykBW6a1DDIdEOCdW9HLCT2PMHV+QSmwM46SqHTKFqq4jI6333T6ToadSBBJANLIvT70f9FLQEvnQIHUaOuhYiK/00YlfTfnGMatqEdyEjmRiD7PVugVFuPMHZDoFSJNHxQ38XY160lWi8kEpkI8nPXOyZ491eAp2RPd9iDJLCdsHcAY3A+6T+dFpjsrK92otpumLaQrAOZhJbMfKjZzx03YDsPlMD2I+HVkhFyOpfLbH1DABWqs5NDmGogmAOaABuc9HjLGqExTSkUn0SWcN2KL1D3AR00XFQCIN+aakb1QCDHXp0Ka0OuDpEX+JliJ7rgHbAgBBGnTVAU6pELkJYyMUehu8neF3BGcC5Tj9nNlipfoep3JaFkAFJvFYS3Z5qkHOB3ZG/2wOfELt9ZgN3EvsF9QKu8bHpemjyGFEPbSb4Kj2YcF+ARcsdNouQYzGrfR2yoFl4IfL8JJKKW/jAwJbrIW4B9lOYGW5McZCN/ZJEGJrj0FmCvdjxpmp7WT0/BFyJHJuZ2PGMCOcopgbg8WA+8M3NTXYG58WpWQ4eq08diD0fMCXPgkgLYheQRXjsmy54NUEHNCJfod6mMpBjd6u9nmh5uw+xFWATinuLJAdZdLTATuBGAwdMSoIDGpGUWp/7tUbuCljt1cDASNs7AXXvMhgHLT0UbwMm4p3VdcP7sCIo1SH3CKxcxJmnVCHnFUcD6n3dxAEWxiEZlFNJNbJ1TUHOEDR6Yr82kyhVIxcla5OkryiIA0AWm1Lsp7Ka9iDFCI3JHrynm9YHHbxGW2T72O6iuNDBO7wZDNZJ9cAViThAoztwH5LW6rQ5C7iJ5E6BZNHiZA3eC0XE3uJoLlSOWWEnNPIJvho3FVXicbqVzGPrc4kmM1VIrL0BmXe9kJT2VsRRTYndyDWZilQbGkXU40s9eHKQy8zf0jRv/gdkS/aEX7aXCTyAhMELkETHQiekmmOFyAORNwxSGFnlo3sgUrlN1eWJA8idpCPAp4Q8qJ1I1JtPOtq+pmneYjKoCo/83+9a61H1+7CjLW5tvZmhNZLkxcCk4FGCfObLsP+D0zlI4tPKTagZoQEpg7veC/wPq3HMapPIvl0AAAAASUVORK5CYII=\",
 \"produkte\":[]
 }"
+```
+####Get all Produkts
+```
+curl -X GET --location "http://localhost:8080/produkt" \
+    -H "Content-Type: application/json"
+```
+####Get one Produkt
+```
+curl -X GET --location "http://localhost:8080/produkt/30724b6f-01ec-4c47-aba7-1a5f2bc5f833" \
+    -H "Content-Type: application/json"
+```
+####Post new Produkt
+```
+curl -X POST --location "http://localhost:8080/produkt" \
+    -H "Content-Type: application/json" \
+    -d "{
+          \"id\":\"5ff026e7-176d-4fe2-96ce-d3100033ac1e\",
+          \"name\":\"Äpfel\",
+          \"kategorie\":\"1631c92e-a31e-45f2-89c9-32c90ff91b90\",
+          \"lagerbestand\":{
+            \"einheit\":{
+              \"id\":\"d20b6519-bc2d-4e9f-b3e7-9bebc995f110\",
+              \"name\":\"kg\"
+            },
+            \"istLagerbestand\":13,
+            \"sollLagerbestand\":18
+          }
+        }"
+```
+####Put update existing Produkt
+```
+curl -X PUT --location "http://localhost:8080/produkt/5ff026e7-176d-4fe2-96ce-d3100033ac1e" \
+    -H "Content-Type: application/json" \
+    -d "{
+          \"id\":\"5ff026e7-176d-4fe2-96ce-d3100033ac1e\",
+          \"name\":\"Äpfel\",
+          \"kategorie\":\"1631c92e-a31e-45f2-89c9-32c90ff91b90\",
+          \"lagerbestand\":{
+            \"einheit\":{
+              \"id\":\"d20b6519-bc2d-4e9f-b3e7-9bebc995f110\",
+              \"name\":\"kg\"
+            },
+            \"istLagerbestand\":9,
+            \"sollLagerbestand\":18
+          }
+        }"
 ```
 ---
 
