@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
@@ -55,6 +56,11 @@ public class ProduktController {
 
     @PostMapping("/produkt")
     ResponseEntity<?> newProdukt(@RequestBody ProduktRepresentation newProdukt) {
+        String id = newProdukt.getId() == null ||
+                newProdukt.getId().equals("undefined") ?
+                UUID.randomUUID().toString() :
+                newProdukt.getId();
+        newProdukt.setId(id);
         Produkt produkt = service.save(toProdukt.apply(newProdukt));
         EntityModel<ProduktRepresentation> entityModel = assembler.toModel(toPresentation.apply(produkt));
         return ResponseEntity
