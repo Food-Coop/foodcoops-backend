@@ -1,6 +1,6 @@
 package de.dhbw.foodcoop.warehouse.plugins.rest;
 
-import de.dhbw.foodcoop.warehouse.application.LagerService.EinheitService;
+import de.dhbw.foodcoop.warehouse.application.lager.EinheitService;
 import de.dhbw.foodcoop.warehouse.domain.repositories.exceptions.EinheitNotFoundException;
 import de.dhbw.foodcoop.warehouse.domain.values.Einheit;
 import de.dhbw.foodcoop.warehouse.plugins.rest.assembler.EinheitModelAssembler;

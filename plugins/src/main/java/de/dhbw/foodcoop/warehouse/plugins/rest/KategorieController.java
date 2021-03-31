@@ -3,7 +3,7 @@ package de.dhbw.foodcoop.warehouse.plugins.rest;
 import de.dhbw.foodcoop.warehouse.adapters.representations.KategorieRepresentation;
 import de.dhbw.foodcoop.warehouse.adapters.representations.mappers.KategorieToRepresentationMapper;
 import de.dhbw.foodcoop.warehouse.adapters.representations.mappers.RepresentationToKategorieMapper;
-import de.dhbw.foodcoop.warehouse.application.LagerService.KategorieService;
+import de.dhbw.foodcoop.warehouse.application.lager.KategorieService;
 import de.dhbw.foodcoop.warehouse.domain.entities.Kategorie;
 import de.dhbw.foodcoop.warehouse.domain.repositories.exceptions.KategorieNotFoundException;
 import de.dhbw.foodcoop.warehouse.plugins.rest.assembler.KategorieModelAssembler;
