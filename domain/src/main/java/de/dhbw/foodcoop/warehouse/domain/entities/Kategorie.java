@@ -1,12 +1,10 @@
 package de.dhbw.foodcoop.warehouse.domain.entities;
 
+import de.dhbw.foodcoop.warehouse.domain.utils.TestUtils;
 import org.apache.commons.lang3.Validate;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 @Entity
 @Table
@@ -16,6 +14,7 @@ public final class Kategorie {
     @Column
     private final String name;
     @Column
+    @Lob
     private final String icon;
     @OneToMany(mappedBy = "kategorie", cascade = CascadeType.ALL, orphanRemoval = true)
     private final List<Produkt> produkte;
@@ -36,7 +35,10 @@ public final class Kategorie {
     }
 
     public Kategorie() {
-        this(UUID.randomUUID().toString(), "undefined", "undefined", new ArrayList<>());
+        this(TestUtils.KATEGORIE_TEST_ID
+                , "undefined"
+                , TestUtils.BASICICON
+                , new ArrayList<>());
     }
 
     public String getId() {
