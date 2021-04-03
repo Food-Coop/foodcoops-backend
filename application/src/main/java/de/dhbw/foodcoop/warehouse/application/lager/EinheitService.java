@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class EinheitService {
@@ -26,6 +27,13 @@ public class EinheitService {
     }
 
     public Einheit save(Einheit newEinheit) {
+        List<Einheit> all = all();
+        List<Einheit> einheits = all.stream()
+                .filter(e -> e.getName().equals(newEinheit.getName()))
+                .collect(Collectors.toList());
+        if (!einheits.isEmpty()) {
+            return einheits.get(0);
+        }
         return repository.speichern(newEinheit);
     }
 }
