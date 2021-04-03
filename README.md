@@ -20,7 +20,7 @@ ___
 
 ##Domain Driven Design
 
-Domain Driven Design (DDD) describes an approach to model complex software. The term was coined by Eric Evans in 2004 
+Domain Driven Design (DDD) describes an approach to model complex software. The term was coined by Eric Evans in 2003 
 [[1]](#1). A domain model is collaboratively extracted from the business domain by software engineers and domain 
 experts. The model maps core concepts and relationships in the domain language.<br>
 This guide uses the terminology as defined in Eric Evans' "Domain-driven design reference" [[2]](#2).
@@ -192,6 +192,6 @@ curl -X PUT --location "http://localhost:8080/produkt/5ff026e7-176d-4fe2-96ce-d3
 ## References
 <a id="1">[1]</a>
 Evans, Eric. Domain-driven design: tackling complexity in the heart of software. 
-Addison-Wesley Professional, 2004.<br>
+Addison-Wesley Professional, 2003.<br>
 <a id="2">[2]</a>
 Evans, Eric. "Domain-driven design reference." Definitions and Pattern Summaries. März (2015).

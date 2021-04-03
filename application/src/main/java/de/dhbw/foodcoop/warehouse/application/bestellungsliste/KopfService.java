@@ -1,12 +1,14 @@
 package de.dhbw.foodcoop.warehouse.application.bestellungsliste;
 
+import org.springframework.stereotype.Service;
+
 import java.time.LocalDate;
 
-public class Kopf {
+public class KopfService {
     private final String einkaeufer;
     private final LocalDate datum;
 
-    public Kopf(String einkaeufer) {
+    public KopfService(String einkaeufer) {
         this.einkaeufer = einkaeufer;
         this.datum = LocalDate.now();
     }
