@@ -3,7 +3,7 @@ package de.dhbw.foodcoop.warehouse.plugins.rest;
 import de.dhbw.foodcoop.warehouse.adapters.representations.ProduktRepresentation;
 import de.dhbw.foodcoop.warehouse.adapters.representations.mappers.ProduktToRepresentationMapper;
 import de.dhbw.foodcoop.warehouse.adapters.representations.mappers.RepresentationToProduktMapper;
-import de.dhbw.foodcoop.warehouse.application.LagerService.ProduktService;
+import de.dhbw.foodcoop.warehouse.application.lager.ProduktService;
 import de.dhbw.foodcoop.warehouse.domain.entities.Produkt;
 import de.dhbw.foodcoop.warehouse.domain.repositories.exceptions.ProduktNotFoundException;
 import de.dhbw.foodcoop.warehouse.plugins.rest.assembler.ProduktModelAssembler;
@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
@@ -55,6 +56,11 @@ public class ProduktController {
 
     @PostMapping("/produkt")
     ResponseEntity<?> newProdukt(@RequestBody ProduktRepresentation newProdukt) {
+        String id = newProdukt.getId() == null ||
+                newProdukt.getId().equals("undefined") ?
+                UUID.randomUUID().toString() :
+                newProdukt.getId();
+        newProdukt.setId(id);
         Produkt produkt = service.save(toProdukt.apply(newProdukt));
         EntityModel<ProduktRepresentation> entityModel = assembler.toModel(toPresentation.apply(produkt));
         return ResponseEntity

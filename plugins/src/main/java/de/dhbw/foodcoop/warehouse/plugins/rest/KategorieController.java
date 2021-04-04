@@ -3,7 +3,7 @@ package de.dhbw.foodcoop.warehouse.plugins.rest;
 import de.dhbw.foodcoop.warehouse.adapters.representations.KategorieRepresentation;
 import de.dhbw.foodcoop.warehouse.adapters.representations.mappers.KategorieToRepresentationMapper;
 import de.dhbw.foodcoop.warehouse.adapters.representations.mappers.RepresentationToKategorieMapper;
-import de.dhbw.foodcoop.warehouse.application.LagerService.KategorieService;
+import de.dhbw.foodcoop.warehouse.application.lager.KategorieService;
 import de.dhbw.foodcoop.warehouse.domain.entities.Kategorie;
 import de.dhbw.foodcoop.warehouse.domain.repositories.exceptions.KategorieNotFoundException;
 import de.dhbw.foodcoop.warehouse.plugins.rest.assembler.KategorieModelAssembler;
@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
@@ -54,6 +55,11 @@ public class KategorieController {
 
     @PostMapping("/kategorie")
     ResponseEntity<?> newKategorie(@RequestBody KategorieRepresentation newKategorie) {
+        String id = newKategorie.getId() == null ||
+                newKategorie.getId().equals("undefined") ?
+                UUID.randomUUID().toString() :
+                newKategorie.getId();
+        newKategorie.setId(id);
         Kategorie saved = service.save(toKategorie.apply(newKategorie));
         EntityModel<KategorieRepresentation> entityModel = assembler.toModel(toRepresentation.apply(saved));
         return ResponseEntity

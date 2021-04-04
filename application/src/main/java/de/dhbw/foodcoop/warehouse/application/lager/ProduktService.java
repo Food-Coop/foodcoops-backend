@@ -1,4 +1,4 @@
-package de.dhbw.foodcoop.warehouse.application.LagerService;
+package de.dhbw.foodcoop.warehouse.application.lager;
 
 import de.dhbw.foodcoop.warehouse.domain.entities.Produkt;
 import de.dhbw.foodcoop.warehouse.domain.repositories.ProduktRepository;

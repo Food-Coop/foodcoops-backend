@@ -1,13 +1,12 @@
 package de.dhbw.foodcoop.warehouse.adapters.representations;
 
 import de.dhbw.foodcoop.warehouse.domain.values.Lagerbestand;
-import org.apache.commons.lang3.Validate;
 
 public final class ProduktRepresentation {
-    private final String id;
     private final String name;
     private final String kategorie;
     private final Lagerbestand lagerbestand;
+    private String id;
 
     public ProduktRepresentation(String id, String name, String kategorie, Lagerbestand lagerbestand) {
         this.id = id;
@@ -18,6 +17,10 @@ public final class ProduktRepresentation {
 
     public String getId() {
         return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getName() {
