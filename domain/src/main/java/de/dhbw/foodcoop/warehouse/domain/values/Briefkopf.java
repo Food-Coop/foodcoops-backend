@@ -27,6 +27,10 @@ public final class Briefkopf {
         return datum.toString();
     }
 
+    public String asDocumentName() {
+        return getDatumString() + "_" + einkaeufer;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

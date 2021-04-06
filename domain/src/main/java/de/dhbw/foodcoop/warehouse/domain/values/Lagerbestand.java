@@ -11,11 +11,11 @@ public class Lagerbestand {
     @JoinColumn(name = "einheit_id", referencedColumnName = "id")
     private final Einheit einheit;
     @Column
-    private final Integer istLagerbestand;
+    private final Double istLagerbestand;
     @Column
-    private final Integer sollLagerbestand;
+    private final Double sollLagerbestand;
 
-    public Lagerbestand(Einheit einheit, Integer istLagerbestand, Integer sollLagerbestand) {
+    public Lagerbestand(Einheit einheit, Double istLagerbestand, Double sollLagerbestand) {
         Validate.notNull(einheit);
         Validate.isTrue(istLagerbestand >= 0);
         Validate.isTrue(sollLagerbestand >= 0);
@@ -26,18 +26,18 @@ public class Lagerbestand {
     }
 
     public Lagerbestand() {
-        this(new Einheit(), 0, 0);
+        this(new Einheit(), 0.0, 0.0);
     }
 
     public Einheit getEinheit() {
         return einheit;
     }
 
-    public Integer getIstLagerbestand() {
+    public Double getIstLagerbestand() {
         return istLagerbestand;
     }
 
-    public Integer getSollLagerbestand() {
+    public Double getSollLagerbestand() {
         return sollLagerbestand;
     }
 
@@ -61,5 +61,13 @@ public class Lagerbestand {
                 ", istLagerbestand=" + istLagerbestand +
                 ", sollLagerbestand=" + sollLagerbestand +
                 '}';
+    }
+
+    public boolean nachbestellen() {
+        return istLagerbestand < getSollLagerbestand();
+    }
+
+    public Double differenz() {
+        return sollLagerbestand - istLagerbestand;
     }
 }

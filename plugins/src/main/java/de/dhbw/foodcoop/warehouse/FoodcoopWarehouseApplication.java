@@ -32,8 +32,8 @@ public class FoodcoopWarehouseApplication {
 
     private Kategorie initKategorieGemuese() {
         Einheit einheit = new Einheit(TestUtils.EINHEIT_TEST_ID, "kg");
-        Lagerbestand lagerbestand1 = new Lagerbestand(einheit, 12, 15);
-        Lagerbestand lagerbestand2 = new Lagerbestand(einheit, 13, 18);
+        Lagerbestand lagerbestand1 = new Lagerbestand(einheit, 12.2, 15.0);
+        Lagerbestand lagerbestand2 = new Lagerbestand(einheit, 13.1, 18.0);
         Produkt karrotten = new Produkt(TestUtils.PRODUKT_TEST_ID, "Karrotten", null, lagerbestand1);
         Produkt roteBeete = new Produkt("Rote Beete", null, lagerbestand2);
         Kategorie gemuese = new Kategorie(TestUtils.KATEGORIE_TEST_ID
@@ -47,8 +47,8 @@ public class FoodcoopWarehouseApplication {
 
     private Kategorie initKategorieTeigwaren() {
         Einheit einheit = new Einheit(TestUtils.EINHEIT_TEST_ID ,"kg");
-        Lagerbestand lagerbestand1 = new Lagerbestand(einheit, 12, 15);
-        Lagerbestand lagerbestand2 = new Lagerbestand(einheit, 13, 18);
+        Lagerbestand lagerbestand1 = new Lagerbestand(einheit, 12.1, 15.9);
+        Lagerbestand lagerbestand2 = new Lagerbestand(einheit, 13.0, 18.1);
         Produkt weissbrot = new Produkt("Kasten Weißbrot", null, lagerbestand1);
         Produkt roggenbrot = new Produkt("Roggenbrot", null, lagerbestand2);
         Kategorie teigwaren = new Kategorie("Teigwaren"
