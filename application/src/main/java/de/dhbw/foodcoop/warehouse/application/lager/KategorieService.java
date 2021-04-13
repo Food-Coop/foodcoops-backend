@@ -2,6 +2,7 @@ package de.dhbw.foodcoop.warehouse.application.lager;
 
 import de.dhbw.foodcoop.warehouse.domain.entities.Kategorie;
 import de.dhbw.foodcoop.warehouse.domain.repositories.KategorieRepository;
+import de.dhbw.foodcoop.warehouse.domain.repositories.exceptions.KategorieIsInUseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -33,4 +34,14 @@ public class KategorieService {
         return repository.findeMitId(id);
     }
 
+    public void deleteById(String id) {
+        Optional<Kategorie> toBeDeleted = repository.findeMitId(id);
+        if(toBeDeleted.isEmpty()) {
+            return;
+        }
+        if (!toBeDeleted.get().getProdukte().isEmpty()) {
+            throw new KategorieIsInUseException(id);
+        }
+        repository.deleteById(id);
+    }
 }

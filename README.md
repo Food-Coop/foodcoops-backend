@@ -112,16 +112,16 @@ Get all *Kategorien* with all *Produkte* and their respective *Lagerbestand* in 
 will depend on the user role via authentication).
 
 ```
-curl -X GET --location "http://localhost:8080/kategorie" -H "Content-Type: application/json"
+curl -X GET --location "http://localhost:8080/kategorien" -H "Content-Type: application/json"
 ``` 
 ####Get one Kategorie
 ```
-curl -X GET --location "http://localhost:8080/kategorie/6abeec3f-fdc4-49b1-b64e-e005b45051cb" \
+curl -X GET --location "http://localhost:8080/kategorien/6abeec3f-fdc4-49b1-b64e-e005b45051cb" \
     -H "Content-Type: application/json"
 ```
 ####Post new Kategorie
 ```
-curl -X POST --location "http://localhost:8080/kategorie" \
+curl -X POST --location "http://localhost:8080/kategorien" \
 -H "Content-Type: application/json" \
 -d "{
 \"id\":\"1631c92e-a31e-45f2-89c9-32c90ff91b90\",
@@ -132,7 +132,7 @@ curl -X POST --location "http://localhost:8080/kategorie" \
 ```
 ####Put update Kategorie
 ```
-curl -X PUT --location "http://localhost:8080/kategorie/1631c92e-a31e-45f2-89c9-32c90ff91b90" \
+curl -X PUT --location "http://localhost:8080/kategorien/1631c92e-a31e-45f2-89c9-32c90ff91b90" \
 -H "Content-Type: application/json" \
 -d "{
 \"id\":\"1631c92e-a31e-45f2-89c9-32c90ff91b90\",
@@ -143,17 +143,17 @@ curl -X PUT --location "http://localhost:8080/kategorie/1631c92e-a31e-45f2-89c9-
 ```
 ####Get all Produkts
 ```
-curl -X GET --location "http://localhost:8080/produkt" \
+curl -X GET --location "http://localhost:8080/produkte" \
     -H "Content-Type: application/json"
 ```
 ####Get one Produkt
 ```
-curl -X GET --location "http://localhost:8080/produkt/30724b6f-01ec-4c47-aba7-1a5f2bc5f833" \
+curl -X GET --location "http://localhost:8080/produkte/30724b6f-01ec-4c47-aba7-1a5f2bc5f833" \
     -H "Content-Type: application/json"
 ```
 ####Post new Produkt
 ```
-curl -X POST --location "http://localhost:8080/produkt" \
+curl -X POST --location "http://localhost:8080/produkte" \
     -H "Content-Type: application/json" \
     -d "{
           \"id\":\"5ff026e7-176d-4fe2-96ce-d3100033ac1e\",
@@ -171,7 +171,7 @@ curl -X POST --location "http://localhost:8080/produkt" \
 ```
 ####Put update existing Produkt
 ```
-curl -X PUT --location "http://localhost:8080/produkt/5ff026e7-176d-4fe2-96ce-d3100033ac1e" \
+curl -X PUT --location "http://localhost:8080/produkte/5ff026e7-176d-4fe2-96ce-d3100033ac1e" \
     -H "Content-Type: application/json" \
     -d "{
           \"id\":\"5ff026e7-176d-4fe2-96ce-d3100033ac1e\",

@@ -5,7 +5,6 @@ import de.dhbw.foodcoop.warehouse.adapters.representations.mappers.ProduktToRepr
 import de.dhbw.foodcoop.warehouse.adapters.representations.mappers.RepresentationToProduktMapper;
 import de.dhbw.foodcoop.warehouse.application.lager.ProduktService;
 import de.dhbw.foodcoop.warehouse.domain.entities.Produkt;
-import de.dhbw.foodcoop.warehouse.domain.repositories.exceptions.KategorieInUseException;
 import de.dhbw.foodcoop.warehouse.domain.repositories.exceptions.ProduktIsInUseException;
 import de.dhbw.foodcoop.warehouse.domain.repositories.exceptions.ProduktNotFoundException;
 import de.dhbw.foodcoop.warehouse.plugins.rest.assembler.ProduktModelAssembler;
@@ -38,7 +37,7 @@ public class ProduktController {
         this.assembler = assembler;
     }
 
-    @GetMapping("/produkt/{id}")
+    @GetMapping("/produkte/{id}")
     public EntityModel<ProduktRepresentation> one(@PathVariable String id) {
         Produkt produkt = service.findById(id)
                 .orElseThrow(() -> new ProduktNotFoundException(id));
@@ -46,7 +45,7 @@ public class ProduktController {
         return assembler.toModel(presentation);
     }
 
-    @GetMapping("/produkt")
+    @GetMapping("/produkte")
     public CollectionModel<EntityModel<ProduktRepresentation>> all() {
         List<EntityModel<ProduktRepresentation>> produkts = service.all().stream()
                 .map(toPresentation)
@@ -56,7 +55,7 @@ public class ProduktController {
                 linkTo(methodOn(ProduktController.class).all()).withSelfRel());
     }
 
-    @PostMapping("/produkt")
+    @PostMapping("/produkte")
     ResponseEntity<?> newProdukt(@RequestBody ProduktRepresentation newProdukt) {
         String id = newProdukt.getId() == null ||
                 newProdukt.getId().equals("undefined") ?
@@ -70,7 +69,7 @@ public class ProduktController {
                 .body(entityModel);
     }
 
-    @PutMapping("/produkt/{id}")
+    @PutMapping("/produkte/{id}")
     ResponseEntity<?> replace(@RequestBody ProduktRepresentation newProdukt, @PathVariable String id) {
         service.findById(id).orElseThrow(() -> new ProduktNotFoundException(id));
         ProduktRepresentation replacement = new ProduktRepresentation(id,
@@ -88,7 +87,7 @@ public class ProduktController {
     }
 
 
-    @DeleteMapping("/produkt/{id}")
+    @DeleteMapping("/produkte/{id}")
     ResponseEntity<?> delete(@PathVariable String id) throws ProduktIsInUseException {
 
         service.deleteById(id);

@@ -6,6 +6,7 @@ import de.dhbw.foodcoop.warehouse.adapters.representations.mappers.Representatio
 import de.dhbw.foodcoop.warehouse.application.lager.KategorieService;
 import de.dhbw.foodcoop.warehouse.domain.entities.Kategorie;
 import de.dhbw.foodcoop.warehouse.domain.repositories.exceptions.KategorieNotFoundException;
+import de.dhbw.foodcoop.warehouse.domain.repositories.exceptions.ProduktIsInUseException;
 import de.dhbw.foodcoop.warehouse.plugins.rest.assembler.KategorieModelAssembler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
@@ -36,14 +37,14 @@ public class KategorieController {
         this.assembler = assembler;
     }
 
-    @GetMapping("/kategorie/{id}")
+    @GetMapping("/kategorien/{id}")
     public EntityModel<KategorieRepresentation> one(@PathVariable String id) {
         Kategorie kategorie = service.findById(id)
                 .orElseThrow(() -> new KategorieNotFoundException(id));
         return assembler.toModel(toRepresentation.apply(kategorie));
     }
 
-    @GetMapping("/kategorie")
+    @GetMapping("/kategorien")
     public CollectionModel<EntityModel<KategorieRepresentation>> all() {
         List<EntityModel<KategorieRepresentation>> kategories = service.all().stream()
                 .map(toRepresentation)
@@ -53,7 +54,7 @@ public class KategorieController {
                 linkTo(methodOn(KategorieController.class).all()).withSelfRel());
     }
 
-    @PostMapping("/kategorie")
+    @PostMapping("/kategorien")
     ResponseEntity<?> newKategorie(@RequestBody KategorieRepresentation newKategorie) {
         String id = newKategorie.getId() == null ||
                 newKategorie.getId().equals("undefined") ?
@@ -67,7 +68,7 @@ public class KategorieController {
                 .body(entityModel);
     }
 
-    @PutMapping("/kategorie/{id}")
+    @PutMapping("/kategorien/{id}")
     ResponseEntity<?> replace(@RequestBody KategorieRepresentation inKategorie, @PathVariable String id) {
 
         service.findById(id).orElseThrow(() -> new KategorieNotFoundException(id));
@@ -84,6 +85,14 @@ public class KategorieController {
         return ResponseEntity //
                 .created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri()) //
                 .body(entityModel);
+    }
+
+    @DeleteMapping("/kategorien/{id}")
+    ResponseEntity<?> delete(@PathVariable String id)  {
+
+        service.deleteById(id);
+
+        return ResponseEntity.noContent().build();
     }
 
 

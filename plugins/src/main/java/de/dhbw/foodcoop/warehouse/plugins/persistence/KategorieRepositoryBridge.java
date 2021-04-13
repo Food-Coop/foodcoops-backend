@@ -31,4 +31,9 @@ public class KategorieRepositoryBridge implements KategorieRepository {
     public Optional<Kategorie> findeMitId(String id) {
         return springDataKategorieRepository.findById(id);
     }
+
+    @Override
+    public void deleteById(String id) {
+        springDataKategorieRepository.deleteById(id);
+    }
 }
