@@ -85,4 +85,6 @@ public class KategorieController {
                 .created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri()) //
                 .body(entityModel);
     }
+
+
 }

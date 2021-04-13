@@ -2,6 +2,7 @@ package de.dhbw.foodcoop.warehouse.plugins.rest;
 
 import de.dhbw.foodcoop.warehouse.application.lager.EinheitService;
 import de.dhbw.foodcoop.warehouse.domain.repositories.exceptions.EinheitNotFoundException;
+import de.dhbw.foodcoop.warehouse.domain.repositories.exceptions.KategorieInUseException;
 import de.dhbw.foodcoop.warehouse.domain.values.Einheit;
 import de.dhbw.foodcoop.warehouse.plugins.rest.assembler.EinheitModelAssembler;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,7 +49,7 @@ public class EinheitController {
     }
 
     @PostMapping("/einheit")
-    ResponseEntity<?> newEinheit(@RequestBody Einheit newEinheit) {
+    public ResponseEntity<?> newEinheit(@RequestBody Einheit newEinheit) {
         String id = newEinheit.getId() == null ||
                 newEinheit.getId().equals("undefined") ?
                 UUID.randomUUID().toString() :
@@ -62,4 +63,13 @@ public class EinheitController {
                 .created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri())
                 .body(entityModel);
     }
+
+    @DeleteMapping("/einheit/{id}")
+    ResponseEntity<?> delete(@PathVariable String id) throws KategorieInUseException {
+
+        service.deleteById(id);
+
+        return ResponseEntity.noContent().build();
+    }
+
 }

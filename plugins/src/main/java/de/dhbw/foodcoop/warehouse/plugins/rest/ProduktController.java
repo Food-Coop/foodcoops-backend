@@ -5,6 +5,8 @@ import de.dhbw.foodcoop.warehouse.adapters.representations.mappers.ProduktToRepr
 import de.dhbw.foodcoop.warehouse.adapters.representations.mappers.RepresentationToProduktMapper;
 import de.dhbw.foodcoop.warehouse.application.lager.ProduktService;
 import de.dhbw.foodcoop.warehouse.domain.entities.Produkt;
+import de.dhbw.foodcoop.warehouse.domain.repositories.exceptions.KategorieInUseException;
+import de.dhbw.foodcoop.warehouse.domain.repositories.exceptions.ProduktIsInUseException;
 import de.dhbw.foodcoop.warehouse.domain.repositories.exceptions.ProduktNotFoundException;
 import de.dhbw.foodcoop.warehouse.plugins.rest.assembler.ProduktModelAssembler;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -83,5 +85,14 @@ public class ProduktController {
         return ResponseEntity //
                 .created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri()) //
                 .body(entityModel);
+    }
+
+
+    @DeleteMapping("/produkt/{id}")
+    ResponseEntity<?> delete(@PathVariable String id) throws ProduktIsInUseException {
+
+        service.deleteById(id);
+
+        return ResponseEntity.noContent().build();
     }
 }
