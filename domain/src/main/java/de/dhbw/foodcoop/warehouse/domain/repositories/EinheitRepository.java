@@ -7,6 +7,10 @@ import java.util.Optional;
 
 public interface EinheitRepository {
     List<Einheit> alle();
+
     Einheit speichern(Einheit einheit);
+
     Optional<Einheit> findeMitId(String id);
+
+    void deleteById(String id);
 }

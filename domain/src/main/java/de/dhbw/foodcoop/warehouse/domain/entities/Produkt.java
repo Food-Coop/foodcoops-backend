@@ -1,5 +1,6 @@
 package de.dhbw.foodcoop.warehouse.domain.entities;
 
+import de.dhbw.foodcoop.warehouse.domain.utils.TestUtils;
 import de.dhbw.foodcoop.warehouse.domain.values.Lagerbestand;
 import org.apache.commons.lang3.Validate;
 
@@ -36,7 +37,10 @@ public class Produkt {
 
     //for unittests
     public Produkt() {
-        this(UUID.randomUUID().toString(), "undefined", new Kategorie(), new Lagerbestand());
+        this(TestUtils.PRODUKT_TEST_ID
+                , "undefined"
+                , new Kategorie()
+                , new Lagerbestand());
     }
 
     public String getId() {

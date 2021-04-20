@@ -32,5 +32,10 @@ public class EinheitRepositoryBridge implements EinheitRepository {
         return springDataEinheitRepository.findById(id);
     }
 
+    @Override
+    public void deleteById(String id) {
+        springDataEinheitRepository.deleteById(id);
+    }
+
 
 }

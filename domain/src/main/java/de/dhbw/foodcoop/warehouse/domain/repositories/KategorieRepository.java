@@ -11,4 +11,6 @@ public interface KategorieRepository {
     Kategorie speichern(Kategorie initKategorieGemuese);
 
     Optional<Kategorie> findeMitId(String id);
+
+    void deleteById(String id);
 }

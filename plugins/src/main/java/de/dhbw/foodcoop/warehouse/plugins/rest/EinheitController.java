@@ -2,6 +2,7 @@ package de.dhbw.foodcoop.warehouse.plugins.rest;
 
 import de.dhbw.foodcoop.warehouse.application.lager.EinheitService;
 import de.dhbw.foodcoop.warehouse.domain.repositories.exceptions.EinheitNotFoundException;
+import de.dhbw.foodcoop.warehouse.domain.repositories.exceptions.EinheitIsInUseException;
 import de.dhbw.foodcoop.warehouse.domain.values.Einheit;
 import de.dhbw.foodcoop.warehouse.plugins.rest.assembler.EinheitModelAssembler;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +30,7 @@ public class EinheitController {
         this.assembler = assembler;
     }
 
-    @GetMapping("/einheit/{id}")
+    @GetMapping("/einheiten/{id}")
     public EntityModel<Einheit> one(@PathVariable String id) {
         Einheit einheit = service.findById(id)
                 .orElseThrow(() -> new EinheitNotFoundException(id));
@@ -37,7 +38,7 @@ public class EinheitController {
         return assembler.toModel(einheit);
     }
 
-    @GetMapping("/einheit")
+    @GetMapping("/einheiten")
     public CollectionModel<EntityModel<Einheit>> all() {
         List<EntityModel<Einheit>> einheits = service.all().stream()
                 .map(assembler::toModel)
@@ -47,8 +48,8 @@ public class EinheitController {
                 linkTo(methodOn(EinheitController.class).all()).withSelfRel());
     }
 
-    @PostMapping("/einheit")
-    ResponseEntity<?> newEinheit(@RequestBody Einheit newEinheit) {
+    @PostMapping("/einheiten")
+    public ResponseEntity<?> newEinheit(@RequestBody Einheit newEinheit) {
         String id = newEinheit.getId() == null ||
                 newEinheit.getId().equals("undefined") ?
                 UUID.randomUUID().toString() :
@@ -62,4 +63,13 @@ public class EinheitController {
                 .created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri())
                 .body(entityModel);
     }
+
+    @DeleteMapping("/einheiten/{id}")
+    ResponseEntity<?> delete(@PathVariable String id) throws EinheitIsInUseException {
+
+        service.deleteById(id);
+
+        return ResponseEntity.noContent().build();
+    }
+
 }
