@@ -104,9 +104,9 @@ and is supposed to be turned into a PDF document by the client.
 
 ---
 
-### Kategorie
+### Kategorien
 
-####Get all Kategories
+#### Get all Kategorien
 
 Get all *Kategorien* with all *Produkte* and their respective *Lagerbestand* in one JSON (in production the information 
 will depend on the user role via authentication).
@@ -114,12 +114,21 @@ will depend on the user role via authentication).
 ```
 curl -X GET --location "http://localhost:8080/kategorien" -H "Content-Type: application/json"
 ``` 
-####Get one Kategorie
+
+#### Get one Kategorien
+
+Returns the Kategorie with the specified id.
+
 ```
+
 curl -X GET --location "http://localhost:8080/kategorien/6abeec3f-fdc4-49b1-b64e-e005b45051cb" \
     -H "Content-Type: application/json"
 ```
-####Post new Kategorie
+
+#### New Kategorien
+
+Add a Kategorie.
+
 ```
 curl -X POST --location "http://localhost:8080/kategorien" \
 -H "Content-Type: application/json" \
@@ -130,7 +139,10 @@ curl -X POST --location "http://localhost:8080/kategorien" \
 \"produkte\":[]
 }"
 ```
-####Put update Kategorie
+#### Update Kategorien
+
+Replace Kategorie with new one, same id.
+
 ```
 curl -X PUT --location "http://localhost:8080/kategorien/1631c92e-a31e-45f2-89c9-32c90ff91b90" \
 -H "Content-Type: application/json" \
@@ -141,17 +153,38 @@ curl -X PUT --location "http://localhost:8080/kategorien/1631c92e-a31e-45f2-89c9
 \"produkte\":[]
 }"
 ```
-####Get all Produkts
+
+#### Delete Kategorien
+
+If a Kategorie contains no Produkte, delete it.
+
+```
+curl -X DELETE --location "http://localhost:8080/produkte/5ff026e7-176d-4fe2-96ce-d3100033ac1e" \
+    -H "Content-Type: application/json"
+```
+
+#### Get all Produkte
+
+Returns a list of all Produkte.
+
 ```
 curl -X GET --location "http://localhost:8080/produkte" \
     -H "Content-Type: application/json"
 ```
-####Get one Produkt
+
+#### Get one Produkte
+
+Get Produkt with the identifier ${id}.
+
 ```
 curl -X GET --location "http://localhost:8080/produkte/30724b6f-01ec-4c47-aba7-1a5f2bc5f833" \
     -H "Content-Type: application/json"
 ```
-####Post new Produkt
+
+#### New Produkte
+
+Add a new Produkt to the database.
+
 ```
 curl -X POST --location "http://localhost:8080/produkte" \
     -H "Content-Type: application/json" \
@@ -169,7 +202,11 @@ curl -X POST --location "http://localhost:8080/produkte" \
           }
         }"
 ```
-####Put update existing Produkt
+
+#### Update Produkte
+
+Replace Produkt with a new version (id must remain the same). (Yes, it is not good HATEOAS)
+
 ```
 curl -X PUT --location "http://localhost:8080/produkte/5ff026e7-176d-4fe2-96ce-d3100033ac1e" \
     -H "Content-Type: application/json" \
@@ -187,6 +224,53 @@ curl -X PUT --location "http://localhost:8080/produkte/5ff026e7-176d-4fe2-96ce-d
           }
         }"
 ```
+#### Delete Produkte
+
+If a product is currently not in stock (if its Ist-Lagerbestand equals 0), delete the Produkt.
+
+```
+curl -X DELETE --location "http://localhost:8080/produkte/5ff026e7-176d-4fe2-96ce-d3100033ac1e" \
+    -H "Content-Type: application/json"
+```
+
+#### Get all Einheiten
+
+Get all Einheiten in the Database.
+
+```
+curl -X GET --location "http://localhost:8080/einheiten" -H "Content-Type: application/json"
+``` 
+
+#### Get one Einheiten
+
+Returns specified Einheit as JSON, it it exists.
+
+```
+curl -X GET --location "http://localhost:8080/einheiten/d20b6519-bc2d-4e9f-b3e7-9bebc995f110\"
+    -H "Content-Type: application/json"
+```
+
+#### New Einheiten
+
+Adds a new Einheit to the database, provided its name is unique.
+```
+curl -X POST --location "http://localhost:8080/einheiten" \
+-H "Content-Type: application/json" \
+-d "{
+\"id\":\"835b53cb-a0a8-4076-8690-a1458aab0cb1\",
+\"name\":\"Liter\"
+}"
+```
+
+#### Delete Einheiten
+
+Deletes an Einheit, if it exists and is not used by any Produkte
+
+```
+curl -X DELETE --location "http://localhost:8080/einheiten/835b53cb-a0a8-4076-8690-a1458aab0cb1" \
+ -H "Content-Type: application/json"
+``` 
+
 ---
 
 ## References
