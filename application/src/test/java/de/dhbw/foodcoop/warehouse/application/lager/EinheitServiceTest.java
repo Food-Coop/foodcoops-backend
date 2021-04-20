@@ -23,8 +23,8 @@ import static org.mockito.Mockito.*;
 class EinheitServiceTest {
     @InjectMocks
     EinheitService toBeTested;
-/*    @Mock
-    ProduktService mockProduktService;*/
+    @Mock
+    ProduktService mockProduktService;
     @Mock
     EinheitRepository mockRepository;
 
@@ -51,7 +51,7 @@ class EinheitServiceTest {
         Assertions.assertEquals("Liter", oldEinheit.getName());
     }
 
-    /*@Test
+    @Test
     void deleteById() {
         Einheit oldEinheint = new Einheit(TestUtils.EINHEIT_TEST_ID, "Gramm");
         Einheit otherEinheit = new Einheit(TestUtils.EINHEIT_TEST_ID_2, "meter");
@@ -64,14 +64,15 @@ class EinheitServiceTest {
                 , "Blutwurst"
                 , kategorie
                 , lagerbestand);
-
         when(mockRepository.findeMitId(TestUtils.EINHEIT_TEST_ID))
                 .thenReturn(Optional.of(oldEinheint));
         when(mockProduktService.all())
                 .thenReturn(List.of(produkt));
         doNothing().when(mockRepository).deleteById(TestUtils.EINHEIT_TEST_ID);
 
+        toBeTested.deleteById(oldEinheint.getId());
+
         Assertions.assertDoesNotThrow(() -> new EinheitIsInUseException(TestUtils.EINHEIT_TEST_ID));
-        //verify(mockRepository, times(1)).deleteById(TestUtils.EINHEIT_TEST_ID);
-    }*/
+        verify(mockRepository, times(1)).deleteById(TestUtils.EINHEIT_TEST_ID);
+    }
 }
