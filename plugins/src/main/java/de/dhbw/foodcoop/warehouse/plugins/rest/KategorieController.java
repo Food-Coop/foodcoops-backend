@@ -71,12 +71,12 @@ public class KategorieController {
     @PutMapping("/kategorien/{id}")
     ResponseEntity<?> replace(@RequestBody KategorieRepresentation inKategorie, @PathVariable String id) {
 
-        service.findById(id).orElseThrow(() -> new KategorieNotFoundException(id));
+        Kategorie oldKategorie = service.findById(id).orElseThrow(() -> new KategorieNotFoundException(id));
         Kategorie newKategorie = toKategorie.apply(inKategorie);
         Kategorie replacement = new Kategorie(id,
                 newKategorie.getName(),
                 newKategorie.getIcon(),
-                newKategorie.getProdukte());
+                oldKategorie.getProdukte());
 
         Kategorie saved = service.save(replacement);
 
