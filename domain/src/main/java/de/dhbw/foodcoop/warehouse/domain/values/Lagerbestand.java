@@ -7,7 +7,7 @@ import java.util.Objects;
 
 @Embeddable
 public class Lagerbestand {
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "einheit_id", referencedColumnName = "id")
     private final Einheit einheit;
     @Column
