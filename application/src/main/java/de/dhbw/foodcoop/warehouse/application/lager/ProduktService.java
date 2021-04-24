@@ -2,7 +2,7 @@ package de.dhbw.foodcoop.warehouse.application.lager;
 
 import de.dhbw.foodcoop.warehouse.domain.entities.Produkt;
 import de.dhbw.foodcoop.warehouse.domain.repositories.ProduktRepository;
-import de.dhbw.foodcoop.warehouse.domain.repositories.exceptions.ProduktIsInUseException;
+import de.dhbw.foodcoop.warehouse.domain.exceptions.ProduktInUseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,13 +30,13 @@ public class ProduktService {
         return repository.speichern(newProdukt);
     }
 
-    public void deleteById(String id) throws ProduktIsInUseException {
+    public void deleteById(String id) throws ProduktInUseException {
         Optional<Produkt> toBeDeleted = repository.findeMitId(id);
         if(toBeDeleted.isEmpty()) {
             return;
         }
         if(toBeDeleted.get().getLagerbestand().getIstLagerbestand() > 1.E-3) {
-            throw new ProduktIsInUseException(id);
+            throw new ProduktInUseException(id);
         }
         repository.deleteById(id);
     }

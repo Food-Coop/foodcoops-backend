@@ -1,8 +1,8 @@
 package de.dhbw.foodcoop.warehouse.plugins.rest;
 
 import de.dhbw.foodcoop.warehouse.application.lager.EinheitService;
-import de.dhbw.foodcoop.warehouse.domain.repositories.exceptions.EinheitNotFoundException;
-import de.dhbw.foodcoop.warehouse.domain.repositories.exceptions.EinheitIsInUseException;
+import de.dhbw.foodcoop.warehouse.domain.exceptions.EinheitNotFoundException;
+import de.dhbw.foodcoop.warehouse.domain.exceptions.EinheitInUseException;
 import de.dhbw.foodcoop.warehouse.domain.values.Einheit;
 import de.dhbw.foodcoop.warehouse.plugins.rest.assembler.EinheitModelAssembler;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,7 +65,7 @@ public class EinheitController {
     }
 
     @DeleteMapping("/einheiten/{id}")
-    ResponseEntity<?> delete(@PathVariable String id) throws EinheitIsInUseException {
+    ResponseEntity<?> delete(@PathVariable String id) throws EinheitInUseException {
 
         service.deleteById(id);
 

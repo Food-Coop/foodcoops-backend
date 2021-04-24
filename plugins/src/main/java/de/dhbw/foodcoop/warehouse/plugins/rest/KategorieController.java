@@ -5,8 +5,7 @@ import de.dhbw.foodcoop.warehouse.adapters.representations.mappers.KategorieToRe
 import de.dhbw.foodcoop.warehouse.adapters.representations.mappers.RepresentationToKategorieMapper;
 import de.dhbw.foodcoop.warehouse.application.lager.KategorieService;
 import de.dhbw.foodcoop.warehouse.domain.entities.Kategorie;
-import de.dhbw.foodcoop.warehouse.domain.repositories.exceptions.KategorieNotFoundException;
-import de.dhbw.foodcoop.warehouse.domain.repositories.exceptions.ProduktIsInUseException;
+import de.dhbw.foodcoop.warehouse.domain.exceptions.KategorieNotFoundException;
 import de.dhbw.foodcoop.warehouse.plugins.rest.assembler.KategorieModelAssembler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;

@@ -5,8 +5,8 @@ import de.dhbw.foodcoop.warehouse.adapters.representations.mappers.ProduktToRepr
 import de.dhbw.foodcoop.warehouse.adapters.representations.mappers.RepresentationToProduktMapper;
 import de.dhbw.foodcoop.warehouse.application.lager.ProduktService;
 import de.dhbw.foodcoop.warehouse.domain.entities.Produkt;
-import de.dhbw.foodcoop.warehouse.domain.repositories.exceptions.ProduktIsInUseException;
-import de.dhbw.foodcoop.warehouse.domain.repositories.exceptions.ProduktNotFoundException;
+import de.dhbw.foodcoop.warehouse.domain.exceptions.ProduktInUseException;
+import de.dhbw.foodcoop.warehouse.domain.exceptions.ProduktNotFoundException;
 import de.dhbw.foodcoop.warehouse.plugins.rest.assembler.ProduktModelAssembler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
@@ -88,7 +88,7 @@ public class ProduktController {
 
 
     @DeleteMapping("/produkte/{id}")
-    ResponseEntity<?> delete(@PathVariable String id) throws ProduktIsInUseException {
+    ResponseEntity<?> delete(@PathVariable String id) throws ProduktInUseException {
 
         service.deleteById(id);
 

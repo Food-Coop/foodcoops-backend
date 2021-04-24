@@ -3,7 +3,7 @@ package de.dhbw.foodcoop.warehouse.application.lager;
 import de.dhbw.foodcoop.warehouse.domain.entities.Kategorie;
 import de.dhbw.foodcoop.warehouse.domain.entities.Produkt;
 import de.dhbw.foodcoop.warehouse.domain.repositories.EinheitRepository;
-import de.dhbw.foodcoop.warehouse.domain.repositories.exceptions.EinheitIsInUseException;
+import de.dhbw.foodcoop.warehouse.domain.exceptions.EinheitInUseException;
 import de.dhbw.foodcoop.warehouse.domain.utils.TestUtils;
 import de.dhbw.foodcoop.warehouse.domain.values.Einheit;
 import de.dhbw.foodcoop.warehouse.domain.values.Lagerbestand;
@@ -72,7 +72,7 @@ class EinheitServiceTest {
 
         toBeTested.deleteById(oldEinheint.getId());
 
-        Assertions.assertDoesNotThrow(() -> new EinheitIsInUseException(TestUtils.EINHEIT_TEST_ID));
+        Assertions.assertDoesNotThrow(() -> new EinheitInUseException(TestUtils.EINHEIT_TEST_ID));
         verify(mockRepository, times(1)).deleteById(TestUtils.EINHEIT_TEST_ID);
     }
 }

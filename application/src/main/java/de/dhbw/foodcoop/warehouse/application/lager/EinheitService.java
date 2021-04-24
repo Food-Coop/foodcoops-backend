@@ -1,7 +1,7 @@
 package de.dhbw.foodcoop.warehouse.application.lager;
 
 import de.dhbw.foodcoop.warehouse.domain.repositories.EinheitRepository;
-import de.dhbw.foodcoop.warehouse.domain.repositories.exceptions.EinheitIsInUseException;
+import de.dhbw.foodcoop.warehouse.domain.exceptions.EinheitInUseException;
 import de.dhbw.foodcoop.warehouse.domain.values.Einheit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -40,14 +40,14 @@ public class EinheitService {
         return einheitRepository.speichern(newEinheit);
     }
 
-    public void deleteById(String id) throws EinheitIsInUseException {
+    public void deleteById(String id) throws EinheitInUseException {
         Optional<Einheit> toBeDeleted = einheitRepository.findeMitId(id);
         if (toBeDeleted.isEmpty()) {
             return;
         }
         if (produktService.all().stream()
                 .anyMatch(produkt -> produkt.getLagerbestand().getEinheit().equals(toBeDeleted.get()))) {
-            throw new EinheitIsInUseException(id);
+            throw new EinheitInUseException(id);
         }
         einheitRepository.deleteById(id);
     }
