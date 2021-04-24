@@ -1,4 +1,4 @@
-package de.dhbw.foodcoop.warehouse.domain.repositories.exceptions;
+package de.dhbw.foodcoop.warehouse.domain.exceptions;
 
 public class ProduktIsInUseException extends RuntimeException {
     public ProduktIsInUseException(String id) {

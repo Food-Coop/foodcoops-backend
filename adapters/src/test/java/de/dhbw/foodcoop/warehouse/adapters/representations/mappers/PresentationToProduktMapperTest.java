@@ -4,7 +4,7 @@ import de.dhbw.foodcoop.warehouse.adapters.representations.ProduktRepresentation
 import de.dhbw.foodcoop.warehouse.application.lager.KategorieService;
 import de.dhbw.foodcoop.warehouse.domain.entities.Kategorie;
 import de.dhbw.foodcoop.warehouse.domain.entities.Produkt;
-import de.dhbw.foodcoop.warehouse.domain.repositories.exceptions.KategorieNotFoundException;
+import de.dhbw.foodcoop.warehouse.domain.exceptions.KategorieNotFoundException;
 import de.dhbw.foodcoop.warehouse.domain.utils.TestUtils;
 import de.dhbw.foodcoop.warehouse.domain.values.Lagerbestand;
 import org.junit.jupiter.api.Assertions;

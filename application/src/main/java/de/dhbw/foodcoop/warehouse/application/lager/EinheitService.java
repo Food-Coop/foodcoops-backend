@@ -1,7 +1,7 @@
 package de.dhbw.foodcoop.warehouse.application.lager;
 
 import de.dhbw.foodcoop.warehouse.domain.repositories.EinheitRepository;
-import de.dhbw.foodcoop.warehouse.domain.repositories.exceptions.EinheitIsInUseException;
+import de.dhbw.foodcoop.warehouse.domain.exceptions.EinheitIsInUseException;
 import de.dhbw.foodcoop.warehouse.domain.values.Einheit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

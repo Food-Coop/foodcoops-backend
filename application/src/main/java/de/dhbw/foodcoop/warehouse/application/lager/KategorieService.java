@@ -2,7 +2,7 @@ package de.dhbw.foodcoop.warehouse.application.lager;
 
 import de.dhbw.foodcoop.warehouse.domain.entities.Kategorie;
 import de.dhbw.foodcoop.warehouse.domain.repositories.KategorieRepository;
-import de.dhbw.foodcoop.warehouse.domain.repositories.exceptions.KategorieIsInUseException;
+import de.dhbw.foodcoop.warehouse.domain.exceptions.KategorieIsInUseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

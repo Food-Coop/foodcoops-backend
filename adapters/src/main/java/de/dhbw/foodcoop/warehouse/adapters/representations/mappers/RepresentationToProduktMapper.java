@@ -3,7 +3,7 @@ package de.dhbw.foodcoop.warehouse.adapters.representations.mappers;
 import de.dhbw.foodcoop.warehouse.adapters.representations.ProduktRepresentation;
 import de.dhbw.foodcoop.warehouse.application.lager.KategorieService;
 import de.dhbw.foodcoop.warehouse.domain.entities.Produkt;
-import de.dhbw.foodcoop.warehouse.domain.repositories.exceptions.KategorieNotFoundException;
+import de.dhbw.foodcoop.warehouse.domain.exceptions.KategorieNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

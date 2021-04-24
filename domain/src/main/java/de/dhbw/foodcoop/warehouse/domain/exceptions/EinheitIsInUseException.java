@@ -1,4 +1,4 @@
-package de.dhbw.foodcoop.warehouse.domain.repositories.exceptions;
+package de.dhbw.foodcoop.warehouse.domain.exceptions;
 
 public class EinheitIsInUseException extends RuntimeException {
     public EinheitIsInUseException(String id) {
