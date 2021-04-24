@@ -1,7 +1,7 @@
 package de.dhbw.foodcoop.warehouse.domain.exceptions;
 
-public class KategorieIsInUseException extends RuntimeException {
-    public KategorieIsInUseException(String id) {
+public class KategorieInUseException extends RuntimeException {
+    public KategorieInUseException(String id) {
         super("The Kategorie " + id + " is used by at least one Produkt.");
     }
 }

@@ -3,7 +3,7 @@ package de.dhbw.foodcoop.warehouse.application.lager;
 import de.dhbw.foodcoop.warehouse.domain.entities.Kategorie;
 import de.dhbw.foodcoop.warehouse.domain.entities.Produkt;
 import de.dhbw.foodcoop.warehouse.domain.repositories.ProduktRepository;
-import de.dhbw.foodcoop.warehouse.domain.exceptions.ProduktIsInUseException;
+import de.dhbw.foodcoop.warehouse.domain.exceptions.ProduktInUseException;
 import de.dhbw.foodcoop.warehouse.domain.utils.TestUtils;
 import de.dhbw.foodcoop.warehouse.domain.values.Einheit;
 import de.dhbw.foodcoop.warehouse.domain.values.Lagerbestand;
@@ -57,7 +57,7 @@ class ProduktServiceTest {
 
         when(mockRepository.findeMitId(produkt.getId())).thenReturn(Optional.of(produkt));
 
-        Assertions.assertThrows(ProduktIsInUseException.class
+        Assertions.assertThrows(ProduktInUseException.class
                 , () -> toBeTested.deleteById(produkt.getId()));
         verify(mockRepository, Mockito.never()).deleteById(any());
     }

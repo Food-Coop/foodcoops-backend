@@ -12,7 +12,7 @@ public class EinheitNotFoundAdvice {
     @ResponseBody
     @ExceptionHandler(EinheitNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public String einheitNotFoundHandler(EinheitNotFoundException exception) {
+    public String handleEinheitNotFound(EinheitNotFoundException exception) {
         return exception.getMessage();
     }
 }

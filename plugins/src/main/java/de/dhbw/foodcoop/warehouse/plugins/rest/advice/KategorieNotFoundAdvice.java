@@ -12,7 +12,7 @@ public class KategorieNotFoundAdvice {
     @ResponseBody
     @ExceptionHandler(KategorieNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public String einheitIsInUseHandler(KategorieNotFoundException exception) {
+    public String handleKategorieNotFound(KategorieNotFoundException exception) {
         return exception.getMessage();
     }
 }
