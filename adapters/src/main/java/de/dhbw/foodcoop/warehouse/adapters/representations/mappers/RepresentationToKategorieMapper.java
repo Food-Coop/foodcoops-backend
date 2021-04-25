@@ -28,9 +28,14 @@ public class RepresentationToKategorieMapper implements Function<KategorieRepres
             produkte = kategorieRepresentation.getProdukte().stream()
                     .map(produktMapper).collect(Collectors.toList());
         }
-        return new Kategorie(kategorieRepresentation.getId(),
-                kategorieRepresentation.getName(),
-                kategorieRepresentation.getIcon(),
+        return new Kategorie(
+                replaceNullWithUndefined(kategorieRepresentation.getId()),
+                replaceNullWithUndefined(kategorieRepresentation.getName()),
+                replaceNullWithUndefined(kategorieRepresentation.getIcon()),
                 produkte);
+    }
+
+    private String replaceNullWithUndefined(String oldValue) {
+        return oldValue == null ? "undefined" : oldValue;
     }
 }

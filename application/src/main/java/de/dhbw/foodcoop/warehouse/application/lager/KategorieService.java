@@ -1,8 +1,8 @@
 package de.dhbw.foodcoop.warehouse.application.lager;
 
 import de.dhbw.foodcoop.warehouse.domain.entities.Kategorie;
-import de.dhbw.foodcoop.warehouse.domain.repositories.KategorieRepository;
 import de.dhbw.foodcoop.warehouse.domain.exceptions.KategorieInUseException;
+import de.dhbw.foodcoop.warehouse.domain.repositories.KategorieRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -36,12 +36,24 @@ public class KategorieService {
 
     public void deleteById(String id) {
         Optional<Kategorie> toBeDeleted = repository.findeMitId(id);
-        if(toBeDeleted.isEmpty()) {
+        if (toBeDeleted.isEmpty()) {
             return;
         }
         if (!toBeDeleted.get().getProdukte().isEmpty()) {
             throw new KategorieInUseException(id);
         }
         repository.deleteById(id);
+    }
+
+    public Kategorie update(Kategorie oldKategorie, Kategorie newKategorie) {
+        Kategorie updateKategorie = new Kategorie(oldKategorie.getId()
+                , newValueOrOld(oldKategorie.getName(), newKategorie.getName())
+                , newValueOrOld(oldKategorie.getIcon(), newKategorie.getIcon())
+                ,oldKategorie.getProdukte());
+        return save(updateKategorie);
+    }
+
+    private String newValueOrOld(String old, String pototentialNew) {
+        return pototentialNew.equals("undefined") ? old : pototentialNew;
     }
 }
