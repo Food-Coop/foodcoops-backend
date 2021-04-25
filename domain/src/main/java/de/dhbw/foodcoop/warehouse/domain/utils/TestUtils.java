@@ -10,4 +10,5 @@ public class TestUtils {
     public static final String EINHEIT_TEST_ID = "d20b6519-bc2d-4e9f-b3e7-9bebc995f110";
     public static final String EINHEIT_TEST_ID_2 = "1516e337-596a-473e-b7fe-be201312e82e";
     public static final String KATEGORIE_TEST_ID = "6abeec3f-fdc4-49b1-b64e-e005b45051cb";
+    public static final String KATEGORIE_TEST_ID_2 = "75947b48-a5df-4445-b0e1-c1281ee6f07f";
 }

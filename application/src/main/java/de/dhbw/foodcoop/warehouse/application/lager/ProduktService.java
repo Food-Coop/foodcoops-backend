@@ -1,5 +1,6 @@
 package de.dhbw.foodcoop.warehouse.application.lager;
 
+import de.dhbw.foodcoop.warehouse.domain.entities.Kategorie;
 import de.dhbw.foodcoop.warehouse.domain.entities.Produkt;
 import de.dhbw.foodcoop.warehouse.domain.repositories.ProduktRepository;
 import de.dhbw.foodcoop.warehouse.domain.exceptions.ProduktInUseException;
