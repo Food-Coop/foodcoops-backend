@@ -68,12 +68,12 @@ public class KategorieController {
     }
 
     @PutMapping("/kategorien/{id}")
-    ResponseEntity<?> update(@RequestBody KategorieRepresentation inKategorie, @PathVariable String id) {
+    ResponseEntity<?> update(@RequestBody KategorieRepresentation newKategorie, @PathVariable String id) {
 
         Kategorie oldKategorie = service.findById(id).orElseThrow(() -> new KategorieNotFoundException(id));
-        Kategorie newKategorie = toKategorie.apply(inKategorie);
+        Kategorie updatedKategorie = toKategorie.update(oldKategorie, newKategorie);
 
-        Kategorie saved = service.update(oldKategorie, newKategorie);
+        Kategorie saved = service.save(updatedKategorie);
 
         EntityModel<KategorieRepresentation> entityModel = assembler.toModel(toRepresentation.apply(saved));
 

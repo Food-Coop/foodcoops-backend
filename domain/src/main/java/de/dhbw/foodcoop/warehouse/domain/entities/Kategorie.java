@@ -16,7 +16,7 @@ public final class Kategorie {
     @Column
     @Lob
     private final String icon;
-    @OneToMany(mappedBy = "kategorie", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "kategorie", cascade = CascadeType.MERGE)
     private final List<Produkt> produkte;
 
     public Kategorie(String id, String name, String icon, List<Produkt> produkte) {

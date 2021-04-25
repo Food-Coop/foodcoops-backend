@@ -28,10 +28,7 @@ class RepresentationToKategorieMapperTest {
     @Test
     @DisplayName("Representation to Kategorie Mapper no Produkte Test")
     void applyNoProdukte() {
-        KategorieRepresentation given = new KategorieRepresentation(TestUtils.KATEGORIE_TEST_ID
-                , "Teigwaren"
-                , TestUtils.TEIGWARENICON
-                , null);
+        KategorieRepresentation given = getKategorieRepresentation(null);
 
         Kategorie then = toBeTested.apply(given);
         Assertions.assertNotNull(then);
@@ -43,8 +40,8 @@ class RepresentationToKategorieMapperTest {
     }
 
     @Test
-    @DisplayName("Representation to Kategorie Mapper With Produkte Test")
-    void applyWithProdukte() {
+    @DisplayName("Representation to Kategorie Mapper Ignores Produkte Test")
+    void applyIgnoresProdukte() {
         ProduktRepresentation apfel = new ProduktRepresentation(
                 TestUtils.PRODUKT_TEST_ID
                 , "Apfel"
@@ -55,27 +52,8 @@ class RepresentationToKategorieMapperTest {
                 , "Birne"
                 , TestUtils.KATEGORIE_TEST_ID
                 , new Lagerbestand());
-        KategorieRepresentation given = new KategorieRepresentation(
-                TestUtils.KATEGORIE_TEST_ID
-                , "Teigwaren"
-                , TestUtils.TEIGWARENICON
-                , List.of(apfel, birne));
-        Kategorie kategorie = new Kategorie(
-                TestUtils.KATEGORIE_TEST_ID
-                , "Teigwaren"
-                , TestUtils.BASICICON
-                , List.of());
+        KategorieRepresentation given = getKategorieRepresentation(List.of(apfel, birne));
 
-        when(produktMapper.apply(apfel)).thenReturn(new Produkt(
-                TestUtils.PRODUKT_TEST_ID
-                , "Apfel"
-                , kategorie
-                , new Lagerbestand()));
-        when(produktMapper.apply(apfel)).thenReturn(new Produkt(
-                TestUtils.PRODUKT_TEST_ID
-                , "Birne"
-                , kategorie
-                , new Lagerbestand()));
         Kategorie then = toBeTested.apply(given);
 
         Assertions.assertNotNull(then);
@@ -83,6 +61,41 @@ class RepresentationToKategorieMapperTest {
         Assertions.assertEquals("Teigwaren", then.getName());
         Assertions.assertEquals(TestUtils.TEIGWARENICON, then.getIcon());
         Assertions.assertNotNull(then.getProdukte());
-        Assertions.assertEquals(2, then.getProdukte().size());
+        Assertions.assertEquals(0, then.getProdukte().size());
+    }
+
+    @Test
+    @DisplayName("Map old Kategorie and new KategorieRepresentation to one Kategorie")
+    public void udpateSuccessfully() {
+        KategorieRepresentation updateKategorieInfo = new KategorieRepresentation(null
+                , "undefined"
+                , TestUtils.TEIGWARENICON
+                , null);
+        Kategorie originalKategorie = getKategorie();
+
+        Kategorie then = toBeTested.update(originalKategorie, updateKategorieInfo);
+
+        Assertions.assertNotNull(then);
+        Assertions.assertEquals(TestUtils.KATEGORIE_TEST_ID, then.getId());
+        Assertions.assertEquals("Teigwaren", then.getName());
+        Assertions.assertEquals(TestUtils.TEIGWARENICON, then.getIcon());
+        Assertions.assertNotNull(then.getProdukte());
+        Assertions.assertEquals(0, then.getProdukte().size());
+
+    }
+
+    private KategorieRepresentation getKategorieRepresentation(List<ProduktRepresentation> produktRepresentations) {
+        return new KategorieRepresentation(TestUtils.KATEGORIE_TEST_ID
+                , "Teigwaren"
+                , TestUtils.TEIGWARENICON
+                , produktRepresentations);
+    }
+
+    private Kategorie getKategorie() {
+        return new Kategorie(
+                TestUtils.KATEGORIE_TEST_ID
+                , "Teigwaren"
+                , TestUtils.BASICICON
+                , List.of());
     }
 }
