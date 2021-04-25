@@ -44,16 +44,4 @@ public class KategorieService {
         }
         repository.deleteById(id);
     }
-
-    public Kategorie update(Kategorie oldKategorie, Kategorie newKategorie) {
-        Kategorie updateKategorie = new Kategorie(oldKategorie.getId()
-                , newValueOrOld(oldKategorie.getName(), newKategorie.getName())
-                , newValueOrOld(oldKategorie.getIcon(), newKategorie.getIcon())
-                ,oldKategorie.getProdukte());
-        return save(updateKategorie);
-    }
-
-    private String newValueOrOld(String old, String pototentialNew) {
-        return pototentialNew.equals("undefined") ? old : pototentialNew;
-    }
 }

@@ -70,14 +70,11 @@ public class ProduktController {
     }
 
     @PutMapping("/produkte/{id}")
-    ResponseEntity<?> replace(@RequestBody ProduktRepresentation newProdukt, @PathVariable String id) {
-        service.findById(id).orElseThrow(() -> new ProduktNotFoundException(id));
-        ProduktRepresentation replacement = new ProduktRepresentation(id,
-                newProdukt.getName(),
-                newProdukt.getKategorie(),
-                newProdukt.getLagerbestand());
+    ResponseEntity<?> update(@RequestBody ProduktRepresentation newProdukt, @PathVariable String id) {
+        Produkt oldProdukt = service.findById(id).orElseThrow(() -> new ProduktNotFoundException(id));
+        Produkt updateProdukt = toProdukt.update(oldProdukt, newProdukt);
 
-        Produkt saved = service.save(toProdukt.apply(replacement));
+        Produkt saved = service.save(updateProdukt);
 
         EntityModel<ProduktRepresentation> entityModel = assembler.toModel(toPresentation.apply(saved));
 
