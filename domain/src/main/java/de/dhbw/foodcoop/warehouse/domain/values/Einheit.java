@@ -14,9 +14,9 @@ import java.util.UUID;
 @Table(name = "einheit")
 public final class Einheit {
     @Id
-    private final String id;
+    private String id;
     @Column
-    private final String name;
+    private String name;
 
     public Einheit(String id, String name) {
         Validate.notBlank(id);
@@ -30,7 +30,6 @@ public final class Einheit {
     }
 
     protected Einheit() {
-        throw new YouShouldNotBeHereException();
     }
 
     public String getId() {

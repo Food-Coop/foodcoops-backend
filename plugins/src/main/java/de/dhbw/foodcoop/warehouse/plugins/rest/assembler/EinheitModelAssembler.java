@@ -1,5 +1,6 @@
 package de.dhbw.foodcoop.warehouse.plugins.rest.assembler;
 
+import de.dhbw.foodcoop.warehouse.adapters.representations.EinheitRepresentation;
 import de.dhbw.foodcoop.warehouse.domain.values.Einheit;
 import de.dhbw.foodcoop.warehouse.plugins.rest.EinheitController;
 import de.dhbw.foodcoop.warehouse.plugins.rest.ProduktController;
@@ -11,9 +12,9 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Component
-public class EinheitModelAssembler implements RepresentationModelAssembler<Einheit, EntityModel<Einheit>> {
+public class EinheitModelAssembler implements RepresentationModelAssembler<EinheitRepresentation, EntityModel<EinheitRepresentation>> {
     @Override
-    public EntityModel<Einheit> toModel(Einheit einheit) {
+    public EntityModel<EinheitRepresentation> toModel(EinheitRepresentation einheit) {
         return EntityModel.of(einheit,
                 linkTo(methodOn(EinheitController.class).one(einheit.getId())).withSelfRel(),
                 linkTo(methodOn(EinheitController.class).all()).withRel("Einheiten"));

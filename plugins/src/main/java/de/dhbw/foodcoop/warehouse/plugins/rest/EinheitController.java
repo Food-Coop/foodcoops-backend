@@ -1,5 +1,8 @@
 package de.dhbw.foodcoop.warehouse.plugins.rest;
 
+import de.dhbw.foodcoop.warehouse.adapters.representations.EinheitRepresentation;
+import de.dhbw.foodcoop.warehouse.adapters.representations.mappers.EinheitToRepresentationMapper;
+import de.dhbw.foodcoop.warehouse.adapters.representations.mappers.RepresentationToEinheitMapper;
 import de.dhbw.foodcoop.warehouse.application.lager.EinheitService;
 import de.dhbw.foodcoop.warehouse.domain.exceptions.EinheitNotFoundException;
 import de.dhbw.foodcoop.warehouse.domain.exceptions.EinheitInUseException;
@@ -23,24 +26,29 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 public class EinheitController {
     private final EinheitService service;
     private final EinheitModelAssembler assembler;
+    private final EinheitToRepresentationMapper toRepresentationMapper;
+    private final RepresentationToEinheitMapper toEinheitMapper;
 
     @Autowired
-    public EinheitController(EinheitService service, EinheitModelAssembler assembler) {
+    public EinheitController(EinheitService service, EinheitModelAssembler assembler, EinheitToRepresentationMapper toRepresentationMapper, RepresentationToEinheitMapper toEinheitMapper) {
         this.service = service;
         this.assembler = assembler;
+        this.toRepresentationMapper = toRepresentationMapper;
+        this.toEinheitMapper = toEinheitMapper;
     }
 
     @GetMapping("/einheiten/{id}")
-    public EntityModel<Einheit> one(@PathVariable String id) {
+    public EntityModel<EinheitRepresentation> one(@PathVariable String id) {
         Einheit einheit = service.findById(id)
                 .orElseThrow(() -> new EinheitNotFoundException(id));
 
-        return assembler.toModel(einheit);
+        return assembler.toModel(toRepresentationMapper.apply(einheit));
     }
 
     @GetMapping("/einheiten")
-    public CollectionModel<EntityModel<Einheit>> all() {
-        List<EntityModel<Einheit>> einheits = service.all().stream()
+    public CollectionModel<EntityModel<EinheitRepresentation>> all() {
+        List<EntityModel<EinheitRepresentation>> einheits = service.all().stream()
+                .map(toRepresentationMapper)
                 .map(assembler::toModel)
                 .collect(Collectors.toList());
 
@@ -49,7 +57,7 @@ public class EinheitController {
     }
 
     @PostMapping("/einheiten")
-    public ResponseEntity<?> newEinheit(@RequestBody Einheit newEinheit) {
+    public ResponseEntity<?> newEinheit(@RequestBody EinheitRepresentation newEinheit) {
         String id = newEinheit.getId() == null ||
                 newEinheit.getId().isBlank() ||
                 newEinheit.getId().equals("undefined") ?
@@ -58,7 +66,7 @@ public class EinheitController {
 
         Einheit withId = new Einheit(id, newEinheit.getName());
         Einheit einheit = service.save(withId);
-        EntityModel<Einheit> entityModel = assembler.toModel(einheit);
+        EntityModel<EinheitRepresentation> entityModel = assembler.toModel(toRepresentationMapper.apply(einheit));
 
         return ResponseEntity
                 .created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri())

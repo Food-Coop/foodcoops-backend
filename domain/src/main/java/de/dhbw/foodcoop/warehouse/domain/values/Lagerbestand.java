@@ -9,11 +9,11 @@ import java.util.Objects;
 public class Lagerbestand {
     @ManyToOne(optional = false)
     @JoinColumn(name = "einheit_id", referencedColumnName = "id")
-    private final Einheit einheit;
+    private Einheit einheit;
     @Column
-    private final Double istLagerbestand;
+    private Double istLagerbestand;
     @Column
-    private final Double sollLagerbestand;
+    private Double sollLagerbestand;
 
     public Lagerbestand(Einheit einheit, Double istLagerbestand, Double sollLagerbestand) {
         Validate.notNull(einheit);
@@ -26,7 +26,6 @@ public class Lagerbestand {
     }
 
     protected Lagerbestand() {
-        this(new Einheit("default constructor"), 0.0, 0.0);
     }
 
     public Einheit getEinheit() {

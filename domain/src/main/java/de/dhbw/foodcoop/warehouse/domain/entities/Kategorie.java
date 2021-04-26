@@ -10,14 +10,14 @@ import java.util.*;
 @Table
 public final class Kategorie {
     @Id
-    private final String id;
+    private String id;
     @Column
-    private final String name;
+    private String name;
     @Column
     @Lob
-    private final String icon;
+    private String icon;
     @OneToMany(mappedBy = "kategorie", cascade = CascadeType.MERGE)
-    private final List<Produkt> produkte;
+    private List<Produkt> produkte;
 
     public Kategorie(String id, String name, String icon, List<Produkt> produkte) {
         Validate.notNull(id);
@@ -35,7 +35,6 @@ public final class Kategorie {
     }
 
     protected Kategorie() {
-        throw new YouShouldNotBeHereException();
     }
 
     public String getId() {

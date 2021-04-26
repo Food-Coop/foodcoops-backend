@@ -15,11 +15,11 @@ import java.util.UUID;
 @Table(name = "produkt")
 public class Produkt {
     @Id
-    private final String id;
+    private String id;
     @Column
-    private final String name;
+    private String name;
     @Embedded
-    private final Lagerbestand lagerbestand;
+    private Lagerbestand lagerbestand;
     @ManyToOne
     @JoinColumn(name = "kategorie_id")
     private Kategorie kategorie;
@@ -39,7 +39,6 @@ public class Produkt {
     }
 
     protected Produkt() {
-        throw new YouShouldNotBeHereException();
     }
 
     public String getId() {
