@@ -1,6 +1,6 @@
 package de.dhbw.foodcoop.warehouse.domain.entities;
 
-import de.dhbw.foodcoop.warehouse.domain.utils.TestUtils;
+import de.dhbw.foodcoop.warehouse.domain.exceptions.YouShouldNotBeHereException;
 import org.apache.commons.lang3.Validate;
 
 import javax.persistence.*;
@@ -10,14 +10,14 @@ import java.util.*;
 @Table
 public final class Kategorie {
     @Id
-    private final String id;
+    private String id;
     @Column
-    private final String name;
+    private String name;
     @Column
     @Lob
-    private final String icon;
+    private String icon;
     @OneToMany(mappedBy = "kategorie", cascade = CascadeType.MERGE)
-    private final List<Produkt> produkte;
+    private List<Produkt> produkte;
 
     public Kategorie(String id, String name, String icon, List<Produkt> produkte) {
         Validate.notNull(id);
@@ -35,7 +35,6 @@ public final class Kategorie {
     }
 
     protected Kategorie() {
-        this("default constructor", TestUtils.BASICICON, List.of());
     }
 
     public String getId() {

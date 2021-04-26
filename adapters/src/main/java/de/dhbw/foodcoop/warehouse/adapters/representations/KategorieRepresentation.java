@@ -2,7 +2,7 @@ package de.dhbw.foodcoop.warehouse.adapters.representations;
 
 import java.util.List;
 
-public class KategorieRepresentation {
+public final class KategorieRepresentation {
     private final String name;
     private final String icon;
     private final List<ProduktRepresentation> produkte;

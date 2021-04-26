@@ -1,5 +1,6 @@
 package de.dhbw.foodcoop.warehouse.domain.entities;
 
+import de.dhbw.foodcoop.warehouse.domain.exceptions.YouShouldNotBeHereException;
 import de.dhbw.foodcoop.warehouse.domain.utils.TestUtils;
 import de.dhbw.foodcoop.warehouse.domain.values.Einheit;
 import de.dhbw.foodcoop.warehouse.domain.values.Lagerbestand;
@@ -14,11 +15,11 @@ import java.util.UUID;
 @Table(name = "produkt")
 public class Produkt {
     @Id
-    private final String id;
+    private String id;
     @Column
-    private final String name;
+    private String name;
     @Embedded
-    private final Lagerbestand lagerbestand;
+    private Lagerbestand lagerbestand;
     @ManyToOne
     @JoinColumn(name = "kategorie_id")
     private Kategorie kategorie;
@@ -38,10 +39,6 @@ public class Produkt {
     }
 
     protected Produkt() {
-        this(TestUtils.PRODUKT_TEST_ID
-                , "default constructor"
-                , new Kategorie("default constructor", TestUtils.BASICICON, List.of())
-                , new Lagerbestand(new Einheit("default constructor"), 0.0, 0.0));
     }
 
     public String getId() {

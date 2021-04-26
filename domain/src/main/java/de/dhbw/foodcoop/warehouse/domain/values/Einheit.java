@@ -1,6 +1,6 @@
 package de.dhbw.foodcoop.warehouse.domain.values;
 
-import de.dhbw.foodcoop.warehouse.domain.utils.TestUtils;
+import de.dhbw.foodcoop.warehouse.domain.exceptions.YouShouldNotBeHereException;
 import org.apache.commons.lang3.Validate;
 
 import javax.persistence.Column;
@@ -14,9 +14,9 @@ import java.util.UUID;
 @Table(name = "einheit")
 public final class Einheit {
     @Id
-    private final String id;
+    private String id;
     @Column
-    private final String name;
+    private String name;
 
     public Einheit(String id, String name) {
         Validate.notBlank(id);
@@ -30,7 +30,6 @@ public final class Einheit {
     }
 
     protected Einheit() {
-        this(TestUtils.EINHEIT_TEST_ID, "default constructor");
     }
 
     public String getId() {
