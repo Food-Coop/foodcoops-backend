@@ -1,5 +1,6 @@
 package de.dhbw.foodcoop.warehouse.domain.entities;
 
+import de.dhbw.foodcoop.warehouse.domain.exceptions.YouShouldNotBeHereException;
 import de.dhbw.foodcoop.warehouse.domain.utils.TestUtils;
 import de.dhbw.foodcoop.warehouse.domain.values.Einheit;
 import de.dhbw.foodcoop.warehouse.domain.values.Lagerbestand;
@@ -38,10 +39,7 @@ public class Produkt {
     }
 
     protected Produkt() {
-        this(TestUtils.PRODUKT_TEST_ID
-                , "default constructor"
-                , new Kategorie("default constructor", TestUtils.BASICICON, List.of())
-                , new Lagerbestand(new Einheit("default constructor"), 0.0, 0.0));
+        throw new YouShouldNotBeHereException();
     }
 
     public String getId() {

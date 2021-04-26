@@ -1,6 +1,6 @@
 package de.dhbw.foodcoop.warehouse.domain.values;
 
-import de.dhbw.foodcoop.warehouse.domain.utils.TestUtils;
+import de.dhbw.foodcoop.warehouse.domain.exceptions.YouShouldNotBeHereException;
 import org.apache.commons.lang3.Validate;
 
 import javax.persistence.Column;
@@ -30,7 +30,7 @@ public final class Einheit {
     }
 
     protected Einheit() {
-        this(TestUtils.EINHEIT_TEST_ID, "default constructor");
+        throw new YouShouldNotBeHereException();
     }
 
     public String getId() {
