@@ -1,10 +1,12 @@
 package de.dhbw.foodcoop.warehouse.domain.entities;
 
 import de.dhbw.foodcoop.warehouse.domain.utils.TestUtils;
+import de.dhbw.foodcoop.warehouse.domain.values.Einheit;
 import de.dhbw.foodcoop.warehouse.domain.values.Lagerbestand;
 import org.apache.commons.lang3.Validate;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -15,11 +17,11 @@ public class Produkt {
     private final String id;
     @Column
     private final String name;
+    @Embedded
+    private final Lagerbestand lagerbestand;
     @ManyToOne
     @JoinColumn(name = "kategorie_id")
     private Kategorie kategorie;
-    @Embedded
-    private final Lagerbestand lagerbestand;
 
     public Produkt(String id, String name, Kategorie kategorie, Lagerbestand lagerbestand) {
         Validate.notBlank(id);
@@ -35,12 +37,11 @@ public class Produkt {
         this(UUID.randomUUID().toString(), name, kategorie, lagerbestand);
     }
 
-    //for unittests
-    public Produkt() {
+    protected Produkt() {
         this(TestUtils.PRODUKT_TEST_ID
-                , "undefined"
-                , new Kategorie()
-                , new Lagerbestand());
+                , "default constructor"
+                , new Kategorie("default constructor", TestUtils.BASICICON, List.of())
+                , new Lagerbestand(new Einheit("default constructor"), 0.0, 0.0));
     }
 
     public String getId() {
@@ -51,12 +52,12 @@ public class Produkt {
         return name;
     }
 
-    public void setKategorie(Kategorie kategorie) {
-        this.kategorie = kategorie;
-    }
-
     public Kategorie getKategorie() {
         return kategorie;
+    }
+
+    public void setKategorie(Kategorie kategorie) {
+        this.kategorie = kategorie;
     }
 
     public Lagerbestand getLagerbestand() {

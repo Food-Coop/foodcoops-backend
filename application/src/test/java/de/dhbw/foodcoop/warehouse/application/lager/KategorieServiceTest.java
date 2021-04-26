@@ -5,6 +5,7 @@ import de.dhbw.foodcoop.warehouse.domain.entities.Produkt;
 import de.dhbw.foodcoop.warehouse.domain.exceptions.KategorieInUseException;
 import de.dhbw.foodcoop.warehouse.domain.repositories.KategorieRepository;
 import de.dhbw.foodcoop.warehouse.domain.utils.TestUtils;
+import de.dhbw.foodcoop.warehouse.domain.values.Einheit;
 import de.dhbw.foodcoop.warehouse.domain.values.Lagerbestand;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -80,6 +81,6 @@ public class KategorieServiceTest {
         return new Produkt(TestUtils.PRODUKT_TEST_ID
                 , "Apfel"
                 , null
-                , new Lagerbestand());
+                , new Lagerbestand(new Einheit("test"), 0.0, 4.0));
     }
 }

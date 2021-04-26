@@ -11,6 +11,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.List;
+
 @ExtendWith(MockitoExtension.class)
 public class KategorieToRepresentationMapperTest {
     @Mock
@@ -21,11 +23,11 @@ public class KategorieToRepresentationMapperTest {
     @Test
     @DisplayName("Kategorie To Representation Test")
     public void applySuccessfully() {
-        Kategorie given = new Kategorie();
+        Kategorie given = new Kategorie(TestUtils.KATEGORIE_TEST_ID, "test", TestUtils.BASICICON, List.of());
         KategorieRepresentation then = toBeTested.apply(given);
         Assertions.assertNotNull(then);
         Assertions.assertEquals(TestUtils.KATEGORIE_TEST_ID, then.getId());
-        Assertions.assertEquals("undefined", then.getName());
+        Assertions.assertEquals("test", then.getName());
         Assertions.assertEquals(TestUtils.BASICICON, then.getIcon());
         Assertions.assertNotNull(then.getProdukte());
         Assertions.assertTrue(then.getProdukte().isEmpty());

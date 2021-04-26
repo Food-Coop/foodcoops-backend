@@ -34,11 +34,8 @@ public final class Kategorie {
         this(UUID.randomUUID().toString(), name, icon, produkte);
     }
 
-    public Kategorie() {
-        this(TestUtils.KATEGORIE_TEST_ID
-                , "undefined"
-                , TestUtils.BASICICON
-                , new ArrayList<>());
+    protected Kategorie() {
+        this("default constructor", TestUtils.BASICICON, List.of());
     }
 
     public String getId() {

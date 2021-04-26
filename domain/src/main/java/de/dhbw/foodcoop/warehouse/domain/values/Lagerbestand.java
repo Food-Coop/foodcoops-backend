@@ -25,8 +25,8 @@ public class Lagerbestand {
         this.sollLagerbestand = sollLagerbestand;
     }
 
-    public Lagerbestand() {
-        this(new Einheit(), 0.0, 0.0);
+    protected Lagerbestand() {
+        this(new Einheit("default constructor"), 0.0, 0.0);
     }
 
     public Einheit getEinheit() {

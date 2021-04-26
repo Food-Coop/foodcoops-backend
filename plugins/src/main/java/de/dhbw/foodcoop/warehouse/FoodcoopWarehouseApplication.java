@@ -20,7 +20,7 @@ public class FoodcoopWarehouseApplication {
         SpringApplication.run(FoodcoopWarehouseApplication.class, args);
     }
 
-    @Bean
+ /*   @Bean
     public CommandLineRunner demoGemuese(KategorieRepository repository) {
         return (args) -> repository.speichern(initKategorieGemuese());
     }
@@ -28,7 +28,7 @@ public class FoodcoopWarehouseApplication {
     @Bean
     public CommandLineRunner demoTeigwaren(KategorieRepository repository) {
         return (args) -> repository.speichern(initKategorieTeigwaren());
-    }
+    }*/
 
     private Kategorie initKategorieGemuese() {
         Einheit einheit = new Einheit(TestUtils.EINHEIT_TEST_ID, "kg");
