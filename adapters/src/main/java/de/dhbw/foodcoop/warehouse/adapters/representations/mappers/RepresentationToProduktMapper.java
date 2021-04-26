@@ -30,7 +30,8 @@ public class RepresentationToProduktMapper implements Function<ProduktRepresenta
     }
 
     public Produkt update(Produkt oldProdukt, ProduktRepresentation newProdukt) {
-        Optional<Kategorie> newKategorie = newProdukt.getKategorie().isBlank() ||
+        Optional<Kategorie> newKategorie = newProdukt.getKategorie() == null ||
+                newProdukt.getKategorie().isBlank() ||
                 newProdukt.getKategorie().equals("undefined") ?
                 Optional.empty() :
                 kategorieService.findById(newProdukt.getKategorie());
