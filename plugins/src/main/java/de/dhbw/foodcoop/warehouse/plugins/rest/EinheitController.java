@@ -50,7 +50,7 @@ public class EinheitController {
 
     @PostMapping("/einheiten")
     public ResponseEntity<?> newEinheit(@RequestBody Einheit newEinheit) {
-        String id = newEinheit.getId() == null ||
+        String id = newEinheit.getId().isBlank() ||
                 newEinheit.getId().equals("undefined") ?
                 UUID.randomUUID().toString() :
                 newEinheit.getId();
