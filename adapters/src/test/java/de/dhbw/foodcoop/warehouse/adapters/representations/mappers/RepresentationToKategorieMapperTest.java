@@ -5,6 +5,7 @@ import de.dhbw.foodcoop.warehouse.adapters.representations.ProduktRepresentation
 import de.dhbw.foodcoop.warehouse.domain.entities.Kategorie;
 import de.dhbw.foodcoop.warehouse.domain.entities.Produkt;
 import de.dhbw.foodcoop.warehouse.domain.utils.TestUtils;
+import de.dhbw.foodcoop.warehouse.domain.values.Einheit;
 import de.dhbw.foodcoop.warehouse.domain.values.Lagerbestand;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -20,8 +21,6 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class RepresentationToKategorieMapperTest {
-    @Mock
-    private RepresentationToProduktMapper produktMapper;
     @InjectMocks
     private RepresentationToKategorieMapper toBeTested;
 
@@ -46,12 +45,12 @@ class RepresentationToKategorieMapperTest {
                 TestUtils.PRODUKT_TEST_ID
                 , "Apfel"
                 , TestUtils.KATEGORIE_TEST_ID
-                , new Lagerbestand());
+                , getLagerbestand());
         ProduktRepresentation birne = new ProduktRepresentation(
                 TestUtils.PRODUKT_TEST_ID
                 , "Birne"
                 , TestUtils.KATEGORIE_TEST_ID
-                , new Lagerbestand());
+                , getLagerbestand());
         KategorieRepresentation given = getKategorieRepresentation(List.of(apfel, birne));
 
         Kategorie then = toBeTested.apply(given);
@@ -97,5 +96,13 @@ class RepresentationToKategorieMapperTest {
                 , "Teigwaren"
                 , TestUtils.BASICICON
                 , List.of());
+    }
+
+    private Lagerbestand getLagerbestand() {
+        return new Lagerbestand(getEinheit(), 2.8, 13.1);
+    }
+
+    private Einheit getEinheit() {
+        return new Einheit("knuts");
     }
 }

@@ -31,8 +31,8 @@ class RepresentationToProduktMapperTest {
     @Test
     @DisplayName("RepresentationToProduktMapper Works Test")
     void applySuccessfully() {
-        Kategorie kategorie = new Kategorie();
-        ProduktRepresentation given = new ProduktRepresentation(TestUtils.PRODUKT_TEST_ID, "abc", kategorie.getId(), new Lagerbestand());
+        Kategorie kategorie = getKategorie();
+        ProduktRepresentation given = new ProduktRepresentation(TestUtils.PRODUKT_TEST_ID, "abc", kategorie.getId(), getLagerbestand());
 
         when(kategorieService.findById(kategorie.getId())).thenReturn(Optional.of(kategorie));
         Produkt then = mapper.apply(given);
@@ -48,8 +48,8 @@ class RepresentationToProduktMapperTest {
     @Test
     @DisplayName("RepresentationToProduktMapper Throws Exception Test")
     void applyWithException() {
-        Kategorie kategorie = new Kategorie();
-        ProduktRepresentation given = new ProduktRepresentation(TestUtils.PRODUKT_TEST_ID, "abc", kategorie.getId(), new Lagerbestand());
+        Kategorie kategorie = getKategorie();
+        ProduktRepresentation given = new ProduktRepresentation(TestUtils.PRODUKT_TEST_ID, "abc", kategorie.getId(), getLagerbestand());
 
         when(kategorieService.findById(kategorie.getId())).thenReturn(Optional.empty());
 
@@ -69,7 +69,7 @@ class RepresentationToProduktMapperTest {
                 TestUtils.KATEGORIE_TEST_ID_2
                 , "Früchte", TestUtils.BASICICON
                 , List.of());
-        Lagerbestand lagerbestand = new Lagerbestand();
+        Lagerbestand lagerbestand = getLagerbestand();
         Produkt oldProdukt = new Produkt(TestUtils.PRODUKT_TEST_ID
         , "Apfel"
         , oldKategorie
@@ -89,8 +89,8 @@ class RepresentationToProduktMapperTest {
     @Test
     @DisplayName(("Old Produkt and new Produktrepresentation With new name update Produkt"))
     public void updateNameSucessfully() {
-        Kategorie kategorie = new Kategorie();
-        Lagerbestand lagerbestand = new Lagerbestand();
+        Kategorie kategorie = getKategorie();
+        Lagerbestand lagerbestand = getLagerbestand();
         Produkt oldProdukt = new Produkt(TestUtils.PRODUKT_TEST_ID
                 , "Apfel"
                 , kategorie
@@ -109,8 +109,8 @@ class RepresentationToProduktMapperTest {
     @Test
     @DisplayName(("Old Produkt and new Produktrepresentation With new id Does Not update Produkt"))
     public void updateIdFailsQuietly() {
-        Kategorie kategorie = new Kategorie();
-        Lagerbestand lagerbestand = new Lagerbestand();
+        Kategorie kategorie = getKategorie();
+        Lagerbestand lagerbestand = getLagerbestand();
         Produkt oldProdukt = new Produkt(TestUtils.PRODUKT_TEST_ID
                 , "Apfel"
                 , kategorie
@@ -129,8 +129,8 @@ class RepresentationToProduktMapperTest {
     @Test
     @DisplayName(("Old Produkt and new Produktrepresentation With new id Does Not update Produkt"))
     public void updateLagerbestandSuccessfully() {
-        Kategorie kategorie = new Kategorie();
-        Einheit einheit = new Einheit();
+        Kategorie kategorie = getKategorie();
+        Einheit einheit = new Einheit(TestUtils.EINHEIT_TEST_ID, "Stück");
         Lagerbestand oldLagerbestand = new Lagerbestand(einheit, 1.4, 9.0);
         Lagerbestand newLagerbestand = new Lagerbestand(einheit, 9.0, 9.0);
         Produkt oldProdukt = new Produkt(TestUtils.PRODUKT_TEST_ID
@@ -146,5 +146,18 @@ class RepresentationToProduktMapperTest {
         Assertions.assertEquals(oldProdukt.getName(), mapped.getName());
         Assertions.assertEquals(oldProdukt.getKategorie(), mapped.getKategorie());
         Assertions.assertEquals(newProduktRepresentation.getLagerbestand(), mapped.getLagerbestand());
+    }
+
+    private Kategorie getKategorie() {
+        return new Kategorie(
+                TestUtils.KATEGORIE_TEST_ID, "kategorie", TestUtils.BASICICON, List.of());
+    }
+
+    private Lagerbestand getLagerbestand() {
+        return new Lagerbestand(getEinheit(), 0.0, 2.9);
+    }
+
+    private Einheit getEinheit() {
+        return new Einheit(TestUtils.EINHEIT_TEST_ID, "Knut");
     }
 }

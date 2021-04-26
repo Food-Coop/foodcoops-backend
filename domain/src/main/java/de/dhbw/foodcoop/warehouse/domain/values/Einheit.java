@@ -29,8 +29,8 @@ public final class Einheit {
         this(UUID.randomUUID().toString(), name);
     }
 
-    public Einheit() {
-        this(TestUtils.EINHEIT_TEST_ID, "undefined");
+    protected Einheit() {
+        this(TestUtils.EINHEIT_TEST_ID, "default constructor");
     }
 
     public String getId() {
