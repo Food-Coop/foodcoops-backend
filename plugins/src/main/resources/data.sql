@@ -19,7 +19,7 @@ values ( '30724b6f-01ec-4c47-aba7-1a5f2bc5f833'
        , 3.5);
 insert into produkt (id, name, kategorie_id, einheit_id, ist_lagerbestand, soll_lagerbestand)
 values ( 'ed149481-71cf-4fc3-8b21-6cb763fa6848'
-       , 'Romanov Salat'
+       , 'Romana Salat'
        , '6abeec3f-fdc4-49b1-b64e-e005b45051cb'
        , 'b9db54bc-8c54-4163-bc25-1ed10b75edea'
        , 3
