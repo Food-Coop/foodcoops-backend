@@ -3,14 +3,14 @@ package de.dhbw.foodcoop.warehouse.adapters.representations;
 public final class ProduktRepresentation {
     private final String name;
     private final String kategorie;
-    private final LagerbestandRepresentation lagerbestandRepresentation;
+    private final LagerbestandRepresentation lagerbestand;
     private String id;
 
-    public ProduktRepresentation(String id, String name, String kategorie, LagerbestandRepresentation lagerbestandRepresentation) {
+    public ProduktRepresentation(String id, String name, String kategorie, LagerbestandRepresentation lagerbestand) {
         this.id = id;
         this.name = name;
         this.kategorie = kategorie;
-        this.lagerbestandRepresentation = lagerbestandRepresentation;
+        this.lagerbestand = lagerbestand;
     }
 
     public String getId() {
@@ -29,8 +29,8 @@ public final class ProduktRepresentation {
         return kategorie;
     }
 
-    public LagerbestandRepresentation getLagerbestandRepresentation() {
-        return lagerbestandRepresentation;
+    public LagerbestandRepresentation getLagerbestand() {
+        return lagerbestand;
     }
 
     @Override
@@ -39,7 +39,7 @@ public final class ProduktRepresentation {
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
                 ", kategorie='" + kategorie + '\'' +
-                ", lagerbestandRepresentation=" + lagerbestandRepresentation +
+                ", lagerbestandRepresentation=" + lagerbestand +
                 '}';
     }
 }

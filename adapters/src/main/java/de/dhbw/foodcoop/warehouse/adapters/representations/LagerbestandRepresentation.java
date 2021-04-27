@@ -1,12 +1,12 @@
 package de.dhbw.foodcoop.warehouse.adapters.representations;
 
 public final class LagerbestandRepresentation {
-    private final EinheitRepresentation einheitRepresentation;
+    private final EinheitRepresentation einheit;
     private final Double istLagerbestand;
     private final Double sollLagerbestand;
 
-    public LagerbestandRepresentation(EinheitRepresentation einheitRepresentation, Double istLagerbestand, Double sollLagerbestand) {
-        this.einheitRepresentation = einheitRepresentation;
+    public LagerbestandRepresentation(EinheitRepresentation einheit, Double istLagerbestand, Double sollLagerbestand) {
+        this.einheit = einheit;
         this.istLagerbestand = istLagerbestand;
         this.sollLagerbestand = sollLagerbestand;
     }
@@ -19,7 +19,7 @@ public final class LagerbestandRepresentation {
         return sollLagerbestand;
     }
 
-    public EinheitRepresentation getEinheitRepresentation() {
-        return einheitRepresentation;
+    public EinheitRepresentation getEinheit() {
+        return einheit;
     }
 }

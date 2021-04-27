@@ -42,7 +42,7 @@ class RepresentationToProduktMapperTest {
                 , getLagerbestandRepresentation());
 
         when(kategorieService.findById(kategorie.getId())).thenReturn(Optional.of(kategorie));
-        when(toLagerbestandMapper.apply(given.getLagerbestandRepresentation()))
+        when(toLagerbestandMapper.apply(given.getLagerbestand()))
                 .thenReturn(getLagerbestand());
         Produkt then = mapper.apply(given);
 
@@ -163,12 +163,12 @@ class RepresentationToProduktMapperTest {
         Assertions.assertEquals(oldProdukt.getId(), mapped.getId());
         Assertions.assertEquals(oldProdukt.getName(), mapped.getName());
         Assertions.assertEquals(oldProdukt.getKategorie(), mapped.getKategorie());
-        Assertions.assertEquals(newProduktRepresentation.getLagerbestandRepresentation()
-                        .getEinheitRepresentation().getId()
+        Assertions.assertEquals(newProduktRepresentation.getLagerbestand()
+                        .getEinheit().getId()
                 , mapped.getLagerbestand().getEinheit().getId());
-        Assertions.assertEquals(newProduktRepresentation.getLagerbestandRepresentation().getIstLagerbestand()
+        Assertions.assertEquals(newProduktRepresentation.getLagerbestand().getIstLagerbestand()
                 , mapped.getLagerbestand().getIstLagerbestand());
-        Assertions.assertEquals(newProduktRepresentation.getLagerbestandRepresentation().getSollLagerbestand()
+        Assertions.assertEquals(newProduktRepresentation.getLagerbestand().getSollLagerbestand()
                 , mapped.getLagerbestand().getSollLagerbestand());
     }
 
