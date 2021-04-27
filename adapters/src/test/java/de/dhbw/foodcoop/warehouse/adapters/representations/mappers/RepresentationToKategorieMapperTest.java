@@ -1,23 +1,19 @@
 package de.dhbw.foodcoop.warehouse.adapters.representations.mappers;
 
+import de.dhbw.foodcoop.warehouse.adapters.representations.EinheitRepresentation;
 import de.dhbw.foodcoop.warehouse.adapters.representations.KategorieRepresentation;
+import de.dhbw.foodcoop.warehouse.adapters.representations.LagerbestandRepresentation;
 import de.dhbw.foodcoop.warehouse.adapters.representations.ProduktRepresentation;
 import de.dhbw.foodcoop.warehouse.domain.entities.Kategorie;
-import de.dhbw.foodcoop.warehouse.domain.entities.Produkt;
 import de.dhbw.foodcoop.warehouse.domain.utils.TestUtils;
-import de.dhbw.foodcoop.warehouse.domain.values.Einheit;
-import de.dhbw.foodcoop.warehouse.domain.values.Lagerbestand;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
-
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class RepresentationToKategorieMapperTest {
@@ -45,12 +41,12 @@ class RepresentationToKategorieMapperTest {
                 TestUtils.PRODUKT_TEST_ID
                 , "Apfel"
                 , TestUtils.KATEGORIE_TEST_ID
-                , getLagerbestand());
+                , getLagerbestandRepresentation());
         ProduktRepresentation birne = new ProduktRepresentation(
                 TestUtils.PRODUKT_TEST_ID
                 , "Birne"
                 , TestUtils.KATEGORIE_TEST_ID
-                , getLagerbestand());
+                , getLagerbestandRepresentation());
         KategorieRepresentation given = getKategorieRepresentation(List.of(apfel, birne));
 
         Kategorie then = toBeTested.apply(given);
@@ -98,11 +94,11 @@ class RepresentationToKategorieMapperTest {
                 , List.of());
     }
 
-    private Lagerbestand getLagerbestand() {
-        return new Lagerbestand(getEinheit(), 2.8, 13.1);
+    private LagerbestandRepresentation getLagerbestandRepresentation() {
+        return new LagerbestandRepresentation(getEinheitRepresentation(), 2.8, 13.1);
     }
 
-    private Einheit getEinheit() {
-        return new Einheit("knuts");
+    private EinheitRepresentation getEinheitRepresentation() {
+        return new EinheitRepresentation(TestUtils.EINHEIT_TEST_ID, "knuts");
     }
 }
