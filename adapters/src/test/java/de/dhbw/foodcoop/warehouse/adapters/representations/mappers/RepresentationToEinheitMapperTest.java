@@ -2,7 +2,6 @@ package de.dhbw.foodcoop.warehouse.adapters.representations.mappers;
 
 import de.dhbw.foodcoop.warehouse.adapters.representations.EinheitRepresentation;
 import de.dhbw.foodcoop.warehouse.application.lager.EinheitService;
-import de.dhbw.foodcoop.warehouse.domain.exceptions.EinheitInUseException;
 import de.dhbw.foodcoop.warehouse.domain.exceptions.EinheitNotFoundException;
 import de.dhbw.foodcoop.warehouse.domain.utils.TestUtils;
 import de.dhbw.foodcoop.warehouse.domain.values.Einheit;
@@ -16,7 +15,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)

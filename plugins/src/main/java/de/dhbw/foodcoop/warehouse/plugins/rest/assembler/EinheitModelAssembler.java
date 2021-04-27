@@ -1,9 +1,7 @@
 package de.dhbw.foodcoop.warehouse.plugins.rest.assembler;
 
 import de.dhbw.foodcoop.warehouse.adapters.representations.EinheitRepresentation;
-import de.dhbw.foodcoop.warehouse.domain.values.Einheit;
 import de.dhbw.foodcoop.warehouse.plugins.rest.EinheitController;
-import de.dhbw.foodcoop.warehouse.plugins.rest.ProduktController;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.RepresentationModelAssembler;
 import org.springframework.stereotype.Component;

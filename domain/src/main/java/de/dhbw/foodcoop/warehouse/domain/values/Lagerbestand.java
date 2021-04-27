@@ -2,7 +2,10 @@ package de.dhbw.foodcoop.warehouse.domain.values;
 
 import org.apache.commons.lang3.Validate;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import java.util.Objects;
 
 @Embeddable

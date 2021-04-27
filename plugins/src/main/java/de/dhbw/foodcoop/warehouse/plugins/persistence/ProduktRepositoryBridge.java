@@ -2,7 +2,6 @@ package de.dhbw.foodcoop.warehouse.plugins.persistence;
 
 import de.dhbw.foodcoop.warehouse.domain.entities.Produkt;
 import de.dhbw.foodcoop.warehouse.domain.repositories.ProduktRepository;
-import de.dhbw.foodcoop.warehouse.domain.values.Einheit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 

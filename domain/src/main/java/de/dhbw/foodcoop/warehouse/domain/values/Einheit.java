@@ -1,6 +1,5 @@
 package de.dhbw.foodcoop.warehouse.domain.values;
 
-import de.dhbw.foodcoop.warehouse.domain.exceptions.YouShouldNotBeHereException;
 import org.apache.commons.lang3.Validate;
 
 import javax.persistence.Column;

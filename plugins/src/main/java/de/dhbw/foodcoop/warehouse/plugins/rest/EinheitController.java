@@ -4,8 +4,8 @@ import de.dhbw.foodcoop.warehouse.adapters.representations.EinheitRepresentation
 import de.dhbw.foodcoop.warehouse.adapters.representations.mappers.EinheitToRepresentationMapper;
 import de.dhbw.foodcoop.warehouse.adapters.representations.mappers.RepresentationToEinheitMapper;
 import de.dhbw.foodcoop.warehouse.application.lager.EinheitService;
-import de.dhbw.foodcoop.warehouse.domain.exceptions.EinheitNotFoundException;
 import de.dhbw.foodcoop.warehouse.domain.exceptions.EinheitInUseException;
+import de.dhbw.foodcoop.warehouse.domain.exceptions.EinheitNotFoundException;
 import de.dhbw.foodcoop.warehouse.domain.values.Einheit;
 import de.dhbw.foodcoop.warehouse.plugins.rest.assembler.EinheitModelAssembler;
 import org.springframework.beans.factory.annotation.Autowired;

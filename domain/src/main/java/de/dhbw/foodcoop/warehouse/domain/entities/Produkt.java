@@ -1,13 +1,9 @@
 package de.dhbw.foodcoop.warehouse.domain.entities;
 
-import de.dhbw.foodcoop.warehouse.domain.exceptions.YouShouldNotBeHereException;
-import de.dhbw.foodcoop.warehouse.domain.utils.TestUtils;
-import de.dhbw.foodcoop.warehouse.domain.values.Einheit;
 import de.dhbw.foodcoop.warehouse.domain.values.Lagerbestand;
 import org.apache.commons.lang3.Validate;
 
 import javax.persistence.*;
-import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 

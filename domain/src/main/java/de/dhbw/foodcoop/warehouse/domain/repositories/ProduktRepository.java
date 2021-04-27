@@ -1,7 +1,6 @@
 package de.dhbw.foodcoop.warehouse.domain.repositories;
 
 import de.dhbw.foodcoop.warehouse.domain.entities.Produkt;
-import de.dhbw.foodcoop.warehouse.domain.values.Einheit;
 
 import java.util.List;
 import java.util.Optional;

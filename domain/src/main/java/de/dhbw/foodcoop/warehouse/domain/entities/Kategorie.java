@@ -1,10 +1,11 @@
 package de.dhbw.foodcoop.warehouse.domain.entities;
 
-import de.dhbw.foodcoop.warehouse.domain.exceptions.YouShouldNotBeHereException;
 import org.apache.commons.lang3.Validate;
 
 import javax.persistence.*;
-import java.util.*;
+import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
 
 @Entity
 @Table
