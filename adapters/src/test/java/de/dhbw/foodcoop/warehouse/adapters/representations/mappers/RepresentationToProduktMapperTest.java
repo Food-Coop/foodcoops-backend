@@ -1,5 +1,7 @@
 package de.dhbw.foodcoop.warehouse.adapters.representations.mappers;
 
+import de.dhbw.foodcoop.warehouse.adapters.representations.EinheitRepresentation;
+import de.dhbw.foodcoop.warehouse.adapters.representations.LagerbestandRepresentation;
 import de.dhbw.foodcoop.warehouse.adapters.representations.ProduktRepresentation;
 import de.dhbw.foodcoop.warehouse.application.lager.KategorieService;
 import de.dhbw.foodcoop.warehouse.domain.entities.Kategorie;
@@ -25,6 +27,8 @@ import static org.mockito.Mockito.when;
 class RepresentationToProduktMapperTest {
     @Mock
     private KategorieService kategorieService;
+    @Mock
+    private RepresentationToLagerbestandMapper toLagerbestandMapper;
     @InjectMocks
     private RepresentationToProduktMapper mapper;
 
@@ -32,9 +36,14 @@ class RepresentationToProduktMapperTest {
     @DisplayName("RepresentationToProduktMapper Works Test")
     void applySuccessfully() {
         Kategorie kategorie = getKategorie();
-        ProduktRepresentation given = new ProduktRepresentation(TestUtils.PRODUKT_TEST_ID, "abc", kategorie.getId(), getLagerbestand());
+        ProduktRepresentation given = new ProduktRepresentation(
+                TestUtils.PRODUKT_TEST_ID
+                , "abc", kategorie.getId()
+                , getLagerbestandRepresentation());
 
         when(kategorieService.findById(kategorie.getId())).thenReturn(Optional.of(kategorie));
+        when(toLagerbestandMapper.apply(given.getLagerbestandRepresentation()))
+                .thenReturn(getLagerbestand());
         Produkt then = mapper.apply(given);
 
         Assertions.assertNotNull(then);
@@ -49,7 +58,10 @@ class RepresentationToProduktMapperTest {
     @DisplayName("RepresentationToProduktMapper Throws Exception Test")
     void applyWithException() {
         Kategorie kategorie = getKategorie();
-        ProduktRepresentation given = new ProduktRepresentation(TestUtils.PRODUKT_TEST_ID, "abc", kategorie.getId(), getLagerbestand());
+        ProduktRepresentation given = new ProduktRepresentation(
+                TestUtils.PRODUKT_TEST_ID
+                , "abc", kategorie.getId()
+                , getLagerbestandRepresentation());
 
         when(kategorieService.findById(kategorie.getId())).thenReturn(Optional.empty());
 
@@ -71,9 +83,9 @@ class RepresentationToProduktMapperTest {
                 , List.of());
         Lagerbestand lagerbestand = getLagerbestand();
         Produkt oldProdukt = new Produkt(TestUtils.PRODUKT_TEST_ID
-        , "Apfel"
-        , oldKategorie
-        , lagerbestand);
+                , "Apfel"
+                , oldKategorie
+                , lagerbestand);
         ProduktRepresentation newProduktRepresentation = new ProduktRepresentation(
                 null, "undefined", newKategorie.getId(), null);
 
@@ -130,9 +142,9 @@ class RepresentationToProduktMapperTest {
     @DisplayName(("Old Produkt and new Produktrepresentation With new id Does Not update Produkt"))
     public void updateLagerbestandSuccessfully() {
         Kategorie kategorie = getKategorie();
-        Einheit einheit = new Einheit(TestUtils.EINHEIT_TEST_ID, "Stück");
-        Lagerbestand oldLagerbestand = new Lagerbestand(einheit, 1.4, 9.0);
-        Lagerbestand newLagerbestand = new Lagerbestand(einheit, 9.0, 9.0);
+        Lagerbestand oldLagerbestand = new Lagerbestand(getEinheit(), 1.4, 9.0);
+        LagerbestandRepresentation newLagerbestand =
+                new LagerbestandRepresentation(getEinheitRepresentation(), 9.0, 9.0);
         Produkt oldProdukt = new Produkt(TestUtils.PRODUKT_TEST_ID
                 , "Apfel"
                 , kategorie
@@ -140,12 +152,24 @@ class RepresentationToProduktMapperTest {
         ProduktRepresentation newProduktRepresentation = new ProduktRepresentation(
                 TestUtils.EINHEIT_TEST_ID, "undefined", "undefined", newLagerbestand);
 
+
+        when(toLagerbestandMapper.apply(newLagerbestand))
+                .thenReturn(new Lagerbestand(
+                        getEinheit()
+                        , newLagerbestand.getIstLagerbestand()
+                        , newLagerbestand.getSollLagerbestand()));
         Produkt mapped = mapper.update(oldProdukt, newProduktRepresentation);
 
         Assertions.assertEquals(oldProdukt.getId(), mapped.getId());
         Assertions.assertEquals(oldProdukt.getName(), mapped.getName());
         Assertions.assertEquals(oldProdukt.getKategorie(), mapped.getKategorie());
-        Assertions.assertEquals(newProduktRepresentation.getLagerbestand(), mapped.getLagerbestand());
+        Assertions.assertEquals(newProduktRepresentation.getLagerbestandRepresentation()
+                        .getEinheitRepresentation().getId()
+                , mapped.getLagerbestand().getEinheit().getId());
+        Assertions.assertEquals(newProduktRepresentation.getLagerbestandRepresentation().getIstLagerbestand()
+                , mapped.getLagerbestand().getIstLagerbestand());
+        Assertions.assertEquals(newProduktRepresentation.getLagerbestandRepresentation().getSollLagerbestand()
+                , mapped.getLagerbestand().getSollLagerbestand());
     }
 
     private Kategorie getKategorie() {
@@ -153,8 +177,16 @@ class RepresentationToProduktMapperTest {
                 TestUtils.KATEGORIE_TEST_ID, "kategorie", TestUtils.BASICICON, List.of());
     }
 
+    private LagerbestandRepresentation getLagerbestandRepresentation() {
+        return new LagerbestandRepresentation(getEinheitRepresentation(), 0.0, 2.9);
+    }
+
     private Lagerbestand getLagerbestand() {
         return new Lagerbestand(getEinheit(), 0.0, 2.9);
+    }
+
+    private EinheitRepresentation getEinheitRepresentation() {
+        return new EinheitRepresentation(TestUtils.EINHEIT_TEST_ID, "Knut");
     }
 
     private Einheit getEinheit() {
