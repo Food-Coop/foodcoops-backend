@@ -49,6 +49,6 @@ public class ProduktToRepresentationMapperTest {
         Assertions.assertEquals("test", when.getName());
         Assertions.assertEquals(TestUtils.KATEGORIE_TEST_ID, when.getKategorie());
         Assertions.assertEquals(given.getLagerbestand().getEinheit().getId()
-                , when.getLagerbestandRepresentation().getEinheitRepresentation().getId());
+                , when.getLagerbestand().getEinheit().getId());
     }
 }

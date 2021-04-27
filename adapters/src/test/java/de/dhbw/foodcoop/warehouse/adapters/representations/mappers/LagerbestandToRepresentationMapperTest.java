@@ -36,9 +36,9 @@ public class LagerbestandToRepresentationMapperTest {
         LagerbestandRepresentation mapped = toBeTested.apply(lagerbestand);
 
         Assertions.assertNotNull(mapped);
-        Assertions.assertNotNull(mapped.getEinheitRepresentation());
-        Assertions.assertEquals(TestUtils.EINHEIT_TEST_ID, mapped.getEinheitRepresentation().getId());
-        Assertions.assertEquals(eimer, mapped.getEinheitRepresentation().getName());
+        Assertions.assertNotNull(mapped.getEinheit());
+        Assertions.assertEquals(TestUtils.EINHEIT_TEST_ID, mapped.getEinheit().getId());
+        Assertions.assertEquals(eimer, mapped.getEinheit().getName());
         Assertions.assertEquals(lagerbestand.getIstLagerbestand(), mapped.getIstLagerbestand());
         Assertions.assertEquals(lagerbestand.getSollLagerbestand(), mapped.getSollLagerbestand());
     }

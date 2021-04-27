@@ -19,7 +19,7 @@ public class RepresentationToLagerbestandMapper implements Function<Lagerbestand
 
     @Override
     public Lagerbestand apply(LagerbestandRepresentation lagerbestandRepresentation) {
-        Einheit einheit = toEinheitMapper.applyById(lagerbestandRepresentation.getEinheitRepresentation().getId());
+        Einheit einheit = toEinheitMapper.applyById(lagerbestandRepresentation.getEinheit().getId());
         return new Lagerbestand(
                 einheit
                 , lagerbestandRepresentation.getIstLagerbestand()
