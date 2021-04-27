@@ -20,7 +20,7 @@ public final class Kategorie {
     private List<Produkt> produkte;
 
     public Kategorie(String id, String name, String icon, List<Produkt> produkte) {
-        Validate.notNull(id);
+        Validate.notBlank(id);
         Validate.notBlank(name);
         Validate.notNull(icon);
         Validate.notNull(produkte);

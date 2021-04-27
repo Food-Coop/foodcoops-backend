@@ -56,6 +56,7 @@ public class KategorieController {
     @PostMapping("/kategorien")
     ResponseEntity<?> newKategorie(@RequestBody KategorieRepresentation newKategorie) {
         String id = newKategorie.getId() == null ||
+                newKategorie.getId().isBlank() ||
                 newKategorie.getId().equals("undefined") ?
                 UUID.randomUUID().toString() :
                 newKategorie.getId();
