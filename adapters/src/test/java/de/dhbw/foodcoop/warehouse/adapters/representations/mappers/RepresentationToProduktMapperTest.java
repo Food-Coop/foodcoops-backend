@@ -9,6 +9,7 @@ import de.dhbw.foodcoop.warehouse.domain.entities.Produkt;
 import de.dhbw.foodcoop.warehouse.domain.exceptions.KategorieNotFoundException;
 import de.dhbw.foodcoop.warehouse.domain.utils.TestUtils;
 import de.dhbw.foodcoop.warehouse.domain.values.Einheit;
+import de.dhbw.foodcoop.warehouse.domain.values.Icon;
 import de.dhbw.foodcoop.warehouse.domain.values.Lagerbestand;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -75,11 +76,11 @@ class RepresentationToProduktMapperTest {
     public void updateKategorieSuccessfully() {
         Kategorie oldKategorie = new Kategorie(
                 TestUtils.KATEGORIE_TEST_ID
-                , "Obst", TestUtils.BASICICON
+                , "Obst", new Icon(TestUtils.BASICICON)
                 , List.of());
         Kategorie newKategorie = new Kategorie(
                 TestUtils.KATEGORIE_TEST_ID_2
-                , "Früchte", TestUtils.BASICICON
+                , "Früchte", new Icon(TestUtils.BASICICON)
                 , List.of());
         Lagerbestand lagerbestand = getLagerbestand();
         Produkt oldProdukt = new Produkt(TestUtils.PRODUKT_TEST_ID
@@ -174,7 +175,7 @@ class RepresentationToProduktMapperTest {
 
     private Kategorie getKategorie() {
         return new Kategorie(
-                TestUtils.KATEGORIE_TEST_ID, "kategorie", TestUtils.BASICICON, List.of());
+                TestUtils.KATEGORIE_TEST_ID, "kategorie", new Icon(TestUtils.BASICICON), List.of());
     }
 
     private LagerbestandRepresentation getLagerbestandRepresentation() {

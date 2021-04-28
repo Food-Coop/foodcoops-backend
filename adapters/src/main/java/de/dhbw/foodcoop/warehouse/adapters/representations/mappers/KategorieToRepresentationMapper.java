@@ -25,7 +25,7 @@ public class KategorieToRepresentationMapper implements Function<Kategorie, Kate
                 .map(mapper).collect(Collectors.toList());
         return new KategorieRepresentation(kategorie.getId(),
                 kategorie.getName(),
-                kategorie.getIcon(),
+                kategorie.getIcon().getIcon(),
                 produkte);
     }
 }

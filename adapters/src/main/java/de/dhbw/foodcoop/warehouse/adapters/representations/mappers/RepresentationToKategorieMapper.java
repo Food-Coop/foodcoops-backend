@@ -2,6 +2,7 @@ package de.dhbw.foodcoop.warehouse.adapters.representations.mappers;
 
 import de.dhbw.foodcoop.warehouse.adapters.representations.KategorieRepresentation;
 import de.dhbw.foodcoop.warehouse.domain.entities.Kategorie;
+import de.dhbw.foodcoop.warehouse.domain.values.Icon;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -16,7 +17,7 @@ public class RepresentationToKategorieMapper implements Function<KategorieRepres
         return new Kategorie(
                 kategorieRepresentation.getId(),
                 kategorieRepresentation.getName(),
-                kategorieRepresentation.getIcon(),
+                new Icon(kategorieRepresentation.getIcon()),
                 List.of());
     }
 
@@ -25,7 +26,7 @@ public class RepresentationToKategorieMapper implements Function<KategorieRepres
         return new Kategorie(
                 oldKategorie.getId(),
                 pickNewIfDefined(oldKategorie.getName(), newKategorie.getName()),
-                pickNewIfDefined(oldKategorie.getIcon(), newKategorie.getIcon()),
+                new Icon(pickNewIfDefined(oldKategorie.getIcon().getIcon(), newKategorie.getIcon())),
                 List.of()
         );
     }

@@ -6,6 +6,7 @@ import de.dhbw.foodcoop.warehouse.domain.exceptions.ProduktInUseException;
 import de.dhbw.foodcoop.warehouse.domain.repositories.ProduktRepository;
 import de.dhbw.foodcoop.warehouse.domain.utils.TestUtils;
 import de.dhbw.foodcoop.warehouse.domain.values.Einheit;
+import de.dhbw.foodcoop.warehouse.domain.values.Icon;
 import de.dhbw.foodcoop.warehouse.domain.values.Lagerbestand;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -35,7 +36,7 @@ class ProduktServiceTest {
         Lagerbestand lagerbestand = new Lagerbestand(einheit, 0.01, 1.6);
         Kategorie kategorie = new Kategorie(TestUtils.KATEGORIE_TEST_ID
                 , "Kategorie"
-                , TestUtils.TEIGWARENICON,
+                , new Icon(TestUtils.TEIGWARENICON),
                 List.of());
         Produkt test = new Produkt(TestUtils.PRODUKT_TEST_ID, kategorie, lagerbestand);
 
@@ -51,7 +52,7 @@ class ProduktServiceTest {
         Lagerbestand lagerbestand = new Lagerbestand(einheit, 0.1, 1.6);
         Kategorie kategorie = new Kategorie(TestUtils.KATEGORIE_TEST_ID
                 , "Kategorie"
-                , TestUtils.TEIGWARENICON,
+                , new Icon(TestUtils.TEIGWARENICON),
                 List.of());
         Produkt produkt = new Produkt(TestUtils.PRODUKT_TEST_ID, kategorie, lagerbestand);
 
@@ -68,7 +69,7 @@ class ProduktServiceTest {
         Lagerbestand lagerbestand = new Lagerbestand(einheit, 0.001, 1.6);
         Kategorie kategorie = new Kategorie(TestUtils.KATEGORIE_TEST_ID
                 , "Kategorie"
-                , TestUtils.TEIGWARENICON,
+                , new Icon(TestUtils.TEIGWARENICON),
                 List.of());
         Produkt produkt = new Produkt(TestUtils.PRODUKT_TEST_ID, kategorie, lagerbestand);
 

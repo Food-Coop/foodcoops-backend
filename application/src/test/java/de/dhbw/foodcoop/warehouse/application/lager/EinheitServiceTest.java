@@ -6,6 +6,7 @@ import de.dhbw.foodcoop.warehouse.domain.exceptions.EinheitInUseException;
 import de.dhbw.foodcoop.warehouse.domain.repositories.EinheitRepository;
 import de.dhbw.foodcoop.warehouse.domain.utils.TestUtils;
 import de.dhbw.foodcoop.warehouse.domain.values.Einheit;
+import de.dhbw.foodcoop.warehouse.domain.values.Icon;
 import de.dhbw.foodcoop.warehouse.domain.values.Lagerbestand;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -58,7 +59,7 @@ class EinheitServiceTest {
         Lagerbestand lagerbestand = new Lagerbestand(otherEinheit, 0.8, 1.5);
         Kategorie kategorie = new Kategorie(TestUtils.KATEGORIE_TEST_ID
                 , "Fleischwaren"
-                , TestUtils.TEIGWARENICON,
+                , new Icon(TestUtils.TEIGWARENICON),
                 List.of());
         Produkt produkt = new Produkt(TestUtils.PRODUKT_TEST_ID
                 , "Blutwurst"

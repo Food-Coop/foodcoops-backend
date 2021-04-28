@@ -6,6 +6,7 @@ import de.dhbw.foodcoop.warehouse.domain.exceptions.KategorieInUseException;
 import de.dhbw.foodcoop.warehouse.domain.repositories.KategorieRepository;
 import de.dhbw.foodcoop.warehouse.domain.utils.TestUtils;
 import de.dhbw.foodcoop.warehouse.domain.values.Einheit;
+import de.dhbw.foodcoop.warehouse.domain.values.Icon;
 import de.dhbw.foodcoop.warehouse.domain.values.Lagerbestand;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -32,9 +33,9 @@ public class KategorieServiceTest {
     @Test
     @DisplayName("Kategorie Sort Test")
     public void getAllKategoriesSorted() {
-        Kategorie a = new Kategorie("A", TestUtils.BASICICON, new ArrayList<>());
-        Kategorie b = new Kategorie("B", TestUtils.BASICICON, new ArrayList<>());
-        Kategorie uea = new Kategorie("Üa", TestUtils.BASICICON, new ArrayList<>());
+        Kategorie a = new Kategorie("A", new Icon(TestUtils.BASICICON), new ArrayList<>());
+        Kategorie b = new Kategorie("B", new Icon(TestUtils.BASICICON), new ArrayList<>());
+        Kategorie uea = new Kategorie("Üa", new Icon(TestUtils.BASICICON), new ArrayList<>());
 
         when(mockRepository.alle()).thenReturn(Arrays.asList(uea, b, a));
         List<Kategorie> whenReturn = toBeTested.all();
@@ -73,7 +74,7 @@ public class KategorieServiceTest {
 
     private Kategorie getKategorie(List<Produkt> produkts) {
         return new Kategorie(TestUtils.KATEGORIE_TEST_ID
-                , "Obst", TestUtils.BASICICON
+                , "Obst", new Icon(TestUtils.BASICICON)
                 , produkts);
     }
 

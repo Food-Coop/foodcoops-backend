@@ -6,6 +6,7 @@ import de.dhbw.foodcoop.warehouse.adapters.representations.LagerbestandRepresent
 import de.dhbw.foodcoop.warehouse.adapters.representations.ProduktRepresentation;
 import de.dhbw.foodcoop.warehouse.domain.entities.Kategorie;
 import de.dhbw.foodcoop.warehouse.domain.utils.TestUtils;
+import de.dhbw.foodcoop.warehouse.domain.values.Icon;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -29,7 +30,7 @@ class RepresentationToKategorieMapperTest {
         Assertions.assertNotNull(then);
         Assertions.assertEquals(TestUtils.KATEGORIE_TEST_ID, then.getId());
         Assertions.assertEquals("Teigwaren", then.getName());
-        Assertions.assertEquals(TestUtils.TEIGWARENICON, then.getIcon());
+        Assertions.assertEquals(TestUtils.TEIGWARENICON, then.getIcon().getIcon());
         Assertions.assertNotNull(then.getProdukte());
         Assertions.assertTrue(then.getProdukte().isEmpty());
     }
@@ -54,7 +55,7 @@ class RepresentationToKategorieMapperTest {
         Assertions.assertNotNull(then);
         Assertions.assertEquals(TestUtils.KATEGORIE_TEST_ID, then.getId());
         Assertions.assertEquals("Teigwaren", then.getName());
-        Assertions.assertEquals(TestUtils.TEIGWARENICON, then.getIcon());
+        Assertions.assertEquals(TestUtils.TEIGWARENICON, then.getIcon().getIcon());
         Assertions.assertNotNull(then.getProdukte());
         Assertions.assertEquals(0, then.getProdukte().size());
     }
@@ -73,7 +74,7 @@ class RepresentationToKategorieMapperTest {
         Assertions.assertNotNull(then);
         Assertions.assertEquals(TestUtils.KATEGORIE_TEST_ID, then.getId());
         Assertions.assertEquals("Teigwaren", then.getName());
-        Assertions.assertEquals(TestUtils.TEIGWARENICON, then.getIcon());
+        Assertions.assertEquals(TestUtils.TEIGWARENICON, then.getIcon().getIcon());
         Assertions.assertNotNull(then.getProdukte());
         Assertions.assertEquals(0, then.getProdukte().size());
 
@@ -90,7 +91,7 @@ class RepresentationToKategorieMapperTest {
         return new Kategorie(
                 TestUtils.KATEGORIE_TEST_ID
                 , "Teigwaren"
-                , TestUtils.BASICICON
+                , new Icon(TestUtils.BASICICON)
                 , List.of());
     }
 

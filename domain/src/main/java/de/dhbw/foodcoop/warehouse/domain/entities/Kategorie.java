@@ -1,5 +1,6 @@
 package de.dhbw.foodcoop.warehouse.domain.entities;
 
+import de.dhbw.foodcoop.warehouse.domain.values.Icon;
 import org.apache.commons.lang3.Validate;
 
 import javax.persistence.*;
@@ -15,12 +16,12 @@ public final class Kategorie {
     @Column
     private String name;
     @Column
-    @Lob
-    private String icon;
+    @Embedded
+    private Icon icon;
     @OneToMany(mappedBy = "kategorie", cascade = CascadeType.MERGE)
     private List<Produkt> produkte;
 
-    public Kategorie(String id, String name, String icon, List<Produkt> produkte) {
+    public Kategorie(String id, String name, Icon icon, List<Produkt> produkte) {
         Validate.notBlank(id);
         Validate.notBlank(name);
         Validate.notNull(icon);
@@ -31,7 +32,7 @@ public final class Kategorie {
         this.produkte = produkte;
     }
 
-    public Kategorie(String name, String icon, List<Produkt> produkte) {
+    public Kategorie(String name, Icon icon, List<Produkt> produkte) {
         this(UUID.randomUUID().toString(), name, icon, produkte);
     }
 
@@ -46,7 +47,7 @@ public final class Kategorie {
         return name;
     }
 
-    public String getIcon() {
+    public Icon getIcon() {
         return icon;
     }
 

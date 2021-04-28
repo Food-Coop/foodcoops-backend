@@ -7,6 +7,7 @@ import de.dhbw.foodcoop.warehouse.domain.entities.Kategorie;
 import de.dhbw.foodcoop.warehouse.domain.entities.Produkt;
 import de.dhbw.foodcoop.warehouse.domain.utils.TestUtils;
 import de.dhbw.foodcoop.warehouse.domain.values.Einheit;
+import de.dhbw.foodcoop.warehouse.domain.values.Icon;
 import de.dhbw.foodcoop.warehouse.domain.values.Lagerbestand;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -34,7 +35,7 @@ public class ProduktToRepresentationMapperTest {
         Lagerbestand lagerbestand = new Lagerbestand(einheit, 0.0000001, 199999.1);
         Produkt given = new Produkt(TestUtils.PRODUKT_TEST_ID
                 , "test"
-                , new Kategorie(TestUtils.KATEGORIE_TEST_ID, "kategorie", TestUtils.BASICICON, List.of())
+                , new Kategorie(TestUtils.KATEGORIE_TEST_ID, "kategorie", new Icon(TestUtils.BASICICON), List.of())
                 , lagerbestand);
 
         when(lagerbestandToRepresentationMapper.apply(lagerbestand))
