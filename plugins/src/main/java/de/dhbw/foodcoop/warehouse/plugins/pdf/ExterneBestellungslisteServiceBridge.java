@@ -44,4 +44,9 @@ public class ExterneBestellungslisteServiceBridge implements ExterneBestellungsl
     public Briefkopf getBriefKopf() {
         return new Briefkopf("Einkäufer");
     }
+
+    @Override
+    public String getFileName() {
+        return getBriefKopf().asDocumentName();
+    }
 }

@@ -25,7 +25,7 @@ public class ExterneBestellungslistenController {
 
     @GetMapping(value = "/externeliste")
     public ResponseEntity<StreamingResponseBody> one() throws IOException {
-        String fileName = service.getBriefKopf().getDatumString() + "_" + service.getBriefKopf().getEinkaeufer();
+        String fileName = service.getFileName();
         File file = service.createExterneListe();
         StreamingResponseBody responseBody = outputStream -> Files.copy(file.toPath(), outputStream);
         return ResponseEntity.ok()
