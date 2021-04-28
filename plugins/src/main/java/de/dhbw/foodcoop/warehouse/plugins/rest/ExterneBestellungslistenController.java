@@ -10,8 +10,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.nio.file.Files;
 
 @RestController
@@ -26,8 +28,19 @@ public class ExterneBestellungslistenController {
     @GetMapping(value = "/externeliste")
     public ResponseEntity<StreamingResponseBody> one() throws IOException {
         String fileName = service.getFileName();
-        File file = service.createExterneListe();
-        StreamingResponseBody responseBody = outputStream -> Files.copy(file.toPath(), outputStream);
+        byte[] pdfInBytes = service.createExterneListe();
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(pdfInBytes);
+        StreamingResponseBody responseBody = outputStream -> {
+
+            int numberOfBytesToWrite;
+            byte[] data = new byte[1024];
+            while ((numberOfBytesToWrite = inputStream.read(data, 0, data.length)) != -1) {
+                outputStream.write(data, 0, numberOfBytesToWrite);
+            }
+
+            inputStream.close();
+        };
+
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + fileName + ".pdf")
                 .contentType(MediaType.APPLICATION_PDF)
