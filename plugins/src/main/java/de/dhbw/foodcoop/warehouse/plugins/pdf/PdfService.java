@@ -14,9 +14,7 @@ import org.vandeseer.easytable.structure.cell.TextCell;
 
 import java.awt.*;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.util.List;
 
 @Service
@@ -58,6 +56,41 @@ public class PdfService {
                         .add(createHeaderCell("OK"))
                         .build())
                 .build();
+
+        if (bestellungList.isEmpty()) {
+            tableBuilder.addRow(
+                    Row.builder()
+                            .add(TextCell.builder()
+                                    .text("Das Lager")
+                                    .textColor(Color.BLACK)
+                                    .borderColor(Color.BLACK)
+                                    .borderWidth(2f)
+                                    .padding(12f)
+                                    .build())
+                            .add(TextCell.builder()
+                                    .text("ist")
+                                    .textColor(Color.BLACK)
+                                    .borderColor(Color.BLACK)
+                                    .borderWidth(2f)
+                                    .padding(12f)
+                                    .build())
+                            .add(TextCell.builder()
+                                    .text("voll.")
+                                    .textColor(Color.BLACK)
+                                    .borderColor(Color.BLACK)
+                                    .borderWidth(2f)
+                                    .padding(12f)
+                                    .build())
+                            .add(TextCell.builder()
+                                    .text("")
+                                    .textColor(Color.BLACK)
+                                    .borderColor(Color.BLACK)
+                                    .borderWidth(2f)
+                                    .padding(12f)
+                                    .build())
+                            .build());
+            return tableBuilder.build();
+        }
 
         for (Bestellung bestellung : bestellungList) {
             tableBuilder.addRow(
