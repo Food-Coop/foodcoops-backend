@@ -63,6 +63,7 @@ class EinheitServiceTest {
                 List.of());
         Produkt produkt = new Produkt(TestUtils.PRODUKT_TEST_ID
                 , "Blutwurst"
+                , new Icon(TestUtils.BASICICON)
                 , kategorie
                 , lagerbestand);
         when(mockRepository.findeMitId(TestUtils.EINHEIT_TEST_ID))

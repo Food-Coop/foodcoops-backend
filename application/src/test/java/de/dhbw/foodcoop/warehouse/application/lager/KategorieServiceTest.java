@@ -81,6 +81,7 @@ public class KategorieServiceTest {
     private Produkt getProdukt() {
         return new Produkt(TestUtils.PRODUKT_TEST_ID
                 , "Apfel"
+                , new Icon(TestUtils.TEIGWARENICON)
                 , null
                 , new Lagerbestand(new Einheit("test"), 0.0, 4.0));
     }

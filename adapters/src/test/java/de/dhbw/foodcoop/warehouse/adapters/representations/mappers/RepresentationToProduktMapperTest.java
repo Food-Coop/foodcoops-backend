@@ -39,7 +39,7 @@ class RepresentationToProduktMapperTest {
         Kategorie kategorie = getKategorie();
         ProduktRepresentation given = new ProduktRepresentation(
                 TestUtils.PRODUKT_TEST_ID
-                , "abc", kategorie.getId()
+                , "abc", TestUtils.BASICICON, kategorie.getId()
                 , getLagerbestandRepresentation());
 
         when(kategorieService.findById(kategorie.getId())).thenReturn(Optional.of(kategorie));
@@ -49,6 +49,7 @@ class RepresentationToProduktMapperTest {
 
         Assertions.assertNotNull(then);
         Assertions.assertEquals(TestUtils.PRODUKT_TEST_ID, then.getId());
+        Assertions.assertEquals(given.getIcon(), then.getIcon().getIcon());
         Assertions.assertNotNull(then.getKategorie());
         Assertions.assertEquals(TestUtils.KATEGORIE_TEST_ID, then.getKategorie().getId());
         Assertions.assertNotNull(then.getLagerbestand());
@@ -61,7 +62,7 @@ class RepresentationToProduktMapperTest {
         Kategorie kategorie = getKategorie();
         ProduktRepresentation given = new ProduktRepresentation(
                 TestUtils.PRODUKT_TEST_ID
-                , "abc", kategorie.getId()
+                , "abc", TestUtils.BASICICON, kategorie.getId()
                 , getLagerbestandRepresentation());
 
         when(kategorieService.findById(kategorie.getId())).thenReturn(Optional.empty());
@@ -85,16 +86,18 @@ class RepresentationToProduktMapperTest {
         Lagerbestand lagerbestand = getLagerbestand();
         Produkt oldProdukt = new Produkt(TestUtils.PRODUKT_TEST_ID
                 , "Apfel"
+                , new Icon(TestUtils.BASICICON)
                 , oldKategorie
                 , lagerbestand);
         ProduktRepresentation newProduktRepresentation = new ProduktRepresentation(
-                null, "undefined", newKategorie.getId(), null);
+                null, "undefined", "undefined", newKategorie.getId(), null);
 
         when(kategorieService.findById(newKategorie.getId())).thenReturn(Optional.of(newKategorie));
         Produkt mapped = mapper.update(oldProdukt, newProduktRepresentation);
 
         Assertions.assertEquals(oldProdukt.getId(), mapped.getId());
         Assertions.assertEquals(oldProdukt.getName(), mapped.getName());
+        Assertions.assertEquals(oldProdukt.getIcon(), mapped.getIcon());
         Assertions.assertEquals(newKategorie, mapped.getKategorie());
         Assertions.assertEquals(oldProdukt.getLagerbestand(), mapped.getLagerbestand());
     }
@@ -106,15 +109,39 @@ class RepresentationToProduktMapperTest {
         Lagerbestand lagerbestand = getLagerbestand();
         Produkt oldProdukt = new Produkt(TestUtils.PRODUKT_TEST_ID
                 , "Apfel"
+                , new Icon(TestUtils.BASICICON)
                 , kategorie
                 , lagerbestand);
         ProduktRepresentation newProduktRepresentation = new ProduktRepresentation(
-                null, "Birne", "undefined", null);
+                null, "Birne", null, "undefined", null);
 
         Produkt mapped = mapper.update(oldProdukt, newProduktRepresentation);
 
         Assertions.assertEquals(oldProdukt.getId(), mapped.getId());
         Assertions.assertEquals(newProduktRepresentation.getName(), mapped.getName());
+        Assertions.assertEquals(oldProdukt.getIcon(), mapped.getIcon());
+        Assertions.assertEquals(oldProdukt.getKategorie(), mapped.getKategorie());
+        Assertions.assertEquals(oldProdukt.getLagerbestand(), mapped.getLagerbestand());
+    }
+
+    @Test
+    @DisplayName(("Old Produkt and new Produktrepresentation With new icon update Produkt"))
+    public void updateIconSucessfully() {
+        Kategorie kategorie = getKategorie();
+        Lagerbestand lagerbestand = getLagerbestand();
+        Produkt oldProdukt = new Produkt(TestUtils.PRODUKT_TEST_ID
+                , "Apfel"
+                , new Icon(TestUtils.BASICICON)
+                , kategorie
+                , lagerbestand);
+        ProduktRepresentation newProduktRepresentation = new ProduktRepresentation(
+                null, "undefined", TestUtils.TEIGWARENICON, "undefined", null);
+
+        Produkt mapped = mapper.update(oldProdukt, newProduktRepresentation);
+
+        Assertions.assertEquals(oldProdukt.getId(), mapped.getId());
+        Assertions.assertEquals(oldProdukt.getName(), mapped.getName());
+        Assertions.assertEquals(newProduktRepresentation.getIcon(), mapped.getIcon().getIcon());
         Assertions.assertEquals(oldProdukt.getKategorie(), mapped.getKategorie());
         Assertions.assertEquals(oldProdukt.getLagerbestand(), mapped.getLagerbestand());
     }
@@ -126,10 +153,11 @@ class RepresentationToProduktMapperTest {
         Lagerbestand lagerbestand = getLagerbestand();
         Produkt oldProdukt = new Produkt(TestUtils.PRODUKT_TEST_ID
                 , "Apfel"
+                , new Icon(TestUtils.BASICICON)
                 , kategorie
                 , lagerbestand);
         ProduktRepresentation newProduktRepresentation = new ProduktRepresentation(
-                TestUtils.EINHEIT_TEST_ID, "undefined", "undefined", null);
+                TestUtils.EINHEIT_TEST_ID, "undefined", null, "undefined", null);
 
         Produkt mapped = mapper.update(oldProdukt, newProduktRepresentation);
 
@@ -148,10 +176,11 @@ class RepresentationToProduktMapperTest {
                 new LagerbestandRepresentation(getEinheitRepresentation(), 9.0, 9.0);
         Produkt oldProdukt = new Produkt(TestUtils.PRODUKT_TEST_ID
                 , "Apfel"
+                , new Icon(TestUtils.BASICICON)
                 , kategorie
                 , oldLagerbestand);
         ProduktRepresentation newProduktRepresentation = new ProduktRepresentation(
-                TestUtils.EINHEIT_TEST_ID, "undefined", "undefined", newLagerbestand);
+                TestUtils.EINHEIT_TEST_ID, "undefined", "undefined", "undefined", newLagerbestand);
 
 
         when(toLagerbestandMapper.apply(newLagerbestand))
@@ -163,6 +192,7 @@ class RepresentationToProduktMapperTest {
 
         Assertions.assertEquals(oldProdukt.getId(), mapped.getId());
         Assertions.assertEquals(oldProdukt.getName(), mapped.getName());
+        Assertions.assertEquals(oldProdukt.getIcon(), mapped.getIcon());
         Assertions.assertEquals(oldProdukt.getKategorie(), mapped.getKategorie());
         Assertions.assertEquals(newProduktRepresentation.getLagerbestand()
                         .getEinheit().getId()

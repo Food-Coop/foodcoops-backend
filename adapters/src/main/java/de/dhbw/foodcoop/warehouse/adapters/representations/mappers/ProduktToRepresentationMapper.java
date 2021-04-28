@@ -24,6 +24,7 @@ public class ProduktToRepresentationMapper implements Function<Produkt, ProduktR
         return new ProduktRepresentation(
                 produkt.getId(),
                 produkt.getName(),
+                produkt.getIcon().getIcon(),
                 produkt.getKategorie().getId(),
                 lagerbestandRepresentation
         );

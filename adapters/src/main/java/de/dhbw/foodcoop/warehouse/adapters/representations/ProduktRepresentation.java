@@ -2,13 +2,15 @@ package de.dhbw.foodcoop.warehouse.adapters.representations;
 
 public final class ProduktRepresentation {
     private final String name;
+    private final String icon;
     private final String kategorie;
     private final LagerbestandRepresentation lagerbestand;
     private String id;
 
-    public ProduktRepresentation(String id, String name, String kategorie, LagerbestandRepresentation lagerbestand) {
+    public ProduktRepresentation(String id, String name, String icon, String kategorie, LagerbestandRepresentation lagerbestand) {
         this.id = id;
         this.name = name;
+        this.icon = icon;
         this.kategorie = kategorie;
         this.lagerbestand = lagerbestand;
     }
@@ -33,13 +35,18 @@ public final class ProduktRepresentation {
         return lagerbestand;
     }
 
+    public String getIcon() {
+        return icon;
+    }
+
     @Override
     public String toString() {
-        return "Produkt{" +
-                "id='" + id + '\'' +
-                ", name='" + name + '\'' +
+        return "ProduktRepresentation{" +
+                "name='" + name + '\'' +
+                ", icon='" + icon + '\'' +
                 ", kategorie='" + kategorie + '\'' +
-                ", lagerbestandRepresentation=" + lagerbestand +
+                ", lagerbestand=" + lagerbestand +
+                ", id='" + id + '\'' +
                 '}';
     }
 }

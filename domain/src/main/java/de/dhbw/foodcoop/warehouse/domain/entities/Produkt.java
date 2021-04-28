@@ -1,5 +1,6 @@
 package de.dhbw.foodcoop.warehouse.domain.entities;
 
+import de.dhbw.foodcoop.warehouse.domain.values.Icon;
 import de.dhbw.foodcoop.warehouse.domain.values.Lagerbestand;
 import org.apache.commons.lang3.Validate;
 
@@ -15,23 +16,26 @@ public class Produkt {
     @Column
     private String name;
     @Embedded
+    private Icon icon;
+    @Embedded
     private Lagerbestand lagerbestand;
     @ManyToOne
     @JoinColumn(name = "kategorie_id")
     private Kategorie kategorie;
 
-    public Produkt(String id, String name, Kategorie kategorie, Lagerbestand lagerbestand) {
+    public Produkt(String id, String name, Icon icon, Kategorie kategorie, Lagerbestand lagerbestand) {
         Validate.notBlank(id);
         Validate.notBlank(name);
         Validate.notNull(lagerbestand);
         this.id = id;
         this.name = name;
+        this.icon = icon;
         this.kategorie = kategorie;
         this.lagerbestand = lagerbestand;
     }
 
-    public Produkt(String name, Kategorie kategorie, Lagerbestand lagerbestand) {
-        this(UUID.randomUUID().toString(), name, kategorie, lagerbestand);
+    public Produkt(String name, Icon icon, Kategorie kategorie, Lagerbestand lagerbestand) {
+        this(UUID.randomUUID().toString(), name, icon, kategorie, lagerbestand);
     }
 
     protected Produkt() {
@@ -45,16 +49,20 @@ public class Produkt {
         return name;
     }
 
+    public Icon getIcon() {
+        return icon;
+    }
+
+    public Lagerbestand getLagerbestand() {
+        return lagerbestand;
+    }
+
     public Kategorie getKategorie() {
         return kategorie;
     }
 
     public void setKategorie(Kategorie kategorie) {
         this.kategorie = kategorie;
-    }
-
-    public Lagerbestand getLagerbestand() {
-        return lagerbestand;
     }
 
     @Override
@@ -75,8 +83,9 @@ public class Produkt {
         return "Produkt{" +
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
-                ", kategorie= '" + kategorie.getName() + '\'' +
+                ", icon=" + icon +
                 ", lagerbestand=" + lagerbestand +
+                ", kategorie=" + kategorie +
                 '}';
     }
 }

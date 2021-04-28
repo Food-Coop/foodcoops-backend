@@ -35,6 +35,7 @@ public class ProduktToRepresentationMapperTest {
         Lagerbestand lagerbestand = new Lagerbestand(einheit, 0.0000001, 199999.1);
         Produkt given = new Produkt(TestUtils.PRODUKT_TEST_ID
                 , "test"
+                , new Icon(TestUtils.BASICICON)
                 , new Kategorie(TestUtils.KATEGORIE_TEST_ID, "kategorie", new Icon(TestUtils.BASICICON), List.of())
                 , lagerbestand);
 

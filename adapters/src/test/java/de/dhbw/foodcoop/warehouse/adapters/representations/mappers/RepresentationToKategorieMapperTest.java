@@ -41,11 +41,13 @@ class RepresentationToKategorieMapperTest {
         ProduktRepresentation apfel = new ProduktRepresentation(
                 TestUtils.PRODUKT_TEST_ID
                 , "Apfel"
+                , TestUtils.TEIGWARENICON
                 , TestUtils.KATEGORIE_TEST_ID
                 , getLagerbestandRepresentation());
         ProduktRepresentation birne = new ProduktRepresentation(
                 TestUtils.PRODUKT_TEST_ID
                 , "Birne"
+                , TestUtils.BASICICON
                 , TestUtils.KATEGORIE_TEST_ID
                 , getLagerbestandRepresentation());
         KategorieRepresentation given = getKategorieRepresentation(List.of(apfel, birne));
@@ -55,7 +57,6 @@ class RepresentationToKategorieMapperTest {
         Assertions.assertNotNull(then);
         Assertions.assertEquals(TestUtils.KATEGORIE_TEST_ID, then.getId());
         Assertions.assertEquals("Teigwaren", then.getName());
-        Assertions.assertEquals(TestUtils.TEIGWARENICON, then.getIcon().getIcon());
         Assertions.assertNotNull(then.getProdukte());
         Assertions.assertEquals(0, then.getProdukte().size());
     }

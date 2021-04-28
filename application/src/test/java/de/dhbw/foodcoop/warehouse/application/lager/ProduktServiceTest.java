@@ -38,7 +38,8 @@ class ProduktServiceTest {
                 , "Kategorie"
                 , new Icon(TestUtils.TEIGWARENICON),
                 List.of());
-        Produkt test = new Produkt(TestUtils.PRODUKT_TEST_ID, kategorie, lagerbestand);
+        Produkt test = new Produkt(
+                TestUtils.PRODUKT_TEST_ID, "test", new Icon(TestUtils.BASICICON), kategorie, lagerbestand);
 
         when(mockRepository.findeMitId(test.getId())).thenReturn(Optional.empty());
         toBeTested.deleteById(test.getId());
@@ -54,7 +55,8 @@ class ProduktServiceTest {
                 , "Kategorie"
                 , new Icon(TestUtils.TEIGWARENICON),
                 List.of());
-        Produkt produkt = new Produkt(TestUtils.PRODUKT_TEST_ID, kategorie, lagerbestand);
+        Produkt produkt = new Produkt(
+                TestUtils.PRODUKT_TEST_ID, "name", new Icon(TestUtils.GEMUESEICON), kategorie, lagerbestand);
 
         when(mockRepository.findeMitId(produkt.getId())).thenReturn(Optional.of(produkt));
 
@@ -71,7 +73,8 @@ class ProduktServiceTest {
                 , "Kategorie"
                 , new Icon(TestUtils.TEIGWARENICON),
                 List.of());
-        Produkt produkt = new Produkt(TestUtils.PRODUKT_TEST_ID, kategorie, lagerbestand);
+        Produkt produkt = new Produkt(
+                TestUtils.PRODUKT_TEST_ID, "name", new Icon(TestUtils.GEMUESEICON), kategorie, lagerbestand);
 
         when(mockRepository.findeMitId(produkt.getId())).thenReturn(Optional.of(produkt));
         toBeTested.deleteById(produkt.getId());
