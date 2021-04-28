@@ -8,7 +8,6 @@ import de.dhbw.foodcoop.warehouse.domain.values.Briefkopf;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -25,7 +24,7 @@ public class ExterneBestellungslisteServiceBridge implements ExterneBestellungsl
     }
 
     @Override
-    public File createExterneListe() throws IOException {
+    public byte[] createExterneListe() throws IOException {
         List<Produkt> produktList = produktService.all();
         List<Bestellung> bestellungList = extractBestellungen(produktList);
         return pdfService.createDocument(getBriefKopf(), bestellungList);

@@ -13,8 +13,10 @@ import org.vandeseer.easytable.structure.Table;
 import org.vandeseer.easytable.structure.cell.TextCell;
 
 import java.awt.*;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.List;
 
 @Service
@@ -23,7 +25,8 @@ public class PdfService {
     public PdfService() {
     }
 
-    public File createDocument(Briefkopf briefKopf, List<Bestellung> bestellungList) throws IOException {
+    public byte[] createDocument(Briefkopf briefKopf, List<Bestellung> bestellungList) throws IOException {
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 
         try (final PDDocument document = new PDDocument()) {
 
@@ -37,10 +40,10 @@ public class PdfService {
                     .draw(() -> document, () -> new PDPage(PDRectangle.A4), 50f);
 
 
-            document.save(briefKopf.asDocumentName());
+            document.save(outputStream);
 
         }
-        return new File(briefKopf.asDocumentName());
+        return outputStream.toByteArray();
     }
 
     private Table createTableWithThreeHeaderRows(List<Bestellung> bestellungList) {
