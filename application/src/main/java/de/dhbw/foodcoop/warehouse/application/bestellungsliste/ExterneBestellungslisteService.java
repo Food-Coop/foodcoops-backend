@@ -10,4 +10,6 @@ public interface ExterneBestellungslisteService {
     File createExterneListe() throws IOException;
 
     Briefkopf getBriefKopf();
+
+    String getFileName();
 }
