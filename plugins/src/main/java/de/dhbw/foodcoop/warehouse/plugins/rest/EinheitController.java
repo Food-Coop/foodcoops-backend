@@ -15,6 +15,7 @@ import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.security.RolesAllowed;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -56,6 +57,7 @@ public class EinheitController {
                 linkTo(methodOn(EinheitController.class).all()).withSelfRel());
     }
 
+    @RolesAllowed("einkäufer")
     @PostMapping("/einheiten")
     public ResponseEntity<?> newEinheit(@RequestBody EinheitRepresentation newEinheit) {
         String id = newEinheit.getId() == null ||
@@ -73,6 +75,7 @@ public class EinheitController {
                 .body(entityModel);
     }
 
+    @RolesAllowed("einkäufer")
     @DeleteMapping("/einheiten/{id}")
     ResponseEntity<?> delete(@PathVariable String id) throws EinheitInUseException {
 

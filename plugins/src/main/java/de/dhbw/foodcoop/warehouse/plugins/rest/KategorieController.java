@@ -14,6 +14,7 @@ import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.security.RolesAllowed;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -53,6 +54,7 @@ public class KategorieController {
                 linkTo(methodOn(KategorieController.class).all()).withSelfRel());
     }
 
+    @RolesAllowed("einkäufer")
     @PostMapping("/kategorien")
     ResponseEntity<?> newKategorie(@RequestBody KategorieRepresentation newKategorie) {
         String id = newKategorie.getId() == null ||
@@ -68,6 +70,7 @@ public class KategorieController {
                 .body(entityModel);
     }
 
+    @RolesAllowed("einkäufer")
     @PutMapping("/kategorien/{id}")
     ResponseEntity<?> update(@RequestBody KategorieRepresentation newKategorie, @PathVariable String id) {
 
@@ -83,6 +86,7 @@ public class KategorieController {
                 .body(entityModel);
     }
 
+    @RolesAllowed("einkäufer")
     @DeleteMapping("/kategorien/{id}")
     ResponseEntity<?> delete(@PathVariable String id)  {
 

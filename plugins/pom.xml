@@ -9,6 +9,10 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
+    <properties>
+        <keycloak.version>12.0.4</keycloak.version>
+    </properties>
+
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>plugins</artifactId>
@@ -37,6 +41,12 @@
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
             <version>42.2.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.keycloak</groupId>
+            <artifactId>keycloak-spring-boot-starter</artifactId>
+            <version>${keycloak.version}</version>
         </dependency>
 
         <dependency>
@@ -73,5 +83,17 @@
         </dependency>
 
     </dependencies>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.keycloak.bom</groupId>
+                <artifactId>keycloak-adapter-bom</artifactId>
+                <version>${keycloak.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
 </project>

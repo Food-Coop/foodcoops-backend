@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
+import javax.annotation.security.RolesAllowed;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
@@ -25,6 +26,7 @@ public class ExterneBestellungslistenController {
         this.service = service;
     }
 
+    @RolesAllowed("einkäufer")
     @GetMapping(value = "/externeliste")
     public ResponseEntity<StreamingResponseBody> one() throws IOException {
         String fileName = service.getFileName();

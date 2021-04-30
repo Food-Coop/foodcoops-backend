@@ -15,6 +15,7 @@ import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.security.RolesAllowed;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -55,6 +56,7 @@ public class ProduktController {
                 linkTo(methodOn(ProduktController.class).all()).withSelfRel());
     }
 
+    @RolesAllowed("einkäufer")
     @PostMapping("/produkte")
     ResponseEntity<?> newProdukt(@RequestBody ProduktRepresentation newProdukt) {
         String id = newProdukt.getId() == null ||
@@ -69,6 +71,7 @@ public class ProduktController {
                 .body(entityModel);
     }
 
+    @RolesAllowed("einkäufer")
     @PutMapping("/produkte/{id}")
     ResponseEntity<?> update(@RequestBody ProduktRepresentation newProdukt, @PathVariable String id) {
         Produkt oldProdukt = service.findById(id).orElseThrow(() -> new ProduktNotFoundException(id));
@@ -84,6 +87,7 @@ public class ProduktController {
     }
 
 
+    @RolesAllowed("einkäufer")
     @DeleteMapping("/produkte/{id}")
     ResponseEntity<?> delete(@PathVariable String id) throws ProduktInUseException {
 
