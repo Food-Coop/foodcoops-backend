@@ -17,7 +17,6 @@
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
     <modules>
-        <module>abstraction</module>
         <module>domain</module>
         <module>application</module>
         <module>plugins</module>
