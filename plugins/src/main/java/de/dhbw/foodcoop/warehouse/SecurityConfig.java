@@ -23,12 +23,15 @@ public class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
 
     @Autowired
     public void configureGlobal(
-            AuthenticationManagerBuilder auth) throws Exception {
+            AuthenticationManagerBuilder auth) {
 
         KeycloakAuthenticationProvider keycloakAuthenticationProvider
                 = keycloakAuthenticationProvider();
+        SimpleAuthorityMapper simpleAuthorityMapper = new SimpleAuthorityMapper();
+        simpleAuthorityMapper.setPrefix("ROLE_");
+        simpleAuthorityMapper.setConvertToUpperCase(true);
         keycloakAuthenticationProvider.setGrantedAuthoritiesMapper(
-                new SimpleAuthorityMapper());
+                simpleAuthorityMapper);
         auth.authenticationProvider(keycloakAuthenticationProvider);
     }
 
@@ -48,7 +51,7 @@ public class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         super.configure(http);
         http.authorizeRequests()
-                .antMatchers("/produkte*","/einheiten*","/kategorien*")
+                .antMatchers("/produkte*", "/einheiten*", "/kategorien*")
                 .hasRole("einkäufer")
                 .anyRequest()
                 .permitAll();
