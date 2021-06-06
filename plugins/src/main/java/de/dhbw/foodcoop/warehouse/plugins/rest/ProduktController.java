@@ -56,7 +56,7 @@ public class ProduktController {
     }
 
     @PostMapping("/produkte")
-    ResponseEntity<?> newProdukt(@RequestBody ProduktRepresentation newProdukt) {
+    public ResponseEntity<?> newProdukt(@RequestBody ProduktRepresentation newProdukt) {
         String id = newProdukt.getId() == null ||
                 newProdukt.getId().equals("undefined") ?
                 UUID.randomUUID().toString() :
@@ -69,10 +69,10 @@ public class ProduktController {
                 .body(entityModel);
     }
 
-    @PutMapping("/produkte/{id}")
-    ResponseEntity<?> update(@RequestBody ProduktRepresentation newProdukt, @PathVariable String id) {
+    @PostMapping("/produkte/{id}")
+    public ResponseEntity<?> update(@RequestBody ProduktRepresentation changedProdukt, @PathVariable String id) {
         Produkt oldProdukt = service.findById(id).orElseThrow(() -> new ProduktNotFoundException(id));
-        Produkt updateProdukt = toProdukt.update(oldProdukt, newProdukt);
+        Produkt updateProdukt = toProdukt.update(oldProdukt, changedProdukt);
 
         Produkt saved = service.save(updateProdukt);
 
@@ -85,7 +85,7 @@ public class ProduktController {
 
 
     @DeleteMapping("/produkte/{id}")
-    ResponseEntity<?> delete(@PathVariable String id) throws ProduktInUseException {
+    public ResponseEntity<?> delete(@PathVariable String id) throws ProduktInUseException {
 
         service.deleteById(id);
 

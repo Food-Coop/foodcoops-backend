@@ -54,7 +54,7 @@ public class KategorieController {
     }
 
     @PostMapping("/kategorien")
-    ResponseEntity<?> newKategorie(@RequestBody KategorieRepresentation newKategorie) {
+    public ResponseEntity<?> newKategorie(@RequestBody KategorieRepresentation newKategorie) {
         String id = newKategorie.getId() == null ||
                 newKategorie.getId().isBlank() ||
                 newKategorie.getId().equals("undefined") ?
@@ -68,8 +68,8 @@ public class KategorieController {
                 .body(entityModel);
     }
 
-    @PutMapping("/kategorien/{id}")
-    ResponseEntity<?> update(@RequestBody KategorieRepresentation newKategorie, @PathVariable String id) {
+    @PostMapping("/kategorien/{id}")
+    public ResponseEntity<?> update(@RequestBody KategorieRepresentation newKategorie, @PathVariable String id) {
 
         Kategorie oldKategorie = service.findById(id).orElseThrow(() -> new KategorieNotFoundException(id));
         Kategorie updatedKategorie = toKategorie.update(oldKategorie, newKategorie);
@@ -84,7 +84,7 @@ public class KategorieController {
     }
 
     @DeleteMapping("/kategorien/{id}")
-    ResponseEntity<?> delete(@PathVariable String id)  {
+    public ResponseEntity<?> delete(@PathVariable String id)  {
 
         service.deleteById(id);
 

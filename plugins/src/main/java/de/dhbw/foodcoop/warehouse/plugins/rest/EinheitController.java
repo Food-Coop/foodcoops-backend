@@ -74,7 +74,7 @@ public class EinheitController {
     }
 
     @DeleteMapping("/einheiten/{id}")
-    ResponseEntity<?> delete(@PathVariable String id) throws EinheitInUseException {
+    public ResponseEntity<?> delete(@PathVariable String id) throws EinheitInUseException {
 
         service.deleteById(id);
 
