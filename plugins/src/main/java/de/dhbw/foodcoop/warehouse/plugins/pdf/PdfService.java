@@ -58,74 +58,40 @@ public class PdfService {
                 .build();
 
         if (bestellungList.isEmpty()) {
-            tableBuilder.addRow(
-                    Row.builder()
-                            .add(TextCell.builder()
-                                    .text("Das Lager")
-                                    .textColor(Color.BLACK)
-                                    .borderColor(Color.BLACK)
-                                    .borderWidth(2f)
-                                    .padding(12f)
-                                    .build())
-                            .add(TextCell.builder()
-                                    .text("ist")
-                                    .textColor(Color.BLACK)
-                                    .borderColor(Color.BLACK)
-                                    .borderWidth(2f)
-                                    .padding(12f)
-                                    .build())
-                            .add(TextCell.builder()
-                                    .text("voll.")
-                                    .textColor(Color.BLACK)
-                                    .borderColor(Color.BLACK)
-                                    .borderWidth(2f)
-                                    .padding(12f)
-                                    .build())
-                            .add(TextCell.builder()
-                                    .text("")
-                                    .textColor(Color.BLACK)
-                                    .borderColor(Color.BLACK)
-                                    .borderWidth(2f)
-                                    .padding(12f)
-                                    .build())
-                            .build());
-            return tableBuilder.build();
+            return addTableIsEmptyMessage(tableBuilder);
         }
 
         for (Bestellung bestellung : bestellungList) {
             tableBuilder.addRow(
                     Row.builder()
-                            .add(TextCell.builder()
-                                    .text(bestellung.getProdukt())
-                                    .textColor(Color.BLACK)
-                                    .borderColor(Color.BLACK)
-                                    .borderWidth(2f)
-                                    .padding(12f)
-                                    .build())
-                            .add(TextCell.builder()
-                                    .text(bestellung.getEinheit())
-                                    .textColor(Color.BLACK)
-                                    .borderColor(Color.BLACK)
-                                    .borderWidth(2f)
-                                    .padding(12f)
-                                    .build())
-                            .add(TextCell.builder()
-                                    .text(String.format("% .2f", bestellung.getMenge()))
-                                    .textColor(Color.BLACK)
-                                    .borderColor(Color.BLACK)
-                                    .borderWidth(2f)
-                                    .padding(12f)
-                                    .build())
-                            .add(TextCell.builder()
-                                    .text("")
-                                    .textColor(Color.BLACK)
-                                    .borderColor(Color.BLACK)
-                                    .borderWidth(2f)
-                                    .padding(12f)
-                                    .build())
+                            .add(getCell(bestellung.getProdukt()))
+                            .add(getCell(bestellung.getEinheit()))
+                            .add(getCell(String.format("% .2f", bestellung.getMenge())))
+                            .add(getCell(""))
                             .build());
         }
 
+        return tableBuilder.build();
+    }
+
+    private TextCell getCell(String text) {
+        return TextCell.builder()
+                .text(text)
+                .textColor(Color.BLACK)
+                .borderColor(Color.BLACK)
+                .borderWidth(2f)
+                .padding(12f)
+                .build();
+    }
+
+    private Table addTableIsEmptyMessage(Table.TableBuilder tableBuilder) {
+        tableBuilder.addRow(
+                Row.builder()
+                        .add(getCell("Das Lager"))
+                        .add(getCell("ist"))
+                        .add(getCell("voll."))
+                        .add(getCell(""))
+                        .build());
         return tableBuilder.build();
     }
 
