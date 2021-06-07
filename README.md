@@ -144,7 +144,7 @@ curl -X POST --location "http://localhost:8080/kategorien" \
 Replace Kategorie with new one, same id.
 
 ```
-curl -X PUT --location "http://localhost:8080/kategorien/1631c92e-a31e-45f2-89c9-32c90ff91b90" \
+curl -X POST --location "http://localhost:8080/kategorien/1631c92e-a31e-45f2-89c9-32c90ff91b90" \
 -H "Content-Type: application/json" \
 -d "{
 \"id\":\"1631c92e-a31e-45f2-89c9-32c90ff91b90\",
@@ -191,7 +191,7 @@ curl -X POST --location "http://localhost:8080/produkte" \
     -d "{
           \"id\":\"undefined\",
           \"name\":\"Äpfel\",
-          \"kategorie\":\"1631c92e-a31e-45f2-89c9-32c90ff91b90\",
+          \"kategorie\":\"0329c98c-02df-450b-86ba-5c50af1ba530\",
           \"lagerbestand\":{
             \"einheit\":{
               \"id\":\"d20b6519-bc2d-4e9f-b3e7-9bebc995f110\",
@@ -208,19 +208,19 @@ curl -X POST --location "http://localhost:8080/produkte" \
 Replace Produkt with a new version (id must remain the same). (Yes, it is not good HATEOAS)
 
 ```
-curl -X PUT --location "http://localhost:8080/produkte/5ff026e7-176d-4fe2-96ce-d3100033ac1e" \
+curl -X POST --location "http://localhost:8080/produkte/30724b6f-01ec-4c47-aba7-1a5f2bc5f833" \
     -H "Content-Type: application/json" \
     -d "{
-          \"id\":\"5ff026e7-176d-4fe2-96ce-d3100033ac1e\",
-          \"name\":\"Äpfel\",
-          \"kategorie\":\"1631c92e-a31e-45f2-89c9-32c90ff91b90\",
+          \"id\":\"30724b6f-01ec-4c47-aba7-1a5f2bc5f833\",
+          \"name\":\"Karotten\",
+          \"kategorie\":\"6abeec3f-fdc4-49b1-b64e-e005b45051cb\",
           \"lagerbestand\":{
             \"einheit\":{
               \"id\":\"d20b6519-bc2d-4e9f-b3e7-9bebc995f110\",
               \"name\":\"kg\"
             },
-            \"istLagerbestand\":9,
-            \"sollLagerbestand\":18
+            \"istLagerbestand\":0.0,
+            \"sollLagerbestand\":3.5
           }
         }"
 ```
@@ -229,7 +229,7 @@ curl -X PUT --location "http://localhost:8080/produkte/5ff026e7-176d-4fe2-96ce-d
 If a product is currently not in stock (if its Ist-Lagerbestand equals 0), delete the Produkt.
 
 ```
-curl -X DELETE --location "http://localhost:8080/produkte/5ff026e7-176d-4fe2-96ce-d3100033ac1e" \
+curl -X DELETE --location "http://localhost:8080/produkte/30724b6f-01ec-4c47-aba7-1a5f2bc5f833" \
     -H "Content-Type: application/json"
 ```
 
@@ -267,7 +267,7 @@ curl -X POST --location "http://localhost:8080/einheiten" \
 Deletes an Einheit, if it exists and is not used by any Produkte
 
 ```
-curl -X DELETE --location "http://localhost:8080/einheiten/835b53cb-a0a8-4076-8690-a1458aab0cb1" \
+curl -X DELETE --location "http://localhost:8080/einheiten/50ac5ca8-0a29-45fe-88cc-d2070fb90303" \
  -H "Content-Type: application/json"
 ``` 
 
