@@ -48,14 +48,7 @@ public class PdfService {
         final Table.TableBuilder tableBuilder = Table.builder()
                 .addColumnsOfWidth(200, 100, 100, 50);
 
-        tableBuilder
-                .addRow(Row.builder()
-                        .add(createHeaderCell("Produkt"))
-                        .add(createHeaderCell("Einheit"))
-                        .add(createHeaderCell("Menge"))
-                        .add(createHeaderCell("OK"))
-                        .build())
-                .build();
+        buildTableWithHeader(tableBuilder);
 
         if (bestellungList.isEmpty()) {
             return addTableIsEmptyMessage(tableBuilder);
@@ -72,6 +65,17 @@ public class PdfService {
         }
 
         return tableBuilder.build();
+    }
+
+    private Table buildTableWithHeader(Table.TableBuilder tableBuilder) {
+        return tableBuilder
+                .addRow(Row.builder()
+                        .add(createHeaderCell("Produkt"))
+                        .add(createHeaderCell("Einheit"))
+                        .add(createHeaderCell("Menge"))
+                        .add(createHeaderCell("OK"))
+                        .build())
+                .build();
     }
 
     private TextCell getStandardCell(String text) {
