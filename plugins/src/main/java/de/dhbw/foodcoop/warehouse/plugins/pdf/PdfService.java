@@ -64,17 +64,17 @@ public class PdfService {
         for (Bestellung bestellung : bestellungList) {
             tableBuilder.addRow(
                     Row.builder()
-                            .add(getCell(bestellung.getProdukt()))
-                            .add(getCell(bestellung.getEinheit()))
-                            .add(getCell(String.format("% .2f", bestellung.getMenge())))
-                            .add(getCell(""))
+                            .add(getStandardCell(bestellung.getProdukt()))
+                            .add(getStandardCell(bestellung.getEinheit()))
+                            .add(getStandardCell(String.format("% .2f", bestellung.getMenge())))
+                            .add(getStandardCell(""))
                             .build());
         }
 
         return tableBuilder.build();
     }
 
-    private TextCell getCell(String text) {
+    private TextCell getStandardCell(String text) {
         return TextCell.builder()
                 .text(text)
                 .textColor(Color.BLACK)
@@ -87,10 +87,10 @@ public class PdfService {
     private Table addTableIsEmptyMessage(Table.TableBuilder tableBuilder) {
         tableBuilder.addRow(
                 Row.builder()
-                        .add(getCell("Das Lager"))
-                        .add(getCell("ist"))
-                        .add(getCell("voll."))
-                        .add(getCell(""))
+                        .add(getStandardCell("Das Lager"))
+                        .add(getStandardCell("ist"))
+                        .add(getStandardCell("voll."))
+                        .add(getStandardCell(""))
                         .build());
         return tableBuilder.build();
     }
@@ -106,5 +106,4 @@ public class PdfService {
                 .borderWidth(2f)
                 .build();
     }
-
 }
