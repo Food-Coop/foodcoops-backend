@@ -16,6 +16,9 @@ public class KategorieModelAssembler implements RepresentationModelAssembler<Kat
     public EntityModel<KategorieRepresentation> toModel(KategorieRepresentation kategorie) {
         return EntityModel.of(kategorie,
                 linkTo(methodOn(KategorieController.class).one(kategorie.getId())).withSelfRel(),
-                linkTo(methodOn(KategorieController.class).all()).withRel("kategorien"));
+                linkTo(methodOn(KategorieController.class).all()).withRel("kategorien"),
+                linkTo(methodOn(KategorieController.class).newKategorie(kategorie)).withRel("post"),
+                linkTo(methodOn(KategorieController.class).update(kategorie, kategorie.getId())).withRel("update"),
+                linkTo(methodOn(KategorieController.class).delete(kategorie.getId())).withRel("delete"));
     }
 }

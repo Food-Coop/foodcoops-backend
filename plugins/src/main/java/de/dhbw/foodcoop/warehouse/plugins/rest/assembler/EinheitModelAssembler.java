@@ -15,6 +15,8 @@ public class EinheitModelAssembler implements RepresentationModelAssembler<Einhe
     public EntityModel<EinheitRepresentation> toModel(EinheitRepresentation einheit) {
         return EntityModel.of(einheit,
                 linkTo(methodOn(EinheitController.class).one(einheit.getId())).withSelfRel(),
-                linkTo(methodOn(EinheitController.class).all()).withRel("Einheiten"));
+                linkTo(methodOn(EinheitController.class).all()).withRel("Einheiten"),
+                linkTo(methodOn(EinheitController.class).newEinheit(einheit)).withRel("New Einheit"),
+                linkTo(methodOn(EinheitController.class).delete(einheit.getId())).withRel("Delete"));
     }
 }
