@@ -4,35 +4,53 @@ import java.sql.Date;
 
 public class FrischBestellungRepresentation {
     private String id;
-    private FrischBestandRepresentation frischbestand;
     private PersonRepresentation person;
-    private Date date;
+    private FrischBestandRepresentation frischbestand;
+    private int bestellmenge;
+    private Date datum;
 
-    public FrischBestellungRepresentation(String id, FrischBestandRepresentation frischbestand, PersonRepresentation person, Date date) {
+    public FrischBestellungRepresentation(String id, PersonRepresentation person, FrischBestandRepresentation frischbestand, int bestellmenge, Date datum) {
         this.id = id;
-        this.frischbestand = frischbestand;
         this.person = person;
-        this.date = date;
+        this.frischbestand = frischbestand;
+        this.bestellmenge = bestellmenge;
+        this.datum = datum;
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getId() {
+    public String getId(){
         return id;
     }
 
-    public FrischBestandRepresentation getFrischbestand() {
-        return frischbestand;
-    }
-
-    public PersonRepresentation getPerson() {
+    public PersonRepresentation getPerson(){
         return person;
     }
 
-    public Date getDate() {
-        return date;
+    public void setPerson(PersonRepresentation person){
+        this.person = person;
+    }
+
+    public FrischBestandRepresentation getFrischbestand(){
+        return frischbestand;
+    }
+
+    public void setFrischbestand(FrischBestandRepresentation frischbestand){
+        this.frischbestand = frischbestand;
+    }
+
+    public int getBestellmenge(){
+        return bestellmenge;
+    }
+
+    public void setBestellmenge(int bestellmenge){
+        this.bestellmenge = bestellmenge;
+    }
+
+    public Date getDatum(){
+        return datum;
+    }
+
+    public void setDatum(Date datum){
+        this.datum = datum;
     }
 
 }

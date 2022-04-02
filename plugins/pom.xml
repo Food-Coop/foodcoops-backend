@@ -31,12 +31,12 @@
                 <configuration>
                 <classifier>exec</classifier>
                 <executable>true</executable>
-                <excludes>
-                <exclude>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-configuration-processor</artifactId>
-                </exclude>
-                </excludes>
+                    <excludes>
+                        <exclude>
+                            <groupId>org.springframework.boot</groupId>
+                            <artifactId>spring-boot-configuration-processor</artifactId>
+                        </exclude>
+                    </excludes>
                 </configuration>
             </plugin>
             <plugin>

@@ -24,8 +24,8 @@ public class FrischBestellungRepositoryBridge implements FrischBestellungReposit
     }
 
     @Override
-    public FrischBestellung speichern(FrischBestellung FrischBestellung) {
-        return springDataFrischBestellungRepository.save(FrischBestellung);
+    public FrischBestellung speichern(FrischBestellung frischBestellung) {
+        return springDataFrischBestellungRepository.save(frischBestellung);
     }
 
     @Override

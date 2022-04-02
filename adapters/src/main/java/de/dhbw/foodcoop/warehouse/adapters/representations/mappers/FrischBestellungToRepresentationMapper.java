@@ -29,9 +29,10 @@ public class FrischBestellungToRepresentationMapper implements Function<FrischBe
                 personToRepresentationMapper.apply(frischBestellung.getPerson());
         return new FrischBestellungRepresentation(
                 frischBestellung.getId(),
-                frischBestandRepresentation,
                 personRepresentation,
-                frischBestellung.getDate()
+                frischBestandRepresentation,
+                frischBestellung.getBestellmenge(),
+                frischBestellung.getDatum()
         );
     }
 }

@@ -12,56 +12,67 @@ public class FrischBestellung {
     @Id
     private String id;
     @ManyToOne
-    @JoinColumn(name = "frischbestand_id")
-    private FrischBestand frischbestand;
-    @ManyToOne
     @JoinColumn(name = "person_id")
     private Person person;
+    @ManyToOne
+    @JoinColumn(name = "frischbestand_id")
+    private FrischBestand frischbestand;
     @Column
-    private Date date;
+    private int bestellmenge;
+    @Column
+    private Date datum;
 
-    public FrischBestellung(String id, FrischBestand frischbestand, Person person, Date date) {
+    public FrischBestellung(String id, Person person, FrischBestand frischbestand, int bestellmenge, Date datum) {
         Validate.notBlank(id);
-        Validate.notNull(date);
+        Validate.notNull(datum);
         this.id = id;
-        this.frischbestand = frischbestand;
         this.person = person;
-        this.date = date;
+        this.frischbestand = frischbestand;
+        this.bestellmenge = bestellmenge;
+        this.datum = datum;
     }
 
-    public FrischBestellung(FrischBestand frischbestand, Person person, Date date) {
-        this(UUID.randomUUID().toString(), frischbestand, person, date);
+    public FrischBestellung(Person person, FrischBestand frischbestand, int bestellmenge, Date datum) {
+        this(UUID.randomUUID().toString(), person, frischbestand, bestellmenge, datum);
     }
 
     public FrischBestellung() {
 
     }
 
-    public String getId() {
+    public String getId(){
         return id;
     }
 
-    public FrischBestand getFrischbestand() {
-        return frischbestand;
-    }
-
-    public void setFrischbestand(FrischBestand frischbestand) {
-        this.frischbestand = frischbestand;
-    }
-
-    public Person getPerson() {
+    public Person getPerson(){
         return person;
     }
 
-    public void setPerson(Person person) {
+    public void setPerson(Person person){
         this.person = person;
     }
 
-    public Date getDate() {
-        return date;
+    public FrischBestand getFrischbestand(){
+        return frischbestand;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+    public void setFrischbestand(FrischBestand frischbestand){
+        this.frischbestand = frischbestand;
+    }
+
+    public int getBestellmenge(){
+        return bestellmenge;
+    }
+
+    public void setBestellmenge(int bestellmenge){
+        this.bestellmenge = bestellmenge;
+    }
+
+    public Date getDatum(){
+        return datum;
+    }
+
+    public void setDatum(Date datum){
+        this.datum = datum;
     }
 }
