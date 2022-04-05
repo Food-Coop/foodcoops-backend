@@ -38,10 +38,10 @@ public class PersonService {
         if (toBeDeleted.isEmpty()) {
             return;
         }
-        if (frischBestellungService.all().stream()
-                .anyMatch(frischbestellung -> frischbestellung.getPerson().equals(toBeDeleted.get()))) {
-            throw new PersonInUseException(id);
-        }
+        // if (frischBestellungService.all().stream()
+        //         .anyMatch(frischbestellung -> frischbestellung.getPerson().equals(toBeDeleted.get()))) {
+        //     throw new PersonInUseException(id);
+        // }
         repository.deleteById(id);
     }
 }

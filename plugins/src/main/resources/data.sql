@@ -67,20 +67,23 @@ values ( '1234abcd-139e-467d-80e0-a1bcad7c9996'
        , 20
        , 'd20b6519-bc2d-4e9f-b3e7-9bebc995f110'
        , 3.0);
-insert into frischbestellung(id, frischbestand_id, person_id, datum)
+insert into frischbestellung(id, frischbestand_id, person_id, bestellmenge, datum)
 values ( '2049vbow-138e-467d-80e0-r3slwp9d2390'
        , '1234abcd-139e-467d-80e0-a1bcad7c9996'
        , '11589rqw-124q-466c-80e0-a1bcad7c9996'
+       , 3
        , '2022-03-08');
-insert into frischbestellung(id, frischbestand_id, person_id, datum)
+insert into frischbestellung(id, frischbestand_id, person_id, bestellmenge, datum)
 values ( '2049vbow-139e-467d-80e0-r3slwp9d2390'
        , '1234abcd-139e-468e-80e0-a1bcad7c9996'
        , '11589rqw-189p-466c-80e0-a1bcad7c9996'
+       , 5
        , '2022-03-09');
-insert into frischbestellung(id, frischbestand_id, person_id, datum)
+insert into frischbestellung(id, frischbestand_id, person_id, bestellmenge, datum)
 values ( '2049vbow-140e-467d-80e0-r3slwp9d2390'
        , '1234abcd-139e-466c-80e0-a1bcad7c9996'
        , '11589rqw-139e-466c-80e0-a1bcad7c9996'
+       , 4
        , '2022-03-10');
 insert into brot(id, name, gewicht, preis)
 values ( '2370sfng-140e-467d-80e0-r3slwp9d2390'

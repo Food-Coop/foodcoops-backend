@@ -38,10 +38,10 @@ public class FrischBestandService {
         if (toBeDeleted.isEmpty()) {
             return;
         }
-        if (frischBestellungService.all().stream()
-                .anyMatch(frischbestellung -> frischbestellung.getFrischbestand().equals(toBeDeleted.get()))) {
-            throw new FrischBestandInUseException(id);
-        }
+        // if (frischBestellungService.all().stream()
+        //         .anyMatch(frischbestellung -> frischbestellung.getFrischbestand().equals(toBeDeleted.get()))) {
+        //     throw new FrischBestandInUseException(id);
+        // }
         repository.deleteById(id);
     }
 }

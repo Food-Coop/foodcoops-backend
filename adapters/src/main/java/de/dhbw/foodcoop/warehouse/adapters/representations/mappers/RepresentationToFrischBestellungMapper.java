@@ -26,32 +26,23 @@ public class RepresentationToFrischBestellungMapper implements Function<FrischBe
 
     @Override
     public FrischBestellung apply(FrischBestellungRepresentation frischBestellungRepresentation) {
-        FrischBestand frischBestand = frischBestandService.findById(frischBestellungRepresentation.getFrischbestand().getId()).orElseThrow
-                (() -> new FrischBestandNotFoundException(frischBestellungRepresentation.getFrischbestand().getId()));
-        Person person = toPersonMapper.apply(frischBestellungRepresentation.getPerson());
+        // FrischBestand frischBestand = frischBestandService.findById(frischBestellungRepresentation.getFrischbestand().getId()).orElseThrow
+        //         (() -> new FrischBestandNotFoundException(frischBestellungRepresentation.getFrischbestand().getId()));
+        //Person person = toPersonMapper.apply(frischBestellungRepresentation.getPerson());
         return new FrischBestellung(
                 frischBestellungRepresentation.getId(),
-                person,
-                frischBestand,
+                frischBestellungRepresentation.getPersonId(),
+                frischBestellungRepresentation.getFrischbestandId(),
                 frischBestellungRepresentation.getBestellmenge(),
                 frischBestellungRepresentation.getDatum()
         );
     }
 
     public FrischBestellung update(FrischBestellung oldFrischBestellung, FrischBestellungRepresentation newFrischBestellung) {
-        Optional<FrischBestand> newFrischBestand = newFrischBestellung.getFrischbestand() == null ||
-                newFrischBestellung.getFrischbestand().equals("undefined") ?
-                Optional.empty() :
-                frischBestandService.findById(newFrischBestellung.getFrischbestand().getId());
-       
-        Person person = newFrischBestellung.getPerson() == null ?
-                oldFrischBestellung.getPerson()
-                : toPersonMapper.apply(newFrischBestellung.getPerson());
-
         return new FrischBestellung(
                 oldFrischBestellung.getId(),
-                person,
-                newFrischBestand.orElseGet(oldFrischBestellung::getFrischbestand),
+                newFrischBestellung.getPersonId(),
+                newFrischBestellung.getFrischbestandId(),
                 newFrischBestellung.getBestellmenge(),
                 newFrischBestellung.getDatum()
         );

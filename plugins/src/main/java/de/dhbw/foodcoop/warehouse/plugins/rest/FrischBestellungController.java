@@ -68,6 +68,7 @@ public class FrischBestellungController {
                 UUID.randomUUID().toString() :
                 newFrischBestellung.getId();
         newFrischBestellung.setId(id);
+        newFrischBestellung.setFrischbestandId("1234abcd-139e-466c-80e0-a1bcad7c9996");
         FrischBestellung frischBestellung = service.save(toFrischBestellung.apply(newFrischBestellung));
         EntityModel<FrischBestellungRepresentation> entityModel = assembler.toModel(toPresentation.apply(frischBestellung));
         return ResponseEntity

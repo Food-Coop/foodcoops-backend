@@ -23,14 +23,14 @@ public class FrischBestellungToRepresentationMapper implements Function<FrischBe
 
     @Override
     public FrischBestellungRepresentation apply(FrischBestellung frischBestellung) {
-        FrischBestandRepresentation frischBestandRepresentation =
-                frischBestandToRepresentationMapper.apply(frischBestellung.getFrischbestand());
-        PersonRepresentation personRepresentation = 
-                personToRepresentationMapper.apply(frischBestellung.getPerson());
+        // FrischBestandRepresentation frischBestandRepresentation =
+        //         frischBestandToRepresentationMapper.apply(frischBestellung.getFrischbestand());
+        // PersonRepresentation personRepresentation = 
+        //         personToRepresentationMapper.apply(frischBestellung.getPerson());
         return new FrischBestellungRepresentation(
                 frischBestellung.getId(),
-                personRepresentation,
-                frischBestandRepresentation,
+                frischBestellung.getPersonId(),
+                frischBestellung.getFrischbestandId(),
                 frischBestellung.getBestellmenge(),
                 frischBestellung.getDatum()
         );
