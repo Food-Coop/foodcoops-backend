@@ -63,8 +63,6 @@ public class FrischBestellungController {
 
     @PostMapping("/frischBestellung")
     public ResponseEntity<?> newFrischBestellung(@RequestBody FrischBestellungRepresentation newFrischBestellung) {
-        System.out.println("****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************");
-        System.out.println("Bestellmenge: " + newFrischBestellung.getBestellmenge() + ", FrischBestandId: " + newFrischBestellung.getFrischbestandId() + " Datum: " + newFrischBestellung.getDatum() + " Person: " + newFrischBestellung.getPersonId());
         String id = newFrischBestellung.getId() == null ||
                 newFrischBestellung.getId().equals("undefined") ?
                 UUID.randomUUID().toString() :

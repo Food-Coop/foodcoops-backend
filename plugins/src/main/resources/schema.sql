@@ -54,6 +54,6 @@ CREATE TABLE frischbestellung(
                                  frischbestand_id VARCHAR(50) references frischbestand(id),
                                  person_id VARCHAR(50) references person(id),
                                  bestellmenge INT NOT NULL,
-                                 datum DATE NOT NULL,
+                                 datum TIMESTAMP NOT NULL,
                                  PRIMARY KEY(frischbestand_id, person_id, datum)
 );
