@@ -63,12 +63,13 @@ public class FrischBestellungController {
 
     @PostMapping("/frischBestellung")
     public ResponseEntity<?> newFrischBestellung(@RequestBody FrischBestellungRepresentation newFrischBestellung) {
+        System.out.println("****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************");
+        System.out.println("Bestellmenge: " + newFrischBestellung.getBestellmenge() + ", FrischBestandId: " + newFrischBestellung.getFrischbestandId() + " Datum: " + newFrischBestellung.getDatum() + " Person: " + newFrischBestellung.getPersonId());
         String id = newFrischBestellung.getId() == null ||
                 newFrischBestellung.getId().equals("undefined") ?
                 UUID.randomUUID().toString() :
                 newFrischBestellung.getId();
         newFrischBestellung.setId(id);
-        newFrischBestellung.setFrischbestandId("1234abcd-139e-466c-80e0-a1bcad7c9996");
         FrischBestellung frischBestellung = service.save(toFrischBestellung.apply(newFrischBestellung));
         EntityModel<FrischBestellungRepresentation> entityModel = assembler.toModel(toPresentation.apply(frischBestellung));
         return ResponseEntity
