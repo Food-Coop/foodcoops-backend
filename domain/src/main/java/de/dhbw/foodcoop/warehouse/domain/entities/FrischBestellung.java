@@ -30,8 +30,21 @@ public class FrischBestellung {
         this.datum = datum;
     }
 
+    public FrischBestellung(String id, String person_id, String frischbestand_id, int bestellmenge) {
+        Validate.notBlank(id);
+        Validate.notNull(datum);
+        this.id = id;
+        this.person_id = person_id;
+        this.frischbestand_id = frischbestand_id;
+        this.bestellmenge = bestellmenge;
+    }
+
     public FrischBestellung(String person_id, String frischbestand_id, int bestellmenge, Timestamp datum) {
         this(UUID.randomUUID().toString(), person_id, frischbestand_id, bestellmenge, datum);
+    }
+
+    public FrischBestellung(String person_id, String frischbestand_id, int bestellmenge) {
+        this(UUID.randomUUID().toString(), person_id, frischbestand_id, bestellmenge);
     }
 
     public FrischBestellung() {

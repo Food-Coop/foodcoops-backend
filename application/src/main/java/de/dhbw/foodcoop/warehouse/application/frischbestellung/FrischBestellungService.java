@@ -1,5 +1,6 @@
 package de.dhbw.foodcoop.warehouse.application.frischbestellung;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,6 +21,14 @@ public class FrischBestellungService {
 
     public List<FrischBestellung> all() {
         return repository.alle();
+    }
+
+    public List<FrischBestellung> findByDateAfter(Timestamp datum){
+        return repository.findeMitDatumNach(datum);
+    }
+
+    public List<FrischBestellung> findByDateAfterAndSum(Timestamp datum){
+        return repository.findeMitDatumNachUndSum(datum);
     }
 
     public FrischBestellung save(FrischBestellung bestellung) {
