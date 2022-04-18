@@ -13,46 +13,39 @@ public class FrischBestellung {
     private String id;
     @Column(name = "person_id")
     private String person_id;
-    @Column(name = "frischbestand_id")
-    private String frischbestand_id;
+    @ManyToOne
+    @JoinColumn(name = "frischbestand_id")
+    private FrischBestand frischbestand;
     @Column
-    private int bestellmenge;
+    private long bestellmenge;
     @Column
     private Timestamp datum;
 
-    public FrischBestellung(String id, String person_id, String frischbestand_id, int bestellmenge, Timestamp datum) {
-        Validate.notBlank(id);
-        Validate.notNull(datum);
+    public FrischBestellung(String id, String person_id, FrischBestand frischbestand, long bestellmenge, Timestamp datum) {
+        //Validate.notBlank(id);
+        //Validate.notNull(datum);
         this.id = id;
         this.person_id = person_id;
-        this.frischbestand_id = frischbestand_id;
+        this.frischbestand = frischbestand;
         this.bestellmenge = bestellmenge;
         this.datum = datum;
     }
 
-    public FrischBestellung(String id, String person_id, String frischbestand_id, int bestellmenge) {
-        Validate.notBlank(id);
+    public FrischBestellung(String id, String person_id, FrischBestand frischbestand, long bestellmenge) {
+        //Validate.notBlank(id);
         //Validate.notNull(datum);
         this.id = id;
         this.person_id = person_id;
-        this.frischbestand_id = frischbestand_id;
+        this.frischbestand = frischbestand;
         this.bestellmenge = bestellmenge;
     }
-    public FrischBestellung(String id, String person_id, String frischbestand_id, long bestellmenge) {
-        Validate.notBlank(id);
-        //Validate.notNull(datum);
-        this.id = id;
-        this.person_id = person_id;
-        this.frischbestand_id = frischbestand_id;
-        this.bestellmenge = (int) bestellmenge;
+
+    public FrischBestellung(String person_id, FrischBestand frischbestand, long bestellmenge, Timestamp datum) {
+        this(UUID.randomUUID().toString(), person_id, frischbestand, bestellmenge, datum);
     }
 
-    public FrischBestellung(String person_id, String frischbestand_id, int bestellmenge, Timestamp datum) {
-        this(UUID.randomUUID().toString(), person_id, frischbestand_id, bestellmenge, datum);
-    }
-
-    public FrischBestellung(String person_id, String frischbestand_id, int bestellmenge) {
-        this(UUID.randomUUID().toString(), person_id, frischbestand_id, bestellmenge);
+    public FrischBestellung(String person_id, FrischBestand frischbestand, long bestellmenge) {
+        this(UUID.randomUUID().toString(), person_id, frischbestand, bestellmenge);
     }
 
     public FrischBestellung() {
@@ -75,19 +68,19 @@ public class FrischBestellung {
         this.person_id = person_id;
     }
 
-    public String getFrischbestandId(){
-        return frischbestand_id;
+    public FrischBestand getFrischbestand(){
+        return frischbestand;
     }
 
-    public void setFrischbestandId(String frischbestand_id){
-        this.frischbestand_id = frischbestand_id;
+    public void setFrischbestand(FrischBestand frischbestand){
+        this.frischbestand = frischbestand;
     }
 
-    public int getBestellmenge(){
+    public long getBestellmenge(){
         return bestellmenge;
     }
 
-    public void setBestellmenge(int bestellmenge){
+    public void setBestellmenge(long bestellmenge){
         this.bestellmenge = bestellmenge;
     }
 

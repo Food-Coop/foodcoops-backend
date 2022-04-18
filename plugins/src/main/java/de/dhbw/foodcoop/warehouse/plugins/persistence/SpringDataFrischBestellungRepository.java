@@ -14,12 +14,9 @@ public interface SpringDataFrischBestellungRepository extends JpaRepository<Fris
     @Query("SELECT f FROM FrischBestellung f WHERE f.datum > :date")
     List<FrischBestellung> findByDateAfter(@Param("date") Timestamp date);
 
-    @Query("SELECT new FrischBestellung(f.id, f.frischbestand_id, f.person_id, SUM(f.bestellmenge)) " +
+    @Query(value = "SELECT new FrischBestellung(f.id, f.frischbestand_id, f.person_id, SUM(f.bestellmenge)) " +
             "FROM FrischBestellung f " +
             "WHERE f.datum > :date " +
-            "GROUP BY f.frischbestand_id")
+            "GROUP BY f.frischbestand_id", nativeQuery = true)
     List<FrischBestellung> findByDateAfterAndSum(@Param("date") Timestamp date);
-    
-    //SQL-Statement in MariaDB-> Funktioniert, anders als hier
-    //SELECT f.id, f.frischbestand_id, f.person_id, SUM(f.bestellmenge), f.datum FROM frischbestellung f WHERE f.datum > '2022-04-10 00:00:00' GROUP BY f.frischbestand_id;
 }

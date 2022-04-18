@@ -5,22 +5,22 @@ import java.sql.Timestamp;
 public class FrischBestellungRepresentation {
     private String id;
     private String person_id;
-    private String frischbestand_id;
-    private int bestellmenge;
+    private FrischBestandRepresentation frischbestand;
+    private long bestellmenge;
     private Timestamp datum;
 
-    public FrischBestellungRepresentation(String id, String person_id, String frischbestand_id, int bestellmenge, Timestamp datum) {
+    public FrischBestellungRepresentation(String id, String person_id, FrischBestandRepresentation frischbestand, long bestellmenge, Timestamp datum) {
         this.id = id;
         this.person_id = person_id;
-        this.frischbestand_id = frischbestand_id;
+        this.frischbestand = frischbestand;
         this.bestellmenge = bestellmenge;
         this.datum = datum;
     }
 
-    public FrischBestellungRepresentation(String id, String person_id, String frischbestand_id, int bestellmenge) {
+    public FrischBestellungRepresentation(String id, String person_id, FrischBestandRepresentation frischbestand, long bestellmenge) {
         this.id = id;
         this.person_id = person_id;
-        this.frischbestand_id = frischbestand_id;
+        this.frischbestand = frischbestand;
         this.bestellmenge = bestellmenge;
     }
 
@@ -40,19 +40,19 @@ public class FrischBestellungRepresentation {
         this.person_id = person_id;
     }
 
-    public String getFrischbestandId(){
-        return frischbestand_id;
+    public FrischBestandRepresentation getFrischbestand(){
+        return frischbestand;
     }
 
-    public void setFrischbestandId(String frischbestand_id){
-        this.frischbestand_id = frischbestand_id;
+    public void setFrischbestand(FrischBestandRepresentation frischbestand){
+        this.frischbestand = frischbestand;
     }
 
-    public int getBestellmenge(){
+    public long getBestellmenge(){
         return bestellmenge;
     }
 
-    public void setBestellmenge(int bestellmenge){
+    public void setBestellmenge(long bestellmenge){
         this.bestellmenge = bestellmenge;
     }
 

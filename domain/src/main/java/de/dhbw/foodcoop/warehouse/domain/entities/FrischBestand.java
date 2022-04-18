@@ -27,11 +27,11 @@ public class FrischBestand {
     private float preis;
 
     public FrischBestand(String id, String name, boolean verfuegbarkeit, String herkunftsland, int gebindegroesse, Einheit einheit, float preis) {
-        Validate.notBlank(id);
-        Validate.notBlank(name);
-        Validate.notNull(verfuegbarkeit);
-        Validate.notNull(gebindegroesse);
-        Validate.notNull(preis);
+        // Validate.notBlank(id);
+        // Validate.notBlank(name);
+        // Validate.notNull(verfuegbarkeit);
+        // Validate.notNull(gebindegroesse);
+        // Validate.notNull(preis);
 
         this.id = id;
         this.name = name;

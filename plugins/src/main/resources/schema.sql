@@ -18,12 +18,6 @@ CREATE TABLE lagerprodukt(
                              soll_lagerbestand VARCHAR(50) NOT NULL
 );
 
-CREATE TABLE person(
-                       id VARCHAR(50) PRIMARY KEY,
-                       vorname VARCHAR(50) NOT NULL,
-                       nachname VARCHAR(50) NOT NULL
-);
-
 CREATE TABLE brot(
                      id VARCHAR(50) PRIMARY KEY,
                      name VARCHAR(50) NOT NULL,
@@ -34,7 +28,7 @@ CREATE TABLE brot(
 CREATE TABLE brotbestellung(
                                id VARCHAR(50) NOT NULL,
                                brot_id VARCHAR(50) references brot(id),
-                               person_id VARCHAR(50) references person(id),
+                               person_id VARCHAR(50) NOT NULL,
                                datum DATE NOT NULL,
                                PRIMARY KEY(brot_id, person_id, datum)
 );
@@ -52,7 +46,7 @@ CREATE TABLE frischbestand(
 CREATE TABLE frischbestellung(
                                  id VARCHAR(50) NOT NULL,
                                  frischbestand_id VARCHAR(50) references frischbestand(id),
-                                 person_id VARCHAR(50) references person(id),
+                                 person_id VARCHAR(50) NOT NULL,
                                  bestellmenge INT NOT NULL,
                                  datum TIMESTAMP NOT NULL,
                                  PRIMARY KEY(frischbestand_id, person_id, datum)
