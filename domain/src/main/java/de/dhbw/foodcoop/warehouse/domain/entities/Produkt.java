@@ -8,7 +8,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 @Entity
-@Table(name = "produkt")
+@Table(name = "lagerprodukt")
 public class Produkt {
     @Id
     private String id;
@@ -17,7 +17,7 @@ public class Produkt {
     @Embedded
     private Lagerbestand lagerbestand;
     @ManyToOne
-    @JoinColumn(name = "kategorie_id")
+    @JoinColumn(name = "lagerkategorie_id")
     private Kategorie kategorie;
 
     public Produkt(String id, String name, Kategorie kategorie, Lagerbestand lagerbestand) {

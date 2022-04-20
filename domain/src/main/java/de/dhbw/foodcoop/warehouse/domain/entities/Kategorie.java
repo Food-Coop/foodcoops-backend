@@ -9,7 +9,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 @Entity
-@Table
+@Table(name = "lagerkategorie")
 public final class Kategorie {
     @Id
     private String id;
