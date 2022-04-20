@@ -17,12 +17,6 @@ public class FrischBestellungRepresentation {
         this.datum = datum;
     }
 
-    public FrischBestellungRepresentation(String id, String person_id, FrischBestandRepresentation frischbestand, long bestellmenge) {
-        this.id = id;
-        this.person_id = person_id;
-        this.frischbestand = frischbestand;
-        this.bestellmenge = bestellmenge;
-    }
 
     public String getId(){
         return id;
