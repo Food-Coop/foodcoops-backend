@@ -105,6 +105,9 @@ public class FrischBestellungController {
 
     @PutMapping ("/frischBestellung/{id}")
     public ResponseEntity<?> update(@RequestBody FrischBestellungRepresentation changedFrischBestellung, @PathVariable String id) {
+        
+        System.out.println(id);
+
         FrischBestellung oldFrischBestellung = service.findById(id).orElseThrow(() -> new FrischBestellungNotFoundException(id));
         FrischBestellung updateFrischBestellung = toFrischBestellung.update(oldFrischBestellung, changedFrischBestellung);
 
