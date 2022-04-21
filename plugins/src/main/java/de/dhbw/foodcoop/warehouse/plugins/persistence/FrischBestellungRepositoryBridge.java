@@ -25,8 +25,8 @@ public class FrischBestellungRepositoryBridge implements FrischBestellungReposit
     }
 
     @Override
-    public List<FrischBestellung> findeMitDatumNach(Timestamp date){
-        return springDataFrischBestellungRepository.findByDateAfter(date);
+    public List<FrischBestellung> findeMitDatumNachUndPerson(Timestamp date, String person_id){
+        return springDataFrischBestellungRepository.findByDateAfterAndPerson(date, person_id);
     }
 
     @Override

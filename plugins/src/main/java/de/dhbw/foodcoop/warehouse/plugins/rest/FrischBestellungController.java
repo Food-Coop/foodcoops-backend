@@ -21,12 +21,7 @@ import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import de.dhbw.foodcoop.warehouse.adapters.representations.FrischBestellungRepresentation;
 import de.dhbw.foodcoop.warehouse.adapters.representations.mappers.FrischBestellungToRepresentationMapper;
@@ -70,11 +65,11 @@ public class FrischBestellungController {
                 linkTo(methodOn(FrischBestellungController.class).all()).withSelfRel());
     }
 
-    @GetMapping("/frischBestellung/datum")
-    public CollectionModel<EntityModel<FrischBestellungRepresentation>> findByDateAfter(){//@PathVariable Timestamp datum1, @PathVariable Timestamp datum2){
+    @GetMapping("/frischBestellung/datum/{person_id}")
+    public CollectionModel<EntityModel<FrischBestellungRepresentation>> findByDateAfterAndPerson(@PathVariable String person_id){
         //Timestamp datum1 = getTimestampNow();
         Timestamp datum = getTimestampLastDeadLine();
-        List<EntityModel<FrischBestellungRepresentation>> produkts = service.findByDateAfter(datum).stream()
+        List<EntityModel<FrischBestellungRepresentation>> produkts = service.findByDateAfterAndPerson(datum, person_id).stream()
                 .map(toPresentation)
                 .map(assembler::toModel)
                 .collect(Collectors.toList());
@@ -108,7 +103,7 @@ public class FrischBestellungController {
                 .body(entityModel);
     }
 
-    @PostMapping("/frischBestellung/{id}")
+    @PutMapping ("/frischBestellung/{id}")
     public ResponseEntity<?> update(@RequestBody FrischBestellungRepresentation changedFrischBestellung, @PathVariable String id) {
         FrischBestellung oldFrischBestellung = service.findById(id).orElseThrow(() -> new FrischBestellungNotFoundException(id));
         FrischBestellung updateFrischBestellung = toFrischBestellung.update(oldFrischBestellung, changedFrischBestellung);

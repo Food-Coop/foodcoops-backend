@@ -51,7 +51,6 @@ public class ProduktController {
                 .map(toPresentation)
                 .map(assembler::toModel)
                 .collect(Collectors.toList());
-        System.out.println("Debug Produkt fetch " + produkts);
         return CollectionModel.of(produkts,
                 linkTo(methodOn(ProduktController.class).all()).withSelfRel());
     }

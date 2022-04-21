@@ -9,7 +9,7 @@ import java.util.Optional;
 public interface FrischBestellungRepository {
     List<FrischBestellung> alle();
 
-    List<FrischBestellung> findeMitDatumNach(Timestamp datum);
+    List<FrischBestellung> findeMitDatumNachUndPerson(Timestamp datum, String person_id);
 
     List<FrischBestellung> findeMitDatumNachUndSum(Timestamp datum);
 

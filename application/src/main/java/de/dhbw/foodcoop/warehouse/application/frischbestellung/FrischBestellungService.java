@@ -23,8 +23,8 @@ public class FrischBestellungService {
         return repository.alle();
     }
 
-    public List<FrischBestellung> findByDateAfter(Timestamp datum){
-        return repository.findeMitDatumNach(datum);
+    public List<FrischBestellung> findByDateAfterAndPerson(Timestamp datum, String person_id){
+        return repository.findeMitDatumNachUndPerson(datum, person_id);
     }
 
     public List<FrischBestellung> findByDateAfterAndSum(Timestamp datum){
