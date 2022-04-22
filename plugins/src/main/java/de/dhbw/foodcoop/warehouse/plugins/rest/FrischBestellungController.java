@@ -68,7 +68,7 @@ public class FrischBestellungController {
     @GetMapping("/frischBestellung/datum/{person_id}")
     public CollectionModel<EntityModel<FrischBestellungRepresentation>> findByDateAfterAndPerson(@PathVariable String person_id){
         //Timestamp datum1 = getTimestampNow();
-        Timestamp datum = getTimestampLastDeadLine();
+        Timestamp datum = getTimestampOfDeadLine(-1);
         List<EntityModel<FrischBestellungRepresentation>> produkts = service.findByDateAfterAndPerson(datum, person_id).stream()
                 .map(toPresentation)
                 .map(assembler::toModel)
@@ -77,8 +77,10 @@ public class FrischBestellungController {
                 linkTo(methodOn(FrischBestellungController.class).all()).withSelfRel());
     }
 
-    @GetMapping("/frischBestellung/{datum1}/{datum2}/{person_id}")
-    public CollectionModel<EntityModel<FrischBestellungRepresentation>> findByDateBetween(@PathVariable Timestamp datum1, @PathVariable Timestamp datum2, @PathVariable String person_id){
+    @GetMapping("/frischBestellung/person/{person_id}")
+    public CollectionModel<EntityModel<FrischBestellungRepresentation>> findByDateBetween(@PathVariable String person_id){
+        Timestamp datum1 = getTimestampOfDeadLine(-1);
+        Timestamp datum2 = getTimestampOfDeadLine(-2);
         List<EntityModel<FrischBestellungRepresentation>> produkts = service.findByDateBetween(datum1, datum2, person_id).stream()
                 .map(toPresentation)
                 .map(assembler::toModel)
@@ -90,7 +92,7 @@ public class FrischBestellungController {
     @GetMapping("/frischBestellung/datum/menge")
     public CollectionModel<EntityModel<FrischBestellungRepresentation>> findByDateAfterAndSum(){//@PathVariable Timestamp datum1, @PathVariable Timestamp datum2){
         //Timestamp datum1 = getTimestampNow();
-        Timestamp datum = getTimestampLastDeadLine();
+        Timestamp datum = getTimestampOfDeadLine(-1);
         List<EntityModel<FrischBestellungRepresentation>> produkts = service.findByDateAfterAndSum(datum).stream()
                 .map(toPresentation)
                 .map(assembler::toModel)
@@ -139,10 +141,11 @@ public class FrischBestellungController {
     }
 
     
-    private Timestamp getTimestampLastDeadLine() {
+    private Timestamp getTimestampOfDeadLine(int n) {
+        //n = -1 => letzte Deadline, n = -2 => vorletzte Deadline, ...
         Calendar calendar2 = Calendar.getInstance();
         calendar2.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
-        calendar2.add(Calendar.WEEK_OF_MONTH, -1);
+        calendar2.add(Calendar.WEEK_OF_MONTH, n);
         int year = calendar2.get(Calendar.YEAR);
         int month = calendar2.get(Calendar.MONTH);
         int day = calendar2.get(Calendar.DATE);
