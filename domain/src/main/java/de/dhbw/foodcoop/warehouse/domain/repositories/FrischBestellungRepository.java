@@ -13,6 +13,8 @@ public interface FrischBestellungRepository {
 
     List<FrischBestellung> findeMitDatumNachUndSum(Timestamp datum);
 
+    List<FrischBestellung> findeMitDatumZwischen(Timestamp datum1, Timestamp datum2, String person_id);
+
     FrischBestellung speichern(FrischBestellung frischBestellung);
 
     Optional<FrischBestellung> findeMitId(String id);

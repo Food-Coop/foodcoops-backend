@@ -31,6 +31,10 @@ public class FrischBestellungService {
         return repository.findeMitDatumNachUndSum(datum);
     }
 
+    public List<FrischBestellung> findByDateBetween(Timestamp datum1, Timestamp datum2, String person_id){
+        return repository.findeMitDatumZwischen(datum1, datum2, person_id);
+    }
+
     public FrischBestellung save(FrischBestellung bestellung) {
         return repository.speichern(bestellung);
     }

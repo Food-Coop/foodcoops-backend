@@ -35,6 +35,11 @@ public class FrischBestellungRepositoryBridge implements FrischBestellungReposit
     }
 
     @Override
+    public List<FrischBestellung> findeMitDatumZwischen(Timestamp date1, Timestamp date2, String person_id){
+        return springDataFrischBestellungRepository.findByDateBetween(date1, date2, person_id);
+    }
+
+    @Override
     public FrischBestellung speichern(FrischBestellung frischBestellung) {
         return springDataFrischBestellungRepository.save(frischBestellung);
     }

@@ -77,6 +77,16 @@ public class FrischBestellungController {
                 linkTo(methodOn(FrischBestellungController.class).all()).withSelfRel());
     }
 
+    @GetMapping("/frischBestellung/{datum1}/{datum2}/{person_id}")
+    public CollectionModel<EntityModel<FrischBestellungRepresentation>> findByDateBetween(@PathVariable Timestamp datum1, @PathVariable Timestamp datum2, @PathVariable String person_id){
+        List<EntityModel<FrischBestellungRepresentation>> produkts = service.findByDateBetween(datum1, datum2, person_id).stream()
+                .map(toPresentation)
+                .map(assembler::toModel)
+                .collect(Collectors.toList());
+        return CollectionModel.of(produkts,
+                linkTo(methodOn(FrischBestellungController.class).all()).withSelfRel());
+    }
+
     @GetMapping("/frischBestellung/datum/menge")
     public CollectionModel<EntityModel<FrischBestellungRepresentation>> findByDateAfterAndSum(){//@PathVariable Timestamp datum1, @PathVariable Timestamp datum2){
         //Timestamp datum1 = getTimestampNow();
