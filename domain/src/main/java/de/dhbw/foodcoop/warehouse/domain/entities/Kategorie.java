@@ -15,25 +15,16 @@ public final class Kategorie {
     private String id;
     @Column
     private String name;
-    @Column
-    @Embedded
-    private Icon icon;
-    @OneToMany(mappedBy = "kategorie", cascade = CascadeType.MERGE)
-    private List<Produkt> produkte;
 
-    public Kategorie(String id, String name, Icon icon, List<Produkt> produkte) {
+    public Kategorie(String id, String name) {
         Validate.notBlank(id);
         Validate.notBlank(name);
-        Validate.notNull(icon);
-        Validate.notNull(produkte);
         this.id = id;
         this.name = name;
-        this.icon = icon;
-        this.produkte = produkte;
     }
 
-    public Kategorie(String name, Icon icon, List<Produkt> produkte) {
-        this(UUID.randomUUID().toString(), name, icon, produkte);
+    public Kategorie(String name) {
+        this(UUID.randomUUID().toString(), name);
     }
 
     protected Kategorie() {
@@ -47,13 +38,6 @@ public final class Kategorie {
         return name;
     }
 
-    public Icon getIcon() {
-        return icon;
-    }
-
-    public List<Produkt> getProdukte() {
-        return produkte;
-    }
 
     @Override
     public boolean equals(Object o) {
@@ -73,8 +57,6 @@ public final class Kategorie {
         return "Kategorie{" +
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
-                ", icon='" + icon + '\'' +
-                ", produkte=" + produkte +
                 '}';
     }
 }

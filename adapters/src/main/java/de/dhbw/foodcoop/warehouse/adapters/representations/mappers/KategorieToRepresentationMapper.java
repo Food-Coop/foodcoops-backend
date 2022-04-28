@@ -21,11 +21,8 @@ public class KategorieToRepresentationMapper implements Function<Kategorie, Kate
 
     @Override
     public KategorieRepresentation apply(Kategorie kategorie) {
-        List<ProduktRepresentation> produkte = kategorie.getProdukte().stream()
-                .map(mapper).collect(Collectors.toList());
         return new KategorieRepresentation(kategorie.getId(),
-                kategorie.getName(),
-                kategorie.getIcon().getIcon(),
-                produkte);
+                kategorie.getName()
+        );
     }
 }

@@ -19,11 +19,15 @@ public class RepresentationToFrischBestandMapper implements Function<FrischBesta
 
     private final EinheitService einheitService;
     private final KategorieService kategorieService;
+    private final RepresentationToEinheitMapper repToEinMapper;
+    private final RepresentationToKategorieMapper repToKatMapper;
 
     @Autowired
-    public RepresentationToFrischBestandMapper(EinheitService einheitService, KategorieService kategorieService) {
+    public RepresentationToFrischBestandMapper(EinheitService einheitService, KategorieService kategorieService, RepresentationToEinheitMapper repToEinMapper, RepresentationToKategorieMapper repToKatMapper) {
         this.einheitService = einheitService;
         this.kategorieService = kategorieService;
+        this.repToEinMapper = repToEinMapper;
+        this.repToKatMapper = repToKatMapper;
     }
 
     @Override
@@ -44,14 +48,16 @@ public class RepresentationToFrischBestandMapper implements Function<FrischBesta
     }
 
     public FrischBestand update(FrischBestand oldFrischBestand, FrischBestandRepresentation newFrischBestand) {
+        Einheit einheit = newFrischBestand.getEinheit() == null ? oldFrischBestand.getEinheit() : repToEinMapper.apply(newFrischBestand.getEinheit());
+        Kategorie kategorie = newFrischBestand.getKategorie() == null ? oldFrischBestand.getKategorie() : repToKatMapper.apply(newFrischBestand.getKategorie());
         return new FrischBestand(
                 oldFrischBestand.getId(),
                 pickNewIfDefined(oldFrischBestand.getName(), newFrischBestand.getName()),
                 newFrischBestand.getVerfuegbarkeit(),
                 pickNewIfDefined(oldFrischBestand.getHerkunftsland(), newFrischBestand.getHerkunftsland()),
                 newFrischBestand.getGebindegroesse(),
-                newFrischBestand.getEinheit(),
-                newFrischBestand.getKategorie(),
+                einheit,
+                kategorie,
                 newFrischBestand.getPreis()
         );
     }

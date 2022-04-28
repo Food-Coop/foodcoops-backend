@@ -9,11 +9,11 @@ public class FrischBestandRepresentation {
     private boolean verfuegbarkeit;
     private String herkunftsland;
     private int gebindegroesse;
-    private Einheit einheit;
-    private Kategorie kategorie;
+    private EinheitRepresentation einheit;
+    private KategorieRepresentation kategorie;
     private float preis;
 
-    public FrischBestandRepresentation(String id, String name, boolean verfuegbarkeit, String herkunftsland, int gebindegroesse, Einheit einheit, Kategorie kategorie, float preis) {
+    public FrischBestandRepresentation(String id, String name, boolean verfuegbarkeit, String herkunftsland, int gebindegroesse, EinheitRepresentation einheit, KategorieRepresentation kategorie, float preis) {
         this.id = id;
         this.name = name;
         this.verfuegbarkeit = verfuegbarkeit;
@@ -44,11 +44,11 @@ public class FrischBestandRepresentation {
         return gebindegroesse;
     }
 
-    public Einheit getEinheit() {
+    public EinheitRepresentation getEinheit() {
         return einheit;
     }
 
-    public Kategorie getKategorie() {
+    public KategorieRepresentation getKategorie() {
         return kategorie;
     }
 

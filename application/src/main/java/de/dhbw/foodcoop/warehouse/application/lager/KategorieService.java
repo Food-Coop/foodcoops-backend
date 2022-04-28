@@ -39,9 +39,6 @@ public class KategorieService {
         if (toBeDeleted.isEmpty()) {
             return;
         }
-        if (!toBeDeleted.get().getProdukte().isEmpty()) {
-            throw new KategorieInUseException(id);
-        }
         repository.deleteById(id);
     }
 }
