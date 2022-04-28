@@ -16,17 +16,18 @@ import java.util.function.Function;
 public class RepresentationToProduktMapper implements Function<ProduktRepresentation, Produkt> {
     private final KategorieService kategorieService;
     private final RepresentationToLagerbestandMapper toLagerbestandMapper;
+    private final RepresentationToKategorieMapper toKategorieMapper;
 
     @Autowired
-    public RepresentationToProduktMapper(KategorieService kategorieService, RepresentationToLagerbestandMapper toLagerbestandMapper) {
+    public RepresentationToProduktMapper(KategorieService kategorieService, RepresentationToLagerbestandMapper toLagerbestandMapper, RepresentationToKategorieMapper toKategorieMapper) {
         this.kategorieService = kategorieService;
         this.toLagerbestandMapper = toLagerbestandMapper;
+        this.toKategorieMapper = toKategorieMapper;
     }
 
     @Override
     public Produkt apply(ProduktRepresentation produktRepresentation) {
-        Kategorie kategorie = kategorieService.findById(produktRepresentation.getKategorie()).orElseThrow
-                (() -> new KategorieNotFoundException(produktRepresentation.getKategorie()));
+        Kategorie kategorie = toKategorieMapper.apply(produktRepresentation.getKategorie());
         Lagerbestand lagerbestand = toLagerbestandMapper.apply(produktRepresentation.getLagerbestand());
         return new Produkt(produktRepresentation.getId(),
                 produktRepresentation.getName(),
@@ -35,11 +36,9 @@ public class RepresentationToProduktMapper implements Function<ProduktRepresenta
     }
 
     public Produkt update(Produkt oldProdukt, ProduktRepresentation newProdukt) {
-        Optional<Kategorie> newKategorie = newProdukt.getKategorie() == null ||
-                newProdukt.getKategorie().isBlank() ||
-                newProdukt.getKategorie().equals("undefined") ?
-                Optional.empty() :
-                kategorieService.findById(newProdukt.getKategorie());
+        Kategorie kategorie = newProdukt.getKategorie() == null ?
+                oldProdukt.getKategorie() 
+                : toKategorieMapper.apply(newProdukt.getKategorie());
         Lagerbestand lagerbestand = newProdukt.getLagerbestand() == null ?
                 oldProdukt.getLagerbestand()
                 : toLagerbestandMapper.apply(newProdukt.getLagerbestand());
@@ -48,7 +47,7 @@ public class RepresentationToProduktMapper implements Function<ProduktRepresenta
                 oldProdukt.getId(),
                 newProdukt.getName() == null || newProdukt.getName().equals("undefined") ?
                         oldProdukt.getName() : newProdukt.getName(),
-                newKategorie.orElseGet(oldProdukt::getKategorie),
+                kategorie,
                 lagerbestand
         );
     }

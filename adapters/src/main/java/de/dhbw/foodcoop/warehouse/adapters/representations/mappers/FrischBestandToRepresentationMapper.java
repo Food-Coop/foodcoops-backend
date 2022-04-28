@@ -5,12 +5,11 @@ import java.util.function.Function;
 import de.dhbw.foodcoop.warehouse.adapters.representations.EinheitRepresentation;
 import de.dhbw.foodcoop.warehouse.adapters.representations.KategorieRepresentation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import de.dhbw.foodcoop.warehouse.adapters.representations.FrischBestandRepresentation;
 import de.dhbw.foodcoop.warehouse.domain.entities.FrischBestand;
-import de.dhbw.foodcoop.warehouse.domain.entities.Kategorie;
-import de.dhbw.foodcoop.warehouse.domain.values.Einheit;
 
 @Component
 public class FrischBestandToRepresentationMapper implements Function<FrischBestand, FrischBestandRepresentation> {
@@ -18,6 +17,7 @@ public class FrischBestandToRepresentationMapper implements Function<FrischBesta
     private final EinheitToRepresentationMapper einheitMapper;
     private final KategorieToRepresentationMapper kategorieMapper;
 
+    @Lazy
     @Autowired
     public FrischBestandToRepresentationMapper(EinheitToRepresentationMapper eMapper, KategorieToRepresentationMapper kMapper) {
         this.einheitMapper = eMapper;

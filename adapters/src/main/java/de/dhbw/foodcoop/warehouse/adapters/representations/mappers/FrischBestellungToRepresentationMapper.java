@@ -14,7 +14,7 @@ public class FrischBestellungToRepresentationMapper implements Function<FrischBe
     private final FrischBestandToRepresentationMapper frischBestandToRepresentationMapper;
 
     @Autowired
-    public FrischBestellungToRepresentationMapper(FrischBestandToRepresentationMapper frischbestandToRepresentationMapper, PersonToRepresentationMapper personToRepresentationMapper) {
+    public FrischBestellungToRepresentationMapper(FrischBestandToRepresentationMapper frischbestandToRepresentationMapper) {
         this.frischBestandToRepresentationMapper = frischbestandToRepresentationMapper;
     }
 
