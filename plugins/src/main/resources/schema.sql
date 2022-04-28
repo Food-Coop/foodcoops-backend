@@ -1,12 +1,12 @@
 CREATE TABLE einheit(
-                        id VARCHAR(50) PRIMARY KEY,
-                        name VARCHAR(50) NOT NULL
+                            id VARCHAR(50) PRIMARY KEY,
+                            name VARCHAR(50) NOT NULL
 );
 
 CREATE TABLE lagerkategorie(
-                               id VARCHAR(50) PRIMARY KEY,
-                               name VARCHAR(50) NOT NULL,
-                               icon VARCHAR(10000) NOT NULL
+                            id VARCHAR(50) PRIMARY KEY,
+                            name VARCHAR(50) NOT NULL,
+                            icon VARCHAR(10000) NOT NULL
 );
 
 CREATE TABLE lagerprodukt(
@@ -19,35 +19,36 @@ CREATE TABLE lagerprodukt(
 );
 
 CREATE TABLE brot(
-                     id VARCHAR(50) PRIMARY KEY,
-                     name VARCHAR(50) NOT NULL,
-                     gewicht INT NOT NULL,
-                     preis FLOAT NOT NULL
+                            id VARCHAR(50) PRIMARY KEY,
+                            name VARCHAR(50) NOT NULL,
+                            gewicht INT NOT NULL,
+                            preis FLOAT NOT NULL
 );
 
 CREATE TABLE brotbestellung(
-                               id VARCHAR(50) NOT NULL,
-                               brot_id VARCHAR(50) references brot(id),
-                               person_id VARCHAR(50) NOT NULL,
-                               datum DATE NOT NULL,
-                               PRIMARY KEY(brot_id, person_id, datum)
+                            id VARCHAR(50) NOT NULL,
+                            brot_id VARCHAR(50) references brot(id),
+                            person_id VARCHAR(50) NOT NULL,
+                            datum DATE NOT NULL,
+                            PRIMARY KEY(brot_id, person_id, datum)
 );
 
 CREATE TABLE frischbestand(
-                              id VARCHAR(50) PRIMARY KEY,
-                              name VARCHAR(50) NOT NULL,
-                              verfuegbarkeit BOOLEAN NOT NULL,
-                              herkunftsland VARCHAR(50) NOT NULL,
-                              gebindegroesse INT NOT NULL,
-                              einheit_id VARCHAR(50) references einheit(id),
-                              preis FLOAT NOT NULL
+                            id VARCHAR(50) PRIMARY KEY,
+                            name VARCHAR(50) NOT NULL,
+                            verfuegbarkeit BOOLEAN NOT NULL,
+                            herkunftsland VARCHAR(50) NOT NULL,
+                            gebindegroesse INT NOT NULL,
+                            einheit_id VARCHAR(50) references einheit(id),
+                            lagerkategorie_id VARCHAR(50) references lagerkategorie(id),
+                            preis FLOAT NOT NULL
 );
 
 CREATE TABLE frischbestellung(
-                                 id VARCHAR(50) NOT NULL,
-                                 frischbestand_id VARCHAR(50) references frischbestand(id),
-                                 person_id VARCHAR(50) NOT NULL,
-                                 bestellmenge INT NOT NULL,
-                                 datum TIMESTAMP NOT NULL,
-                                 PRIMARY KEY(frischbestand_id, person_id, datum)
+                            id VARCHAR(50) NOT NULL,
+                            frischbestand_id VARCHAR(50) references frischbestand(id),
+                            person_id VARCHAR(50) NOT NULL,
+                            bestellmenge INT NOT NULL,
+                            datum TIMESTAMP NOT NULL,
+                            PRIMARY KEY(frischbestand_id, person_id, datum)
 );

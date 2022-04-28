@@ -43,30 +43,42 @@ values ( '11589rqw-189p-466c-80e0-a1bcad7c9996'
 values ( '11589rqw-124q-466c-80e0-a1bcad7c9996'
        , 'Robin'
        , 'Schmidt');
-insert into frischbestand(id, name, verfuegbarkeit, herkunftsland, gebindegroesse, einheit_id, preis)
+insert into frischbestand(id, name, verfuegbarkeit, herkunftsland, gebindegroesse, einheit_id, lagerkategorie_id, preis)
 values ( '1234abcd-139e-466c-80e0-a1bcad7c9996'
        , 'Lauch'
        , true
        , 'DE'
        , 20
        , 'b9db54bc-8c54-4163-bc25-1ed10b75edea'
+       , '6abeec3f-fdc4-49b1-b64e-e005b45051cb'
        , 1.5);
-insert into frischbestand(id, name, verfuegbarkeit, herkunftsland, gebindegroesse, einheit_id, preis)
+insert into frischbestand(id, name, verfuegbarkeit, herkunftsland, gebindegroesse, einheit_id, lagerkategorie_id, preis)
 values ( '1234abcd-139e-468e-80e0-a1bcad7c9996'
        , 'Blumenkohl'
        , true
        , 'DE'
        , 12
        , 'b9db54bc-8c54-4163-bc25-1ed10b75edea'
+       , '6abeec3f-fdc4-49b1-b64e-e005b45051cb'
        , 1.0);
-insert into frischbestand(id, name, verfuegbarkeit, herkunftsland, gebindegroesse, einheit_id, preis)
+insert into frischbestand(id, name, verfuegbarkeit, herkunftsland, gebindegroesse, einheit_id, lagerkategorie_id, preis)
 values ( '1234abcd-139e-467d-80e0-a1bcad7c9996'
        , 'Paprika'
        , true
        , 'ES'
        , 20
        , 'd20b6519-bc2d-4e9f-b3e7-9bebc995f110'
+       , '6abeec3f-fdc4-49b1-b64e-e005b45051cb'
        , 3.0);
+insert into frischbestand(id, name, verfuegbarkeit, herkunftsland, gebindegroesse, einheit_id, lagerkategorie_id, preis)
+values ( '1234abcd-139e-469f-80e0-a1bcad7c9996'
+       , 'Tomate'
+       , false
+       , 'IT'
+       , 10
+       , 'd20b6519-bc2d-4e9f-b3e7-9bebc995f110'
+       , '6abeec3f-fdc4-49b1-b64e-e005b45051cb'
+       , 2.5);
 insert into frischbestellung(id, frischbestand_id, person_id, bestellmenge, datum)
 values ( '2049vbow-138e-467d-80e0-r3slwp9d2390'
        , '1234abcd-139e-467d-80e0-a1bcad7c9996'

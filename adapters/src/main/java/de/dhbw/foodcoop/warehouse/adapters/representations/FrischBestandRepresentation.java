@@ -1,5 +1,6 @@
 package de.dhbw.foodcoop.warehouse.adapters.representations;
 
+import de.dhbw.foodcoop.warehouse.domain.entities.Kategorie;
 import de.dhbw.foodcoop.warehouse.domain.values.Einheit;
 
 public class FrischBestandRepresentation {
@@ -9,15 +10,17 @@ public class FrischBestandRepresentation {
     private String herkunftsland;
     private int gebindegroesse;
     private Einheit einheit;
+    private Kategorie kategorie;
     private float preis;
 
-    public FrischBestandRepresentation(String id, String name, boolean verfuegbarkeit, String herkunftsland, int gebindegroesse, Einheit einheit, float preis) {
+    public FrischBestandRepresentation(String id, String name, boolean verfuegbarkeit, String herkunftsland, int gebindegroesse, Einheit einheit, Kategorie kategorie, float preis) {
         this.id = id;
         this.name = name;
         this.verfuegbarkeit = verfuegbarkeit;
         this.herkunftsland = herkunftsland;
         this.gebindegroesse = gebindegroesse;
         this.einheit = einheit;
+        this.kategorie = kategorie;
         this.preis = preis;
     }
 
@@ -43,6 +46,10 @@ public class FrischBestandRepresentation {
 
     public Einheit getEinheit() {
         return einheit;
+    }
+
+    public Kategorie getKategorie() {
+        return kategorie;
     }
 
     public float getPreis() {

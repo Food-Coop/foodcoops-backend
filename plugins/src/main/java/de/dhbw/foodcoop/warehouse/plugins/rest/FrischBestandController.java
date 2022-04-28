@@ -70,7 +70,7 @@ public class FrischBestandController {
                 .body(entityModel);
     }
 
-    @PostMapping("/frischBestand/{id}")
+    @PutMapping("/frischBestand/{id}")
     public ResponseEntity<?> update(@RequestBody FrischBestandRepresentation changedProdukt, @PathVariable String id) {
         FrischBestand oldFrischBestand = service.findById(id).orElseThrow(() -> new FrischBestandNotFoundException(id));
         FrischBestand updateProdukt = toFrischBestand.update(oldFrischBestand, changedProdukt);

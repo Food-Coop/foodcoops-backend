@@ -23,10 +23,13 @@ public class FrischBestand {
     @ManyToOne
     @JoinColumn(name = "einheit_id")
     private Einheit einheit;
+    @ManyToOne
+    @JoinColumn(name = "lagerkategorie_id")
+    private Kategorie kategorie;
     @Column
     private float preis;
 
-    public FrischBestand(String id, String name, boolean verfuegbarkeit, String herkunftsland, int gebindegroesse, Einheit einheit, float preis) {
+    public FrischBestand(String id, String name, boolean verfuegbarkeit, String herkunftsland, int gebindegroesse, Einheit einheit, Kategorie kategorie, float preis) {
         // Validate.notBlank(id);
         // Validate.notBlank(name);
         // Validate.notNull(verfuegbarkeit);
@@ -39,11 +42,12 @@ public class FrischBestand {
         this.herkunftsland = herkunftsland;
         this.gebindegroesse = gebindegroesse;
         this.einheit = einheit;
+        this.kategorie = kategorie;
         this.preis = preis;
     }
 
-    public FrischBestand(String name, boolean verfuegbarkeit, String herkunftsland, int gebindegroesse, Einheit einheit, float preis) {
-        this(UUID.randomUUID().toString(), name, verfuegbarkeit, herkunftsland, gebindegroesse, einheit, preis);
+    public FrischBestand(String name, boolean verfuegbarkeit, String herkunftsland, int gebindegroesse, Einheit einheit, Kategorie kategorie, float preis) {
+        this(UUID.randomUUID().toString(), name, verfuegbarkeit, herkunftsland, gebindegroesse, einheit, kategorie, preis);
     }
 
     public FrischBestand() {
@@ -74,6 +78,10 @@ public class FrischBestand {
         return einheit;
     }
 
+    public Kategorie getKategorie(){
+        return kategorie;
+    }
+
     public float getPreis() {
         return preis;
     }
@@ -96,6 +104,10 @@ public class FrischBestand {
 
     public void setEinheit(Einheit einheit) {
         this.einheit = einheit;
+    }
+
+    public void setKategorie(Kategorie kategorie){
+        this.kategorie = kategorie;
     }
 
     public void setPreis(float preis) {

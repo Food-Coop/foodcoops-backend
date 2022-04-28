@@ -4,15 +4,10 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -23,6 +18,7 @@ import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import de.dhbw.foodcoop.warehouse.adapters.representations.FrischBestandRepresentation;
 import de.dhbw.foodcoop.warehouse.adapters.representations.FrischBestellungRepresentation;
 import de.dhbw.foodcoop.warehouse.adapters.representations.mappers.FrischBestellungToRepresentationMapper;
 import de.dhbw.foodcoop.warehouse.adapters.representations.mappers.RepresentationToFrischBestellungMapper;
@@ -108,6 +104,19 @@ public class FrischBestellungController {
                 UUID.randomUUID().toString() :
                 newFrischBestellung.getId();
         newFrischBestellung.setId(id);
+
+        String person_id = newFrischBestellung.getPersonId();
+        Timestamp deadline = getTimestampOfDeadLine(-1);
+        // FrischBestandRepresentation frischbestand = newFrischBestellung.getFrischbestand();
+        // List<FrischBestellung> frischBestellungTest = service.findByDateAfterAndPerson(deadline, person_id);
+        // ListIterator<FrischBestellung> iterator = frischBestellungTest.listIterator();
+        // while(iterator.hasNext()){
+        //         if(iterator.next().getFrischbestand().getId() == frischbestand.getId()){
+        //                 System.out.println("TEST!!!");
+        //                 return ResponseEntity.badRequest().body("TEST!!!");
+        //         }
+        // }
+
         FrischBestellung frischBestellung = service.save(toFrischBestellung.apply(newFrischBestellung));
         EntityModel<FrischBestellungRepresentation> entityModel = assembler.toModel(toPresentation.apply(frischBestellung));
         return ResponseEntity

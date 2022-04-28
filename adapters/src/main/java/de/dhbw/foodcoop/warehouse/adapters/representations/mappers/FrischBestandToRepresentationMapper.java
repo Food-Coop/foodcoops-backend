@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 import de.dhbw.foodcoop.warehouse.adapters.representations.FrischBestandRepresentation;
 import de.dhbw.foodcoop.warehouse.domain.entities.FrischBestand;
+import de.dhbw.foodcoop.warehouse.domain.entities.Kategorie;
 import de.dhbw.foodcoop.warehouse.domain.values.Einheit;
 
 @Component
@@ -19,12 +20,14 @@ public class FrischBestandToRepresentationMapper implements Function<FrischBesta
     @Override
     public FrischBestandRepresentation apply(FrischBestand frischBestand) {
         Einheit einheit = frischBestand.getEinheit();
+        Kategorie kategorie = frischBestand.getKategorie();
         return new FrischBestandRepresentation(frischBestand.getId(),
                 frischBestand.getName(),
                 frischBestand.getVerfuegbarkeit(),
                 frischBestand.getHerkunftsland(),
                 frischBestand.getGebindegroesse(),
                 einheit,
+                kategorie,
                 frischBestand.getPreis());
     }
 }
