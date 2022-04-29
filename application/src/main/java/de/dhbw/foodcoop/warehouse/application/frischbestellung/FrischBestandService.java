@@ -1,7 +1,6 @@
 package de.dhbw.foodcoop.warehouse.application.frischbestellung;
 
 import de.dhbw.foodcoop.warehouse.domain.entities.FrischBestand;
-import de.dhbw.foodcoop.warehouse.domain.exceptions.FrischBestandInUseException;
 import de.dhbw.foodcoop.warehouse.domain.repositories.FrischBestandRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,12 +12,10 @@ import java.util.Optional;
 @Service
 public class FrischBestandService {
     private final FrischBestandRepository repository;
-    private FrischBestellungService frischBestellungService;
 
     @Autowired
     public FrischBestandService(FrischBestandRepository repository, FrischBestellungService frischBestellungService) {
         this.repository = repository;
-        this.frischBestellungService = frischBestellungService;
     }
 
     public Optional<FrischBestand> findById(String id) {

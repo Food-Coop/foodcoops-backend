@@ -24,7 +24,7 @@ public class FrischBestand {
     @JoinColumn(name = "einheit_id")
     private Einheit einheit;
     @ManyToOne
-    @JoinColumn(name = "lagerkategorie_id")
+    @JoinColumn(name = "kategorie_id")
     private Kategorie kategorie;
     @Column
     private float preis;
@@ -129,7 +129,7 @@ public class FrischBestand {
 
     @Override
     public String toString() {
-        return "Produkt{" +
+        return "FrischBestand{" +
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
                 ", verfuegbarkeit= '" + verfuegbarkeit + '\'' +

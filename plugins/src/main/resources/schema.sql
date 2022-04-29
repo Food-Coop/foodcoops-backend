@@ -1,34 +1,38 @@
+CREATE DATABASE foodcoop;
+USE foodcoop;
+
 CREATE TABLE einheit(
                             id VARCHAR(50) PRIMARY KEY,
                             name VARCHAR(50) NOT NULL
 );
 
-CREATE TABLE lagerkategorie(
+CREATE TABLE kategorie(
                             id VARCHAR(50) PRIMARY KEY,
-                            name VARCHAR(50) NOT NULL,
-                            icon VARCHAR(10000) NOT NULL
+                            name VARCHAR(50) NOT NULL
 );
 
 CREATE TABLE lagerprodukt(
                              id VARCHAR(50) PRIMARY KEY,
                              name VARCHAR(50) NOT NULL,
-                             lagerkategorie_id VARCHAR(50) references lagerkategorie(id),
+                             kategorie_id VARCHAR(50) references kategorie(id),
                              einheit_id VARCHAR(50) references einheit(id),
                              ist_lagerbestand VARCHAR(50) NOT NULL,
                              soll_lagerbestand VARCHAR(50) NOT NULL
 );
 
-CREATE TABLE brot(
+CREATE TABLE brotbestand(
                             id VARCHAR(50) PRIMARY KEY,
                             name VARCHAR(50) NOT NULL,
+                            verfuegbarkeit BOOLEAN NOT NULL,
                             gewicht INT NOT NULL,
                             preis FLOAT NOT NULL
 );
 
 CREATE TABLE brotbestellung(
                             id VARCHAR(50) NOT NULL,
-                            brot_id VARCHAR(50) references brot(id),
+                            brot_id VARCHAR(50) references brotbestand(id),
                             person_id VARCHAR(50) NOT NULL,
+                            bestellmenge INT NOT NULL,
                             datum DATE NOT NULL,
                             PRIMARY KEY(brot_id, person_id, datum)
 );
@@ -40,7 +44,7 @@ CREATE TABLE frischbestand(
                             herkunftsland VARCHAR(50) NOT NULL,
                             gebindegroesse INT NOT NULL,
                             einheit_id VARCHAR(50) references einheit(id),
-                            lagerkategorie_id VARCHAR(50) references lagerkategorie(id),
+                            kategorie_id VARCHAR(50) references kategorie(id),
                             preis FLOAT NOT NULL
 );
 
@@ -51,4 +55,9 @@ CREATE TABLE frischbestellung(
                             bestellmenge INT NOT NULL,
                             datum TIMESTAMP NOT NULL,
                             PRIMARY KEY(frischbestand_id, person_id, datum)
+);
+
+CREATE TABLE deadline(
+                            id VARCHAR(50) PRIMARY KEY,
+                            datum TIMESTAMP NOT NULL
 );

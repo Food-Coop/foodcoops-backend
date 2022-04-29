@@ -17,7 +17,7 @@ public class Produkt {
     @Embedded
     private Lagerbestand lagerbestand;
     @ManyToOne
-    @JoinColumn(name = "lagerkategorie_id")
+    @JoinColumn(name = "kategorie_id")
     private Kategorie kategorie;
 
     public Produkt(String id, String name, Kategorie kategorie, Lagerbestand lagerbestand) {
