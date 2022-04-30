@@ -1,7 +1,5 @@
 package de.dhbw.foodcoop.warehouse.adapters.representations;
 
-import de.dhbw.foodcoop.warehouse.domain.entities.Kategorie;
-
 public final class ProduktRepresentation {
     private final String name;
     private final KategorieRepresentation kategorie;

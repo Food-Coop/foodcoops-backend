@@ -14,7 +14,7 @@ public class BrotBestandService {
     private final BrotBestandRepository repository;
     
     @Autowired
-    public BrotBestandService(BrotBestandRepository repository, BrotBestellungService brotBestellungService) {
+    public BrotBestandService(BrotBestandRepository repository) {
         this.repository = repository;
     }
 
@@ -35,10 +35,6 @@ public class BrotBestandService {
         if (toBeDeleted.isEmpty()) {
             return;
         }
-        // if (frischBestellungService.all().stream()
-        //         .anyMatch(frischbestellung -> frischbestellung.getFrischbestand().equals(toBeDeleted.get()))) {
-        //     throw new FrischBestandInUseException(id);
-        // }
         repository.deleteById(id);
     }
 }

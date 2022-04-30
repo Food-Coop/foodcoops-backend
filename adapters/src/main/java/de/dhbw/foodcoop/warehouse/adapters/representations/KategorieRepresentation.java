@@ -1,7 +1,5 @@
 package de.dhbw.foodcoop.warehouse.adapters.representations;
 
-import java.util.List;
-
 public final class KategorieRepresentation {
     private final String name;
     private String id;

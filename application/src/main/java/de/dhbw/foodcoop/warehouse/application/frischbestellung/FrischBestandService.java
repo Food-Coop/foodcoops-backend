@@ -14,7 +14,7 @@ public class FrischBestandService {
     private final FrischBestandRepository repository;
 
     @Autowired
-    public FrischBestandService(FrischBestandRepository repository, FrischBestellungService frischBestellungService) {
+    public FrischBestandService(FrischBestandRepository repository) {
         this.repository = repository;
     }
 

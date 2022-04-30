@@ -2,10 +2,8 @@ package de.dhbw.foodcoop.warehouse.adapters.representations.mappers;
 
 import de.dhbw.foodcoop.warehouse.adapters.representations.KategorieRepresentation;
 import de.dhbw.foodcoop.warehouse.domain.entities.Kategorie;
-import de.dhbw.foodcoop.warehouse.domain.values.Icon;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
 import java.util.function.Function;
 
 @Component

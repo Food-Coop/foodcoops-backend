@@ -1,8 +1,5 @@
 package de.dhbw.foodcoop.warehouse.adapters.representations;
 
-import de.dhbw.foodcoop.warehouse.domain.entities.Kategorie;
-import de.dhbw.foodcoop.warehouse.domain.values.Einheit;
-
 public class FrischBestandRepresentation {
     private String id;
     private String name;

@@ -1,7 +1,6 @@
 package de.dhbw.foodcoop.warehouse.domain.entities;
 
 import de.dhbw.foodcoop.warehouse.domain.values.Einheit;
-import org.apache.commons.lang3.Validate;
 
 import javax.persistence.*;
 import java.util.Objects;
@@ -136,6 +135,7 @@ public class FrischBestand {
                 ", herkunftsland=" + herkunftsland + '\'' +
                 ", gebindegroesse=" + gebindegroesse + '\'' +
                 ", einheit=" + einheit.getName() + '\'' +
+                ", kategorie=" + kategorie.getName() + '\'' +
                 ", preis=" + preis +
                 '}';
     }

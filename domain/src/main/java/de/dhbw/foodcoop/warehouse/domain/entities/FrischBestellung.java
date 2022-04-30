@@ -1,7 +1,5 @@
 package de.dhbw.foodcoop.warehouse.domain.entities;
 
-import org.apache.commons.lang3.Validate;
-
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.UUID;

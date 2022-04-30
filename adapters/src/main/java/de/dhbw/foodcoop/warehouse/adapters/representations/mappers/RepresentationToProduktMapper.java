@@ -1,26 +1,21 @@
 package de.dhbw.foodcoop.warehouse.adapters.representations.mappers;
 
 import de.dhbw.foodcoop.warehouse.adapters.representations.ProduktRepresentation;
-import de.dhbw.foodcoop.warehouse.application.lager.KategorieService;
 import de.dhbw.foodcoop.warehouse.domain.entities.Kategorie;
 import de.dhbw.foodcoop.warehouse.domain.entities.Produkt;
-import de.dhbw.foodcoop.warehouse.domain.exceptions.KategorieNotFoundException;
 import de.dhbw.foodcoop.warehouse.domain.values.Lagerbestand;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.Optional;
 import java.util.function.Function;
 
 @Component
 public class RepresentationToProduktMapper implements Function<ProduktRepresentation, Produkt> {
-    private final KategorieService kategorieService;
     private final RepresentationToLagerbestandMapper toLagerbestandMapper;
     private final RepresentationToKategorieMapper toKategorieMapper;
 
     @Autowired
-    public RepresentationToProduktMapper(KategorieService kategorieService, RepresentationToLagerbestandMapper toLagerbestandMapper, RepresentationToKategorieMapper toKategorieMapper) {
-        this.kategorieService = kategorieService;
+    public RepresentationToProduktMapper(RepresentationToLagerbestandMapper toLagerbestandMapper, RepresentationToKategorieMapper toKategorieMapper) {
         this.toLagerbestandMapper = toLagerbestandMapper;
         this.toKategorieMapper = toKategorieMapper;
     }
