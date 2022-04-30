@@ -15,7 +15,7 @@ public interface BrotBestellungRepository {
 
     List<BrotBestellung> findeMitDatumZwischen(Timestamp datum1, Timestamp datum2, String person_id);
 
-    BrotBestellung speichern(BrotBestellung frischBestellung);
+    BrotBestellung speichern(BrotBestellung brotBestellung);
 
     Optional<BrotBestellung> findeMitId(String id);
 

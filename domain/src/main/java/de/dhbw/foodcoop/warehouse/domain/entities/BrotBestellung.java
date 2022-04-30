@@ -5,7 +5,7 @@ import java.sql.Timestamp;
 import java.util.UUID;
 
 @Entity
-@Table(name="frischbestellung")
+@Table(name="brotbestellung")
 public class BrotBestellung {
     @Id
     private String id;

@@ -33,7 +33,7 @@ CREATE TABLE brotbestellung(
                             brot_id VARCHAR(50) references brotbestand(id),
                             person_id VARCHAR(50) NOT NULL,
                             bestellmenge INT NOT NULL,
-                            datum DATE NOT NULL,
+                            datum TIMESTAMP NOT NULL,
                             PRIMARY KEY(brot_id, person_id, datum)
 );
 
