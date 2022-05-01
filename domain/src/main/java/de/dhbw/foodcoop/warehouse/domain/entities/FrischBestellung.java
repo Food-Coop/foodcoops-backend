@@ -9,7 +9,7 @@ import java.util.UUID;
 public class FrischBestellung {
     @Id
     private String id;
-    @Column(name = "person_id")
+    @Column
     private String person_id;
     @ManyToOne
     @JoinColumn(name = "frischbestand_id")

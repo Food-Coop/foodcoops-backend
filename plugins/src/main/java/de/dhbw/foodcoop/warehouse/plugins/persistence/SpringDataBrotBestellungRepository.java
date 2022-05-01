@@ -11,15 +11,15 @@ import de.dhbw.foodcoop.warehouse.domain.entities.BrotBestellung;
 
 public interface SpringDataBrotBestellungRepository extends JpaRepository<BrotBestellung, String>{
 
-    @Query(value = "SELECT b FROM BrotBestellung b WHERE b.datum > :date AND b.person_id = :person_id", nativeQuery = true)
+    @Query("SELECT b FROM BrotBestellung b WHERE b.datum > :date AND b.person_id = :person_id")
     List<BrotBestellung> findByDateAfterAndPerson(@Param("date") Timestamp date, @Param("person_id") String person_id);
 
-    @Query(value = "SELECT b FROM BrotBestellung b WHERE b.datum <= :date1 AND b.datum > :date2 AND b.person_id = :person_id", nativeQuery = true)
+    @Query("SELECT b FROM BrotBestellung b WHERE b.datum <= :date1 AND b.datum > :date2 AND b.person_id = :person_id")
     List<BrotBestellung> findByDateBetween(@Param("date1") Timestamp date1, @Param("date2") Timestamp date2, @Param("person_id") String person_id);
 
-    @Query(value = "SELECT new BrotBestellung(b.id, b.person_id, b.brotbestand,  SUM(b.bestellmenge)) " +
+    @Query("SELECT new BrotBestellung(b.id, b.person_id, b.brotbestand,  SUM(b.bestellmenge)) " +
             "FROM BrotBestellung b " +
             "WHERE b.datum > :date " +
-            "GROUP BY b.brotbestand", nativeQuery = true)
+            "GROUP BY b.brotbestand")
     List<BrotBestellung> findByDateAfterAndSum(@Param("date") Timestamp date);
 }

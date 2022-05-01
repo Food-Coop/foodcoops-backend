@@ -9,39 +9,39 @@ import java.util.UUID;
 public class BrotBestellung {
     @Id
     private String id;
-    @Column(name = "person_id")
+    @Column
     private String person_id;
     @ManyToOne
-    @JoinColumn(name = "brot_id")
-    private BrotBestand brot;
+    @JoinColumn(name = "brotbestand_id")
+    private BrotBestand brotbestand;
     @Column
     private long bestellmenge;
     @Column
     private Timestamp datum;
 
-    public  BrotBestellung(String id, String person_id, BrotBestand brot, long bestellmenge, Timestamp datum) {
+    public  BrotBestellung(String id, String person_id, BrotBestand brotbestand, long bestellmenge, Timestamp datum) {
         this.id = id;
         this.person_id = person_id;
-        this.brot = brot;
+        this.brotbestand = brotbestand;
         this.bestellmenge = bestellmenge;
         this.datum = datum;
     }
 
-    public BrotBestellung(String id, String person_id, BrotBestand brot, long bestellmenge) {
+    public BrotBestellung(String id, String person_id, BrotBestand brotbestand, long bestellmenge) {
         //Validate.notBlank(id);
         //Validate.notNull(datum);
         this.id = id;
         this.person_id = person_id;
-        this.brot = brot;
+        this.brotbestand = brotbestand;
         this.bestellmenge = bestellmenge;
     }
 
-    public BrotBestellung(String person_id, BrotBestand brot, long bestellmenge, Timestamp datum) {
-        this(UUID.randomUUID().toString(), person_id, brot, bestellmenge, datum);
+    public BrotBestellung(String person_id, BrotBestand brotbestand, long bestellmenge, Timestamp datum) {
+        this(UUID.randomUUID().toString(), person_id, brotbestand, bestellmenge, datum);
     }
 
-    public BrotBestellung(String person_id, BrotBestand brot, long bestellmenge) {
-        this(UUID.randomUUID().toString(), person_id, brot, bestellmenge);
+    public BrotBestellung(String person_id, BrotBestand brotbestand, long bestellmenge) {
+        this(UUID.randomUUID().toString(), person_id, brotbestand, bestellmenge);
     }
 
     public BrotBestellung() {
@@ -65,11 +65,11 @@ public class BrotBestellung {
     }
 
     public BrotBestand getBrotBestand(){
-        return brot;
+        return brotbestand;
     }
 
-    public void setBrotBestand(BrotBestand brot){
-        this.brot = brot;
+    public void setBrotBestand(BrotBestand brotbestand){
+        this.brotbestand = brotbestand;
     }
 
     public long getBestellmenge(){

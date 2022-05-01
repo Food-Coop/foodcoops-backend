@@ -127,21 +127,21 @@ VALUES ( '2370sfng-140e-490z-80e0-r3slwp9d2390'
        , 1000
        , 4.0);
 
-INSERT INTO brotbestellung(id, brot_id, person_id, bestellmenge, datum)
+INSERT INTO brotbestellung(id, brotbestand_id, person_id, bestellmenge, datum)
 VALUES ( '28390wer-12af-490z-80e0-as234jkl231a'
        , '2370sfng-140e-467d-80e0-r3slwp9d2390'
        , '11589rqw-139e-466c-80e0-a1bcad7c9996'
        , 5
        , '2022-03-08 00:00:00');
 
-INSERT INTO brotbestellung(id, brot_id, person_id, bestellmenge, datum)
+INSERT INTO brotbestellung(id, brotbestand_id, person_id, bestellmenge, datum)
 VALUES ( '28390wer-12af-490z-81u8-as234jkl231a'
        , '2370sfng-140e-468o-80e0-r3slwp9d2390'
        , '11589rqw-189p-466c-80e0-a1bcad7c9996'
        , 2
        , '2022-03-08 00:00:00');
 
-INSERT INTO brotbestellung(id, brot_id, person_id, bestellmenge, datum)
+INSERT INTO brotbestellung(id, brotbestand_id, person_id, bestellmenge, datum)
 VALUES ( '28390wer-12af-490z-82i9-as234jkl231a'
        , '2370sfng-140e-490z-80e0-r3slwp9d2390'
        , '11589rqw-124q-466c-80e0-a1bcad7c9996'
