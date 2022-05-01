@@ -24,6 +24,10 @@ public class Deadline {
         this(UUID.randomUUID().toString(), weekday, time);
     }
 
+    public Deadline(){
+        
+    }
+
     public String getId() {
         return id;
     }
