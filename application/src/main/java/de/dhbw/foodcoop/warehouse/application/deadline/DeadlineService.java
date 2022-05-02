@@ -22,6 +22,10 @@ public class DeadlineService {
         return repository.alle();
     }
 
+    public List<Deadline> last() {
+        return repository.letzte();
+    }
+
     public Deadline save(Deadline deadline) {
         return repository.speichern(deadline);
     }

@@ -20,7 +20,8 @@ public class RepresentationToDeadlineMapper implements Function<DeadlineRepresen
        return new Deadline(
                 deadlineRepresentation.getId(),
                 deadlineRepresentation.getWeekday(),
-                deadlineRepresentation.getTime()
+                deadlineRepresentation.getTime(),
+                deadlineRepresentation.getDatum()
         );
     }
 
@@ -28,7 +29,8 @@ public class RepresentationToDeadlineMapper implements Function<DeadlineRepresen
         return new Deadline(
                 oldDeadline.getId(),
                 newDeadline.getWeekday(),
-                newDeadline.getTime()
+                newDeadline.getTime(),
+                newDeadline.getDatum()
         );
     }
 }

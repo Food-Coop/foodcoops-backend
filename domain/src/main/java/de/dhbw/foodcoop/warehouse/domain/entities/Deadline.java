@@ -1,6 +1,8 @@
 package de.dhbw.foodcoop.warehouse.domain.entities;
 
 import javax.persistence.*;
+
+import java.sql.Timestamp;
 import java.sql.Time;
 import java.util.UUID;
 
@@ -13,15 +15,18 @@ public class Deadline {
     private String weekday;
     @Column
     private Time time;
+    @Column
+    private Timestamp datum;
 
-    public Deadline(String id, String weekday, Time time){
+    public Deadline(String id, String weekday, Time time, Timestamp datum){
         this.id = id;
         this.weekday = weekday;
         this.time = time;
+        this.datum = datum;
     }
 
-    public Deadline(String weekday, Time time){
-        this(UUID.randomUUID().toString(), weekday, time);
+    public Deadline(String weekday, Time time,Timestamp datum){
+        this(UUID.randomUUID().toString(), weekday, time, datum);
     }
 
     public Deadline(){
@@ -52,6 +57,14 @@ public class Deadline {
         this.time = time;
     }
 
+    public Timestamp getDatum() {
+        return datum;
+    }
+
+    public void setDatum(Timestamp datum) {
+        this.datum = datum;
+    }
+
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -59,6 +72,7 @@ public class Deadline {
         result = prime * result + ((id == null) ? 0 : id.hashCode());
         result = prime * result + ((time == null) ? 0 : time.hashCode());
         result = prime * result + ((weekday == null) ? 0 : weekday.hashCode());
+        result = prime * result + ((datum == null) ? 0 : datum.hashCode());
         return result;
     }
 
@@ -86,12 +100,17 @@ public class Deadline {
                 return false;
         } else if (!weekday.equals(other.weekday))
             return false;
+        if (datum == null) {
+            if (other.datum != null)
+                return false;
+        } else if (!datum.equals(other.datum))
+            return false;
         return true;
     }
 
     @Override
     public String toString() {
-        return "Deadline [id=" + id + ", time=" + time + ", weekday=" + weekday + "]";
+        return "Deadline [id=" + id + ", time=" + time + ", weekday=" + weekday + ", datum=" + datum + "]";
     }
     
 }

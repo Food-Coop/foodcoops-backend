@@ -3,6 +3,9 @@ package de.dhbw.foodcoop.warehouse.plugins.rest;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
+import java.util.Date;
+import java.sql.Timestamp;
+import java.util.Calendar;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -56,6 +59,17 @@ public class DeadlineController {
                 linkTo(methodOn(DeadlineController.class).all()).withSelfRel());
     }
 
+    @GetMapping("/deadline/last")
+    public CollectionModel<EntityModel<DeadlineRepresentation>> last() {
+        List<EntityModel<DeadlineRepresentation>> deadlines = service.last().stream()
+                .map(toPresentation)
+                .map(assembler::toModel)
+                .collect(Collectors.toList());
+        List<EntityModel<DeadlineRepresentation>> lastDeadline = deadlines;
+        return CollectionModel.of(lastDeadline,
+                linkTo(methodOn(DeadlineController.class).all()).withSelfRel());
+    }
+
     @PostMapping("/deadline")
     public ResponseEntity<?> newDeadline(@RequestBody DeadlineRepresentation newDeadline) {
         String id = newDeadline.getId() == null ||
@@ -63,6 +77,19 @@ public class DeadlineController {
                 UUID.randomUUID().toString() :
                 newDeadline.getId();
             newDeadline.setId(id);
+
+        //Timestamp machen
+        Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DATE);
+        int hour = calendar.get(Calendar.HOUR);
+        int minute = calendar.get(Calendar.MINUTE);
+        int second = calendar.get(Calendar.SECOND);
+        calendar.set(year, month, day, hour, minute, second);
+        Date then = calendar.getTime();
+        Timestamp datum = new Timestamp(then.getTime());
+        newDeadline.setDatum(datum);
 
         Deadline deadline = service.save(toDeadline.apply(newDeadline));
         EntityModel<DeadlineRepresentation> entityModel = assembler.toModel(toPresentation.apply(deadline));

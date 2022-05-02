@@ -7,6 +7,8 @@ import java.util.Optional;
 
 public interface DeadlineRepository {
     List<Deadline> alle();
+
+    List<Deadline> letzte();
     
     Deadline speichern(Deadline deadline);
 

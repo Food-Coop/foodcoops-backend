@@ -24,6 +24,11 @@ public class DeadlineRepositoryBridge implements DeadlineRepository{
     }
 
     @Override
+    public List<Deadline> letzte() {
+        return springDataDeadlineRepository.findLast();
+    }
+
+    @Override
     public Deadline speichern(Deadline deadline) {
         return springDataDeadlineRepository.save(deadline);
     }
