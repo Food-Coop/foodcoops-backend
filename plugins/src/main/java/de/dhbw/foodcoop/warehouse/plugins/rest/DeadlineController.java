@@ -65,7 +65,7 @@ public class DeadlineController {
                 .map(toPresentation)
                 .map(assembler::toModel)
                 .collect(Collectors.toList());
-        List<EntityModel<DeadlineRepresentation>> lastDeadline = deadlines;
+        List<EntityModel<DeadlineRepresentation>> lastDeadline = deadlines.subList(deadlines.size()-1, deadlines.size());
         return CollectionModel.of(lastDeadline,
                 linkTo(methodOn(DeadlineController.class).all()).withSelfRel());
     }

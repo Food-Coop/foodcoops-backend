@@ -110,7 +110,6 @@ public class FrischBestellungController {
         // ListIterator<FrischBestellung> iterator = frischBestellungTest.listIterator();
         // while(iterator.hasNext()){
         //         if(iterator.next().getFrischbestand().getId() == frischbestand.getId()){
-        //                 System.out.println("TEST!!!");
         //                 return ResponseEntity.badRequest().body("TEST!!!");
         //         }
         // }

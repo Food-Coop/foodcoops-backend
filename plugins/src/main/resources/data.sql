@@ -153,3 +153,8 @@ VALUES ('28qwe2wer-123f-413z-q2i9-asdfb2kl231a'
         , '2022-05-06 10:00:00'
         , 'Freitag'
         , '10:00:00');
+INSERT INTO deadline(id, datum, weekday, time)
+VALUES ('28qwe2wer-234g-413z-q2i9-asdfb2kl231a'
+        , '2022-05-06 10:00:00'
+        , 'Sonntag'
+        , '10:00:00');
