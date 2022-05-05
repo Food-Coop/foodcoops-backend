@@ -9,7 +9,7 @@ import de.dhbw.foodcoop.warehouse.domain.entities.Deadline;
 
 public interface SpringDataDeadlineRepository extends JpaRepository<Deadline, String> {
 
-    @Query("SELECT d FROM Deadline d ORDER BY d.datum DESC")
+    @Query("SELECT d FROM Deadline d ORDER BY d.datum ASC")
     List<Deadline> findLast();
 
     // MariaDB: SELECT * FROM deadline ORDER BY datum DESC LIMIT 1;
