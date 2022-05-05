@@ -2,7 +2,6 @@ package de.dhbw.foodcoop.warehouse.plugins.rest;
 
 import de.dhbw.foodcoop.warehouse.adapters.representations.EinheitRepresentation;
 import de.dhbw.foodcoop.warehouse.adapters.representations.mappers.EinheitToRepresentationMapper;
-import de.dhbw.foodcoop.warehouse.adapters.representations.mappers.RepresentationToEinheitMapper;
 import de.dhbw.foodcoop.warehouse.application.lager.EinheitService;
 import de.dhbw.foodcoop.warehouse.domain.exceptions.EinheitInUseException;
 import de.dhbw.foodcoop.warehouse.domain.exceptions.EinheitNotFoundException;
@@ -27,14 +26,12 @@ public class EinheitController {
     private final EinheitService service;
     private final EinheitModelAssembler assembler;
     private final EinheitToRepresentationMapper toRepresentationMapper;
-    private final RepresentationToEinheitMapper toEinheitMapper;
 
     @Autowired
-    public EinheitController(EinheitService service, EinheitModelAssembler assembler, EinheitToRepresentationMapper toRepresentationMapper, RepresentationToEinheitMapper toEinheitMapper) {
+    public EinheitController(EinheitService service, EinheitModelAssembler assembler, EinheitToRepresentationMapper toRepresentationMapper) {
         this.service = service;
         this.assembler = assembler;
         this.toRepresentationMapper = toRepresentationMapper;
-        this.toEinheitMapper = toEinheitMapper;
     }
 
     @GetMapping("/einheiten/{id}")
