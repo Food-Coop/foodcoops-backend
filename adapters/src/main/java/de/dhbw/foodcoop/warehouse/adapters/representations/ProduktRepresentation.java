@@ -2,11 +2,11 @@ package de.dhbw.foodcoop.warehouse.adapters.representations;
 
 public final class ProduktRepresentation {
     private final String name;
-    private final String kategorie;
+    private final KategorieRepresentation kategorie;
     private final LagerbestandRepresentation lagerbestand;
     private String id;
 
-    public ProduktRepresentation(String id, String name, String kategorie, LagerbestandRepresentation lagerbestand) {
+    public ProduktRepresentation(String id, String name, KategorieRepresentation kategorie, LagerbestandRepresentation lagerbestand) {
         this.id = id;
         this.name = name;
         this.kategorie = kategorie;
@@ -25,7 +25,7 @@ public final class ProduktRepresentation {
         return name;
     }
 
-    public String getKategorie() {
+    public KategorieRepresentation getKategorie() {
         return kategorie;
     }
 

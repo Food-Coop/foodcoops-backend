@@ -3,7 +3,6 @@ package de.dhbw.foodcoop.warehouse.domain.values;
 import de.dhbw.foodcoop.warehouse.domain.utils.TestUtils;
 import de.dhbw.foodcoop.warehouse.domain.utils.ValidateUtils;
 import org.apache.commons.lang3.Validate;
-import org.springframework.validation.ValidationUtils;
 
 import javax.persistence.Embeddable;
 import javax.persistence.Lob;

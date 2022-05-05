@@ -69,7 +69,7 @@ public class ProduktController {
                 .body(entityModel);
     }
 
-    @PostMapping("/produkte/{id}")
+    @PutMapping("/produkte/{id}")
     public ResponseEntity<?> update(@RequestBody ProduktRepresentation changedProdukt, @PathVariable String id) {
         Produkt oldProdukt = service.findById(id).orElseThrow(() -> new ProduktNotFoundException(id));
         Produkt updateProdukt = toProdukt.update(oldProdukt, changedProdukt);
