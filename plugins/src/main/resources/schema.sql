@@ -62,5 +62,7 @@ CREATE TABLE frischbestellung(
 
 CREATE TABLE deadline(
                             id VARCHAR(50) PRIMARY KEY,
-                            datum TIMESTAMP NOT NULL
+                            datum TIMESTAMP NOT NULL,
+                            time TIME NOT NULL,
+                            weekday VARCHAR(50) NOT NULL
 );
