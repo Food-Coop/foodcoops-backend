@@ -157,7 +157,7 @@ public class FrischBestellungController {
     }
 
     
-    private Timestamp getTimestampOfDeadLine(int n) {
+    public Timestamp getTimestampOfDeadLine(int n) {
         //n = -1 => letzte Deadline, n = -2 => vorletzte Deadline, ..
         List<EntityModel<DeadlineRepresentation>> deadlines = deadlineService.last().stream()
                 .map(deadlineToPresentation)
@@ -196,7 +196,6 @@ public class FrischBestellungController {
         calendar.set(year, month, day, time.getHours(), time.getMinutes(), time.getSeconds() );
         Date then = calendar.getTime();
         Timestamp datum = new Timestamp(then.getTime());
-        System.out.println(datum);
         return datum;
     }
 

@@ -1,5 +1,6 @@
 package de.dhbw.foodcoop.warehouse.plugins.pdf;
 
+import de.dhbw.foodcoop.warehouse.domain.entities.FrischBestellung;
 import de.dhbw.foodcoop.warehouse.domain.values.Bestellung;
 import de.dhbw.foodcoop.warehouse.domain.values.Briefkopf;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -44,6 +45,27 @@ public class PdfService {
         return outputStream.toByteArray();
     }
 
+    public byte[] createFrischBestellungDocument(Briefkopf briefKopf, List<FrischBestellung> frischBestellungList) throws IOException {
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+
+        try (final PDDocument document = new PDDocument()) {
+
+            RepeatedHeaderTableDrawer.builder()
+                    .table(createTableWithFourHeaderRows(frischBestellungList))
+                    .startX(50)
+                    .startY(545F)
+                    .endY(50F) // note: if not set, table is drawn over the end of the page
+                    .numberOfRowsToRepeat(2)
+                    .build()
+                    .draw(() -> document, () -> new PDPage(PDRectangle.A4), 50f);
+
+
+            document.save(outputStream);
+
+        }
+        return outputStream.toByteArray();
+    }
+
     private Table createTableWithThreeHeaderRows(List<Bestellung> bestellungList) {
         final Table.TableBuilder tableBuilder = Table.builder()
                 .addColumnsOfWidth(200, 100, 100, 50);
@@ -67,6 +89,30 @@ public class PdfService {
         return tableBuilder.build();
     }
 
+    private Table createTableWithFourHeaderRows(List<FrischBestellung> bestellungList) {
+        final Table.TableBuilder tableBuilder = Table.builder()
+                .addColumnsOfWidth(100, 100, 100, 100, 100);
+
+        buildGebindeTableWithHeader(tableBuilder);
+
+        if (bestellungList.isEmpty()) {
+            return addTableIsEmptyMessage(tableBuilder);
+        }
+
+        for (FrischBestellung bestellung : bestellungList) {
+            tableBuilder.addRow(
+                    Row.builder()
+                            .add(getStandardCell(bestellung.getFrischbestand().getName()))
+                            .add(getStandardCell(bestellung.getBestellmenge()))
+                            .add(getStandardCell(bestellung.getFrischbestand().getGebindegroesse()))
+                            .add(getStandardCell(bestellung.getFrischbestand().getPreis()))
+                            .add(getStandardCell(""))
+                            .build());
+        }
+
+        return tableBuilder.build();
+    }
+
     private Table buildTableWithHeader(Table.TableBuilder tableBuilder) {
         return tableBuilder
                 .addRow(Row.builder()
@@ -78,9 +124,32 @@ public class PdfService {
                 .build();
     }
 
+    private Table buildGebindeTableWithHeader(Table.TableBuilder tableBuilder) {
+        return tableBuilder
+                .addRow(Row.builder()
+                        .add(createHeaderCell("Produkt"))
+                        .add(createHeaderCell("Gebindegröße"))
+                        .add(createHeaderCell("Menge"))
+                        .add(createHeaderCell("Preis"))
+                        .add(createHeaderCell("Anpassung"))
+                        .build())
+                .build();
+    }
+
     private TextCell getStandardCell(String text) {
         return TextCell.builder()
                 .text(text)
+                .textColor(Color.BLACK)
+                .borderColor(Color.BLACK)
+                .borderWidth(2f)
+                .padding(12f)
+                .build();
+    }
+
+    private TextCell getStandardCell(float text) {
+        String textToString = Float.toString(text);
+        return TextCell.builder()
+                .text(textToString)
                 .textColor(Color.BLACK)
                 .borderColor(Color.BLACK)
                 .borderWidth(2f)
@@ -110,4 +179,5 @@ public class PdfService {
                 .borderWidth(2f)
                 .build();
     }
+
 }
