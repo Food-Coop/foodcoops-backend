@@ -20,7 +20,9 @@ public interface SpringDataFrischBestellungRepository extends JpaRepository<Fris
     @Query("SELECT new FrischBestellung(f.id, f.person_id, f.frischbestand,  SUM(f.bestellmenge)) " +
             "FROM FrischBestellung f " +
             "WHERE f.datum > :date " +
-            "GROUP BY f.frischbestand")
+            "GROUP BY f.frischbestand " +
+            "ORDER BY f.frischbestand.kategorie.name"
+    )
     List<FrischBestellung> findByDateAfterAndSum(@Param("date") Timestamp date);
 
 }

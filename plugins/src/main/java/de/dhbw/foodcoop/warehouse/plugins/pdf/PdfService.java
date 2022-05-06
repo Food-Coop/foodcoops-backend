@@ -91,7 +91,7 @@ public class PdfService {
 
     private Table createTableWithFourHeaderRows(List<FrischBestellung> bestellungList) {
         final Table.TableBuilder tableBuilder = Table.builder()
-                .addColumnsOfWidth(100, 100, 100, 100, 100);
+                .addColumnsOfWidth(100, 100, 100, 100, 100, 100);
 
         buildGebindeTableWithHeader(tableBuilder);
 
@@ -106,6 +106,7 @@ public class PdfService {
                             .add(getStandardCell(bestellung.getBestellmenge()))
                             .add(getStandardCell(bestellung.getFrischbestand().getGebindegroesse()))
                             .add(getStandardCell(bestellung.getFrischbestand().getPreis()))
+                            .add(getStandardCell(bestellung.getFrischbestand().getKategorie().getName()))
                             .add(getStandardCell(""))
                             .build());
         }
@@ -131,6 +132,7 @@ public class PdfService {
                         .add(createHeaderCell("Gebindegröße"))
                         .add(createHeaderCell("Menge"))
                         .add(createHeaderCell("Preis"))
+                        .add(createHeaderCell("Kategorie"))
                         .add(createHeaderCell("Anpassung"))
                         .build())
                 .build();
