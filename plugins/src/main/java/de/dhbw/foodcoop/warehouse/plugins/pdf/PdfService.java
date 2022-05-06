@@ -91,7 +91,7 @@ public class PdfService {
 
     private Table createTableWithFourHeaderRows(List<FrischBestellung> bestellungList) {
         final Table.TableBuilder tableBuilder = Table.builder()
-                .addColumnsOfWidth(100, 100, 100, 100, 100, 100);
+                .addColumnsOfWidth(100, 70, 100, 70, 100, 80);
 
         buildGebindeTableWithHeader(tableBuilder);
 
@@ -100,6 +100,24 @@ public class PdfService {
         }
 
         for (FrischBestellung bestellung : bestellungList) {
+            String vorschlag  = "0";
+            //Wenn es eine Gebindegroesse gibt
+            //Bestellmenge insgesamt zu klein
+            if(bestellung.getBestellmenge() < 5 && bestellung.getFrischbestand().getGebindegroesse() != 0){
+                vorschlag = "0";
+            }
+
+            //Fall dazwischen abdecken
+            // ->TO DO
+
+            //Bestellmenge groß genug, um aufzurunden
+            else if(bestellung.getBestellmenge() > bestellung.getFrischbestand().getGebindegroesse() - 5){
+                vorschlag = Integer.toString(bestellung.getFrischbestand().getGebindegroesse());
+            }
+            //Wenn es keine Gebindegroesse gibt
+            else{
+                vorschlag = Long.toString(bestellung.getBestellmenge());
+            }
             tableBuilder.addRow(
                     Row.builder()
                             .add(getStandardCell(bestellung.getFrischbestand().getName()))
@@ -107,7 +125,7 @@ public class PdfService {
                             .add(getStandardCell(bestellung.getFrischbestand().getGebindegroesse()))
                             .add(getStandardCell(bestellung.getFrischbestand().getPreis()))
                             .add(getStandardCell(bestellung.getFrischbestand().getKategorie().getName()))
-                            .add(getStandardCell(""))
+                            .add(getStandardCell(vorschlag))
                             .build());
         }
 
@@ -129,11 +147,11 @@ public class PdfService {
         return tableBuilder
                 .addRow(Row.builder()
                         .add(createHeaderCell("Produkt"))
-                        .add(createHeaderCell("Gebindegröße"))
                         .add(createHeaderCell("Menge"))
+                        .add(createHeaderCell("Gebindegröße"))
                         .add(createHeaderCell("Preis"))
                         .add(createHeaderCell("Kategorie"))
-                        .add(createHeaderCell("Anpassung"))
+                        .add(createHeaderCell("Vorschlag"))
                         .build())
                 .build();
     }
