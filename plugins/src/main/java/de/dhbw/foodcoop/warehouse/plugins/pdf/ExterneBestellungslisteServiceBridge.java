@@ -1,7 +1,9 @@
 package de.dhbw.foodcoop.warehouse.plugins.pdf;
 
 import de.dhbw.foodcoop.warehouse.application.bestellungsliste.ExterneBestellungslisteService;
+import de.dhbw.foodcoop.warehouse.application.frischbestellung.FrischBestellungService;
 import de.dhbw.foodcoop.warehouse.application.lager.ProduktService;
+import de.dhbw.foodcoop.warehouse.domain.entities.FrischBestellung;
 import de.dhbw.foodcoop.warehouse.domain.entities.Produkt;
 import de.dhbw.foodcoop.warehouse.domain.values.Bestellung;
 import de.dhbw.foodcoop.warehouse.domain.values.Briefkopf;
@@ -15,17 +17,27 @@ import java.util.stream.Collectors;
 @Service
 public class ExterneBestellungslisteServiceBridge implements ExterneBestellungslisteService {
     private final ProduktService produktService;
+    private final FrischBestellungService frischBestellungSerivce;
     private final PdfService pdfService;
 
     @Autowired
-    public ExterneBestellungslisteServiceBridge(ProduktService produktService, PdfService pdfService) {
+    public ExterneBestellungslisteServiceBridge(ProduktService produktService, FrischBestellungService frischBestellungService, PdfService pdfService) {
         this.produktService = produktService;
+        this.frischBestellungSerivce = frischBestellungService;
         this.pdfService = pdfService;
     }
 
     @Override
     public byte[] createExterneListe() throws IOException {
         List<Produkt> produktList = produktService.all();
+        List<Bestellung> bestellungList = extractBestellungen(produktList);
+        return pdfService.createDocument(getBriefKopf(), bestellungList);
+    }
+
+    @Override
+    public byte[] createExterneListeGebinde() throws IOException {
+        Timestamp date;
+        List<FrischBestellung> produktList = frischBestellungSerivce.findByDateAfterAndSum(date);
         List<Bestellung> bestellungList = extractBestellungen(produktList);
         return pdfService.createDocument(getBriefKopf(), bestellungList);
     }
