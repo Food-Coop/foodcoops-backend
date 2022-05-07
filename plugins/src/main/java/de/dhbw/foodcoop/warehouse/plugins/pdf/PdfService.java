@@ -17,6 +17,7 @@ import org.vandeseer.easytable.structure.cell.TextCell;
 import java.awt.*;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -25,7 +26,7 @@ public class PdfService {
     public PdfService() {
     }
 
-    private final GebindemanagementService gebindemanagementSerivce = new GebindemanagementService();
+    private final GebindemanagementService gebindemanagementService = new GebindemanagementService();
 
     public byte[] createDocument(Briefkopf briefKopf, List<Bestellung> bestellungList) throws IOException {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
@@ -55,8 +56,8 @@ public class PdfService {
 
             RepeatedHeaderTableDrawer.builder()
                     .table(createTableWithFourHeaderRows(frischBestellungList))
-                    .startX(50)
-                    .startY(545F)
+                    .startX(20)
+                    .startY(30F)
                     .endY(50F) // note: if not set, table is drawn over the end of the page
                     .numberOfRowsToRepeat(2)
                     .build()
@@ -94,7 +95,7 @@ public class PdfService {
 
     private Table createTableWithFourHeaderRows(List<FrischBestellung> bestellungList) {
         final Table.TableBuilder tableBuilder = Table.builder()
-                .addColumnsOfWidth(100, 70, 100, 70, 100, 80);
+                .addColumnsOfWidth(100, 70, 100, 70, 100, 60, 60);
 
         buildGebindeTableWithHeader(tableBuilder);
 
@@ -103,26 +104,58 @@ public class PdfService {
         }
 
         //Liste mit Sublisten von Frischbestellungen nach der Kategorie sortiert
-        List<List<FrischBestellung>> bestellungListKategorie = gebindemanagementSerivce.splitBestellungList(bestellungList);
+        List<List<FrischBestellung>> bestellungListKategorie = gebindemanagementService.splitBestellungList(bestellungList);
         System.out.println(bestellungListKategorie);
-        for (int i = 0; i < bestellungList.size(); i ++) {
-            FrischBestellung bestellung = bestellungList.get(i);
-            String vorschlag = gebindemanagementSerivce.vorschlagBerechnen(bestellungList, i);
+        System.out.println(bestellungListKategorie.get(0).get(0).getBestellmenge());
+
+        for (int i = 0; i < bestellungListKategorie.size(); i++) {
+
+            List<FrischBestellung> kategorie = bestellungListKategorie.get(i);
+            double[][] matrix = gebindemanagementService.VorschlagBerechnen(kategorie);
+            double vgz = 0;
+            double gz = 0;
+//            tableBuilder.addRow(
+//                    Row.builder()
+//                            .add(getStandardCell("Kategorie:"))
+//                            .add(getStandardCell(""))
+//                            .add(getStandardCell(""))
+//                            .add(getStandardCell(""))
+//                            .add(getStandardCell(kategorie.get(0).getFrischbestand().getKategorie().getName()))
+//                            .add(getStandardCell(""))
+//                            .build());
+            for (int j = 0; j < kategorie.size(); j++){
+
+                FrischBestellung bestellung = kategorie.get(j);
+                String vorschlag = Double.toString(matrix[j][3] * bestellung.getFrischbestand().getGebindegroesse());
+                vgz += matrix[j][3] * bestellung.getFrischbestand().getGebindegroesse();
+                gz += bestellung.getBestellmenge();
+                tableBuilder.addRow(
+                        Row.builder()
+                                .add(getStandardCell(bestellung.getFrischbestand().getName()))
+                                .add(getStandardCell(bestellung.getBestellmenge()))
+                                .add(getStandardCell(bestellung.getFrischbestand().getGebindegroesse()))
+                                .add(getStandardCell(bestellung.getFrischbestand().getPreis()))
+                                .add(getStandardCell(bestellung.getFrischbestand().getKategorie().getName()))
+                                .add(getStandardCell(vorschlag))
+                                .add(getStandardCell(""))
+                                .build());
+            }
             tableBuilder.addRow(
                     Row.builder()
-                            .add(getStandardCell(bestellung.getFrischbestand().getName()))
-                            .add(getStandardCell(bestellung.getBestellmenge()))
-                            .add(getStandardCell(bestellung.getFrischbestand().getGebindegroesse()))
-                            .add(getStandardCell(bestellung.getFrischbestand().getPreis()))
-                            .add(getStandardCell(bestellung.getFrischbestand().getKategorie().getName()))
-                            .add(getStandardCell(vorschlag))
+                            .add(getStandardCell("Gesamt:"))
+                            .add(getStandardCell(Double.toString(gz)))
+                            .add(getStandardCell(""))
+                            .add(getStandardCell(""))
+                            .add(getStandardCell(""))
+                            .add(getStandardCell(Double.toString(vgz)))
+                            .add(getStandardCell(""))
                             .build());
-        }
 
+        }
         return tableBuilder.build();
     }
 
-    
+
 
     private Table buildTableWithHeader(Table.TableBuilder tableBuilder) {
         return tableBuilder
@@ -144,6 +177,7 @@ public class PdfService {
                         .add(createHeaderCell("Preis"))
                         .add(createHeaderCell("Kategorie"))
                         .add(createHeaderCell("Vorschlag"))
+                        .add(createHeaderCell("Korrektur"))
                         .build())
                 .build();
     }
@@ -185,7 +219,7 @@ public class PdfService {
                 .font(PDType1Font.HELVETICA_BOLD)
                 .text(text.toUpperCase())
                 .backgroundColor(Color.BLUE)
-                .padding(16f)
+                .padding(8f)
                 .textColor(Color.WHITE)
                 .borderColor(Color.WHITE)
                 .borderWidth(2f)
