@@ -10,7 +10,6 @@ import de.dhbw.foodcoop.warehouse.domain.entities.FrischBestellung;
 import de.dhbw.foodcoop.warehouse.domain.entities.Produkt;
 import de.dhbw.foodcoop.warehouse.domain.values.Bestellung;
 import de.dhbw.foodcoop.warehouse.domain.values.Briefkopf;
-import de.dhbw.foodcoop.warehouse.plugins.rest.FrischBestellungController;
 import de.dhbw.foodcoop.warehouse.plugins.rest.assembler.DeadlineModelAssembler;
 
 import org.springframework.beans.factory.annotation.Autowired;

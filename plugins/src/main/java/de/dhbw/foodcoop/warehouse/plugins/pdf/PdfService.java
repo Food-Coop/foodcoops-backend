@@ -1,5 +1,6 @@
 package de.dhbw.foodcoop.warehouse.plugins.pdf;
 
+import de.dhbw.foodcoop.warehouse.application.gebindemanagement.GebindemanagementService;
 import de.dhbw.foodcoop.warehouse.domain.entities.FrischBestellung;
 import de.dhbw.foodcoop.warehouse.domain.values.Bestellung;
 import de.dhbw.foodcoop.warehouse.domain.values.Briefkopf;
@@ -23,6 +24,8 @@ public class PdfService {
 
     public PdfService() {
     }
+
+    private final GebindemanagementService gebindemanagementSerivce = new GebindemanagementService();
 
     public byte[] createDocument(Briefkopf briefKopf, List<Bestellung> bestellungList) throws IOException {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
@@ -99,25 +102,12 @@ public class PdfService {
             return addTableIsEmptyMessage(tableBuilder);
         }
 
-        for (FrischBestellung bestellung : bestellungList) {
-            String vorschlag  = "0";
-            //Wenn es eine Gebindegroesse gibt
-            //Bestellmenge insgesamt zu klein
-            if(bestellung.getBestellmenge() < 5 && bestellung.getFrischbestand().getGebindegroesse() != 0){
-                vorschlag = "0";
-            }
-
-            //Fall dazwischen abdecken
-            // ->TO DO
-
-            //Bestellmenge groß genug, um aufzurunden
-            else if(bestellung.getBestellmenge() > bestellung.getFrischbestand().getGebindegroesse() - 5){
-                vorschlag = Integer.toString(bestellung.getFrischbestand().getGebindegroesse());
-            }
-            //Wenn es keine Gebindegroesse gibt
-            else{
-                vorschlag = Long.toString(bestellung.getBestellmenge());
-            }
+        //Liste mit Sublisten von Frischbestellungen nach der Kategorie sortiert
+        List<List<FrischBestellung>> bestellungListKategorie = gebindemanagementSerivce.splitBestellungList(bestellungList);
+        System.out.println(bestellungListKategorie);
+        for (int i = 0; i < bestellungList.size(); i ++) {
+            FrischBestellung bestellung = bestellungList.get(i);
+            String vorschlag = gebindemanagementSerivce.vorschlagBerechnen(bestellungList, i);
             tableBuilder.addRow(
                     Row.builder()
                             .add(getStandardCell(bestellung.getFrischbestand().getName()))
@@ -131,6 +121,8 @@ public class PdfService {
 
         return tableBuilder.build();
     }
+
+    
 
     private Table buildTableWithHeader(Table.TableBuilder tableBuilder) {
         return tableBuilder
