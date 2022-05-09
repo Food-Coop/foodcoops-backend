@@ -329,7 +329,7 @@ INSERT INTO frischbestellung(id, frischbestand_id, person_id, bestellmenge, datu
 VALUES ( '1434abcd-139e-469f-8090-a1bcad7c9991'
        , '2234abcd-139e-467d-80e0-a1bcad7d9993'
        , 'test_admin'
-       , 3
+       , 3.5
        , '2022-05-06 00:00:00');
 
 INSERT INTO frischbestellung(id, frischbestand_id, person_id, bestellmenge, datum)
@@ -343,7 +343,7 @@ INSERT INTO frischbestellung(id, frischbestand_id, person_id, bestellmenge, datu
 VALUES ( '1434abcd-139e-469f-8090-a1bcad7c9993'
        , '2234abcd-139e-467d-80e0-a1bcad7d9993'
        , 'test_b'
-       , 2
+       , 1.5
        , '2022-05-06 00:00:00');
 
 INSERT INTO frischbestellung(id, frischbestand_id, person_id, bestellmenge, datum)

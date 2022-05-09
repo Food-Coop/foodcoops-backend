@@ -4,20 +4,15 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import javax.security.auth.kerberos.KeyTab;
-
-import java.util.List;
-
 import de.dhbw.foodcoop.warehouse.domain.entities.FrischBestellung;
-import de.dhbw.foodcoop.warehouse.domain.exceptions.KategorieNotFoundException;
 
 public class GebindemanagementService {
     
     public String vorschlagBerechnen(List<FrischBestellung> bestellung, int i) {
         //Wenn es keine Gebindegroesse gibt
-        String vorschlag = Long.toString(bestellung.get(i).getBestellmenge());
+        String vorschlag = Float.toString(bestellung.get(i).getBestellmenge());
         if(bestellung.get(i).getBestellmenge() == bestellung.get(i).getFrischbestand().getGebindegroesse()){
-            vorschlag = Long.toString(bestellung.get(i).getBestellmenge());
+            vorschlag = Float.toString(bestellung.get(i).getBestellmenge());
         }
         //Wenn es eine Gebindegroesse gibt
         //Bestellmenge insgesamt zu klein

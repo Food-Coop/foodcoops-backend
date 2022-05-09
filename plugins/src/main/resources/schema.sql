@@ -35,7 +35,7 @@ CREATE TABLE brotbestellung(
                             id VARCHAR(50) NOT NULL,
                             brotbestand_id VARCHAR(50) references brotbestand(id),
                             person_id VARCHAR(50) NOT NULL,
-                            bestellmenge INT NOT NULL,
+                            bestellmenge FLOAT NOT NULL,
                             datum TIMESTAMP NOT NULL,
                             PRIMARY KEY(brotbestand_id, person_id, datum)
 );
@@ -55,7 +55,7 @@ CREATE TABLE frischbestellung(
                             id VARCHAR(50) NOT NULL,
                             frischbestand_id VARCHAR(50) references frischbestand(id),
                             person_id VARCHAR(50) NOT NULL,
-                            bestellmenge INT NOT NULL,
+                            bestellmenge FLOAT NOT NULL,
                             datum TIMESTAMP NOT NULL,
                             PRIMARY KEY(frischbestand_id, person_id, datum)
 );
