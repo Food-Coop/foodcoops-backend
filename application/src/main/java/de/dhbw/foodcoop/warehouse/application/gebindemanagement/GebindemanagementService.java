@@ -10,9 +10,9 @@ public class GebindemanagementService {
     
     public String vorschlagBerechnen(List<FrischBestellung> bestellung, int i) {
         //Wenn es keine Gebindegroesse gibt
-        String vorschlag = Float.toString(bestellung.get(i).getBestellmenge());
+        String vorschlag = Double.toString(bestellung.get(i).getBestellmenge());
         if(bestellung.get(i).getBestellmenge() == bestellung.get(i).getFrischbestand().getGebindegroesse()){
-            vorschlag = Float.toString(bestellung.get(i).getBestellmenge());
+            vorschlag = Double.toString(bestellung.get(i).getBestellmenge());
         }
         //Wenn es eine Gebindegroesse gibt
         //Bestellmenge insgesamt zu klein

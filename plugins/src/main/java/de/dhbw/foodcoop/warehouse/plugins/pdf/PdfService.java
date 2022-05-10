@@ -132,7 +132,7 @@ public class PdfService {
                 tableBuilder.addRow(
                         Row.builder()
                                 .add(getStandardCell(bestellung.getFrischbestand().getName()))
-                                .add(getStandardCell(bestellung.getBestellmenge()))
+                                .add(getStandardCell(Double.toString(bestellung.getBestellmenge())))
                                 .add(getStandardCell(bestellung.getFrischbestand().getGebindegroesse()))
                                 .add(getStandardCell(bestellung.getFrischbestand().getPreis()))
                                 .add(getStandardCell(bestellung.getFrischbestand().getKategorie().getName()))

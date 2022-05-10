@@ -15,21 +15,21 @@ public class FrischBestellung {
     @JoinColumn(name = "frischbestand_id")
     private FrischBestand frischbestand;
     @Column
-    private float bestellmenge;
+    private double bestellmenge;
     @Column
     private Timestamp datum;
 
-    public FrischBestellung(String id, String person_id, FrischBestand frischbestand, float f, Timestamp datum) {
+    public FrischBestellung(String id, String person_id, FrischBestand frischbestand, double bestellmenge, Timestamp datum) {
         //Validate.notBlank(id);
         //Validate.notNull(datum);
         this.id = id;
         this.person_id = person_id;
         this.frischbestand = frischbestand;
-        this.bestellmenge = f;
+        this.bestellmenge = bestellmenge;
         this.datum = datum;
     }
 
-    public FrischBestellung(String id, String person_id, FrischBestand frischbestand, float bestellmenge) {
+    public FrischBestellung(String id, String person_id, FrischBestand frischbestand, double bestellmenge) {
         //Validate.notBlank(id);
         //Validate.notNull(datum);
         this.id = id;
@@ -38,11 +38,11 @@ public class FrischBestellung {
         this.bestellmenge = bestellmenge;
     }
 
-    public FrischBestellung(String person_id, FrischBestand frischbestand, float bestellmenge, Timestamp datum) {
+    public FrischBestellung(String person_id, FrischBestand frischbestand, double bestellmenge, Timestamp datum) {
         this(UUID.randomUUID().toString(), person_id, frischbestand, bestellmenge, datum);
     }
 
-    public FrischBestellung(String person_id, FrischBestand frischbestand, float bestellmenge) {
+    public FrischBestellung(String person_id, FrischBestand frischbestand, double bestellmenge) {
         this(UUID.randomUUID().toString(), person_id, frischbestand, bestellmenge);
     }
 
@@ -74,11 +74,11 @@ public class FrischBestellung {
         this.frischbestand = frischbestand;
     }
 
-    public float getBestellmenge(){
+    public double getBestellmenge(){
         return bestellmenge;
     }
 
-    public void setBestellmenge(float bestellmenge){
+    public void setBestellmenge(double bestellmenge){
         this.bestellmenge = bestellmenge;
     }
 
