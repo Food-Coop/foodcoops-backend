@@ -74,7 +74,7 @@ public class FrischBestellungController {
     @GetMapping("/frischBestellung/datum/{person_id}")
     public CollectionModel<EntityModel<FrischBestellungRepresentation>> findByDateAfterAndPerson(@PathVariable String person_id){
         //Timestamp datum1 = getTimestampNow();
-        Timestamp datum = getTimestampOfDeadLine(-1);
+        Timestamp datum = getTimestampOfDeadLine(0);
         List<EntityModel<FrischBestellungRepresentation>> produkts = service.findByDateAfterAndPerson(datum, person_id).stream()
                 .map(toPresentation)
                 .map(assembler::toModel)
@@ -85,8 +85,8 @@ public class FrischBestellungController {
 
     @GetMapping("/frischBestellung/person/{person_id}")
     public CollectionModel<EntityModel<FrischBestellungRepresentation>> findByDateBetween(@PathVariable String person_id){
-        Timestamp datum1 = getTimestampOfDeadLine(-1);
-        Timestamp datum2 = getTimestampOfDeadLine(-2);
+        Timestamp datum1 = getTimestampOfDeadLine(0);
+        Timestamp datum2 = getTimestampOfDeadLine(-1);
         List<EntityModel<FrischBestellungRepresentation>> produkts = service.findByDateBetween(datum1, datum2, person_id).stream()
                 .map(toPresentation)
                 .map(assembler::toModel)
@@ -98,7 +98,7 @@ public class FrischBestellungController {
     @GetMapping("/frischBestellung/datum/menge")
     public CollectionModel<EntityModel<FrischBestellungRepresentation>> findByDateAfterAndSum(){//@PathVariable Timestamp datum1, @PathVariable Timestamp datum2){
         //Timestamp datum1 = getTimestampNow();
-        Timestamp datum = getTimestampOfDeadLine(-1);
+        Timestamp datum = getTimestampOfDeadLine(0);
         List<EntityModel<FrischBestellungRepresentation>> produkts = service.findByDateAfterAndSum(datum).stream()
                 .map(toPresentation)
                 .map(assembler::toModel)
@@ -114,17 +114,6 @@ public class FrischBestellungController {
                 UUID.randomUUID().toString() :
                 newFrischBestellung.getId();
         newFrischBestellung.setId(id);
-
-        // String person_id = newFrischBestellung.getPersonId();
-        // Timestamp deadline = getTimestampOfDeadLine(-1);
-        // FrischBestandRepresentation frischbestand = newFrischBestellung.getFrischbestand();
-        // List<FrischBestellung> frischBestellungTest = service.findByDateAfterAndPerson(deadline, person_id);
-        // ListIterator<FrischBestellung> iterator = frischBestellungTest.listIterator();
-        // while(iterator.hasNext()){
-        //         if(iterator.next().getFrischbestand().getId() == frischbestand.getId()){
-        //                 return ResponseEntity.badRequest().body("TEST!!!");
-        //         }
-        // }
 
         FrischBestellung frischBestellung = service.save(toFrischBestellung.apply(newFrischBestellung));
         EntityModel<FrischBestellungRepresentation> entityModel = assembler.toModel(toPresentation.apply(frischBestellung));
@@ -196,6 +185,7 @@ public class FrischBestellungController {
         calendar.set(year, month, day, time.getHours(), time.getMinutes(), time.getSeconds() );
         Date then = calendar.getTime();
         Timestamp datum = new Timestamp(then.getTime());
+        System.out.println(datum);
         return datum;
     }
 
