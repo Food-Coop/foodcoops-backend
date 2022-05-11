@@ -147,7 +147,7 @@ public class FrischBestellungController {
 
     
     public Timestamp getTimestampOfDeadLine(int n) {
-        //n = -1 => letzte Deadline, n = -2 => vorletzte Deadline, ..
+        //n = 0 => letzte Deadline, n = -1 => vorletzte Deadline, ..
         List<EntityModel<DeadlineRepresentation>> deadlines = deadlineService.last().stream()
                 .map(deadlineToPresentation)
                 .map(deadlineAssembler::toModel)
