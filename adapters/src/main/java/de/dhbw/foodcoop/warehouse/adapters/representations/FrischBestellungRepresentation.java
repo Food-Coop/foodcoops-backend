@@ -6,10 +6,10 @@ public class FrischBestellungRepresentation {
     private String id;
     private String person_id;
     private FrischBestandRepresentation frischbestand;
-    private long bestellmenge;
+    private double bestellmenge;
     private Timestamp datum;
 
-    public FrischBestellungRepresentation(String id, String person_id, FrischBestandRepresentation frischbestand, long bestellmenge, Timestamp datum) {
+    public FrischBestellungRepresentation(String id, String person_id, FrischBestandRepresentation frischbestand, double bestellmenge, Timestamp datum) {
         this.id = id;
         this.person_id = person_id;
         this.frischbestand = frischbestand;
@@ -17,7 +17,7 @@ public class FrischBestellungRepresentation {
         this.datum = datum;
     }
 
-//    public FrischBestellungRepresentation(String id, String person_id, FrischBestandRepresentation frischbestand, long bestellmenge) {
+//    public FrischBestellungRepresentation(String id, String person_id, FrischBestandRepresentation frischbestand, double bestellmenge) {
 //        this.id = id;
 //        this.person_id = person_id;
 //        this.frischbestand = frischbestand;
@@ -49,11 +49,11 @@ public class FrischBestellungRepresentation {
         this.frischbestand = frischbestand;
     }
 
-    public long getBestellmenge(){
+    public double getBestellmenge(){
         return bestellmenge;
     }
 
-    public void setBestellmenge(long bestellmenge){
+    public void setBestellmenge(double bestellmenge){
         this.bestellmenge = bestellmenge;
     }
 

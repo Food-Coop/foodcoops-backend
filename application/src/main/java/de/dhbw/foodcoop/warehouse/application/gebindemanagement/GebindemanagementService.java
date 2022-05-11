@@ -4,20 +4,15 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import javax.security.auth.kerberos.KeyTab;
-
-import java.util.List;
-
 import de.dhbw.foodcoop.warehouse.domain.entities.FrischBestellung;
-import de.dhbw.foodcoop.warehouse.domain.exceptions.KategorieNotFoundException;
 
 public class GebindemanagementService {
     
     public String vorschlagBerechnen(List<FrischBestellung> bestellung, int i) {
         //Wenn es keine Gebindegroesse gibt
-        String vorschlag = Long.toString(bestellung.get(i).getBestellmenge());
+        String vorschlag = Double.toString(bestellung.get(i).getBestellmenge());
         if(bestellung.get(i).getBestellmenge() == bestellung.get(i).getFrischbestand().getGebindegroesse()){
-            vorschlag = Long.toString(bestellung.get(i).getBestellmenge());
+            vorschlag = Double.toString(bestellung.get(i).getBestellmenge());
         }
         //Wenn es eine Gebindegroesse gibt
         //Bestellmenge insgesamt zu klein
@@ -80,19 +75,19 @@ public class GebindemanagementService {
         bestellungListKategorie.add(kategorie);
         
 
-        System.out.println("[");
+        // System.out.println("[");
   
-        for (List<FrischBestellung> list : bestellungListKategorie) {
-            System.out.print("  [");
+        // for (List<FrischBestellung> list : bestellungListKategorie) {
+        //     System.out.print("  [");
   
-            for (FrischBestellung item : list) {
-                System.out.print("  "
-                                 + item.getFrischbestand().getName()
-                                 + ", ");
-            }
-            System.out.println("], ");
-        }
-        System.out.println("]");
+        //     for (FrischBestellung item : list) {
+        //         System.out.print("  "
+        //                          + item.getFrischbestand().getName()
+        //                          + ", ");
+        //     }
+        //     System.out.println("], ");
+        // }
+        // System.out.println("]");
         
         return bestellungListKategorie;
     }
@@ -126,14 +121,14 @@ public class GebindemanagementService {
             }
             double uebrig = liste[i][1] - liste [i][0];
             //[i][3] = liste[i][0]
-            System.out.println(uebrig);
+            //System.out.println(uebrig);
             liste[i][2] = uebrig;
             gesamt += liste[i][0];
 
         }
         //sortieren nach übrigen
         Arrays.sort(liste, (a, b) -> Double.compare(a[2], b[2]));
-        System.out.println(gesamt);
+        //System.out.println(gesamt);
         double optimiert = 0;
         for (int i = 0; i < liste.length; i++){
             if(gesamt - liste[i][1] >= 0){
@@ -175,8 +170,8 @@ public class GebindemanagementService {
             }
         }
         Arrays.sort(liste, (a, b) -> Double.compare(a[4], b[4]));
-        System.out.println(optimiert);
-        System.out.println(gesamt);
+        //System.out.println(optimiert);
+        //System.out.println(gesamt);
 
 
         return liste;

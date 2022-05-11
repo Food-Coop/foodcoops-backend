@@ -15,11 +15,11 @@ public class FrischBestellung {
     @JoinColumn(name = "frischbestand_id")
     private FrischBestand frischbestand;
     @Column
-    private long bestellmenge;
+    private double bestellmenge;
     @Column
     private Timestamp datum;
 
-    public FrischBestellung(String id, String person_id, FrischBestand frischbestand, long bestellmenge, Timestamp datum) {
+    public FrischBestellung(String id, String person_id, FrischBestand frischbestand, double bestellmenge, Timestamp datum) {
         //Validate.notBlank(id);
         //Validate.notNull(datum);
         this.id = id;
@@ -29,7 +29,7 @@ public class FrischBestellung {
         this.datum = datum;
     }
 
-    public FrischBestellung(String id, String person_id, FrischBestand frischbestand, long bestellmenge) {
+    public FrischBestellung(String id, String person_id, FrischBestand frischbestand, double bestellmenge) {
         //Validate.notBlank(id);
         //Validate.notNull(datum);
         this.id = id;
@@ -38,11 +38,11 @@ public class FrischBestellung {
         this.bestellmenge = bestellmenge;
     }
 
-    public FrischBestellung(String person_id, FrischBestand frischbestand, long bestellmenge, Timestamp datum) {
+    public FrischBestellung(String person_id, FrischBestand frischbestand, double bestellmenge, Timestamp datum) {
         this(UUID.randomUUID().toString(), person_id, frischbestand, bestellmenge, datum);
     }
 
-    public FrischBestellung(String person_id, FrischBestand frischbestand, long bestellmenge) {
+    public FrischBestellung(String person_id, FrischBestand frischbestand, double bestellmenge) {
         this(UUID.randomUUID().toString(), person_id, frischbestand, bestellmenge);
     }
 
@@ -74,11 +74,11 @@ public class FrischBestellung {
         this.frischbestand = frischbestand;
     }
 
-    public long getBestellmenge(){
+    public double getBestellmenge(){
         return bestellmenge;
     }
 
-    public void setBestellmenge(long bestellmenge){
+    public void setBestellmenge(double bestellmenge){
         this.bestellmenge = bestellmenge;
     }
 
