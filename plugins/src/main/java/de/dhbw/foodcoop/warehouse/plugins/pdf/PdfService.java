@@ -17,6 +17,8 @@ import org.vandeseer.easytable.structure.cell.TextCell;
 import java.awt.*;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.List;
 
@@ -105,8 +107,8 @@ public class PdfService {
 
         //Liste mit Sublisten von Frischbestellungen nach der Kategorie sortiert
         List<List<FrischBestellung>> bestellungListKategorie = gebindemanagementService.splitBestellungList(bestellungList);
-        System.out.println(bestellungListKategorie);
-        System.out.println(bestellungListKategorie.get(0).get(0).getBestellmenge());
+        // System.out.println(bestellungListKategorie);
+        // System.out.println(bestellungListKategorie.get(0).get(0).getBestellmenge());
 
         for (int i = 0; i < bestellungListKategorie.size(); i++) {
 
@@ -114,25 +116,24 @@ public class PdfService {
             double[][] matrix = gebindemanagementService.VorschlagBerechnen(kategorie);
             double vgz = 0;
             double gz = 0;
-//            tableBuilder.addRow(
-//                    Row.builder()
-//                            .add(getStandardCell("Kategorie:"))
-//                            .add(getStandardCell(""))
-//                            .add(getStandardCell(""))
-//                            .add(getStandardCell(""))
-//                            .add(getStandardCell(kategorie.get(0).getFrischbestand().getKategorie().getName()))
-//                            .add(getStandardCell(""))
-//                            .build());
+
             for (int j = 0; j < kategorie.size(); j++){
 
                 FrischBestellung bestellung = kategorie.get(j);
                 String vorschlag = Double.toString(matrix[j][3] * bestellung.getFrischbestand().getGebindegroesse());
                 vgz += matrix[j][3] * bestellung.getFrischbestand().getGebindegroesse();
                 gz += bestellung.getBestellmenge();
+                
+                DecimalFormat df = new DecimalFormat("0.##");
+                df.setRoundingMode(RoundingMode.DOWN);
+                String bestellmengeRounded = df.format(gz);
+                bestellmengeRounded = bestellmengeRounded.replace(",", ".");
+                gz = Double.valueOf(bestellmengeRounded);
+
                 tableBuilder.addRow(
                         Row.builder()
                                 .add(getStandardCell(bestellung.getFrischbestand().getName()))
-                                .add(getStandardCell(Double.toString(bestellung.getBestellmenge())))
+                                .add(getStandardCell(Double.toString(gz)))
                                 .add(getStandardCell(bestellung.getFrischbestand().getGebindegroesse()))
                                 .add(getStandardCell(bestellung.getFrischbestand().getPreis()))
                                 .add(getStandardCell(bestellung.getFrischbestand().getKategorie().getName()))
