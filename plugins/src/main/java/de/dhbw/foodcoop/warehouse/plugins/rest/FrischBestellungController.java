@@ -185,7 +185,6 @@ public class FrischBestellungController {
         calendar.set(year, month, day, time.getHours(), time.getMinutes(), time.getSeconds() );
         Date then = calendar.getTime();
         Timestamp datum = new Timestamp(then.getTime());
-        System.out.println(datum);
         return datum;
     }
 
