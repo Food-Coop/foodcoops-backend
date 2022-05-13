@@ -44,4 +44,26 @@ public class ExterneBestellungslistenController {
                 .body(responseBody);
     }
 
+    @GetMapping(value = "/externeliste/gebinde")
+    public ResponseEntity<StreamingResponseBody> oneGebinde() throws IOException {
+        String fileName = service.getFileName();
+        byte[] pdfInBytes = service.createExterneListeGebinde();
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(pdfInBytes);
+        StreamingResponseBody responseBody = outputStream -> {
+
+            int numberOfBytesToWrite;
+            byte[] data = new byte[1024];
+            while ((numberOfBytesToWrite = inputStream.read(data, 0, data.length)) != -1) {
+                outputStream.write(data, 0, numberOfBytesToWrite);
+            }
+
+            inputStream.close();
+        };
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + fileName + ".pdf")
+                .contentType(MediaType.APPLICATION_PDF)
+                .body(responseBody);
+    }
+
 }

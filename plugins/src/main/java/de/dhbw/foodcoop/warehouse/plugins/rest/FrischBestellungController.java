@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
+import java.sql.Time;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
@@ -17,13 +18,17 @@ import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import de.dhbw.foodcoop.warehouse.adapters.representations.DeadlineRepresentation;
 import de.dhbw.foodcoop.warehouse.adapters.representations.FrischBestellungRepresentation;
+import de.dhbw.foodcoop.warehouse.adapters.representations.mappers.DeadlineToRepresentationMapper;
 import de.dhbw.foodcoop.warehouse.adapters.representations.mappers.FrischBestellungToRepresentationMapper;
 import de.dhbw.foodcoop.warehouse.adapters.representations.mappers.RepresentationToFrischBestellungMapper;
+import de.dhbw.foodcoop.warehouse.application.deadline.DeadlineService;
 import de.dhbw.foodcoop.warehouse.application.frischbestellung.FrischBestellungService;
 import de.dhbw.foodcoop.warehouse.domain.entities.FrischBestellung;
 import de.dhbw.foodcoop.warehouse.domain.exceptions.FrischBestellungInUseException;
 import de.dhbw.foodcoop.warehouse.domain.exceptions.FrischBestellungNotFoundException;
+import de.dhbw.foodcoop.warehouse.plugins.rest.assembler.DeadlineModelAssembler;
 import de.dhbw.foodcoop.warehouse.plugins.rest.assembler.FrischBestellungModelAssembler;
 
 @RestController
@@ -32,13 +37,19 @@ public class FrischBestellungController {
     private final RepresentationToFrischBestellungMapper toFrischBestellung;
     private final FrischBestellungToRepresentationMapper toPresentation;
     private final FrischBestellungModelAssembler assembler;
+    private final DeadlineService deadlineService;
+    private final DeadlineToRepresentationMapper deadlineToPresentation;
+    private final DeadlineModelAssembler deadlineAssembler;
 
     @Autowired
-    public FrischBestellungController(FrischBestellungService service, RepresentationToFrischBestellungMapper toFrischBestellung, FrischBestellungToRepresentationMapper toPresentation, FrischBestellungModelAssembler assembler) {
+    public FrischBestellungController(FrischBestellungService service, RepresentationToFrischBestellungMapper toFrischBestellung, FrischBestellungToRepresentationMapper toPresentation, FrischBestellungModelAssembler assembler, DeadlineService deadlineService, DeadlineToRepresentationMapper deadlineToPresentation, DeadlineModelAssembler deadlineAssembler) {
         this.service = service;
         this.toFrischBestellung = toFrischBestellung;
         this.toPresentation = toPresentation;
         this.assembler = assembler;
+        this.deadlineService = deadlineService;
+        this.deadlineToPresentation = deadlineToPresentation;
+        this.deadlineAssembler = deadlineAssembler;
     }
 
     @GetMapping("/frischBestellung/{id}")
@@ -103,17 +114,6 @@ public class FrischBestellungController {
                 newFrischBestellung.getId();
         newFrischBestellung.setId(id);
 
-        // String person_id = newFrischBestellung.getPersonId();
-        // Timestamp deadline = getTimestampOfDeadLine(-1);
-        // FrischBestandRepresentation frischbestand = newFrischBestellung.getFrischbestand();
-        // List<FrischBestellung> frischBestellungTest = service.findByDateAfterAndPerson(deadline, person_id);
-        // ListIterator<FrischBestellung> iterator = frischBestellungTest.listIterator();
-        // while(iterator.hasNext()){
-        //         if(iterator.next().getFrischbestand().getId() == frischbestand.getId()){
-        //                 return ResponseEntity.badRequest().body("TEST!!!");
-        //         }
-        // }
-
         FrischBestellung frischBestellung = service.save(toFrischBestellung.apply(newFrischBestellung));
         EntityModel<FrischBestellungRepresentation> entityModel = assembler.toModel(toPresentation.apply(frischBestellung));
         return ResponseEntity
@@ -145,19 +145,93 @@ public class FrischBestellungController {
     }
 
     
-    private Timestamp getTimestampOfDeadLine(int n) {
-        //n = -1 => letzte Deadline, n = -2 => vorletzte Deadline, ...
-        Calendar calendar2 = Calendar.getInstance();
-        calendar2.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
-        calendar2.add(Calendar.WEEK_OF_MONTH, n);
-        int year = calendar2.get(Calendar.YEAR);
-        int month = calendar2.get(Calendar.MONTH);
-        int day = calendar2.get(Calendar.DATE);
-        calendar2.set(year, month, day, 0, 0, 0);
-        Date then = calendar2.getTime();
-        Timestamp datum2 = new Timestamp(then.getTime());
-        return datum2;
-    }
+    public Timestamp getTimestampOfDeadLine(int n) {
+        //n = 0 => letzte Deadline, n = -1 => vorletzte Deadline, ..
+        List<EntityModel<DeadlineRepresentation>> deadlines = deadlineService.last().stream()
+                .map(deadlineToPresentation)
+                .map(deadlineAssembler::toModel)
+                .collect(Collectors.toList());
+        List<EntityModel<DeadlineRepresentation>> lastDeadline = deadlines.subList(deadlines.size()-1, deadlines.size());
+        Calendar calendar = Calendar.getInstance();
+        switch(lastDeadline.get(0).getContent().getWeekday()){
+                case "Montag":
+                        calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+                        break;
+                case "Dienstag":
+                        calendar.set(Calendar.DAY_OF_WEEK, Calendar.TUESDAY);
+                        break;
+                case "Mittwoch":
+                        calendar.set(Calendar.DAY_OF_WEEK, Calendar.WEDNESDAY);
+                        break;
+                case "Donnerstag":
+                        calendar.set(Calendar.DAY_OF_WEEK, Calendar.THURSDAY);
+                        break;
+                case "Freitag":
+                        calendar.set(Calendar.DAY_OF_WEEK, Calendar.FRIDAY);
+                        break;
+                case "Samstag":
+                        calendar.set(Calendar.DAY_OF_WEEK, Calendar.SATURDAY);
+                        break;
+                case "Sonntag":
+                        calendar.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
+                        break;
+        }
+        
 
+        Calendar calendarNow = Calendar.getInstance();
+        int yearNow = calendarNow.get(Calendar.YEAR);
+        int monthNow = calendarNow.get(Calendar.MONTH);
+        int dayNow = calendarNow.get(Calendar.DATE);
+        int hourNow = calendarNow.get(Calendar.HOUR_OF_DAY);
+        int minuteNow = calendarNow.get(Calendar.MINUTE);
+        int secondNow = calendarNow.get(Calendar.SECOND);
+        calendarNow.set(yearNow, monthNow, dayNow, hourNow, minuteNow, secondNow);
+       
+        Time timeNow = new Time(0L);
+        timeNow.setTime(new java.util.Date().getTime());
+        if(calendar.get(Calendar.WEEK_OF_YEAR) == calendarNow.get(Calendar.WEEK_OF_YEAR) && calendar.get(Calendar.DAY_OF_WEEK) <= calendarNow.get(Calendar.DAY_OF_WEEK) && lastDeadline.get(0).getContent().getTime().getHours() <= timeNow.getHours()){
+               System.out.println(lastDeadline.get(0).getContent().getTime().getHours() + " + " + timeNow.getHours());
+               System.out.println(lastDeadline.get(0).getContent().getTime().getMinutes() + " + " + timeNow.getMinutes());
+                if ( calendar.get(Calendar.DAY_OF_WEEK) == calendarNow.get(Calendar.DAY_OF_WEEK) && lastDeadline.get(0).getContent().getTime().getHours() <= timeNow.getHours()){
+                        if(lastDeadline.get(0).getContent().getTime().getHours() == timeNow.getHours() && lastDeadline.get(0).getContent().getTime().getMinutes() <= timeNow.getMinutes()){
+                                if(lastDeadline.get(0).getContent().getTime().getMinutes() == timeNow.getMinutes() && lastDeadline.get(0).getContent().getTime().getSeconds() <= timeNow.getSeconds()){
+                                        System.out.println("True + True + True");
+                                        n += 1;
+                                }
+                                else {
+                                        System.out.println("True + True + False");
+                                        //n += 1;
+                                }
+                        }
+                        else{
+                                System.out.println("True + False + False");
+                                //n += 1;
+                        }
+                }
+                else{
+                        System.out.println("False + False");
+                        n += 1;
+                }
+        }
+        else if ( calendar.get(Calendar.DAY_OF_WEEK) == calendarNow.get(Calendar.DAY_OF_WEEK) ){
+        }
+        else if ( calendar.get(Calendar.DAY_OF_WEEK) == 1 && calendarNow.get(Calendar.DAY_OF_WEEK) > 1 ){
+        }
+        else if ( calendar.get(Calendar.WEEK_OF_YEAR) == calendarNow.get(Calendar.WEEK_OF_YEAR) && calendar.get(Calendar.DAY_OF_WEEK) > calendarNow.get(Calendar.DAY_OF_WEEK) ){
+        }
+        else{
+                n += 1;
+        }
+        calendar.add(Calendar.WEEK_OF_MONTH, n);
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DATE);
+        Time time = lastDeadline.get(0).getContent().getTime();
+        calendar.set(year, month, day, time.getHours(), time.getMinutes(), time.getSeconds() );
+        Date then = calendar.getTime();
+        Timestamp datum = new Timestamp(then.getTime());
+        System.out.println("Deadline: " + datum + " " + n);
+        return datum;
+    }
 }
 

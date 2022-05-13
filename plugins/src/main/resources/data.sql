@@ -8,10 +8,10 @@ INSERT INTO einheit (id, name)
 VALUES ('50ac5ca8-0a29-45fe-88cc-d2070fb90303', 'Liter');
 
 INSERT INTO kategorie (id, name)
-VALUES ('6abeec3f-fdc4-49b1-b64e-e005b45051cb', 'Gemuese');
+VALUES ('6abeec3f-fdc4-49b1-b64e-e005b45051cb', 'Salat');
 
 INSERT INTO kategorie (id, name)
-VALUES ('87c9cc6b-735d-4f48-badb-1d3fe39871dd', 'Teigwaren');
+VALUES ('87c9cc6b-735d-4f48-badb-1d3fe39871dd', 'Kartoffeln');
 
 INSERT INTO lagerprodukt (id, name, kategorie_id, einheit_id, ist_lagerbestand, soll_lagerbestand)
 VALUES ( '30724b6f-01ec-4c47-aba7-1a5f2bc5f833'
@@ -46,8 +46,8 @@ VALUES ( '35186fbe-6f46-4824-8d91-c80b7ad50f5d'
        , 9);
 
 INSERT INTO frischbestand(id, name, verfuegbarkeit, herkunftsland, gebindegroesse, einheit_id, kategorie_id, preis)
-VALUES ( '1234abcd-139e-466c-80e0-a1bcad7c9996'
-       , 'Lauch'
+VALUES ( '1234abcd-139e-466c-80e0-a1bcad7d9991'
+       , 'Eisbergsalat'
        , true
        , 'DE'
        , 20
@@ -56,8 +56,8 @@ VALUES ( '1234abcd-139e-466c-80e0-a1bcad7c9996'
        , 1.5);
 
 INSERT INTO frischbestand(id, name, verfuegbarkeit, herkunftsland, gebindegroesse, einheit_id, kategorie_id, preis)
-VALUES ( '1234abcd-139e-468e-80e0-a1bcad7c9996'
-       , 'Blumenkohl'
+VALUES ( '1234abcd-139e-468e-80e0-a1bcad7d9992'
+       , 'Kopfsalat'
        , true
        , 'DE'
        , 12
@@ -66,45 +66,299 @@ VALUES ( '1234abcd-139e-468e-80e0-a1bcad7c9996'
        , 1.0);
 
 INSERT INTO frischbestand(id, name, verfuegbarkeit, herkunftsland, gebindegroesse, einheit_id, kategorie_id, preis)
-VALUES ( '1234abcd-139e-467d-80e0-a1bcad7c9996'
-       , 'Paprika'
+VALUES ( '1234abcd-139e-467d-80e0-a1bcad7d9993'
+       , 'Romanasalat'
        , true
        , 'ES'
-       , 20
-       , 'd20b6519-bc2d-4e9f-b3e7-9bebc995f110'
+       , 15
+       , 'b9db54bc-8c54-4163-bc25-1ed10b75edea'
        , '6abeec3f-fdc4-49b1-b64e-e005b45051cb'
        , 3.0);
 
 INSERT INTO frischbestand(id, name, verfuegbarkeit, herkunftsland, gebindegroesse, einheit_id, kategorie_id, preis)
-VALUES ( '1234abcd-139e-469f-80e0-a1bcad7c9996'
-       , 'Tomate'
-       , false
+VALUES ( '1234abcd-139e-469f-80e0-a1bcad7d9994'
+       , 'Endiviensalat'
+       , true
        , 'IT'
        , 10
-       , 'd20b6519-bc2d-4e9f-b3e7-9bebc995f110'
+       , 'b9db54bc-8c54-4163-bc25-1ed10b75edea'
        , '6abeec3f-fdc4-49b1-b64e-e005b45051cb'
        , 2.5);
 
+INSERT INTO frischbestand(id, name, verfuegbarkeit, herkunftsland, gebindegroesse, einheit_id, kategorie_id, preis)
+VALUES ( '1234abcd-139e-469f-8090-a1bcad7d9995'
+       , 'Eichblattsalat'
+       , true
+       , 'IT'
+       , 18
+       , 'b9db54bc-8c54-4163-bc25-1ed10b75edea'
+       , '6abeec3f-fdc4-49b1-b64e-e005b45051cb'
+       , 2.5);
+
+INSERT INTO frischbestand(id, name, verfuegbarkeit, herkunftsland, gebindegroesse, einheit_id, kategorie_id, preis)
+VALUES ( '2234abcd-139e-467d-80e0-a1bcad7d9993'
+       , 'Kartoffel Linda'
+       , true
+       , 'DE'
+       , 15
+       , 'd20b6519-bc2d-4e9f-b3e7-9bebc995f110'
+       , '87c9cc6b-735d-4f48-badb-1d3fe39871dd'
+       , 3.0);
+
+INSERT INTO frischbestand(id, name, verfuegbarkeit, herkunftsland, gebindegroesse, einheit_id, kategorie_id, preis)
+VALUES ( '2234abcd-139e-467d-80e0-a1bcad7d9994'
+       , 'Kartoffel Annabelle'
+       , true
+       , 'DE'
+       , 10
+       , 'd20b6519-bc2d-4e9f-b3e7-9bebc995f110'
+       , '87c9cc6b-735d-4f48-badb-1d3fe39871dd'
+       , 3.0);
+
 INSERT INTO frischbestellung(id, frischbestand_id, person_id, bestellmenge, datum)
-VALUES ( '2049vbow-138e-467d-80e0-r3slwp9d2390'
-       , '1234abcd-139e-467d-80e0-a1bcad7c9996'
+VALUES ( '1234abcd-139e-469f-8090-a1bcad7c9991'
+       , '1234abcd-139e-469f-8090-a1bcad7d9995'
        , 'test_admin'
        , 3
-       , '2022-04-12 00:00:00');
+       , '2022-05-11 11:23:45');
 
 INSERT INTO frischbestellung(id, frischbestand_id, person_id, bestellmenge, datum)
-VALUES ( '2049vbow-139e-467d-80e0-r3slwp9d2390'
-       , '1234abcd-139e-468e-80e0-a1bcad7c9996'
-       , 'test_admin'
+VALUES ( '1234abcd-139e-469f-8090-a1bcad7c9992'
+       , '1234abcd-139e-469f-8090-a1bcad7d9995'
+       , 'test_a'
        , 5
-       , '2022-04-12 00:00:00');
+       , '2022-05-11 11:23:45');
 
 INSERT INTO frischbestellung(id, frischbestand_id, person_id, bestellmenge, datum)
-VALUES ( '2049vbow-140e-467d-80e0-r3slwp9d2390'
-       , '1234abcd-139e-466c-80e0-a1bcad7c9996'
+VALUES ( '1234abcd-139e-469f-8090-a1bcad7c9993'
+       , '1234abcd-139e-469f-8090-a1bcad7d9995'
+       , 'test_b'
+       , 2
+       , '2022-05-11 11:23:45');
+
+INSERT INTO frischbestellung(id, frischbestand_id, person_id, bestellmenge, datum)
+VALUES ( '1234abcd-139e-469f-8090-a1bcad7c9994'
+       , '1234abcd-139e-469f-8090-a1bcad7d9995'
+       , 'test_c'
+       , 1
+       , '2022-05-11 11:23:45');
+
+INSERT INTO frischbestellung(id, frischbestand_id, person_id, bestellmenge, datum)
+VALUES ( '1234abcd-139e-469f-8090-a1bcad7c9995'
+       , '1234abcd-139e-469f-8090-a1bcad7d9995'
+       , 'test_d'
+       , 4
+       , '2022-05-11 11:23:45');
+
+INSERT INTO frischbestellung(id, frischbestand_id, person_id, bestellmenge, datum)
+VALUES ( '1234abcd-139e-469f-80e0-a1bcad7c9996'
+       , '1234abcd-139e-469f-80e0-a1bcad7d9994'
+       , 'test_admin'
+       , 1
+       , '2022-05-11 11:23:45');
+
+INSERT INTO frischbestellung(id, frischbestand_id, person_id, bestellmenge, datum)
+VALUES ( '1234abcd-139e-469f-80e0-a1bcad7c9997'
+       , '1234abcd-139e-469f-80e0-a1bcad7d9994'
+       , 'test_a'
+       , 5
+       , '2022-05-11 11:23:45');
+
+INSERT INTO frischbestellung(id, frischbestand_id, person_id, bestellmenge, datum)
+VALUES ( '1234abcd-139e-469f-80e0-a1bcad7c9998'
+       , '1234abcd-139e-469f-80e0-a1bcad7d9994'
+       , 'test_b'
+       , 2
+       , '2022-05-11 11:23:45');
+
+INSERT INTO frischbestellung(id, frischbestand_id, person_id, bestellmenge, datum)
+VALUES ( '1234abcd-139e-469f-80e0-a1bcad7c9999'
+       , '1234abcd-139e-469f-80e0-a1bcad7d9994'
+       , 'test_c'
+       , 1
+       , '2022-05-11 11:23:45');
+
+INSERT INTO frischbestellung(id, frischbestand_id, person_id, bestellmenge, datum)
+VALUES ( '1234abcd-139e-469f-80e0-a1bcad7c9916'
+       , '1234abcd-139e-469f-80e0-a1bcad7d9994'
+       , 'test_d'
+       , 2
+       , '2022-05-11 11:23:45');
+
+INSERT INTO frischbestellung(id, frischbestand_id, person_id, bestellmenge, datum)
+VALUES ( '1234abcd-139e-467d-80e0-a1bcad7c9926'
+       , '1234abcd-139e-467d-80e0-a1bcad7d9993'
+       , 'test_admin'
+       , 2
+       , '2022-05-11 11:23:45');
+
+INSERT INTO frischbestellung(id, frischbestand_id, person_id, bestellmenge, datum)
+VALUES ( '1234abcd-139e-467d-80e0-a1bcad7c9936'
+       , '1234abcd-139e-467d-80e0-a1bcad7d9993'
+       , 'test_a'
+       , 3
+       , '2022-05-11 11:23:45');
+
+INSERT INTO frischbestellung(id, frischbestand_id, person_id, bestellmenge, datum)
+VALUES ( '1234abcd-139e-467d-80e0-a1bcad7c9946'
+       , '1234abcd-139e-467d-80e0-a1bcad7d9993'
+       , 'test_b'
+       , 2
+       , '2022-05-11 11:23:45');
+
+INSERT INTO frischbestellung(id, frischbestand_id, person_id, bestellmenge, datum)
+VALUES ( '1234abcd-139e-467d-80e0-a1bcad7c9956'
+       , '1234abcd-139e-467d-80e0-a1bcad7d9993'
+       , 'test_c'
+       , 1
+       , '2022-05-11 11:23:45');
+
+INSERT INTO frischbestellung(id, frischbestand_id, person_id, bestellmenge, datum)
+VALUES ( '1234abcd-139e-467d-80e0-a1bcad7c9966'
+       , '1234abcd-139e-467d-80e0-a1bcad7d9993'
+       , 'test_d'
+       , 1
+       , '2022-05-11 11:23:45');
+
+INSERT INTO frischbestellung(id, frischbestand_id, person_id, bestellmenge, datum)
+VALUES ( '1234abcd-139e-468e-80e0-a1bcad7c9976'
+       , '1234abcd-139e-468e-80e0-a1bcad7d9992'
        , 'test_admin'
        , 4
-       , '2022-04-12 00:00:00');
+       , '2022-05-11 11:23:45');
+
+INSERT INTO frischbestellung(id, frischbestand_id, person_id, bestellmenge, datum)
+VALUES ( '1234abcd-139e-468e-80e0-a1bcad7c9986'
+       , '1234abcd-139e-468e-80e0-a1bcad7d9992'
+       , 'test_a'
+       , 7
+       , '2022-05-11 11:23:45');
+
+INSERT INTO frischbestellung(id, frischbestand_id, person_id, bestellmenge, datum)
+VALUES ( '1234abcd-139e-468e-80e0-a1bcad7c9196'
+       , '1234abcd-139e-468e-80e0-a1bcad7d9992'
+       , 'test_b'
+       , 3
+       , '2022-05-11 11:23:45');
+
+INSERT INTO frischbestellung(id, frischbestand_id, person_id, bestellmenge, datum)
+VALUES ( '1234abcd-139e-468e-80e0-a1bcad7c9296'
+       , '1234abcd-139e-468e-80e0-a1bcad7d9992'
+       , 'test_c'
+       , 5
+       , '2022-05-11 11:23:45');
+
+INSERT INTO frischbestellung(id, frischbestand_id, person_id, bestellmenge, datum)
+VALUES ( '1234abcd-139e-468e-80e0-a1bcad7c9396'
+       , '1234abcd-139e-468e-80e0-a1bcad7d9992'
+       , 'test_d'
+       , 4
+       , '2022-05-11 11:23:45');
+
+INSERT INTO frischbestellung(id, frischbestand_id, person_id, bestellmenge, datum)
+VALUES ( '1234abcd-139e-466c-80e0-a1bcad7c9496'
+       , '1234abcd-139e-466c-80e0-a1bcad7d9991'
+       , 'test_admin'
+       , 3
+       , '2022-05-11 11:23:45');
+
+INSERT INTO frischbestellung(id, frischbestand_id, person_id, bestellmenge, datum)
+VALUES ( '1234abcd-139e-466c-80e0-a1bcad7c5996'
+       , '1234abcd-139e-466c-80e0-a1bcad7d9991'
+       , 'test_a'
+       , 5
+       , '2022-05-11 11:23:45');
+
+INSERT INTO frischbestellung(id, frischbestand_id, person_id, bestellmenge, datum)
+VALUES ( '1234abcd-139e-466c-80e0-a1bcad7c9696'
+       , '1234abcd-139e-466c-80e0-a1bcad7d9991'
+       , 'test_b'
+       , 2
+       , '2022-05-11 11:23:45');
+
+INSERT INTO frischbestellung(id, frischbestand_id, person_id, bestellmenge, datum)
+VALUES ( '1234abcd-139e-466c-80e0-a1bcad7c9796'
+       , '1234abcd-139e-466c-80e0-a1bcad7d9991'
+       , 'test_c'
+       , 1
+       , '2022-05-11 11:23:45');
+
+INSERT INTO frischbestellung(id, frischbestand_id, person_id, bestellmenge, datum)
+VALUES ( '1234abcd-139e-466c-80e0-a1bcad7c9896'
+       , '1234abcd-139e-466c-80e0-a1bcad7d9991'
+       , 'test_d'
+       , 4
+       , '2022-05-11 11:23:45');
+
+INSERT INTO frischbestellung(id, frischbestand_id, person_id, bestellmenge, datum)
+VALUES ( '1334abcd-139e-469f-8090-a1bcad7c9991'
+       , '2234abcd-139e-467d-80e0-a1bcad7d9994'
+       , 'test_admin'
+       , 3
+       , '2022-05-11 11:23:45');
+
+INSERT INTO frischbestellung(id, frischbestand_id, person_id, bestellmenge, datum)
+VALUES ( '1334abcd-139e-469f-8090-a1bcad7c9992'
+       , '2234abcd-139e-467d-80e0-a1bcad7d9994'
+       , 'test_a'
+       , 5
+       , '2022-05-11 11:23:45');
+
+INSERT INTO frischbestellung(id, frischbestand_id, person_id, bestellmenge, datum)
+VALUES ( '1334abcd-139e-469f-8090-a1bcad7c9993'
+       , '2234abcd-139e-467d-80e0-a1bcad7d9994'
+       , 'test_b'
+       , 2
+       , '2022-05-11 11:23:45');
+
+INSERT INTO frischbestellung(id, frischbestand_id, person_id, bestellmenge, datum)
+VALUES ( '1334abcd-139e-469f-8090-a1bcad7c9994'
+       , '2234abcd-139e-467d-80e0-a1bcad7d9994'
+       , 'test_c'
+       , 1
+       , '2022-05-11 11:23:45');
+
+INSERT INTO frischbestellung(id, frischbestand_id, person_id, bestellmenge, datum)
+VALUES ( '1334abcd-139e-469f-8090-a1bcad7c9995'
+       , '2234abcd-139e-467d-80e0-a1bcad7d9994'
+       , 'test_d'
+       , 4
+       , '2022-05-11 11:23:45');
+
+INSERT INTO frischbestellung(id, frischbestand_id, person_id, bestellmenge, datum)
+VALUES ( '1434abcd-139e-469f-8090-a1bcad7c9991'
+       , '2234abcd-139e-467d-80e0-a1bcad7d9993'
+       , 'test_admin'
+       , 3.5
+       , '2022-05-11 11:23:45');
+
+INSERT INTO frischbestellung(id, frischbestand_id, person_id, bestellmenge, datum)
+VALUES ( '1434abcd-139e-469f-8090-a1bcad7c9992'
+       , '2234abcd-139e-467d-80e0-a1bcad7d9993'
+       , 'test_a'
+       , 5
+       , '2022-05-11 11:23:45');
+
+INSERT INTO frischbestellung(id, frischbestand_id, person_id, bestellmenge, datum)
+VALUES ( '1434abcd-139e-469f-8090-a1bcad7c9993'
+       , '2234abcd-139e-467d-80e0-a1bcad7d9993'
+       , 'test_b'
+       , 1.5
+       , '2022-05-11 11:23:45');
+
+INSERT INTO frischbestellung(id, frischbestand_id, person_id, bestellmenge, datum)
+VALUES ( '1434abcd-139e-469f-8090-a1bcad7c9994'
+       , '2234abcd-139e-467d-80e0-a1bcad7d9993'
+       , 'test_c'
+       , 1
+       , '2022-05-11 11:23:45');
+
+INSERT INTO frischbestellung(id, frischbestand_id, person_id, bestellmenge, datum)
+VALUES ( '1434abcd-139e-469f-8090-a1bcad7c9995'
+       , '2234abcd-139e-467d-80e0-a1bcad7d9993'
+       , 'test_d'
+       , 4
+       , '2022-05-11 11:23:45');
 
 INSERT INTO brotbestand(id, name, verfuegbarkeit, gewicht, preis)
 VALUES ( '2370sfng-140e-467d-80e0-r3slwp9d2390'
@@ -147,14 +401,14 @@ VALUES ( '28390wer-12af-490z-82i9-as234jkl231a'
        , '11589rqw-124q-466c-80e0-a1bcad7c9996'
        , 3
        , '2022-03-08 00:00:00');
-       
+
 INSERT INTO deadline(id, datum, weekday, time)
 VALUES ('28qwe2wer-123f-413z-q2i9-asdfb2kl231a'
-        , '2022-05-06 10:00:00'
-        , 'Freitag'
-        , '10:00:00');
+       , '2022-05-12 10:00:00'
+       , 'Freitag'
+       , '10:00:00');
 INSERT INTO deadline(id, datum, weekday, time)
 VALUES ('28qwe2wer-234g-413z-q2i9-asdfb2kl231a'
-        , '2022-05-06 10:00:01'
-        , 'Sonntag'
-        , '10:00:00');
+       , '2022-05-12 10:00:01'
+       , 'Sonntag'
+       , '10:00:00');
