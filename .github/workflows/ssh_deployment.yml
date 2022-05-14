@@ -59,4 +59,3 @@ jobs:
             user: ${{ secrets.SSH_USER }}
             key: ${{ secrets.SSH_PRIVATE_KEY}}
             port: ${{ secrets.SSH_PORT }}
-            pass: ${{ secrets.SSH_SUDOPW }}
