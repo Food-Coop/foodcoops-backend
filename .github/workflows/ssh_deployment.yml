@@ -52,6 +52,8 @@ jobs:
         with:
             command: |
               cd /volume1/FoodCoop_Share/backend-installation/
+              echo "${{ secrets.SSH_SUDOPW }}" | sudo -S docker ps -q --filter ancestor=foodcoop/backend | xargs sudo docker stop
+              echo "${{ secrets.SSH_SUDOPW }}" | sudo -S docker rmi -f foodcoop/backend
               echo "${{ secrets.SSH_SUDOPW }}" | sudo -S docker build -t foodcoop/backend .
               echo "${{ secrets.SSH_SUDOPW }}" | sudo -S docker run -d -p 8080:8080 foodcoop/backend
             host: ${{ secrets.SSH_HOST }}
