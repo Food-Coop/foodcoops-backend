@@ -57,4 +57,5 @@ jobs:
               echo '${{ secrets.SSH_SUDOPW }}' | sudo -S docker run -p 8080:8080 foodcoop/backend
             host: ${{ secrets.SSH_HOST }}
             user: ${{ secrets.SSH_USER }}
+            port: ${{ secrets.SSH_PORT }}
             key: ${{ secrets.PRIVATE_KEY}}
