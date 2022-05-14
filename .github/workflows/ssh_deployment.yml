@@ -26,7 +26,6 @@ jobs:
         run: |
             echo $DEV_ENV_FILE >> plugins/src/main/resources/application.properties
             cat plugins/src/main/resources/application.properties
-        shell: bash
         env:
             DEV_ENV_FILE : ${{secrets.APPLICATION_PROPERTIES}}
       - name: clean install
@@ -53,8 +52,8 @@ jobs:
         with:
             command: |
               cd /volume1/FoodCoop_Share/backend-installation/
-              sudo docker build -t foodcoop/backend .
-              sudo docker run -p 8080:8080 foodcoop/backend
+              echo ${{ secrets.SSH_SUDOPW }} | sudo -S docker build -t foodcoop/backend .
+              echo ${{ secrets.SSH_SUDOPW }} | sudo -S docker run -p 8080:8080 foodcoop/backend
             host: ${{ secrets.SSH_HOST }}
             user: ${{ secrets.SSH_USER }}
             key: ${{ secrets.SSH_PRIVATE_KEY}}
