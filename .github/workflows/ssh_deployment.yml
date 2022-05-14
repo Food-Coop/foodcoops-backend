@@ -24,12 +24,11 @@ jobs:
           
       - name: Create Application.Properties
         run: |
-            ls
-            cd plugins/src/main/resources/
-            ls
-            touch application.properties
-            ls
-            echo ${{ secrets.APPLICATION_PROPERTIES }} >> application.properties  
+            echo $DEV_ENV_FILE >> plugins/src/main/resources/application.properties
+            cat plugins/src/main/resources/application.properties
+        shell: bash
+        env:
+            DEV_ENV_FILE : ${{secrets.APPLICATION_PROPERTIES}}
       - name: clean install
         run: mvn clean install
       - name: Build with Maven
