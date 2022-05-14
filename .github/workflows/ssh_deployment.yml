@@ -52,10 +52,11 @@ jobs:
         uses: fifsky/ssh-action@master
         with:
             command: |
-              cd /volume1/FoodCoop_Share/backend-installation
+              cd /volume1/FoodCoop_Share/backend-installation/
               sudo docker build -t foodcoop/backend .
               sudo docker run -p 8080:8080 foodcoop/backend
             host: ${{ secrets.SSH_HOST }}
             user: ${{ secrets.SSH_USER }}
+            key: ${{ secrets.SSH_PRIVATE_KEY}}
             port: ${{ secrets.SSH_PORT }}
             pass: ${{ secrets.SSH_SUDOPW }}
