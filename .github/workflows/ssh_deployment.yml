@@ -26,7 +26,9 @@ jobs:
         run: |
             ls
             cd plugins/src/main/resources/
+            ls
             touch application.properties
+            ls
             echo ${{ secrets.APPLICATION_PROPERTIES }} >> application.properties  
       - name: clean install
         run: mvn clean install
