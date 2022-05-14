@@ -47,12 +47,22 @@ jobs:
         run: rsync -avz -e "ssh -p ${{ secrets.SSH_PORT }}" ./plugins/target/plugins-1.0-SNAPSHOT-exec.jar ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/volume1/FoodCoop_Share/backend-installation/
       - name: Deploy Dockerfile with rsync
         run: rsync -avz -e "ssh -p ${{ secrets.SSH_PORT }}" ./Dockerfile ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/volume1/FoodCoop_Share/backend-installation/
-      - name: ls -a via ssh
+      - name: stop old conatiner
         uses: fifsky/ssh-action@master
         with:
             command: |
               cd /volume1/FoodCoop_Share/backend-installation/
               echo "${{ secrets.SSH_SUDOPW }}" | sudo -S docker ps -q --filter ancestor=foodcoop/backend | xargs sudo docker stop
+              sleep 15
+            host: ${{ secrets.SSH_HOST }}
+            user: ${{ secrets.SSH_USER }}
+            key: ${{ secrets.SSH_PRIVATE_KEY}}
+            port: ${{ secrets.SSH_PORT }}
+      - name: Override container
+        uses: fifsky/ssh-action@master
+        with:
+            command: |
+              cd /volume1/FoodCoop_Share/backend-installation/
               sleep 15
               echo "${{ secrets.SSH_SUDOPW }}" | sudo -S docker rmi -f foodcoop/backend
               echo "${{ secrets.SSH_SUDOPW }}" | sudo -S docker build -t foodcoop/backend .
