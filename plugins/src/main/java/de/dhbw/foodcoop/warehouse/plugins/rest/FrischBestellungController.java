@@ -222,6 +222,11 @@ public class FrischBestellungController {
         else{
                 n += 1;
         }
+        if(calendarNow.get(Calendar.DAY_OF_WEEK) == 1) {
+                if(calendar.get(Calendar.DAY_OF_WEEK) != 1 || lastDeadline.get(0).getContent().getTime().getHours() < timeNow.getHours()){
+                        n += 1;
+                }
+        }
         calendar.add(Calendar.WEEK_OF_MONTH, n);
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH);
