@@ -1,21 +1,25 @@
 # Food-Coop-Warehouse
 
 Food-coop warehouse management software.
+
+
+
+
+
 ## Installing, starting and stopping the application
 
 Food-coop warehouse comes prepackaged with its maven wrapper. Go to the project directory.<br>
 Building the app:
-```
-mvnw clean install
-```
+
+### `mvnw clean install`
+
 Starting the app:
-```
-mvnw -pl plugins spring-boot:run
-```
+
+### `mvnw -pl plugins spring-boot:run`
+
 Stopping the app: 
-```
-ctrl c
-```
+
+### `ctrl-c`
 ___
 
 ##Domain Driven Design
@@ -25,40 +29,46 @@ Domain Driven Design (DDD) describes an approach to model complex software. The 
 experts. The model maps core concepts and relationships in the domain language.<br>
 This guide uses the terminology as defined in Eric Evans' "Domain-driven design reference" [[2]](#2).
 
-### Ubiquitous language
-
-A food-coop warehouse contains defined amounts of goods (**Produkt**), largely foodstuff. Each *Produkt* is
-of a specific **Kategorie** (literally category), e.g. meat or vegetable. The current stock (**istLagerbestand**) of
-each *Produkt* and the current target stock (**sollLagerbestand**) can be set by the buyer (**Einkäufer**). The 
-*Einkäufer* can also define new units of measurement (**Einheit**, e.g. kg, liters), new kinds of *Produkt* and new 
-kinds of *Kategorie* of goods.
----
-
-### Domain model terms
+### Ubiquitous language glossary
 
 **Produkt**<br>
-Product: Individual products of wares in the warehouse. A *Produkt* has a name, should have an icon, belongs to a
-*Kategory*, has an *istLagerbestand* and a *sollLagerbestand*.
+Product: Individual products of wares in the warehouse. Products are always preservable like noodles.
+
+**Frisch**<br>
+Fresh: Perishable products like vegetables, orderd at a local farmer.
+
+***Frischbestand***<br>
+Avaible Fresh
+
+***Frischbestellung***<br>
+Members can order their weekly amount of Fresh ware in a Frischbestellung.
+
+**Brot**<br>
+Bread: Priducts like Baguette, that can be ordered at a local bakery
+
+***Brotbestand***<br>
+Avaible Breads
+
+***Brotbestellung***<br>
+Members can order their weekly amount of Bread in a Brotbestellung.
+
+**Menge**<br>
+Amount: The specific count, weight or volume (depending on the product in
+question), that the *Produkt* is measured in.
 
 **Kategorie**<br>
-Specific category of *Produkt*. Each category has a name and should have an icon. For example, the warehouse might be 
-sorted into meat, vegetables, noodles, grains, etc.
+Specific category of *Produkt*. For example, the warehouse might be sorted into
+meat, vegetables, noodles, grains, etc.
 
 **Lagerbestand**<br>
 The **istLagerbestand** amount of a *Produkt* in the warehouse.<br>
-The **sollLagerbestand** amount of a *Produkt* in the warehouse.
+The **sollLagerbestand** amount of a *Produkt* in the warehouse.<br>
 
-**Einheit**<br>
-The unit of measurement of a *Lagerbestand*.
----
+**Deadline**<br>
+A Deadline borders the window of time in which a Frischbestellung or a Brotbestellung can be ordered.
 
-#### Roles
-
-**Rollen**<br>
-Roles of food-coop members.
-
-**Einkäufer**<br>
-Buyer: keeps the warehouse stocked by buying from farmers and wholesaler.
+**Gebinde**<br>
+A local farmer can only deliver products in a determined size. The size is called Gebinde.
 
 ---
 
@@ -85,6 +95,12 @@ should update the *istLagerbestand* based on an inventory before placing a new o
 The **Einkäufer** gets a list of all products(**Produkte**) with current stock levels(**istLagerbestand**) below target
 stock levels (**sollLagerbestand**), and the amount(**Menge**) that is missing. The list infomration is encoded in JSON
 and is supposed to be turned into a PDF document by the client.
+
+**Bestellung**<br>
+Mitglied can order products of a list of Frischbestand or a list of Breadbestand.
+
+**Gebindemanagement**
+The Frischbestellungen of all Mitglieder is summed up and a proposal for possible Gebinde is calculated.
 
 ---
 
