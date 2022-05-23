@@ -229,7 +229,25 @@ public class FrischBestellungController {
         }
         if(calendarNow.get(Calendar.DAY_OF_WEEK) == 1) {
                 if(calendar.get(Calendar.DAY_OF_WEEK) != 1 || lastDeadline.get(0).getContent().getTime().getHours() < timeNow.getHours()){
-                        n += 1;
+                        if(lastDeadline.get(0).getContent().getTime().getHours() == timeNow.getHours() && lastDeadline.get(0).getContent().getTime().getMinutes() <= timeNow.getMinutes()){
+                                if(lastDeadline.get(0).getContent().getTime().getMinutes() == timeNow.getMinutes() && lastDeadline.get(0).getContent().getTime().getSeconds() <= timeNow.getSeconds()){
+                                        System.out.println("True + True + True");
+                                        n += 1;
+                                }else if ( lastDeadline.get(0).getContent().getTime().getMinutes() < timeNow.getMinutes() ) {
+                                        n += 1;
+                                }
+                                else {
+                                        System.out.println("True + True + False");
+                                        //n += 1;
+                                }
+                        }
+                        else if ( lastDeadline.get(0).getContent().getTime().getHours() < timeNow.getHours() ) {
+                                n += 1;
+                        }
+                        else{
+                                System.out.println("True + False + False");
+                                //n += 1;
+                        }
                 }
         }
         calendar.add(Calendar.WEEK_OF_MONTH, n);
