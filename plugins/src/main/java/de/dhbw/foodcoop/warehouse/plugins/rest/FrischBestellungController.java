@@ -197,11 +197,16 @@ public class FrischBestellungController {
                                 if(lastDeadline.get(0).getContent().getTime().getMinutes() == timeNow.getMinutes() && lastDeadline.get(0).getContent().getTime().getSeconds() <= timeNow.getSeconds()){
                                         System.out.println("True + True + True");
                                         n += 1;
+                                }else if ( lastDeadline.get(0).getContent().getTime().getMinutes() < timeNow.getMinutes() ) {
+                                        n += 1;
                                 }
                                 else {
                                         System.out.println("True + True + False");
                                         //n += 1;
                                 }
+                        }
+                        else if ( lastDeadline.get(0).getContent().getTime().getHours() < timeNow.getHours() ) {
+                                n += 1;
                         }
                         else{
                                 System.out.println("True + False + False");
