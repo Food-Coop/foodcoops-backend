@@ -22,7 +22,7 @@ Stopping the app:
 ### `ctrl-c`
 ___
 
-##Domain Driven Design
+## Domain Driven Design
 
 Domain Driven Design (DDD) describes an approach to model complex software. The term was coined by Eric Evans in 2003 
 [[1]](#1). A domain model is collaboratively extracted from the business domain by software engineers and domain 
