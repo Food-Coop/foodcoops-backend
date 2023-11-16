@@ -3,7 +3,30 @@
 Food-coop warehouse management software.
 
 
+## Instructions for local setup
 
+If you want to setup the Backend for your localhost you need to create an application.properties in plugins/src/main/resources and you need a local Keycloak & MariaDB instance.
+In the application.properties you have to define your MariaDB Datasource and Keycloak instance.
+This is needed because for production the application.properties is created & written to via GitHub Actions (see [GitHub workflows](https://github.com/FoodCoopV3/foodcoops-backend/blob/main/.github/workflows/ssh_deployment.yml))
+The reason for this is, that the private Data of the official Keycloak/MariaDB instances like passwords, secrets etc. is not exposed in the propertie file and is being filled in when build by GitHub Actions.
+An example applications.properties could look like this:
+```java
+spring.datasource.url=jdbc:mariadb://localhost:3306/{DBNAME}
+spring.datasource.username={YOUR USERNAME}
+spring.datasource.password={YOUR PASSWORD}
+spring.datasource.driver-class-name=org.mariadb.jdbc.Driver
+spring.jpa.hibernate.ddl-auto=none
+spring.jpa.generate-ddl=true
+spring.datasource.initialization-mode=always
+spring.jpa.show-sql=true
+
+keycloak.realm=Foodcoop
+keycloak.auth-server-url=http://localhost:{KEYCLOAK PORT}/
+keycloak.ssl-required=none
+keycloak.credentials.secret={SECRET OF THE KEYCLOAK CLIENT}
+keycloak.use-resource-role-mappings = true
+keycloak.resource={KEYCLOAK CLIENT NAME}
+```
 
 
 ## Installing, starting and stopping the application
