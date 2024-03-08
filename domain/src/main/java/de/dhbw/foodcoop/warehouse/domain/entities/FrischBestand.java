@@ -8,13 +8,9 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "frischbestand")
-public class FrischBestand {
-    @Id
-    private String id;
-    @Column
-    private String name;
-    @Column
-    private boolean verfuegbarkeit;
+public class FrischBestand extends BestandEntity{
+
+	
     @Column
     private String herkunftsland;
     @Column
@@ -25,8 +21,7 @@ public class FrischBestand {
     @ManyToOne
     @JoinColumn(name = "kategorie_id")
     private Kategorie kategorie;
-    @Column
-    private float preis;
+
 
     public FrischBestand(String id, String name, boolean verfuegbarkeit, String herkunftsland, int gebindegroesse, Einheit einheit, Kategorie kategorie, float preis) {
         // Validate.notBlank(id);
@@ -53,17 +48,8 @@ public class FrischBestand {
 
     }
 
-    public String getId() {
-        return id;
-    }
+   
 
-    public String getName() {
-        return name;
-    }
-
-    public boolean getVerfuegbarkeit() {
-        return verfuegbarkeit;
-    }
 
     public String getHerkunftsland() {
         return herkunftsland;
@@ -81,17 +67,6 @@ public class FrischBestand {
         return kategorie;
     }
 
-    public float getPreis() {
-        return preis;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setVerfuegbarkeit(boolean verfuegbarkeit) {
-        this.verfuegbarkeit = verfuegbarkeit;
-    }
 
     public void setHerkunftsland(String herkunftsland) {
         this.herkunftsland = herkunftsland;
@@ -109,9 +84,6 @@ public class FrischBestand {
         this.kategorie = kategorie;
     }
 
-    public void setPreis(float preis) {
-        this.preis = preis;
-    }
 
     @Override
     public boolean equals(Object o) {

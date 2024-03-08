@@ -6,17 +6,11 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "brotbestand")
-public class BrotBestand {
-    @Id
-    private String id;
-    @Column
-    private String name;
-    @Column
-    private boolean verfuegbarkeit;
+public class BrotBestand extends BestandEntity{
+
     @Column
     private long gewicht;
-    @Column
-    private float preis;
+
 
     public BrotBestand(String id, String name, boolean verfuegbarkeit, long gewicht, float preis) {
         // Validate.notBlank(id);
@@ -39,41 +33,19 @@ public class BrotBestand {
 
     }
 
-    public String getId() {
-        return id;
-    }
 
-    public String getName() {
-        return name;
-    }
-
-    public boolean getVerfuegbarkeit() {
-        return verfuegbarkeit;
-    }
 
     public long getGewicht() {
         return gewicht;
     }
 
-    public float getPreis() {
-        return preis;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setVerfuegbarkeit(boolean verfuegbarkeit) {
-        this.verfuegbarkeit = verfuegbarkeit;
-    }
+   
 
     public void setGewicht(long gewicht){
         this.gewicht = gewicht;
     }
 
-    public void setPreis(float preis) {
-        this.preis = preis;
-    }
+  
 
     @Override
     public boolean equals(Object o) {

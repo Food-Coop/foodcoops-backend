@@ -6,4 +6,7 @@ syntax: glob
 /*/target/*
 /*/*.iml
 /*.iml
+.classpath
+.project
+org.*
 /*/*/*/*/application.properties

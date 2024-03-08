@@ -31,7 +31,8 @@ public class BrotBestandService {
     }
 
     
-    public void deleteById(String id) {Optional<BrotBestand> toBeDeleted = repository.findeMitId(id);
+    public void deleteById(String id) {
+    	Optional<BrotBestand> toBeDeleted = repository.findeMitId(id);
         if (toBeDeleted.isEmpty()) {
             return;
         }

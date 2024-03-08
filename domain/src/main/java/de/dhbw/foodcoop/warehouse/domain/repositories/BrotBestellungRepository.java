@@ -9,6 +9,8 @@ import java.util.Optional;
 public interface BrotBestellungRepository {
     List<BrotBestellung> alle();
 
+    List<BrotBestellung> alleVonPerson(String person_id); 
+    
     List<BrotBestellung> findeMitDatumNachUndPerson(Timestamp datum, String person_id);
 
     List<BrotBestellung> findeMitDatumNachUndSum(Timestamp datum);

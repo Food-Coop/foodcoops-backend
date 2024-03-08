@@ -53,4 +53,9 @@ public class BrotBestellungRepositoryBridge implements BrotBestellungRepository{
     public void deleteById(String id) {
         springDataBrotBestellungRepository.deleteById(id);
     }
+
+	@Override
+	public List<BrotBestellung> alleVonPerson(String person_id) {
+		return springDataBrotBestellungRepository.findAllFromPerson(person_id);
+	}
 }

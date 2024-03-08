@@ -6,66 +6,48 @@ import java.util.UUID;
 
 @Entity
 @Table(name="frischbestellung")
-public class FrischBestellung {
-    @Id
-    private String id;
-    @Column
-    private String person_id;
+public class FrischBestellung extends BestellungEntity{
+
     @ManyToOne
     @JoinColumn(name = "frischbestand_id")
     private FrischBestand frischbestand;
-    @Column
-    private double bestellmenge;
-    @Column
-    private Timestamp datum;
+    
+ 
 
-    public FrischBestellung(String id, String person_id, FrischBestand frischbestand, double bestellmenge, Timestamp datum) {
+    public FrischBestellung(String id, String personId, FrischBestand frischbestand, double bestellmenge, Timestamp datum) {
         //Validate.notBlank(id);
         //Validate.notNull(datum);
+    	super();
         this.id = id;
-        this.person_id = person_id;
+        this.personId = personId;
         this.frischbestand = frischbestand;
         this.bestellmenge = bestellmenge;
         this.datum = datum;
     }
 
-    public FrischBestellung(String id, String person_id, FrischBestand frischbestand, double bestellmenge) {
+    public FrischBestellung(String id, String personId, FrischBestand frischbestand, double bestellmenge) {
         //Validate.notBlank(id);
         //Validate.notNull(datum);
+    	super();
         this.id = id;
-        this.person_id = person_id;
+        this.personId = personId;
         this.frischbestand = frischbestand;
         this.bestellmenge = bestellmenge;
     }
 
-    public FrischBestellung(String person_id, FrischBestand frischbestand, double bestellmenge, Timestamp datum) {
-        this(UUID.randomUUID().toString(), person_id, frischbestand, bestellmenge, datum);
+    public FrischBestellung(String personId, FrischBestand frischbestand, double bestellmenge, Timestamp datum) {
+        this(UUID.randomUUID().toString(), personId, frischbestand, bestellmenge, datum);
     }
 
-    public FrischBestellung(String person_id, FrischBestand frischbestand, double bestellmenge) {
-        this(UUID.randomUUID().toString(), person_id, frischbestand, bestellmenge);
+    public FrischBestellung(String personId, FrischBestand frischbestand, double bestellmenge) {
+        this(UUID.randomUUID().toString(), personId, frischbestand, bestellmenge);
     }
 
     public FrischBestellung() {
-
+    	super();
     }
 
-    public String getId(){
-        return id;
-    }
-
-    public void setId(String id){
-        this.id = id;
-    }
-
-    public String getPersonId(){
-        return person_id;
-    }
-
-    public void setPersonId(String person_id){
-        this.person_id = person_id;
-    }
-
+   
     public FrischBestand getFrischbestand(){
         return frischbestand;
     }
@@ -74,19 +56,5 @@ public class FrischBestellung {
         this.frischbestand = frischbestand;
     }
 
-    public double getBestellmenge(){
-        return bestellmenge;
-    }
 
-    public void setBestellmenge(double bestellmenge){
-        this.bestellmenge = bestellmenge;
-    }
-
-    public Timestamp getDatum(){
-        return datum;
-    }
-
-    public void setDatum(Timestamp datum){
-        this.datum = datum;
-    }
 }

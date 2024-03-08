@@ -53,4 +53,9 @@ public class FrischBestellungRepositoryBridge implements FrischBestellungReposit
     public void deleteById(String id) {
         springDataFrischBestellungRepository.deleteById(id);
     }
+
+	@Override
+	public List<FrischBestellung> findeAlleVonPerson(String person_id) {
+		return springDataFrischBestellungRepository.findAllFromPerson(person_id);
+	}
 }

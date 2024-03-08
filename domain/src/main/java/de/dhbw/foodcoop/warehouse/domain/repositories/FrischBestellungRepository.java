@@ -8,6 +8,8 @@ import java.util.Optional;
 
 public interface FrischBestellungRepository {
     List<FrischBestellung> alle();
+    
+    List<FrischBestellung> findeAlleVonPerson(String person_id);
 
     List<FrischBestellung> findeMitDatumNachUndPerson(Timestamp datum, String person_id);
 

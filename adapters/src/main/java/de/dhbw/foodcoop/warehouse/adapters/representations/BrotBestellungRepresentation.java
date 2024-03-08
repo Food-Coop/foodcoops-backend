@@ -6,10 +6,10 @@ public class BrotBestellungRepresentation {
     private String id;
     private String person_id;
     private BrotBestandRepresentation brotbestand;
-    private long bestellmenge;
+    private double bestellmenge;
     private Timestamp datum;
 
-    public BrotBestellungRepresentation(String id, String person_id, BrotBestandRepresentation brotbestand, long bestellmenge, Timestamp datum) {
+    public BrotBestellungRepresentation(String id, String person_id, BrotBestandRepresentation brotbestand, double bestellmenge, Timestamp datum) {
         this.id = id;
         this.person_id = person_id;
         this.brotbestand = brotbestand;
@@ -49,11 +49,11 @@ public class BrotBestellungRepresentation {
         this.brotbestand = brotbestand;
     }
 
-    public long getBestellmenge(){
+    public double getBestellmenge(){
         return bestellmenge;
     }
 
-    public void setBestellmenge(long bestellmenge){
+    public void setBestellmenge(double bestellmenge){
         this.bestellmenge = bestellmenge;
     }
 
