@@ -48,8 +48,8 @@ public class BrotBestellungService {
     	Person p = personService.getOrCreatePerson(bestellung.getPersonId());
     	
         BrotBestellung brotBestellung = repository.speichern(bestellung);
-        EinkaufBestellungVergleich ebv = einkaufBestellungVergleichRepository.speichern(new EinkaufBestellungVergleich(UUID.randomUUID().toString(), brotBestellung, 0, false));
-        p.getBestellungen().add(ebv);
+       // EinkaufBestellungVergleich ebv = einkaufBestellungVergleichRepository.speichern(new EinkaufBestellungVergleich(UUID.randomUUID().toString(), brotBestellung, 0, false));
+        p.getBestellungen().add(brotBestellung);
         personService.save(p);
         return brotBestellung;
     }
