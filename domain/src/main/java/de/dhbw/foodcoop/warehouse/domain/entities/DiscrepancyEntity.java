@@ -5,6 +5,8 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 @Entity
 public class DiscrepancyEntity {
@@ -12,7 +14,8 @@ public class DiscrepancyEntity {
 	@Id
 	private String id;
 	
-	@Column
+    @ManyToOne
+    @JoinColumn(name = "frischbestand_id")
 	private BestandEntity bestand;
 	
 	@Column
