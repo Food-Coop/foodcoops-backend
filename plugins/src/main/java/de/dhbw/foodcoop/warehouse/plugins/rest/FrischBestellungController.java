@@ -144,7 +144,7 @@ public class FrischBestellungController {
         return ResponseEntity.noContent().build();
     }
 
-    
+    // WTF ist das, dringend überarbeiten wenn mal Zeit ist..
     public Timestamp getTimestampOfDeadLine(int n) {
         //n = 0 => letzte Deadline, n = -1 => vorletzte Deadline, ..
         List<EntityModel<DeadlineRepresentation>> deadlines = deadlineService.last().stream()

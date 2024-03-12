@@ -9,8 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import de.dhbw.foodcoop.warehouse.application.einkauf.PersonService;
+import de.dhbw.foodcoop.warehouse.domain.entities.BrotBestellung;
 import de.dhbw.foodcoop.warehouse.domain.entities.FrischBestellung;
 import de.dhbw.foodcoop.warehouse.domain.entities.Person;
+import de.dhbw.foodcoop.warehouse.domain.repositories.EinkaufBestellungVergleichRepository;
 import de.dhbw.foodcoop.warehouse.domain.repositories.FrischBestellungRepository;
 import de.dhbw.foodcoop.warehouse.domain.values.EinkaufBestellungVergleich;
 
@@ -18,11 +20,13 @@ import de.dhbw.foodcoop.warehouse.domain.values.EinkaufBestellungVergleich;
 public class FrischBestellungService {
     private final FrischBestellungRepository repository;
     private final PersonService personService;
+    private final EinkaufBestellungVergleichRepository einkaufBestellungVergleichRepository;
 
     @Autowired
-    public FrischBestellungService(FrischBestellungRepository repository, PersonService personService) {
+    public FrischBestellungService(FrischBestellungRepository repository, PersonService personService,EinkaufBestellungVergleichRepository einkaufBestellungVergleichRepository) {
         this.repository = repository;
         this.personService = personService;
+        this.einkaufBestellungVergleichRepository = einkaufBestellungVergleichRepository;
     }
 
     public List<FrischBestellung> all() {
@@ -41,11 +45,13 @@ public class FrischBestellungService {
         return repository.findeMitDatumZwischen(datum1, datum2, person_id);
     }
 
+    //Hier wird für den Einkauf direkt ein Vergleichs Objekt angelegt
     public FrischBestellung save(FrischBestellung bestellung) {
     	Person p = personService.getOrCreatePerson(bestellung.getPersonId());
     	
         FrischBestellung frischBestellung = repository.speichern(bestellung);
-        p.getBestellungen().add(new EinkaufBestellungVergleich(UUID.randomUUID().toString(), frischBestellung, 0, false));
+        EinkaufBestellungVergleich ebv = einkaufBestellungVergleichRepository.speichern(new EinkaufBestellungVergleich(UUID.randomUUID().toString(), frischBestellung, 0, false));
+        p.getBestellungen().add(ebv);
         personService.save(p);
         return frischBestellung;
     }
