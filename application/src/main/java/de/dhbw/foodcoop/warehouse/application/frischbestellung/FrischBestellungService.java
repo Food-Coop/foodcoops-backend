@@ -50,8 +50,8 @@ public class FrischBestellungService {
     	Person p = personService.getOrCreatePerson(bestellung.getPersonId());
     	
         FrischBestellung frischBestellung = repository.speichern(bestellung);
-        EinkaufBestellungVergleich ebv = einkaufBestellungVergleichRepository.speichern(new EinkaufBestellungVergleich(UUID.randomUUID().toString(), frischBestellung, 0, false));
-        p.getBestellungen().add(ebv);
+       // EinkaufBestellungVergleich ebv = einkaufBestellungVergleichRepository.speichern(new EinkaufBestellungVergleich(UUID.randomUUID().toString(), frischBestellung, 0, false));
+        p.getBestellungen().add(frischBestellung);
         personService.save(p);
         return frischBestellung;
     }

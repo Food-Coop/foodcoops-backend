@@ -39,6 +39,7 @@ public class EinkaufService {
      * @param personId
      * @param updatedOrders
      */
+    //TODO ÜBERARBEITEN; FUNKTIONIERT NICHT!!!!!
     public EinkaufEntity executeShopping(String personId, List<EinkaufBestellungVergleich> updatedOrders) {
     	Person p = personService.findById(personId).orElseThrow();
     	List<EinkaufBestellungVergleich> nonFullfiledOrders = new ArrayList<>();
@@ -49,7 +50,7 @@ public class EinkaufService {
     	}
     	
     	updatedOrders.removeAll(nonFullfiledOrders);
-    	p.setBestellungen(nonFullfiledOrders);
+    	//p.setBestellungen(nonFullfiledOrders);
     	personService.save(p);
     	EinkaufEntity ee = new EinkaufEntity(UUID.randomUUID().toString(), personId, updatedOrders, Timestamp.from(Instant.now()));
     	ee.setBreadPriceAtTime(calculatePriceForBread(ee));
@@ -101,11 +102,11 @@ public class EinkaufService {
     	return price;
     }
     
-    public List<EinkaufBestellungVergleich> loadOpenOrders(String personId) {
-    	Person p = personService.findById(personId).orElseThrow();
-        return p.getBestellungen().stream() 
-                .filter(b -> !b.isReeleMengeAngegeben()) 
-                .collect(Collectors.toList());
-    }
+//    public List<EinkaufBestellungVergleich> loadOpenOrders(String personId) {
+//    	Person p = personService.findById(personId).orElseThrow();
+//        return p.getBestellungen().stream() 
+//                .filter(b -> !b.isReeleMengeAngegeben()) 
+//                .collect(Collectors.toList());
+//    }
 	
 }
