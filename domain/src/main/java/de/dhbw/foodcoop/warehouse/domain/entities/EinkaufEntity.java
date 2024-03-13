@@ -26,9 +26,16 @@ public class EinkaufEntity {
 	@Column
 	private String personId;
 	
+	//Dies sind die Frisch/Brot Produkte die tatsächlich von der Bestellung gekauft wurden
     @OneToMany(mappedBy = "einkauf", cascade = CascadeType.ALL, orphanRemoval = true)
 	List<EinkaufBestellungVergleich> einkauf;
 	
+    
+    //Dies sind weitere Produkte die  z.B. aus der zuviel Liste oder Lagerware! die gekauft wurden, aber keine Bestellung waren
+    @OneToMany(mappedBy = "bestandEinkauf", cascade = CascadeType.ALL, orphanRemoval = true)
+    List<BestandBuyEntity> bestandEinkauf;
+    
+    
 	@Column
 	private Timestamp date;
 	
@@ -39,19 +46,46 @@ public class EinkaufEntity {
 	@Column
 	private double freshPriceAtTime;
 	
+	@Column
+	private double bestandPriceAtTime;
+	
 	public EinkaufEntity() {
 		// TODO Auto-generated constructor stub
 	}
 
-	public EinkaufEntity(String id, String personId, List<EinkaufBestellungVergleich> einkauf, Timestamp date) {
+
+	public EinkaufEntity(String id, String personId, List<EinkaufBestellungVergleich> einkauf,
+			 List<BestandBuyEntity> bestandEinkauf, Timestamp date, double breadPriceAtTime,
+			double freshPriceAtTime,  double bestandPriceAtTime) {
 		super();
 		this.id = id;
 		this.personId = personId;
 		this.einkauf = einkauf;
+		this.bestandEinkauf = bestandEinkauf;
 		this.date = date;
+		this.breadPriceAtTime = breadPriceAtTime;
+		this.freshPriceAtTime = freshPriceAtTime;
+		this.bestandPriceAtTime = bestandPriceAtTime;
 	}
-	
-	
+
+
+	public double getBestandPriceAtTime() {
+		return bestandPriceAtTime;
+	}
+
+
+	public void setBestandPriceAtTime(double bestandPriceAtTime) {
+		this.bestandPriceAtTime = bestandPriceAtTime;
+	}
+
+
+	public List<BestandBuyEntity> getBestandEinkauf() {
+		return bestandEinkauf;
+	}
+
+	public void setBestandEinkauf(List<BestandBuyEntity> bestandEinkauf) {
+		this.bestandEinkauf = bestandEinkauf;
+	}
 
 	public double getTotalPriceAtTime() {
 		return freshPriceAtTime + breadPriceAtTime;
