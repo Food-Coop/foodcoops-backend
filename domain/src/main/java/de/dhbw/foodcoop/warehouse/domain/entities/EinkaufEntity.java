@@ -10,6 +10,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import de.dhbw.foodcoop.warehouse.domain.values.EinkaufBestellungVergleich;
 
 /**
@@ -28,6 +30,7 @@ public class EinkaufEntity {
 	
 	//Dies sind die Frisch/Brot Produkte die tatsächlich von der Bestellung gekauft wurden
     @OneToMany(mappedBy = "einkauf", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
 	List<EinkaufBestellungVergleich> einkauf;
 	
     
