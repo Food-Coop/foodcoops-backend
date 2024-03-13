@@ -3,11 +3,10 @@ package de.dhbw.foodcoop.warehouse.domain.entities;
 import java.sql.Timestamp;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -26,8 +25,8 @@ public class EinkaufEntity {
 	
 	@Column
 	private String personId;
-    @OneToMany
-    @JoinColumn(name = "offeneBestellungen_id")
+	
+    @OneToMany(mappedBy = "einkauf", cascade = CascadeType.ALL, orphanRemoval = true)
 	List<EinkaufBestellungVergleich> einkauf;
 	
 	@Column
