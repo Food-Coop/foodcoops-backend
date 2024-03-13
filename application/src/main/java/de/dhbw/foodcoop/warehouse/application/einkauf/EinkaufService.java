@@ -70,7 +70,7 @@ public class EinkaufService {
         einkauf.setId(UUID.randomUUID().toString());
         einkauf.setPersonId(personId);
         einkauf.setDate(new Timestamp(System.currentTimeMillis()));
-        
+        einkauf = einkaufRepository.speichern(einkauf);
         for(BestandBuyEntity bbe : bestandBuy) {
         	bbe.setEinkauf(einkauf);
         	bestandBuyRepository.speichern(bbe);
