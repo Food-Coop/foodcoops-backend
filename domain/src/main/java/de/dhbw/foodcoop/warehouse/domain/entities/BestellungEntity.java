@@ -7,7 +7,10 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import de.dhbw.foodcoop.warehouse.domain.values.EinkaufBestellungVergleich;
 
 
 @Entity
@@ -31,6 +34,8 @@ public abstract class BestellungEntity {
 	@Column
 	protected boolean isDone;
 	
+	@OneToOne(mappedBy = "bestellung")
+	private EinkaufBestellungVergleich ebv;
 	
 
 	

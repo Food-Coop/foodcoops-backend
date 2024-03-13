@@ -5,11 +5,11 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import de.dhbw.foodcoop.warehouse.domain.entities.BestellungEntity;
-import de.dhbw.foodcoop.warehouse.domain.entities.BrotBestellung;
-import de.dhbw.foodcoop.warehouse.domain.entities.FrischBestellung;
+import de.dhbw.foodcoop.warehouse.domain.entities.EinkaufEntity;
 
 @Entity
 @Table
@@ -18,9 +18,13 @@ public class EinkaufBestellungVergleich {
     @Id
     private String id;
     
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "Bestellung_id")
 	private BestellungEntity bestellung;
+    
+    @ManyToOne
+    @JoinColumn(name = "einkauf_id")
+    private EinkaufEntity einkauf;
 
 	@Column
 	private double reeleMenge;
@@ -34,9 +38,10 @@ public class EinkaufBestellungVergleich {
 
 	
 	public EinkaufBestellungVergleich(String id, BestellungEntity bestellung,
-			double reeleMenge, boolean reeleMengeAngegeben) {
+			double reeleMenge, boolean reeleMengeAngegeben, EinkaufEntity einkaufEntity) {
 		super();
 		this.reeleMengeAngegeben = reeleMengeAngegeben;
+		this.einkauf = einkaufEntity;
 		this.id = id;
 		this.bestellung = bestellung;
 		this.reeleMenge = reeleMenge;
@@ -44,6 +49,16 @@ public class EinkaufBestellungVergleich {
 
 	
 	
+	public EinkaufEntity getEinkauf() {
+		return einkauf;
+	}
+
+
+	public void setEinkauf(EinkaufEntity einkauf) {
+		this.einkauf = einkauf;
+	}
+
+
 	public boolean isReeleMengeAngegeben() {
 		return reeleMengeAngegeben;
 	}
