@@ -10,10 +10,19 @@ import javax.persistence.InheritanceType;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+
 import de.dhbw.foodcoop.warehouse.domain.values.EinkaufBestellungVergleich;
 
 
 @Entity
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
+@JsonSubTypes({
+    @JsonSubTypes.Type(value = FrischBestellung.class, name = "frisch"),
+    @JsonSubTypes.Type(value = BrotBestellung.class, name ="brot")
+    // Andere Subtypen hier
+})
 @Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "bestellung")
 public abstract class BestellungEntity {
