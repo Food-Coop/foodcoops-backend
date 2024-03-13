@@ -36,7 +36,7 @@ public class EinkaufController {
     	return einkaufService.createCompareObjectForPersonOrder(be, amount);
     }
     
-    @GetMapping(value = "/einkaufe/create/EinkaufBestellungVergleich")
+    @GetMapping(value = "/einkaufe/create/Bestand")
     public BestandBuyEntity getBBEFromData(@RequestBody BestandEntity be, @RequestBody long amount) {
     	return einkaufService.createBestandBuyEntityForPersonOrder(be, amount);
     } 

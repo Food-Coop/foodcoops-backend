@@ -32,7 +32,7 @@ public class EinkaufEntity {
 	
     
     //Dies sind weitere Produkte die  z.B. aus der zuviel Liste oder Lagerware! die gekauft wurden, aber keine Bestellung waren
-    @OneToMany(mappedBy = "bestandEinkauf", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "einkauf", cascade = CascadeType.ALL, orphanRemoval = true)
     List<BestandBuyEntity> bestandEinkauf;
     
     
