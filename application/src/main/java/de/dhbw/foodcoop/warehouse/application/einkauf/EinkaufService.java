@@ -135,12 +135,17 @@ public class EinkaufService {
     
     public double calculatePriceForBread(EinkaufEntity einkauf) {
     	double price = 0d;
-    	for(EinkaufBestellungVergleich ebv : einkauf.getEinkauf()) {
-    		double real = ebv.getReeleMenge();
-    		if(ebv.getBestellung() instanceof BrotBestellung) {
-    			BrotBestellung brot = (BrotBestellung) ebv.getBestellung();
-    			price = price + real * brot.getBrotBestand().getPreis();
-    		}
+    	if(einkauf.getEinkauf() != null) {
+	    	for(EinkaufBestellungVergleich ebv : einkauf.getEinkauf()) {
+	    		double real = ebv.getReeleMenge();
+	    		if(ebv.getBestellung() instanceof BrotBestellung) {
+	    			BrotBestellung brot = (BrotBestellung) ebv.getBestellung();
+	    			price = price + real * brot.getBrotBestand().getPreis();
+	    		}
+	    	}
+    	}
+      	if(einkauf.getBestandEinkauf() == null) {
+    		return price;
     	}
     	for(BestandBuyEntity be : einkauf.getBestandEinkauf()) {
     		if(be.getBestand() instanceof BrotBestand) {
@@ -152,6 +157,9 @@ public class EinkaufService {
     
     public double calculatePriceForBestandBuy(EinkaufEntity einkauf) {
     	double price = 0d;
+    	if(einkauf.getBestandEinkauf() == null) {
+    		return price;
+    	}
     	for(BestandBuyEntity be : einkauf.getBestandEinkauf()) {
     		if(be.getBestand() instanceof Produkt) {
     			price = price + be.getBestand().getPreis() * be.getAmount();
@@ -162,12 +170,17 @@ public class EinkaufService {
     
     public double calculatePriceForFresh(EinkaufEntity einkauf) {
     	double price = 0d;
-    	for(EinkaufBestellungVergleich ebv : einkauf.getEinkauf()) {
-    		double real = ebv.getReeleMenge();
-    		if(ebv.getBestellung() instanceof FrischBestellung) {
-    			FrischBestellung frisch = (FrischBestellung) ebv.getBestellung();
-    			price = price + real * frisch.getFrischbestand().getPreis();
-    		}
+    	if(einkauf.getEinkauf() != null) { 
+	    	for(EinkaufBestellungVergleich ebv : einkauf.getEinkauf()) {
+	    		double real = ebv.getReeleMenge();
+	    		if(ebv.getBestellung() instanceof FrischBestellung) {
+	    			FrischBestellung frisch = (FrischBestellung) ebv.getBestellung();
+	    			price = price + real * frisch.getFrischbestand().getPreis();
+	    		}
+	    	}
+    	}
+    	if(einkauf.getBestandEinkauf() == null) {
+    		return price;
     	}
     	for(BestandBuyEntity be : einkauf.getBestandEinkauf()) {
     		if(be.getBestand() instanceof FrischBestand) {
