@@ -1,24 +1,28 @@
 package de.dhbw.foodcoop.warehouse.application.einkauf;
 
 import java.sql.Timestamp;
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import de.dhbw.foodcoop.warehouse.domain.entities.BestandBuyEntity;
+import de.dhbw.foodcoop.warehouse.domain.entities.BestandEntity;
 import de.dhbw.foodcoop.warehouse.domain.entities.BestellungEntity;
+import de.dhbw.foodcoop.warehouse.domain.entities.BrotBestand;
 import de.dhbw.foodcoop.warehouse.domain.entities.BrotBestellung;
 import de.dhbw.foodcoop.warehouse.domain.entities.EinkaufEntity;
+import de.dhbw.foodcoop.warehouse.domain.entities.FrischBestand;
 import de.dhbw.foodcoop.warehouse.domain.entities.FrischBestellung;
+import de.dhbw.foodcoop.warehouse.domain.entities.Produkt;
+import de.dhbw.foodcoop.warehouse.domain.repositories.BestandBuyRepository;
 import de.dhbw.foodcoop.warehouse.domain.repositories.BrotBestellungRepository;
 import de.dhbw.foodcoop.warehouse.domain.repositories.EinkaufBestellungVergleichRepository;
 import de.dhbw.foodcoop.warehouse.domain.repositories.EinkaufRepository;
 import de.dhbw.foodcoop.warehouse.domain.repositories.FrischBestellungRepository;
+import de.dhbw.foodcoop.warehouse.domain.repositories.ProduktRepository;
 import de.dhbw.foodcoop.warehouse.domain.values.EinkaufBestellungVergleich;
 
 @Service
@@ -36,36 +40,59 @@ public class EinkaufService {
 
     @Autowired
     private EinkaufBestellungVergleichRepository ebvRepository;
+    
+    @Autowired
+    private BestandBuyRepository bestandBuyRepository;
 
-    public EinkaufEntity einkaufDurchführen(String personId, Timestamp einkaufsDatum, List<EinkaufBestellungVergleich> vergleiche) {
+    
+    public EinkaufBestellungVergleich createCompareObjectForPersonOrder(BestellungEntity order, double realAmount) {
+    		
+        	EinkaufBestellungVergleich ebvObject = new EinkaufBestellungVergleich();
+        	ebvObject.setId(UUID.randomUUID().toString());
+        	ebvObject.setBestellung(order);
+        	ebvObject.setReeleMenge(realAmount);
+        	ebvObject.setReeleMengeAngegeben(true);
+        	return ebvObject;
+    }
+    
+    public BestandBuyEntity createBestandBuyEntityForPersonOrder(BestandEntity bestand, double amount) {
+    	BestandBuyEntity bbe = new BestandBuyEntity();
+    	bbe.setId(UUID.randomUUID().toString());
+    	bbe.setAmount(amount);
+    	bbe.setBestand(bestand);
+    	return bbe;
+    }
+    
+
+    public EinkaufEntity einkaufDurchführen(String personId, List<EinkaufBestellungVergleich> vergleiche, List<BestandBuyEntity> bestandBuy) {
+    	
         EinkaufEntity einkauf = new EinkaufEntity();
         einkauf.setId(UUID.randomUUID().toString());
         einkauf.setPersonId(personId);
-        einkauf.setDate(einkaufsDatum);
-        // Weitere Einkaufsdetails setzen...
-
-        // Finde alle Bestellungen dieser Person
-        //Anpassen mit Datum nach ..
-        List<FrischBestellung> frischBestellungen = frischBestellungRepository.findeAlleVonPerson(personId);
-        List<BrotBestellung> brotBestellungen = brotBestellungRepository.alleVonPerson(personId);
-        List<BestellungEntity> bestellungen = Stream.concat(frischBestellungen.stream(), brotBestellungen.stream())
-                .collect(Collectors.toList());
+        einkauf.setDate(new Timestamp(System.currentTimeMillis()));
+        
+        for(BestandBuyEntity bbe : bestandBuy) {
+        	bbe.setEinkauf(einkauf);
+        	bestandBuyRepository.speichern(bbe);
+        	einkauf.getBestandEinkauf().add(bbe);
+        }
         
 
-        for (BestellungEntity bestellung : bestellungen) {
-            EinkaufBestellungVergleich vergleich = new EinkaufBestellungVergleich();
-            vergleich.setId(UUID.randomUUID().toString());
-            vergleich.setBestellung(bestellung);
-            vergleich.setEinkauf(einkauf);
+        for (EinkaufBestellungVergleich ebv : vergleiche) {
+            
+            ebv.setEinkauf(einkauf);
             // Setze die reeleMenge und reeleMengeAngegeben basierend auf dem Vergleich...
 
             // Speichere den Vergleich in der Datenbank
-            ebvRepository.speichern(vergleich);
+            ebvRepository.speichern(ebv);
 
             // Füge den Vergleich dem Einkauf hinzu
-            einkauf.getEinkauf().add(vergleich);
+            einkauf.getEinkauf().add(ebv);
         }
 
+        einkauf.setBestandPriceAtTime(calculatePriceForBestandBuy(einkauf));
+        einkauf.setBreadPriceAtTime(calculatePriceForBread(einkauf));
+        einkauf.setFreshPriceAtTime(calculatePriceForFresh(einkauf));
         // Speichere den Einkauf in der Datenbank
         return einkaufRepository.speichern(einkauf);
     }
@@ -79,25 +106,7 @@ public class EinkaufService {
      * @param personId
      * @param updatedOrders
      */
-    //TODO ÜBERARBEITEN; FUNKTIONIERT NICHT!!!!!
-    public EinkaufEntity executeShopping(String personId, List<EinkaufBestellungVergleich> updatedOrders) {
-    //	Person p = personService.findById(personId).orElseThrow();
-    	List<EinkaufBestellungVergleich> nonFullfiledOrders = new ArrayList<>();
-    	for(EinkaufBestellungVergleich ebv : updatedOrders) {
-    		if(!ebv.isReeleMengeAngegeben()) {
-    			nonFullfiledOrders.add(ebv);
-    		}
-    	}
-    	
-    	updatedOrders.removeAll(nonFullfiledOrders);
-    	//p.setBestellungen(nonFullfiledOrders);
-    	//personService.save(p);
-    	EinkaufEntity ee = new EinkaufEntity(UUID.randomUUID().toString(), personId, updatedOrders, Timestamp.from(Instant.now()));
-    	ee.setBreadPriceAtTime(calculatePriceForBread(ee));
-    	ee.setFreshPriceAtTime(calculatePriceForFresh(ee));
-    	return einkaufRepository.speichern(ee);
-    	
-    }
+  
     
     public List<EinkaufEntity> findAllFromPerson(String personId) {
     	return einkaufRepository.alleVonPerson(personId);
@@ -115,7 +124,7 @@ public class EinkaufService {
     	einkaufRepository.deleteById(id);
     }
     public double calculateTotalPrice(EinkaufEntity einkauf) {
-    	return calculatePriceForBread(einkauf) + calculatePriceForFresh(einkauf);
+    	return calculatePriceForBread(einkauf) + calculatePriceForFresh(einkauf) + calculatePriceForBestandBuy(einkauf);
     }
     
     public double calculatePriceForBread(EinkaufEntity einkauf) {
@@ -125,6 +134,21 @@ public class EinkaufService {
     		if(ebv.getBestellung() instanceof BrotBestellung) {
     			BrotBestellung brot = (BrotBestellung) ebv.getBestellung();
     			price = price + real * brot.getBrotBestand().getPreis();
+    		}
+    	}
+    	for(BestandBuyEntity be : einkauf.getBestandEinkauf()) {
+    		if(be.getBestand() instanceof BrotBestand) {
+    			price = price + be.getBestand().getPreis() * be.getAmount();
+    		}
+    	}
+    	return price;
+    }
+    
+    public double calculatePriceForBestandBuy(EinkaufEntity einkauf) {
+    	double price = 0d;
+    	for(BestandBuyEntity be : einkauf.getBestandEinkauf()) {
+    		if(be.getBestand() instanceof Produkt) {
+    			price = price + be.getBestand().getPreis() * be.getAmount();
     		}
     	}
     	return price;
@@ -137,6 +161,11 @@ public class EinkaufService {
     		if(ebv.getBestellung() instanceof FrischBestellung) {
     			FrischBestellung frisch = (FrischBestellung) ebv.getBestellung();
     			price = price + real * frisch.getFrischbestand().getPreis();
+    		}
+    	}
+    	for(BestandBuyEntity be : einkauf.getBestandEinkauf()) {
+    		if(be.getBestand() instanceof FrischBestand) {
+    			price = price + be.getBestand().getPreis() * be.getAmount();
     		}
     	}
     	return price;

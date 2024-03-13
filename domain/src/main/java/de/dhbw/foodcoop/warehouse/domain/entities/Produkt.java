@@ -9,16 +9,17 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "lagerprodukt")
-public class Produkt {
-    @Id
-    private String id;
-    @Column
-    private String name;
+public class Produkt extends BestandEntity {
+
     @Embedded
     private Lagerbestand lagerbestand;
     @ManyToOne
     @JoinColumn(name = "kategorie_id")
     private Kategorie kategorie;
+    
+    @ManyToOne
+    @JoinColumn(name = "einkauf_id")
+    private EinkaufEntity einkauf;
 
     public Produkt(String id, String name, Kategorie kategorie, Lagerbestand lagerbestand) {
         Validate.notBlank(id);
@@ -37,13 +38,6 @@ public class Produkt {
     protected Produkt() {
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
 
     public Kategorie getKategorie() {
         return kategorie;
@@ -56,8 +50,17 @@ public class Produkt {
     public Lagerbestand getLagerbestand() {
         return lagerbestand;
     }
+    
 
-    @Override
+    public EinkaufEntity getEinkauf() {
+		return einkauf;
+	}
+
+	public void setEinkauf(EinkaufEntity einkauf) {
+		this.einkauf = einkauf;
+	}
+
+	@Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
