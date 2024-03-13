@@ -73,8 +73,8 @@ public class EinkaufController {
     } 
     
     @PostMapping(value = "/einkauf/{id}")
-    public EinkaufEntity executeShopping(@PathVariable String id, @RequestBody List<BestandBuyEntity> bbe, @RequestBody List<EinkaufBestellungVergleich> ebv) {
-    	return einkaufService.einkaufDurchführen(id, ebv, bbe);
+    public EinkaufEntity executeShopping(@PathVariable String id, @RequestBody List<EinkaufBestellungVergleich> ebv) {
+    	return einkaufService.einkaufDurchführen(id, ebv, new ArrayList<BestandBuyEntity>());
     }
     
 }
