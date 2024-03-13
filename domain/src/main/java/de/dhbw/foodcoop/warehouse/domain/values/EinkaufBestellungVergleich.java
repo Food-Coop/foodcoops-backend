@@ -8,6 +8,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import de.dhbw.foodcoop.warehouse.domain.entities.BestellungEntity;
 import de.dhbw.foodcoop.warehouse.domain.entities.EinkaufEntity;
 
@@ -24,6 +26,7 @@ public class EinkaufBestellungVergleich {
     
     @ManyToOne
     @JoinColumn(name = "einkauf_id")
+    @JsonBackReference
     private EinkaufEntity einkauf;
 
 	@Column
