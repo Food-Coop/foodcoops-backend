@@ -74,6 +74,9 @@ public class EinkaufService {
         for(BestandBuyEntity bbe : bestandBuy) {
         	bbe.setEinkauf(einkauf);
         	bestandBuyRepository.speichern(bbe);
+            if(einkauf.getBestandEinkauf() == null) {
+            	einkauf.setBestandEinkauf(new ArrayList<BestandBuyEntity>());
+            }
         	einkauf.getBestandEinkauf().add(bbe);
         }
         
@@ -87,6 +90,9 @@ public class EinkaufService {
             ebvRepository.speichern(ebv);
 
             // Füge den Vergleich dem Einkauf hinzu
+            if(einkauf.getEinkauf() == null) {
+            	einkauf.setEinkauf(new ArrayList<EinkaufBestellungVergleich>());
+            }
             einkauf.getEinkauf().add(ebv);
         }
 
