@@ -13,7 +13,8 @@ public class BestandBuyEntity {
 	@Id
 	private String id;
 	
-	@Column
+	@ManyToOne 
+	@JoinColumn(name = "bestand_id")
 	private BestandEntity bestand;
 	
 	@Column
