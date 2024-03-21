@@ -28,12 +28,11 @@ public class EinkaufEntity {
 	
 	//Dies sind die Frisch/Brot Produkte die tatsächlich von der Bestellung gekauft wurden
     @OneToMany( cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
 	List<BestellungEntity> bestellungsEinkauf;
 	
     
     //Dies sind weitere Produkte die  z.B. aus der zuviel Liste oder Lagerware! die gekauft wurden, aber keine Bestellung waren
-    @OneToMany(mappedBy = "einkauf", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany( cascade = CascadeType.ALL, orphanRemoval = true)
     List<BestandBuyEntity> bestandEinkauf;
     
     

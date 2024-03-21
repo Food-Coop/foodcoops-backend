@@ -49,7 +49,9 @@ public abstract class BestellungEntity {
 	private double reeleMenge;
 	
 
+ public BestellungEntity() {
 
+ }
 	
 	public boolean isDone() {
 		return isDone;
