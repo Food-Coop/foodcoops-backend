@@ -12,8 +12,6 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
-import de.dhbw.foodcoop.warehouse.domain.values.EinkaufBestellungVergleich;
-
 /**
  * @author MStaar
  *
@@ -29,9 +27,9 @@ public class EinkaufEntity {
 	private String personId;
 	
 	//Dies sind die Frisch/Brot Produkte die tatsächlich von der Bestellung gekauft wurden
-    @OneToMany(mappedBy = "einkauf", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany( cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
-	List<EinkaufBestellungVergleich> einkauf;
+	List<BestellungEntity> bestellungsEinkauf;
 	
     
     //Dies sind weitere Produkte die  z.B. aus der zuviel Liste oder Lagerware! die gekauft wurden, aber keine Bestellung waren
@@ -57,13 +55,13 @@ public class EinkaufEntity {
 	}
 
 
-	public EinkaufEntity(String id, String personId, List<EinkaufBestellungVergleich> einkauf,
+	public EinkaufEntity(String id, String personId, List<BestellungEntity> einkauf,
 			 List<BestandBuyEntity> bestandEinkauf, Timestamp date, double breadPriceAtTime,
 			double freshPriceAtTime,  double bestandPriceAtTime) {
 		super();
 		this.id = id;
 		this.personId = personId;
-		this.einkauf = einkauf;
+		this.bestellungsEinkauf = einkauf;
 		this.bestandEinkauf = bestandEinkauf;
 		this.date = date;
 		this.breadPriceAtTime = breadPriceAtTime;
@@ -135,12 +133,12 @@ public class EinkaufEntity {
 		this.personId = personId;
 	}
 
-	public List<EinkaufBestellungVergleich> getEinkauf() {
-		return einkauf;
+	public List<BestellungEntity> getBestellungsEinkauf() {
+		return bestellungsEinkauf;
 	}
 
-	public void setEinkauf(List<EinkaufBestellungVergleich> einkauf) {
-		this.einkauf = einkauf;
+	public void setBestellungsEinkauf(List<BestellungEntity> einkauf) {
+		this.bestellungsEinkauf = einkauf;
 	}
 	
 	

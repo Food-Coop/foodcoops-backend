@@ -8,18 +8,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import de.dhbw.foodcoop.warehouse.domain.entities.FrischBestellung;
-import de.dhbw.foodcoop.warehouse.domain.repositories.EinkaufBestellungVergleichRepository;
 import de.dhbw.foodcoop.warehouse.domain.repositories.FrischBestellungRepository;
 
 @Service
 public class FrischBestellungService {
     private final FrischBestellungRepository repository;
-    private final EinkaufBestellungVergleichRepository einkaufBestellungVergleichRepository;
 
     @Autowired
-    public FrischBestellungService(FrischBestellungRepository repository, EinkaufBestellungVergleichRepository einkaufBestellungVergleichRepository) {
+    public FrischBestellungService(FrischBestellungRepository repository) {
         this.repository = repository;
-        this.einkaufBestellungVergleichRepository = einkaufBestellungVergleichRepository;
     }
 
     public List<FrischBestellung> all() {

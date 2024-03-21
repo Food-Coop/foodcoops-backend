@@ -9,16 +9,13 @@ import org.springframework.stereotype.Service;
 
 import de.dhbw.foodcoop.warehouse.domain.entities.BrotBestellung;
 import de.dhbw.foodcoop.warehouse.domain.repositories.BrotBestellungRepository;
-import de.dhbw.foodcoop.warehouse.domain.repositories.EinkaufBestellungVergleichRepository;
 
 @Service
 public class BrotBestellungService {
     private final BrotBestellungRepository repository;
-    private final EinkaufBestellungVergleichRepository einkaufBestellungVergleichRepository;
     @Autowired
-    public BrotBestellungService(BrotBestellungRepository repository,  EinkaufBestellungVergleichRepository einkaufBestellungVergleichRepository) {
+    public BrotBestellungService(BrotBestellungRepository repository) {
         this.repository = repository;
-        this.einkaufBestellungVergleichRepository = einkaufBestellungVergleichRepository;
     }
 
     public List<BrotBestellung> all() {
