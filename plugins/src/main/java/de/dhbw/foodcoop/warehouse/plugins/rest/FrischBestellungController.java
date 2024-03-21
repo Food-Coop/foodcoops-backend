@@ -3,28 +3,37 @@ package de.dhbw.foodcoop.warehouse.plugins.rest;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
+import java.sql.Time;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
-import java.sql.Time;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
+import de.dhbw.foodcoop.warehouse.adapters.representations.BrotBestellungRepresentation;
 import de.dhbw.foodcoop.warehouse.adapters.representations.DeadlineRepresentation;
 import de.dhbw.foodcoop.warehouse.adapters.representations.FrischBestellungRepresentation;
+import de.dhbw.foodcoop.warehouse.adapters.representations.mappers.BestellungToRepresentationMapper;
 import de.dhbw.foodcoop.warehouse.adapters.representations.mappers.DeadlineToRepresentationMapper;
-import de.dhbw.foodcoop.warehouse.adapters.representations.mappers.FrischBestellungToRepresentationMapper;
-import de.dhbw.foodcoop.warehouse.adapters.representations.mappers.RepresentationToFrischBestellungMapper;
+import de.dhbw.foodcoop.warehouse.adapters.representations.mappers.RepresentationToBestellungMapper;
 import de.dhbw.foodcoop.warehouse.application.deadline.DeadlineService;
 import de.dhbw.foodcoop.warehouse.application.frischbestellung.FrischBestellungService;
+import de.dhbw.foodcoop.warehouse.domain.entities.BrotBestellung;
 import de.dhbw.foodcoop.warehouse.domain.entities.FrischBestellung;
 import de.dhbw.foodcoop.warehouse.domain.exceptions.FrischBestellungInUseException;
 import de.dhbw.foodcoop.warehouse.domain.exceptions.FrischBestellungNotFoundException;
@@ -34,15 +43,15 @@ import de.dhbw.foodcoop.warehouse.plugins.rest.assembler.FrischBestellungModelAs
 @RestController
 public class FrischBestellungController {
     private final FrischBestellungService service;
-    private final RepresentationToFrischBestellungMapper toFrischBestellung;
-    private final FrischBestellungToRepresentationMapper toPresentation;
+    private final RepresentationToBestellungMapper toFrischBestellung;
+    private final BestellungToRepresentationMapper toPresentation;
     private final FrischBestellungModelAssembler assembler;
     private final DeadlineService deadlineService;
     private final DeadlineToRepresentationMapper deadlineToPresentation;
     private final DeadlineModelAssembler deadlineAssembler;
 
     @Autowired
-    public FrischBestellungController(FrischBestellungService service, RepresentationToFrischBestellungMapper toFrischBestellung, FrischBestellungToRepresentationMapper toPresentation, FrischBestellungModelAssembler assembler, DeadlineService deadlineService, DeadlineToRepresentationMapper deadlineToPresentation, DeadlineModelAssembler deadlineAssembler) {
+    public FrischBestellungController(FrischBestellungService service, RepresentationToBestellungMapper toFrischBestellung, BestellungToRepresentationMapper toPresentation, FrischBestellungModelAssembler assembler, DeadlineService deadlineService, DeadlineToRepresentationMapper deadlineToPresentation, DeadlineModelAssembler deadlineAssembler) {
         this.service = service;
         this.toFrischBestellung = toFrischBestellung;
         this.toPresentation = toPresentation;
@@ -56,17 +65,22 @@ public class FrischBestellungController {
     public EntityModel<FrischBestellungRepresentation> one(@PathVariable String id) {
         FrischBestellung produkt = service.findById(id)
                 .orElseThrow(() -> new FrischBestellungNotFoundException(id));
-        FrischBestellungRepresentation presentation = toPresentation.apply(produkt);
+        FrischBestellungRepresentation presentation = (FrischBestellungRepresentation) toPresentation.apply(produkt);
         return assembler.toModel(presentation);
     }
 
     @GetMapping("/frischBestellung")
     public CollectionModel<EntityModel<FrischBestellungRepresentation>> all() {
-        List<EntityModel<FrischBestellungRepresentation>> produkts = service.all().stream()
-                .map(toPresentation)
-                .map(assembler::toModel)
-                .collect(Collectors.toList());
-        return CollectionModel.of(produkts,
+    	
+     	List<FrischBestellung> frischBestellungen = service.all();
+    	List<EntityModel<FrischBestellungRepresentation>> frisch = new ArrayList<>();
+    	for(FrischBestellung f : frischBestellungen) {
+    		FrischBestellungRepresentation fr = (FrischBestellungRepresentation) toPresentation.apply(f);
+    		EntityModel<FrischBestellungRepresentation> em = assembler.toModel(fr);
+    		frisch.add(em);
+    	}
+       
+        return CollectionModel.of(frisch,
                 linkTo(methodOn(FrischBestellungController.class).all()).withSelfRel());
     }
 
@@ -74,11 +88,15 @@ public class FrischBestellungController {
     public CollectionModel<EntityModel<FrischBestellungRepresentation>> findByDateAfterAndPerson(@PathVariable String person_id){
         //Timestamp datum1 = getTimestampNow();
         Timestamp datum = getTimestampOfDeadLine(-1);
-        List<EntityModel<FrischBestellungRepresentation>> produkts = service.findByDateAfterAndPerson(datum, person_id).stream()
-                .map(toPresentation)
-                .map(assembler::toModel)
-                .collect(Collectors.toList());
-        return CollectionModel.of(produkts,
+     	List<FrischBestellung> frischBestellungen = service.findByDateAfterAndPerson(datum, person_id);
+    	List<EntityModel<FrischBestellungRepresentation>> frisch = new ArrayList<>();
+    	for(FrischBestellung f : frischBestellungen) {
+    		FrischBestellungRepresentation fr = (FrischBestellungRepresentation) toPresentation.apply(f);
+    		EntityModel<FrischBestellungRepresentation> em = assembler.toModel(fr);
+    		frisch.add(em);
+    	}
+   
+        return CollectionModel.of(frisch,
                 linkTo(methodOn(FrischBestellungController.class).all()).withSelfRel());
     }
 
@@ -86,11 +104,15 @@ public class FrischBestellungController {
     public CollectionModel<EntityModel<FrischBestellungRepresentation>> findByDateBetween(@PathVariable String person_id){
         Timestamp datum1 = getTimestampOfDeadLine(-1);
         Timestamp datum2 = getTimestampOfDeadLine(-2);
-        List<EntityModel<FrischBestellungRepresentation>> produkts = service.findByDateBetween(datum1, datum2, person_id).stream()
-                .map(toPresentation)
-                .map(assembler::toModel)
-                .collect(Collectors.toList());
-        return CollectionModel.of(produkts,
+     	List<FrischBestellung> frischBestellungen = service.findByDateBetween(datum1, datum2, person_id);
+    	List<EntityModel<FrischBestellungRepresentation>> frisch = new ArrayList<>();
+    	for(FrischBestellung f : frischBestellungen) {
+    		FrischBestellungRepresentation fr = (FrischBestellungRepresentation) toPresentation.apply(f);
+    		EntityModel<FrischBestellungRepresentation> em = assembler.toModel(fr);
+    		frisch.add(em);
+    	}
+      
+        return CollectionModel.of(frisch,
                 linkTo(methodOn(FrischBestellungController.class).all()).withSelfRel());
     }
 
@@ -98,11 +120,15 @@ public class FrischBestellungController {
     public CollectionModel<EntityModel<FrischBestellungRepresentation>> findByDateAfterAndSum(){//@PathVariable Timestamp datum1, @PathVariable Timestamp datum2){
         //Timestamp datum1 = getTimestampNow();
         Timestamp datum = getTimestampOfDeadLine(-1);
-        List<EntityModel<FrischBestellungRepresentation>> produkts = service.findByDateAfterAndSum(datum).stream()
-                .map(toPresentation)
-                .map(assembler::toModel)
-                .collect(Collectors.toList());
-        return CollectionModel.of(produkts,
+     	List<FrischBestellung> frischBestellungen = service.findByDateAfterAndSum(datum);
+    	List<EntityModel<FrischBestellungRepresentation>> frisch = new ArrayList<>();
+    	for(FrischBestellung f : frischBestellungen) {
+    		FrischBestellungRepresentation fr = (FrischBestellungRepresentation) toPresentation.apply(f);
+    		EntityModel<FrischBestellungRepresentation> em = assembler.toModel(fr);
+    		frisch.add(em);
+    	}
+       
+        return CollectionModel.of(frisch,
                 linkTo(methodOn(FrischBestellungController.class).all()).withSelfRel());
     }
 
@@ -114,8 +140,8 @@ public class FrischBestellungController {
                 newFrischBestellung.getId();
         newFrischBestellung.setId(id);
 
-        FrischBestellung frischBestellung = service.save(toFrischBestellung.apply(newFrischBestellung));
-        EntityModel<FrischBestellungRepresentation> entityModel = assembler.toModel(toPresentation.apply(frischBestellung));
+        FrischBestellung frischBestellung = service.save((FrischBestellung) toFrischBestellung.apply(newFrischBestellung));
+        EntityModel<FrischBestellungRepresentation> entityModel = assembler.toModel((FrischBestellungRepresentation) toPresentation.apply(frischBestellung));
         return ResponseEntity
                 .created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri())
                 .body(entityModel);
@@ -125,11 +151,11 @@ public class FrischBestellungController {
     public ResponseEntity<?> update(@RequestBody FrischBestellungRepresentation changedFrischBestellung, @PathVariable String id) {
 
         FrischBestellung oldFrischBestellung = service.findById(id).orElseThrow(() -> new FrischBestellungNotFoundException(id));
-        FrischBestellung updateFrischBestellung = toFrischBestellung.update(oldFrischBestellung, changedFrischBestellung);
+        FrischBestellung updateFrischBestellung = (FrischBestellung) toFrischBestellung.update(oldFrischBestellung, changedFrischBestellung);
 
         FrischBestellung saved = service.save(updateFrischBestellung);
 
-        EntityModel<FrischBestellungRepresentation> entityModel = assembler.toModel(toPresentation.apply(saved));
+        EntityModel<FrischBestellungRepresentation> entityModel = assembler.toModel((FrischBestellungRepresentation) toPresentation.apply(saved));
 
         return ResponseEntity //
                 .created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri()) //

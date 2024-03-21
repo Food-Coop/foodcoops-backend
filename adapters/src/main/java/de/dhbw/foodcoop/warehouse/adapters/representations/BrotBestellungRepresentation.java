@@ -2,19 +2,12 @@ package de.dhbw.foodcoop.warehouse.adapters.representations;
 
 import java.sql.Timestamp;
 
-public class BrotBestellungRepresentation {
-    private String id;
-    private String person_id;
+public class BrotBestellungRepresentation extends BestellungRepresentation {
     private BrotBestandRepresentation brotbestand;
-    private double bestellmenge;
-    private Timestamp datum;
 
-    public BrotBestellungRepresentation(String id, String person_id, BrotBestandRepresentation brotbestand, double bestellmenge, Timestamp datum) {
-        this.id = id;
-        this.person_id = person_id;
+    public BrotBestellungRepresentation(String id, String person_id, BrotBestandRepresentation brotbestand, double bestellmenge, Timestamp datum, boolean isDone, double reeleMenge) {
+     super(id, person_id, datum, bestellmenge, isDone, reeleMenge);
         this.brotbestand = brotbestand;
-        this.bestellmenge = bestellmenge;
-        this.datum = datum;
     }
 
 //    public FrischBestellungRepresentation(String id, String person_id, FrischBestandRepresentation frischbestand, long bestellmenge) {
@@ -25,21 +18,7 @@ public class BrotBestellungRepresentation {
 //    }
 
 
-    public String getId(){
-        return id;
-    }
 
-    public void setId(String id){
-        this.id = id;
-    }
-
-    public String getPersonId(){
-        return person_id;
-    }
-
-    public void setPersonId(String person_id){
-        this.person_id = person_id;
-    }
 
     public BrotBestandRepresentation getBrotbestand(){
         return brotbestand;
@@ -49,20 +28,11 @@ public class BrotBestellungRepresentation {
         this.brotbestand = brotbestand;
     }
 
-    public double getBestellmenge(){
-        return bestellmenge;
-    }
+	public void setId(String id) {
+		// TODO Auto-generated method stub
+		super.id = id;
+		
+	}
 
-    public void setBestellmenge(double bestellmenge){
-        this.bestellmenge = bestellmenge;
-    }
-
-    public Timestamp getDatum(){
-        return datum;
-    }
-
-    public void setDatum(Timestamp datum){
-        this.datum = datum;
-    }
 
 }
