@@ -51,6 +51,9 @@ public class EinkaufRepresentation {
 	public double getBestandPriceAtTime() {
 		return bestandPriceAtTime;
 	}
+	public void setId(String id) {
+		this.id = id;
+	}
 	
 	
 }

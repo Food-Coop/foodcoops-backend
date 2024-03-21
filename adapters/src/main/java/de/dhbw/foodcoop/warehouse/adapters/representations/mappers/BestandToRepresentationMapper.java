@@ -32,8 +32,6 @@ public class BestandToRepresentationMapper implements Function<BestandEntity, Be
     public BestandToRepresentationMapper() {
 
     }
-    
-
 
 	@Override
 	public BestandRepresentation apply(BestandEntity t) {
