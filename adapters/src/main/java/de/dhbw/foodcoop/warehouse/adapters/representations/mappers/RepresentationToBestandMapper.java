@@ -1,5 +1,6 @@
 package de.dhbw.foodcoop.warehouse.adapters.representations.mappers;
 
+import java.util.Optional;
 import java.util.function.Function;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,22 +10,26 @@ import de.dhbw.foodcoop.warehouse.adapters.representations.BestandRepresentation
 import de.dhbw.foodcoop.warehouse.adapters.representations.BrotBestandRepresentation;
 import de.dhbw.foodcoop.warehouse.adapters.representations.FrischBestandRepresentation;
 import de.dhbw.foodcoop.warehouse.adapters.representations.ProduktRepresentation;
+import de.dhbw.foodcoop.warehouse.application.lager.EinheitService;
+import de.dhbw.foodcoop.warehouse.application.lager.KategorieService;
 import de.dhbw.foodcoop.warehouse.domain.entities.BestandEntity;
 import de.dhbw.foodcoop.warehouse.domain.entities.BrotBestand;
 import de.dhbw.foodcoop.warehouse.domain.entities.FrischBestand;
+import de.dhbw.foodcoop.warehouse.domain.entities.Kategorie;
 import de.dhbw.foodcoop.warehouse.domain.entities.Produkt;
+import de.dhbw.foodcoop.warehouse.domain.values.Einheit;
 
 @Component
 public class RepresentationToBestandMapper implements Function<BestandRepresentation, BestandEntity> {
 
 	@Autowired
-	private RepresentationToEinheitMapper einheitMapper;
-	
-	@Autowired
-	private RepresentationToKategorieMapper kategorieMapper;
-	
-	@Autowired
 	private RepresentationToLagerbestandMapper lagerbestandMapper;
+	
+	@Autowired
+	private EinheitService einheitService;
+	
+	@Autowired
+	private KategorieService kategorieService;
 	
     @Autowired
     public RepresentationToBestandMapper() {
@@ -38,11 +43,14 @@ public class RepresentationToBestandMapper implements Function<BestandRepresenta
     		return new BrotBestand(oldBestand.getId(), pickNewIfDefined(oldBestand.getName(), newBestand.getName()), newBestand.getVerfuegbarkeit(), bb.getGewicht(), bb.getPreis());
     	} if(newBestand instanceof FrischBestandRepresentation) {
     		FrischBestandRepresentation fb = (FrischBestandRepresentation) newBestand;
-    		return new FrischBestand(oldBestand.getId(), pickNewIfDefined(oldBestand.getName(), newBestand.getName()), newBestand.getVerfuegbarkeit(), fb.getHerkunftsland(), fb.getGebindegroesse(), einheitMapper.apply(fb.getEinheit()), kategorieMapper.apply(fb.getKategorie()), fb.getPreis());
+    		Einheit einheit = einheitService.findById(fb.getEinheit().getId()).orElseThrow();
+			Kategorie kategorie = kategorieService.findById(fb.getKategorie().getId()).orElseThrow();
+    		return new FrischBestand(oldBestand.getId(), pickNewIfDefined(oldBestand.getName(), newBestand.getName()), newBestand.getVerfuegbarkeit(), fb.getHerkunftsland(), fb.getGebindegroesse(), einheit, kategorie, fb.getPreis());
     	}
     	if(newBestand instanceof ProduktRepresentation) {
     		ProduktRepresentation pr = (ProduktRepresentation) newBestand;
-    		return new Produkt(oldBestand.getId(), pickNewIfDefined(oldBestand.getName(), newBestand.getName()), kategorieMapper.apply(pr.getKategorie()), lagerbestandMapper.apply(pr.getLagerbestand()));
+    		Kategorie kategorie = kategorieService.findById(pr.getKategorie().getId()).orElseThrow();
+    		return new Produkt(oldBestand.getId(), pickNewIfDefined(oldBestand.getName(), newBestand.getName()), kategorie, lagerbestandMapper.apply(pr.getLagerbestand()));
     	}
     	
     	return null;
@@ -58,17 +66,20 @@ public class RepresentationToBestandMapper implements Function<BestandRepresenta
 
 	@Override
 	public BestandEntity apply(BestandRepresentation t) {
+		
 		if(t instanceof BrotBestandRepresentation) {
 			BrotBestandRepresentation bbr = (BrotBestandRepresentation) t;
 			return new BrotBestand(bbr.getId(), bbr.getName(), bbr.getVerfuegbarkeit(), bbr.getGewicht(), bbr.getPreis());
 		}  if(t instanceof FrischBestandRepresentation) {
 			FrischBestandRepresentation bbr = (FrischBestandRepresentation) t;
-			
-			return new FrischBestand(bbr.getId(), bbr.getName(), bbr.getVerfuegbarkeit(), bbr.getHerkunftsland(), bbr.getGebindegroesse(), einheitMapper.apply(bbr.getEinheit()), kategorieMapper.apply(bbr.getKategorie()), bbr.getPreis());
+			Einheit einheit = einheitService.findById(bbr.getEinheit().getId()).orElseThrow();
+			Kategorie kategorie = kategorieService.findById(bbr.getKategorie().getId()).orElseThrow();
+			return new FrischBestand(bbr.getId(), bbr.getName(), bbr.getVerfuegbarkeit(), bbr.getHerkunftsland(), bbr.getGebindegroesse(), einheit, kategorie, bbr.getPreis());
 		}
 		if(t instanceof ProduktRepresentation) {
 			ProduktRepresentation pr = (ProduktRepresentation) t;
-			return new Produkt(pr.getId(), pr.getName(), kategorieMapper.apply(pr.getKategorie()), lagerbestandMapper.apply(pr.getLagerbestand()));
+			Kategorie kategorie = kategorieService.findById(pr.getKategorie().getId()).orElseThrow();
+			return new Produkt(pr.getId(), pr.getName(), kategorie, lagerbestandMapper.apply(pr.getLagerbestand()));
 		}
 		
 		return null;
