@@ -43,8 +43,6 @@ public abstract class BestellungEntity {
 	@Column
 	protected boolean isDone;
 	
-
-	
 	@Column
 	private double reeleMenge;
 	

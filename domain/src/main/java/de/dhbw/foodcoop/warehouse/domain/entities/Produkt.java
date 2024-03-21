@@ -17,9 +17,7 @@ public class Produkt extends BestandEntity {
     @JoinColumn(name = "kategorie_id")
     private Kategorie kategorie;
     
-    @ManyToOne
-    @JoinColumn(name = "einkauf_id")
-    private EinkaufEntity einkauf;
+
 
     public Produkt(String id, String name, Kategorie kategorie, Lagerbestand lagerbestand) {
         Validate.notBlank(id);
@@ -52,13 +50,7 @@ public class Produkt extends BestandEntity {
     }
     
 
-    public EinkaufEntity getEinkauf() {
-		return einkauf;
-	}
 
-	public void setEinkauf(EinkaufEntity einkauf) {
-		this.einkauf = einkauf;
-	}
 
 	@Override
     public boolean equals(Object o) {

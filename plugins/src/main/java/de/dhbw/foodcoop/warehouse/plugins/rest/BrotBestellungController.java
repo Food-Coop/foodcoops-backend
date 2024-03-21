@@ -5,6 +5,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 import java.sql.Time;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -16,15 +17,23 @@ import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
+import de.dhbw.foodcoop.warehouse.adapters.representations.BrotBestandRepresentation;
 import de.dhbw.foodcoop.warehouse.adapters.representations.BrotBestellungRepresentation;
 import de.dhbw.foodcoop.warehouse.adapters.representations.DeadlineRepresentation;
-import de.dhbw.foodcoop.warehouse.adapters.representations.mappers.BrotBestellungToRepresentationMapper;
+import de.dhbw.foodcoop.warehouse.adapters.representations.mappers.BestellungToRepresentationMapper;
 import de.dhbw.foodcoop.warehouse.adapters.representations.mappers.DeadlineToRepresentationMapper;
-import de.dhbw.foodcoop.warehouse.adapters.representations.mappers.RepresentationToBrotBestellungMapper;
+import de.dhbw.foodcoop.warehouse.adapters.representations.mappers.RepresentationToBestellungMapper;
 import de.dhbw.foodcoop.warehouse.application.brot.BrotBestellungService;
 import de.dhbw.foodcoop.warehouse.application.deadline.DeadlineService;
+import de.dhbw.foodcoop.warehouse.domain.entities.BrotBestand;
 import de.dhbw.foodcoop.warehouse.domain.entities.BrotBestellung;
 import de.dhbw.foodcoop.warehouse.domain.exceptions.BrotBestellungInUseException;
 import de.dhbw.foodcoop.warehouse.domain.exceptions.BrotBestellungNotFoundException;
@@ -34,15 +43,15 @@ import de.dhbw.foodcoop.warehouse.plugins.rest.assembler.DeadlineModelAssembler;
 @RestController
 public class BrotBestellungController {
     private final BrotBestellungService service;
-    private final RepresentationToBrotBestellungMapper toBrotBestellung;
-    private final BrotBestellungToRepresentationMapper toPresentation;
+    private final RepresentationToBestellungMapper toBrotBestellung;
+    private final BestellungToRepresentationMapper toPresentation;
     private final BrotBestellungModelAssembler assembler;
     private final DeadlineService deadlineService;
     private final DeadlineToRepresentationMapper deadlineToPresentation;
     private final DeadlineModelAssembler deadlineAssembler;
 
     @Autowired
-    public BrotBestellungController(BrotBestellungService service, RepresentationToBrotBestellungMapper toBrotBestellung, BrotBestellungToRepresentationMapper toPresentation, BrotBestellungModelAssembler assembler, DeadlineService deadlineService, DeadlineToRepresentationMapper deadlineToPresentation, DeadlineModelAssembler deadlineAssembler) {
+    public BrotBestellungController(BrotBestellungService service, RepresentationToBestellungMapper toBrotBestellung, BestellungToRepresentationMapper toPresentation, BrotBestellungModelAssembler assembler, DeadlineService deadlineService, DeadlineToRepresentationMapper deadlineToPresentation, DeadlineModelAssembler deadlineAssembler) {
         this.service = service;
         this.toBrotBestellung = toBrotBestellung;
         this.toPresentation = toPresentation;
@@ -56,16 +65,20 @@ public class BrotBestellungController {
     public EntityModel<BrotBestellungRepresentation> one(@PathVariable String id) {
         BrotBestellung brot = service.findById(id)
                 .orElseThrow(() -> new BrotBestellungNotFoundException(id));
-        BrotBestellungRepresentation presentation = toPresentation.apply(brot);
+        BrotBestellungRepresentation presentation = (BrotBestellungRepresentation)toPresentation.apply(brot);
         return assembler.toModel(presentation);
     }
 
     @GetMapping("/brotBestellung")
     public CollectionModel<EntityModel<BrotBestellungRepresentation>> all() {
-        List<EntityModel<BrotBestellungRepresentation>> brote = service.all().stream()
-                .map(toPresentation)
-                .map(assembler::toModel)
-                .collect(Collectors.toList());
+       	List<BrotBestellung> brotBestellungen = service.all();
+    	List<EntityModel<BrotBestellungRepresentation>> brote = new ArrayList<>();
+    	for(BrotBestellung b : brotBestellungen) {
+    		BrotBestellungRepresentation br = (BrotBestellungRepresentation) toPresentation.apply(b);
+    		EntityModel<BrotBestellungRepresentation> em = assembler.toModel(br);
+    		brote.add(em);
+    	}
+
         return CollectionModel.of(brote,
                 linkTo(methodOn(BrotBestellungController.class).all()).withSelfRel());
     }
@@ -74,10 +87,14 @@ public class BrotBestellungController {
     public CollectionModel<EntityModel<BrotBestellungRepresentation>> findByDateAfterAndPerson(@PathVariable String person_id){
         //Timestamp datum1 = getTimestampNow();
         Timestamp datum = getTimestampOfDeadLine(-1);
-        List<EntityModel<BrotBestellungRepresentation>> brote = service.findByDateAfterAndPerson(datum, person_id).stream()
-                .map(toPresentation)
-                .map(assembler::toModel)
-                .collect(Collectors.toList());
+     	List<BrotBestellung> brotBestellungen = service.findByDateAfterAndPerson(datum, person_id);
+    	List<EntityModel<BrotBestellungRepresentation>> brote = new ArrayList<>();
+    	for(BrotBestellung b : brotBestellungen) {
+    		BrotBestellungRepresentation br = (BrotBestellungRepresentation) toPresentation.apply(b);
+    		EntityModel<BrotBestellungRepresentation> em = assembler.toModel(br);
+    		brote.add(em);
+    	}
+      
         return CollectionModel.of(brote,
                 linkTo(methodOn(BrotBestellungController.class).all()).withSelfRel());
     }
@@ -86,10 +103,14 @@ public class BrotBestellungController {
     public CollectionModel<EntityModel<BrotBestellungRepresentation>> findByDateBetween(@PathVariable String person_id){
         Timestamp datum1 = getTimestampOfDeadLine(-1);
         Timestamp datum2 = getTimestampOfDeadLine(-2);
-        List<EntityModel<BrotBestellungRepresentation>> brote = service.findByDateBetween(datum1, datum2, person_id).stream()
-                .map(toPresentation)
-                .map(assembler::toModel)
-                .collect(Collectors.toList());
+     	List<BrotBestellung> brotBestellungen = service.findByDateBetween(datum1, datum2, person_id);
+    	List<EntityModel<BrotBestellungRepresentation>> brote = new ArrayList<>();
+    	for(BrotBestellung b : brotBestellungen) {
+    		BrotBestellungRepresentation br = (BrotBestellungRepresentation) toPresentation.apply(b);
+    		EntityModel<BrotBestellungRepresentation> em = assembler.toModel(br);
+    		brote.add(em);
+    	}
+      
         return CollectionModel.of(brote,
                 linkTo(methodOn(BrotBestellungController.class).all()).withSelfRel());
     }
@@ -98,10 +119,14 @@ public class BrotBestellungController {
     public CollectionModel<EntityModel<BrotBestellungRepresentation>> findByDateAfterAndSum(){//@PathVariable Timestamp datum1, @PathVariable Timestamp datum2){
         //Timestamp datum1 = getTimestampNow();
         Timestamp datum = getTimestampOfDeadLine(-1);
-        List<EntityModel<BrotBestellungRepresentation>> brote = service.findByDateAfterAndSum(datum).stream()
-                .map(toPresentation)
-                .map(assembler::toModel)
-                .collect(Collectors.toList());
+     	List<BrotBestellung> brotBestellungen = service.findByDateAfterAndSum(datum);
+    	List<EntityModel<BrotBestellungRepresentation>> brote = new ArrayList<>();
+    	for(BrotBestellung b : brotBestellungen) {
+    		BrotBestellungRepresentation br = (BrotBestellungRepresentation) toPresentation.apply(b);
+    		EntityModel<BrotBestellungRepresentation> em = assembler.toModel(br);
+    		brote.add(em);
+    	}
+     
         return CollectionModel.of(brote,
                 linkTo(methodOn(BrotBestellungController.class).all()).withSelfRel());
     }
@@ -113,8 +138,8 @@ public class BrotBestellungController {
                 UUID.randomUUID().toString() :
                 newBrotBestellung.getId();
         newBrotBestellung.setId(id);
-        BrotBestellung brotBestellung = service.save(toBrotBestellung.apply(newBrotBestellung));
-        EntityModel<BrotBestellungRepresentation> entityModel = assembler.toModel(toPresentation.apply(brotBestellung));
+        BrotBestellung brotBestellung = service.save((BrotBestellung)toBrotBestellung.apply(newBrotBestellung));
+        EntityModel<BrotBestellungRepresentation> entityModel = assembler.toModel((BrotBestellungRepresentation) toPresentation.apply(brotBestellung));
         return ResponseEntity
                 .created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri())
                 .body(entityModel);
@@ -124,11 +149,11 @@ public class BrotBestellungController {
     public ResponseEntity<?> update(@RequestBody BrotBestellungRepresentation brotBestellung, @PathVariable String id) {
 
         BrotBestellung oldBrotBestellung = service.findById(id).orElseThrow(() -> new BrotBestellungNotFoundException(id));
-        BrotBestellung updateBrotBestellung = toBrotBestellung.update(oldBrotBestellung, brotBestellung);
+        BrotBestellung updateBrotBestellung = (BrotBestellung) toBrotBestellung.update(oldBrotBestellung, brotBestellung);
 
         BrotBestellung saved = service.save(updateBrotBestellung);
 
-        EntityModel<BrotBestellungRepresentation> entityModel = assembler.toModel(toPresentation.apply(saved));
+        EntityModel<BrotBestellungRepresentation> entityModel = assembler.toModel((BrotBestellungRepresentation) toPresentation.apply(saved));
 
         return ResponseEntity //
                 .created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri()) //
