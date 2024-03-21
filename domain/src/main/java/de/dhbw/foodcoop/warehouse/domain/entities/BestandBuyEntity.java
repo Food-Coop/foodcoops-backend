@@ -20,9 +20,6 @@ public class BestandBuyEntity {
 	@Column
 	private double amount;
 	
-    @ManyToOne
-    @JoinColumn(name = "einkauf_id")
-    private EinkaufEntity einkauf;
 
 	public String getId() {
 		return id;
@@ -58,13 +55,7 @@ public class BestandBuyEntity {
 		this.amount = amount;
 	}
 
-	public EinkaufEntity getEinkauf() {
-		return einkauf;
-	}
 
-	public void setEinkauf(EinkaufEntity einkauf) {
-		this.einkauf = einkauf;
-	}
 	
 
 	

@@ -43,39 +43,29 @@ public class EinkaufService {
         einkauf.setDate(new Timestamp(System.currentTimeMillis()));
         einkauf = einkaufRepository.speichern(einkauf);
         if(bestandBuy != null) {
-        for(BestandBuyEntity bbe : bestandBuy) {
-        	bbe.setEinkauf(einkauf);
-        //	bestandBuyRepository.speichern(bbe);
-            if(einkauf.getBestandEinkauf() == null) {
-            	einkauf.setBestandEinkauf(new ArrayList<BestandBuyEntity>());
-            }
-        	einkauf.getBestandEinkauf().add(bbe);
+	        for(BestandBuyEntity bbe : bestandBuy) {
+	        	//bbe.setEinkauf(einkauf);
+	        //	bestandBuyRepository.speichern(bbe);
+	            if(einkauf.getBestandEinkauf() == null) {
+	            	einkauf.setBestandEinkauf(new ArrayList<BestandBuyEntity>());
+	            }
+	        		einkauf.getBestandEinkauf().add(bbe);
+	        }
         }
-        }
-
-        for (BestellungEntity ebv : vergleiche) {
-            
-          //  ebv.setEinkauf(einkauf);
-            // Setze die reeleMenge und reeleMengeAngegeben basierend auf dem Vergleich...
-
-            // Speichere den Vergleich in der Datenbank
-       //     ebvRepository.speichern(ebv);
-
-            // Füge den Vergleich dem Einkauf hinzu
-            if(einkauf.getBestellungsEinkauf() == null) {
-            	einkauf.setBestellungsEinkauf(new ArrayList<BestellungEntity>());
-            }
-            einkauf.getBestellungsEinkauf().add(ebv);
+        if(vergleiche != null) {
+        	for (BestellungEntity ebv : vergleiche) {
+            	// Füge den Vergleich dem Einkauf hinzu
+            	if(einkauf.getBestellungsEinkauf() == null) {
+            		einkauf.setBestellungsEinkauf(new ArrayList<BestellungEntity>());
+            	}
+            		einkauf.getBestellungsEinkauf().add(ebv);
+        	}
         }
         
-        
-        einkauf.setBestandPriceAtTime(1);
-        einkauf.setBreadPriceAtTime(1);
-        einkauf.setFreshPriceAtTime(1);
 
-        //einkauf.setBestandPriceAtTime(calculatePriceForBestandBuy(einkauf));
-       // einkauf.setBreadPriceAtTime(calculatePriceForBread(einkauf));
-       // einkauf.setFreshPriceAtTime(calculatePriceForFresh(einkauf));
+        einkauf.setBestandPriceAtTime(calculatePriceForBestandBuy(einkauf));
+        einkauf.setBreadPriceAtTime(calculatePriceForBread(einkauf));
+        einkauf.setFreshPriceAtTime(calculatePriceForFresh(einkauf));
         // Speichere den Einkauf in der Datenbank
         return einkaufRepository.speichern(einkauf);
     }
@@ -121,14 +111,7 @@ public class EinkaufService {
 	    		}
 	    	}
     	}
-      	if(einkauf.getBestandEinkauf() == null) {
-    		return price;
-    	}
-    	for(BestandBuyEntity be : einkauf.getBestandEinkauf()) {
-    		if(be.getBestand() instanceof BrotBestand) {
-    			price = price + be.getBestand().getPreis() * be.getAmount();
-    		}
-    	}
+
     	return price;
     }
     
@@ -156,14 +139,7 @@ public class EinkaufService {
 	    		}
 	    	}
     	}
-    	if(einkauf.getBestandEinkauf() == null) {
-    		return price;
-    	}
-    	for(BestandBuyEntity be : einkauf.getBestandEinkauf()) {
-    		if(be.getBestand() instanceof FrischBestand) {
-    			price = price + be.getBestand().getPreis() * be.getAmount();
-    		}
-    	}
+
     	return price;
     }
     
