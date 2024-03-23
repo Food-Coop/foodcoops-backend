@@ -24,7 +24,7 @@ public class DeadlineRepositoryBridge implements DeadlineRepository{
     }
 
     @Override
-    public List<Deadline> letzte() {
+    public Optional<Deadline> letzte() {
         return springDataDeadlineRepository.findLast();
     }
 
@@ -42,4 +42,10 @@ public class DeadlineRepositoryBridge implements DeadlineRepository{
     public void deleteById(String id) {
         springDataDeadlineRepository.deleteById(id);
     }
+
+	@Override
+	public Optional<Deadline> findeNachReihenfolge(int position) {
+		// TODO Auto-generated method stub
+		return springDataDeadlineRepository.findFromSortedPosition(position);
+	}
 }

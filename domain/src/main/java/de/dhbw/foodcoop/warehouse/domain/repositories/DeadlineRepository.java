@@ -8,11 +8,13 @@ import java.util.Optional;
 public interface DeadlineRepository {
     List<Deadline> alle();
 
-    List<Deadline> letzte();
+    Optional<Deadline> letzte();
     
     Deadline speichern(Deadline deadline);
 
     Optional<Deadline> findeMitId(String id);
 
     void deleteById(String id);
+    
+    Optional<Deadline> findeNachReihenfolge(int position);
 }

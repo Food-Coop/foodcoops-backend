@@ -87,7 +87,7 @@ public class FrischBestellungController {
     @GetMapping("/frischBestellung/datum/{person_id}")
     public CollectionModel<EntityModel<FrischBestellungRepresentation>> findByDateAfterAndPerson(@PathVariable String person_id){
         //Timestamp datum1 = getTimestampNow();
-        Timestamp datum = getTimestampOfDeadLine(-1);
+        Timestamp datum = Timestamp.valueOf(deadlineService.calculateDateFromDeadline(deadlineService.getByPosition(1)));
      	List<FrischBestellung> frischBestellungen = service.findByDateAfterAndPerson(datum, person_id);
     	List<EntityModel<FrischBestellungRepresentation>> frisch = new ArrayList<>();
     	for(FrischBestellung f : frischBestellungen) {
@@ -102,8 +102,8 @@ public class FrischBestellungController {
 
     @GetMapping("/frischBestellung/person/{person_id}")
     public CollectionModel<EntityModel<FrischBestellungRepresentation>> findByDateBetween(@PathVariable String person_id){
-        Timestamp datum1 = getTimestampOfDeadLine(-1);
-        Timestamp datum2 = getTimestampOfDeadLine(-2);
+        Timestamp datum1 = Timestamp.valueOf(deadlineService.calculateDateFromDeadline(deadlineService.getByPosition(1)));
+        Timestamp datum2 = Timestamp.valueOf(deadlineService.calculateDateFromDeadline(deadlineService.getByPosition(2)));
      	List<FrischBestellung> frischBestellungen = service.findByDateBetween(datum1, datum2, person_id);
     	List<EntityModel<FrischBestellungRepresentation>> frisch = new ArrayList<>();
     	for(FrischBestellung f : frischBestellungen) {
@@ -119,7 +119,7 @@ public class FrischBestellungController {
     @GetMapping("/frischBestellung/datum/menge")
     public CollectionModel<EntityModel<FrischBestellungRepresentation>> findByDateAfterAndSum(){//@PathVariable Timestamp datum1, @PathVariable Timestamp datum2){
         //Timestamp datum1 = getTimestampNow();
-        Timestamp datum = getTimestampOfDeadLine(-1);
+        Timestamp datum = Timestamp.valueOf(deadlineService.calculateDateFromDeadline(deadlineService.getByPosition(1)));
      	List<FrischBestellung> frischBestellungen = service.findByDateAfterAndSum(datum);
     	List<EntityModel<FrischBestellungRepresentation>> frisch = new ArrayList<>();
     	for(FrischBestellung f : frischBestellungen) {
@@ -170,122 +170,6 @@ public class FrischBestellungController {
         return ResponseEntity.noContent().build();
     }
 
-    // WTF ist das, dringend überarbeiten wenn mal Zeit ist..
-    public Timestamp getTimestampOfDeadLine(int n) {
-        //n = 0 => letzte Deadline, n = -1 => vorletzte Deadline, ..
-        List<EntityModel<DeadlineRepresentation>> deadlines = deadlineService.last().stream()
-                .map(deadlineToPresentation)
-                .map(deadlineAssembler::toModel)
-                .collect(Collectors.toList());
-        List<EntityModel<DeadlineRepresentation>> lastDeadline = deadlines.subList(deadlines.size()-1, deadlines.size());
-        Calendar calendar = Calendar.getInstance();
-        switch(lastDeadline.get(0).getContent().getWeekday()){
-                case "Montag":
-                        calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
-                        break;
-                case "Dienstag":
-                        calendar.set(Calendar.DAY_OF_WEEK, Calendar.TUESDAY);
-                        break;
-                case "Mittwoch":
-                        calendar.set(Calendar.DAY_OF_WEEK, Calendar.WEDNESDAY);
-                        break;
-                case "Donnerstag":
-                        calendar.set(Calendar.DAY_OF_WEEK, Calendar.THURSDAY);
-                        break;
-                case "Freitag":
-                        calendar.set(Calendar.DAY_OF_WEEK, Calendar.FRIDAY);
-                        break;
-                case "Samstag":
-                        calendar.set(Calendar.DAY_OF_WEEK, Calendar.SATURDAY);
-                        break;
-                case "Sonntag":
-                        calendar.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
-                        break;
-        }
-        
-
-        Calendar calendarNow = Calendar.getInstance();
-        int yearNow = calendarNow.get(Calendar.YEAR);
-        int monthNow = calendarNow.get(Calendar.MONTH);
-        int dayNow = calendarNow.get(Calendar.DATE);
-        int hourNow = calendarNow.get(Calendar.HOUR_OF_DAY);
-        int minuteNow = calendarNow.get(Calendar.MINUTE);
-        int secondNow = calendarNow.get(Calendar.SECOND);
-        calendarNow.set(yearNow, monthNow, dayNow, hourNow, minuteNow, secondNow);
-       
-        Time timeNow = new Time(0L);
-        timeNow.setTime(new java.util.Date().getTime());
-        if(calendar.get(Calendar.WEEK_OF_YEAR) == calendarNow.get(Calendar.WEEK_OF_YEAR) && calendar.get(Calendar.DAY_OF_WEEK) <= calendarNow.get(Calendar.DAY_OF_WEEK) && lastDeadline.get(0).getContent().getTime().getHours() <= timeNow.getHours()){
-               System.out.println(lastDeadline.get(0).getContent().getTime().getHours() + " + " + timeNow.getHours());
-               System.out.println(lastDeadline.get(0).getContent().getTime().getMinutes() + " + " + timeNow.getMinutes());
-                if ( calendar.get(Calendar.DAY_OF_WEEK) == calendarNow.get(Calendar.DAY_OF_WEEK) && lastDeadline.get(0).getContent().getTime().getHours() <= timeNow.getHours()){
-                        if(lastDeadline.get(0).getContent().getTime().getHours() == timeNow.getHours() && lastDeadline.get(0).getContent().getTime().getMinutes() <= timeNow.getMinutes()){
-                                if(lastDeadline.get(0).getContent().getTime().getMinutes() == timeNow.getMinutes() && lastDeadline.get(0).getContent().getTime().getSeconds() <= timeNow.getSeconds()){
-                                        System.out.println("True + True + True");
-                                        n += 1;
-                                }else if ( lastDeadline.get(0).getContent().getTime().getMinutes() < timeNow.getMinutes() ) {
-                                        n += 1;
-                                }
-                                else {
-                                        System.out.println("True + True + False");
-                                        //n += 1;
-                                }
-                        }
-                        else if ( lastDeadline.get(0).getContent().getTime().getHours() < timeNow.getHours() ) {
-                                n += 1;
-                        }
-                        else{
-                                System.out.println("True + False + False");
-                                //n += 1;
-                        }
-                }
-                else{
-                        System.out.println("False + False");
-                        n += 1;
-                }
-        }
-        else if ( calendar.get(Calendar.DAY_OF_WEEK) == calendarNow.get(Calendar.DAY_OF_WEEK) ){
-        }
-        else if ( calendar.get(Calendar.DAY_OF_WEEK) == 1 && calendarNow.get(Calendar.DAY_OF_WEEK) > 1 ){
-        }
-        else if ( calendar.get(Calendar.WEEK_OF_YEAR) == calendarNow.get(Calendar.WEEK_OF_YEAR) && calendar.get(Calendar.DAY_OF_WEEK) > calendarNow.get(Calendar.DAY_OF_WEEK) ){
-        }
-        else{
-                n += 1;
-        }
-        if(calendarNow.get(Calendar.DAY_OF_WEEK) == 1) {
-                if(calendar.get(Calendar.DAY_OF_WEEK) != 1 || lastDeadline.get(0).getContent().getTime().getHours() < timeNow.getHours()){
-                        if(lastDeadline.get(0).getContent().getTime().getHours() == timeNow.getHours() && lastDeadline.get(0).getContent().getTime().getMinutes() <= timeNow.getMinutes()){
-                                if(lastDeadline.get(0).getContent().getTime().getMinutes() == timeNow.getMinutes() && lastDeadline.get(0).getContent().getTime().getSeconds() <= timeNow.getSeconds()){
-                                        System.out.println("True + True + True");
-                                        n += 1;
-                                }else if ( lastDeadline.get(0).getContent().getTime().getMinutes() < timeNow.getMinutes() ) {
-                                        n += 1;
-                                }
-                                else {
-                                        System.out.println("True + True + False");
-                                        //n += 1;
-                                }
-                        }
-                        else if ( lastDeadline.get(0).getContent().getTime().getHours() < timeNow.getHours() ) {
-                                n += 1;
-                        }
-                        else{
-                                System.out.println("True + False + False");
-                                //n += 1;
-                        }
-                }
-        }
-        calendar.add(Calendar.WEEK_OF_MONTH, n);
-        int year = calendar.get(Calendar.YEAR);
-        int month = calendar.get(Calendar.MONTH);
-        int day = calendar.get(Calendar.DATE);
-        Time time = lastDeadline.get(0).getContent().getTime();
-        calendar.set(year, month, day, time.getHours(), time.getMinutes(), time.getSeconds() );
-        Date then = calendar.getTime();
-        Timestamp datum = new Timestamp(then.getTime());
-        System.out.println("Deadline: " + datum + " " + n);
-        return datum;
-    }
+   
 }
 
