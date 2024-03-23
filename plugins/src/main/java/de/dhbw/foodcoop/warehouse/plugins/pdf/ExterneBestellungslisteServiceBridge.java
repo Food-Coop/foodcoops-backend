@@ -51,8 +51,9 @@ public class ExterneBestellungslisteServiceBridge implements ExterneBestellungsl
     }
 
     @Override
-    public byte[] createExterneListeGebinde() throws IOException {      
-        Timestamp date = getTimestampOfDeadLine(-1);
+    public byte[] createExterneListeGebinde() throws IOException {   
+    	//ANSCHAUEN!
+        Timestamp date = Timestamp.valueOf(deadlineService.calculateDateFromDeadline(deadlineService.getByPosition(1)));
         List<FrischBestellung> frischBestellungList = frischBestellungSerivce.findByDateAfterAndSum(date);
         return pdfService.createFrischBestellungDocument(getBriefKopf(), frischBestellungList);
     }
@@ -76,45 +77,5 @@ public class ExterneBestellungslisteServiceBridge implements ExterneBestellungsl
         return getBriefKopf().asDocumentName();
     }
 
-    public Timestamp getTimestampOfDeadLine(int n) {
-        //n = -1 => letzte Deadline, n = -2 => vorletzte Deadline, ..
-        List<EntityModel<DeadlineRepresentation>> deadlines = deadlineService.last().stream()
-                .map(deadlineToPresentation)
-                .map(deadlineAssembler::toModel)
-                .collect(Collectors.toList());
-        List<EntityModel<DeadlineRepresentation>> lastDeadline = deadlines.subList(deadlines.size()-1, deadlines.size());
-        Calendar calendar = Calendar.getInstance();
-        switch(lastDeadline.get(0).getContent().getWeekday()){
-                case "Montag":
-                        calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
-                        break;
-                case "Dienstag":
-                        calendar.set(Calendar.DAY_OF_WEEK, Calendar.TUESDAY);
-                        break;
-                case "Mittwoch":
-                        calendar.set(Calendar.DAY_OF_WEEK, Calendar.WEDNESDAY);
-                        break;
-                case "Donnerstag":
-                        calendar.set(Calendar.DAY_OF_WEEK, Calendar.THURSDAY);
-                        break;
-                case "Freitag":
-                        calendar.set(Calendar.DAY_OF_WEEK, Calendar.FRIDAY);
-                        break;
-                case "Samstag":
-                        calendar.set(Calendar.DAY_OF_WEEK, Calendar.SATURDAY);
-                        break;
-                case "Sonntag":
-                        calendar.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
-                        break;
-        }
-        calendar.add(Calendar.WEEK_OF_MONTH, n);
-        int year = calendar.get(Calendar.YEAR);
-        int month = calendar.get(Calendar.MONTH);
-        int day = calendar.get(Calendar.DATE);
-        Time time = lastDeadline.get(0).getContent().getTime();
-        calendar.set(year, month, day, time.getHours(), time.getMinutes(), time.getSeconds() );
-        Date then = calendar.getTime();
-        Timestamp datum = new Timestamp(then.getTime());
-        return datum;
-    }
+    
 }
