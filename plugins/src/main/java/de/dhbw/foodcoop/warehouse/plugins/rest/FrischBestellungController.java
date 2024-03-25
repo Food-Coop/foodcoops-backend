@@ -87,7 +87,8 @@ public class FrischBestellungController {
     @GetMapping("/frischBestellung/datum/{person_id}")
     public CollectionModel<EntityModel<FrischBestellungRepresentation>> findByDateAfterAndPerson(@PathVariable String person_id){
         //Timestamp datum1 = getTimestampNow();
-        Timestamp datum = Timestamp.valueOf(deadlineService.calculateDateFromDeadline(deadlineService.getByPosition(1)));
+        Timestamp datum = deadlineService.getByPosition(1).getDatum();
+        
      	List<FrischBestellung> frischBestellungen = service.findByDateAfterAndPerson(datum, person_id);
     	List<EntityModel<FrischBestellungRepresentation>> frisch = new ArrayList<>();
     	for(FrischBestellung f : frischBestellungen) {
@@ -102,8 +103,8 @@ public class FrischBestellungController {
 
     @GetMapping("/frischBestellung/person/{person_id}")
     public CollectionModel<EntityModel<FrischBestellungRepresentation>> findByDateBetween(@PathVariable String person_id){
-        Timestamp datum1 = Timestamp.valueOf(deadlineService.calculateDateFromDeadline(deadlineService.getByPosition(1)));
-        Timestamp datum2 = Timestamp.valueOf(deadlineService.calculateDateFromDeadline(deadlineService.getByPosition(2)));
+        Timestamp datum1 = deadlineService.getByPosition(1).getDatum();
+        Timestamp datum2 = deadlineService.getByPosition(2).getDatum();
      	List<FrischBestellung> frischBestellungen = service.findByDateBetween(datum1, datum2, person_id);
     	List<EntityModel<FrischBestellungRepresentation>> frisch = new ArrayList<>();
     	for(FrischBestellung f : frischBestellungen) {
@@ -119,7 +120,7 @@ public class FrischBestellungController {
     @GetMapping("/frischBestellung/datum/menge")
     public CollectionModel<EntityModel<FrischBestellungRepresentation>> findByDateAfterAndSum(){//@PathVariable Timestamp datum1, @PathVariable Timestamp datum2){
         //Timestamp datum1 = getTimestampNow();
-        Timestamp datum = Timestamp.valueOf(deadlineService.calculateDateFromDeadline(deadlineService.getByPosition(1)));
+        Timestamp datum = deadlineService.getByPosition(1).getDatum();
      	List<FrischBestellung> frischBestellungen = service.findByDateAfterAndSum(datum);
     	List<EntityModel<FrischBestellungRepresentation>> frisch = new ArrayList<>();
     	for(FrischBestellung f : frischBestellungen) {

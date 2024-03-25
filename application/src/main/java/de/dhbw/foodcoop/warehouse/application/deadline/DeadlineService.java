@@ -89,9 +89,9 @@ public class DeadlineService {
     public LocalDateTime calculateDateFromDeadline(Deadline d) {
     	
     	
-    	LocalDateTime date = d.getDatum().toLocalDateTime();
-    	LocalTime t = date.toLocalTime();
-    	LocalTime target = LocalTime.of(d.getTime().getHours(), d.getTime().getMinutes(), d.getTime().getSeconds());
+    	LocalDateTime date = d.getDatum().toLocalDateTime(); // Der Timestamp an dem die deadline gesetzt wurde
+    	LocalTime t = date.toLocalTime(); // die Zeit des timestamps
+    	LocalTime target = LocalTime.of(d.getTime().getHours(), d.getTime().getMinutes(), d.getTime().getSeconds()); //Die Zeit des ziels
     	
     	if(germanDaysOfWeek.get(d.getWeekday()).getValue() == date.getDayOfWeek().getValue()) {
     		if(t.isBefore(target)) {
