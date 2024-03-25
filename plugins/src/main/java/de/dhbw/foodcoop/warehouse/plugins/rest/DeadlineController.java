@@ -4,6 +4,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -52,6 +53,13 @@ public class DeadlineController {
                 .orElseThrow(() -> new DeadlineNotFoundException(id));
         DeadlineRepresentation presentation = toPresentation.apply(deadline);
         return assembler.toModel(presentation);
+    }
+    
+    @GetMapping("/deadline/getEndDateOfDeadline/{id}")
+    public LocalDateTime getEndDate(@PathVariable String id) {
+        Deadline deadline = service.findById(id)
+                .orElseThrow(() -> new DeadlineNotFoundException(id));
+       return service.calculateDateFromDeadline(deadline);
     }
     
     @GetMapping("/deadline/lookForUpdate")

@@ -74,7 +74,7 @@ public class DeadlineService {
     	LocalDateTime dateForDeadline = calculateDateFromDeadline(d);
     	if(LocalDateTime.now().isAfter(dateForDeadline)) {
     		
-    		Deadline deadline = new Deadline(UUID.randomUUID().toString(), d.getWeekday(), d.getTime(), Timestamp.valueOf(calculateDateFromDeadline(d).plusDays(7)));
+    		Deadline deadline = new Deadline(UUID.randomUUID().toString(), d.getWeekday(), d.getTime(), new Timestamp(System.currentTimeMillis()));
     		return Optional.of(save(deadline));
     	}
 		return Optional.empty();
