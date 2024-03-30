@@ -35,8 +35,7 @@ class EinheitServiceTest {
        when(mockRepository.alle()).thenReturn(List.of(new Einheit(TestUtils.EINHEIT_TEST_ID_2, "kg")));
        when(mockRepository.speichern(newEinheit)).thenReturn(newEinheit);
        Einheit returnVal = toBeTested.save(newEinheit);
-
-       Assertions.assertEquals(TestUtils.EINHEIT_TEST_ID, returnVal.getId());
+      Assertions.assertEquals(TestUtils.EINHEIT_TEST_ID, returnVal.getId());
        Assertions.assertEquals("Liter", newEinheit.getName());
    }
 
