@@ -1,6 +1,9 @@
 package de.dhbw.foodcoop.warehouse.application.brot;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,7 +39,11 @@ public class BrotBestellungService {
 
     public BrotBestellung save(BrotBestellung bestellung) {
     	//Person p = personService.getOrCreatePerson(bestellung.getPersonId());
-    	bestellung.setDatum(new Timestamp(System.currentTimeMillis()));
+        ZonedDateTime jetztInDeutschland = ZonedDateTime.now(ZoneId.of("Europe/Berlin"));
+        long timestamp = jetztInDeutschland.toInstant().toEpochMilli();
+        Timestamp t = new Timestamp(timestamp);
+        t.setHours(LocalDateTime.now().getHour());
+    	bestellung.setDatum(t);
         BrotBestellung brotBestellung = repository.speichern(bestellung);
        // EinkaufBestellungVergleich ebv = einkaufBestellungVergleichRepository.speichern(new EinkaufBestellungVergleich(UUID.randomUUID().toString(), brotBestellung, 0, false));
       //  p.getBestellungen().add(brotBestellung);

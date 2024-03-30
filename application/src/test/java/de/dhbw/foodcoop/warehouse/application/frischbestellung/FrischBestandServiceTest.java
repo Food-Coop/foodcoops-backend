@@ -78,11 +78,11 @@ public class FrischBestandServiceTest {
         Assertions.assertEquals("DE", returnVal.getHerkunftsland());
         Assertions.assertEquals(20, returnVal.getGebindegroesse());
         Assertions.assertEquals(new Einheit("111", "Stück"), returnVal.getEinheit());
-        Assertions.assertEquals(new Kategorie("222", "Salat"), returnVal.getKategorie());
+        Assertions.assertEquals(new Kategorie("222", "Salat", true), returnVal.getKategorie());
         Assertions.assertEquals((float)1.5, returnVal.getPreis());
     }
 
     Einheit e1 = new Einheit("111", "Stück");
-    Kategorie k1 = new Kategorie("222", "Salat");
+    Kategorie k1 = new Kategorie("222", "Salat", true);
         
 }

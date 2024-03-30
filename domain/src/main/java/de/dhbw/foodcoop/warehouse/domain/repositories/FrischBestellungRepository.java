@@ -20,6 +20,8 @@ public interface FrischBestellungRepository {
     FrischBestellung speichern(FrischBestellung frischBestellung);
 
     Optional<FrischBestellung> findeMitId(String id);
+    
+    List<FrischBestellung> findeAlleBestellungenNachDatum(Timestamp datum);
 
     void deleteById(String id);
 }

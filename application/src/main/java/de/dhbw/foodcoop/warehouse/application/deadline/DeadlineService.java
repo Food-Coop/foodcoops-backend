@@ -4,6 +4,8 @@ import java.sql.Timestamp;
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.format.TextStyle;
 import java.time.temporal.TemporalAdjusters;
 import java.util.Arrays;
@@ -73,8 +75,11 @@ public class DeadlineService {
     	Deadline d = optDead.get();
     	LocalDateTime dateForDeadline = calculateDateFromDeadline(d);
     	if(LocalDateTime.now().isAfter(dateForDeadline)) {
-    		
-    		Deadline deadline = new Deadline(UUID.randomUUID().toString(), d.getWeekday(), d.getTime(), new Timestamp(System.currentTimeMillis()));
+            ZonedDateTime jetztInDeutschland = ZonedDateTime.now(ZoneId.of("Europe/Berlin"));
+            long timestamp = jetztInDeutschland.toInstant().toEpochMilli();
+            Timestamp t = new Timestamp(timestamp);
+            t.setHours(LocalDateTime.now().getHour());
+    		Deadline deadline = new Deadline(UUID.randomUUID().toString(), d.getWeekday(), d.getTime(), t);
     		return Optional.of(save(deadline));
     	}
 		return Optional.empty();

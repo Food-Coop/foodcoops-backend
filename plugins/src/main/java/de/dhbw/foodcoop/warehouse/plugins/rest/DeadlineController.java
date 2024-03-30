@@ -5,9 +5,12 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -108,8 +111,11 @@ public class DeadlineController {
                 newDeadline.getId();
             newDeadline.setId(id);
 
-
-        newDeadline.setDatum(new Timestamp(System.currentTimeMillis()));
+            ZonedDateTime jetztInDeutschland = ZonedDateTime.now(ZoneId.of("Europe/Berlin"));
+            long timestamp = jetztInDeutschland.toInstant().toEpochMilli();
+            Timestamp t = new Timestamp(timestamp);
+            t.setHours(LocalDateTime.now().getHour());
+        newDeadline.setDatum(t);
 
         Deadline deadline = service.save(toDeadline.apply(newDeadline));
         EntityModel<DeadlineRepresentation> entityModel = assembler.toModel(toPresentation.apply(deadline));

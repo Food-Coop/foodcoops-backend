@@ -58,4 +58,9 @@ public class FrischBestellungRepositoryBridge implements FrischBestellungReposit
 	public List<FrischBestellung> findeAlleVonPerson(String person_id) {
 		return springDataFrischBestellungRepository.findAllFromPerson(person_id);
 	}
+
+	@Override
+	public List<FrischBestellung> findeAlleBestellungenNachDatum(Timestamp datum) {
+		return springDataFrischBestellungRepository.findAllAfter(datum);
+	}
 }

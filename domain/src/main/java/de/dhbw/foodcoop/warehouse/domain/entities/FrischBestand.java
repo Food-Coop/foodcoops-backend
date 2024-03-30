@@ -14,7 +14,7 @@ public class FrischBestand extends BestandEntity{
     @Column
     private String herkunftsland;
     @Column
-    private int gebindegroesse;
+    private float gebindegroesse;
     @ManyToOne
     @JoinColumn(name = "einheit_id")
     private Einheit einheit;
@@ -23,7 +23,7 @@ public class FrischBestand extends BestandEntity{
     private Kategorie kategorie;
 
 
-    public FrischBestand(String id, String name, boolean verfuegbarkeit, String herkunftsland, int gebindegroesse, Einheit einheit, Kategorie kategorie, float preis) {
+    public FrischBestand(String id, String name, boolean verfuegbarkeit, String herkunftsland, float gebindegroesse, Einheit einheit, Kategorie kategorie, float preis) {
         // Validate.notBlank(id);
         // Validate.notBlank(name);
         // Validate.notNull(verfuegbarkeit);
@@ -55,7 +55,7 @@ public class FrischBestand extends BestandEntity{
         return herkunftsland;
     }
 
-    public int getGebindegroesse() {
+    public float getGebindegroesse() {
         return gebindegroesse;
     }
 
@@ -72,7 +72,7 @@ public class FrischBestand extends BestandEntity{
         this.herkunftsland = herkunftsland;
     }
 
-    public void setGebindegroesse(int gebindegroesse) {
+    public void setGebindegroesse(float gebindegroesse) {
         this.gebindegroesse = gebindegroesse;
     }
 

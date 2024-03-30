@@ -19,7 +19,7 @@ public class FoodcoopWarehouseApplication {
         SpringApplication.run(FoodcoopWarehouseApplication.class, args);
     }
     
-    @Scheduled(fixedDelay = 1000 * 60, initialDelay = 1000 *2)
+    @Scheduled(fixedDelay = 1000 * 60 * 3, initialDelay = 1000 *2)
     public void updateDeadlineIfNescessary()  {
     	deadlineService.updateDeadline();
 }

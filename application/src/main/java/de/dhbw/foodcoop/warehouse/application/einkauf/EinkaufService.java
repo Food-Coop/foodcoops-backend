@@ -1,6 +1,9 @@
 package de.dhbw.foodcoop.warehouse.application.einkauf;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -26,7 +29,7 @@ public class EinkaufService {
 	@Autowired
     private EinkaufRepository einkaufRepository;
 
-    public BestandBuyEntity createBestandBuyEntityForPersonOrder(BestandEntity bestand, double amount) {
+    public BestandBuyEntity createBestandBuyEntityForPersonOrder(Produkt bestand, double amount) {
     	BestandBuyEntity bbe = new BestandBuyEntity();
     	bbe.setId(UUID.randomUUID().toString());
     	bbe.setAmount(amount);
@@ -40,7 +43,11 @@ public class EinkaufService {
         EinkaufEntity einkauf = new EinkaufEntity();
         einkauf.setId(UUID.randomUUID().toString());
         einkauf.setPersonId(personId);
-        einkauf.setDate(new Timestamp(System.currentTimeMillis()));
+        ZonedDateTime jetztInDeutschland = ZonedDateTime.now(ZoneId.of("Europe/Berlin"));
+        long timestamp = jetztInDeutschland.toInstant().toEpochMilli();
+        Timestamp t = new Timestamp(timestamp);
+        t.setHours(LocalDateTime.now().getHour());
+        einkauf.setDate(t);
         einkauf = einkaufRepository.speichern(einkauf);
         if(bestandBuy != null) {
 	        for(BestandBuyEntity bbe : bestandBuy) {
