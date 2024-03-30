@@ -1,6 +1,9 @@
 package de.dhbw.foodcoop.warehouse.application.frischbestellung;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,6 +26,9 @@ public class FrischBestellungService {
         return repository.alle();
     }
 
+    public List<FrischBestellung> findAllOrdersAfterDate(Timestamp date) {
+    	return repository.findeAlleBestellungenNachDatum(date);
+    }
     public List<FrischBestellung> findByDateAfterAndPerson(Timestamp datum, String person_id){
         return repository.findeMitDatumNachUndPerson(datum, person_id);
     }
@@ -38,7 +44,11 @@ public class FrischBestellungService {
     //Hier wird für den Einkauf direkt ein Vergleichs Objekt angelegt
     public FrischBestellung save(FrischBestellung bestellung) {
     //	Person p = personService.getOrCreatePerson(bestellung.getPersonId());
-    	bestellung.setDatum(new Timestamp(System.currentTimeMillis()));
+        ZonedDateTime jetztInDeutschland = ZonedDateTime.now(ZoneId.of("Europe/Berlin"));
+        long timestamp = jetztInDeutschland.toInstant().toEpochMilli();
+        Timestamp t = new Timestamp(timestamp);
+        t.setHours(LocalDateTime.now().getHour());
+    	bestellung.setDatum(t);
         FrischBestellung frischBestellung = repository.speichern(bestellung);
        // EinkaufBestellungVergleich ebv = einkaufBestellungVergleichRepository.speichern(new EinkaufBestellungVergleich(UUID.randomUUID().toString(), frischBestellung, 0, false));
      //   p.getBestellungen().add(frischBestellung);

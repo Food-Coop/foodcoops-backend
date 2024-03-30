@@ -15,7 +15,7 @@ public class BestandBuyEntity {
 	
 	@ManyToOne 
 	@JoinColumn(name = "bestand_id")
-	private BestandEntity bestand;
+	private Produkt bestand;
 	
 	@Column
 	private double amount;
@@ -29,18 +29,18 @@ public class BestandBuyEntity {
 		this.id = id;
 	}
 
-	public BestandEntity getBestand() {
+	public Produkt getBestand() {
 		return bestand;
 	}
 
-	public void setBestand(BestandEntity bestand) {
+	public void setBestand(Produkt bestand) {
 		this.bestand = bestand;
 	}
 
 	public BestandBuyEntity() {
 		// TODO Auto-generated constructor stub
 	}
-	public BestandBuyEntity(String id, BestandEntity bestand, double amount) {
+	public BestandBuyEntity(String id, Produkt bestand, double amount) {
 		super();
 		this.id = id;
 		this.bestand = bestand;

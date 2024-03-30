@@ -14,14 +14,16 @@ public class RepresentationToKategorieMapper implements Function<KategorieRepres
 
         return new Kategorie(
                 kategorieRepresentation.getId(),
-                kategorieRepresentation.getName());
+                kategorieRepresentation.getName(),
+                kategorieRepresentation.isMixable());
     }
 
     public Kategorie update(Kategorie oldKategorie, KategorieRepresentation newKategorie) {
 
         return new Kategorie(
                 oldKategorie.getId(),
-                pickNewIfDefined(oldKategorie.getName(), newKategorie.getName())
+                pickNewIfDefined(oldKategorie.getName(), newKategorie.getName()),
+                		newKategorie.isMixable()
         );
     }
 

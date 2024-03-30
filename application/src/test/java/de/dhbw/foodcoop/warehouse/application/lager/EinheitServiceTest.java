@@ -56,7 +56,7 @@ class EinheitServiceTest {
        Einheit oldEinheint = new Einheit(TestUtils.EINHEIT_TEST_ID, "Gramm");
        Einheit otherEinheit = new Einheit(TestUtils.EINHEIT_TEST_ID_2, "meter");
        Lagerbestand lagerbestand = new Lagerbestand(otherEinheit, 0.8, 1.5);
-       Kategorie kategorie = new Kategorie("1234", "Wurst");
+       Kategorie kategorie = new Kategorie("1234", "Wurst", false);
        Produkt produkt = new Produkt(TestUtils.PRODUKT_TEST_ID
                , "Blutwurst"
                , kategorie

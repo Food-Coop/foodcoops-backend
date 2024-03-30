@@ -28,9 +28,9 @@ public class KategorieServiceTest {
    @Test
    @DisplayName("Kategorie Sort Test")
    public void getAllKategoriesSorted() {
-       Kategorie a = new Kategorie("1234", "Kartoffel");
-       Kategorie b = new Kategorie("2345", "Tomate");
-       Kategorie uea = new Kategorie("3456", "Salat");
+       Kategorie a = new Kategorie("1234", "Kartoffel", false);
+       Kategorie b = new Kategorie("2345", "Tomate", false);
+       Kategorie uea = new Kategorie("3456", "Salat", true);
 
        when(mockRepository.alle()).thenReturn(Arrays.asList(uea, b, a));
        List<Kategorie> whenReturn = toBeTested.all();
@@ -55,6 +55,6 @@ public class KategorieServiceTest {
    }
 
    private Kategorie getKategorie(List<Produkt> produkts) {
-       return new Kategorie("1234", "Apfel");
+       return new Kategorie("1234", "Apfel", true);
    }
 }

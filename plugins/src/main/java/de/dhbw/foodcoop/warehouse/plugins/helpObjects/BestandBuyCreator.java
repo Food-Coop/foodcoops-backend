@@ -1,18 +1,23 @@
 package de.dhbw.foodcoop.warehouse.plugins.helpObjects;
 
 import de.dhbw.foodcoop.warehouse.domain.entities.BestandEntity;
+import de.dhbw.foodcoop.warehouse.domain.entities.Produkt;
 
 public class BestandBuyCreator {
 
-	private BestandEntity bestandEntity;
+	private Produkt bestandEntity;
 	private double amount;
-	public BestandEntity getBestandEntity() {
+	
+	
+	
+	
+	public Produkt getBestandEntity() {
 		return bestandEntity;
 	}
 	public double getAmount() {
 		return amount;
 	}
-	public void setBestandEntity(BestandEntity bestandEntity) {
+	public void setBestandEntity(Produkt bestandEntity) {
 		this.bestandEntity = bestandEntity;
 	}
 	public void setAmount(double amount) {

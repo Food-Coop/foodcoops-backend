@@ -18,15 +18,28 @@ public class DiscrepancyEntity {
     @JoinColumn(name = "frischbestand_id")
 	private BestandEntity bestand;
 	
+	// Wenn ein Gebinde z.B. 2,5kg ist, und zuBestellendeGebinde 3, heißt das 2,5 * 3 für gesamte Kg Menge
 	@Column
-	private float amount;
+	private int zuBestellendeGebinde;
 	
+	// Positive Zahl: Menge die zu viel geliefert wurde. In Stückzahl oder Kg
+	// Negative Zahl: Menge die zu wenig geliefert wurde. In Stückzahl oder Kg
+	@Column
+	private float zuVielzuWenig;
 	
-	public DiscrepancyEntity(String id, BestandEntity bestand, float amount) {
+	// Wie viel bestellt werden würde wenn es keine Gebinde gäb. z.B. 3 Personen bestellen 3Kg = 9Kg (auch wenn gebinde z.B. 8kg wäre)
+	@Column
+	private float gewollteMenge;
+	
+
+	
+	public DiscrepancyEntity(String id, BestandEntity bestand, int zuBestellendeGebinde, float zuVielzuWenig, float gewollteMenge) {
 		super();
+		this.gewollteMenge = gewollteMenge;
 		this.id = id;
 		this.bestand = bestand;
-		this.amount = amount;
+		this.zuBestellendeGebinde = zuBestellendeGebinde;
+		this.zuVielzuWenig = zuVielzuWenig;
 	}
 
 	public DiscrepancyEntity() {
@@ -45,6 +58,21 @@ public class DiscrepancyEntity {
 
 
 
+	public int getZuBestellendeGebinde() {
+		return zuBestellendeGebinde;
+	}
+
+	public void setZuBestellendeGebinde(int zuBestellendeGebinde) {
+		this.zuBestellendeGebinde = zuBestellendeGebinde;
+	}
+
+	public float getZuVielzuWenig() {
+		return zuVielzuWenig;
+	}
+
+	public void setZuVielzuWenig(float zuVielzuWenig) {
+		this.zuVielzuWenig = zuVielzuWenig;
+	}
 
 	public BestandEntity getBestand() {
 		return bestand;
@@ -57,16 +85,17 @@ public class DiscrepancyEntity {
 		this.bestand = bestand;
 	}
 
+	public float getGewollteMenge() {
+		return gewollteMenge;
+	}
 
-
-
-	public float getAmount() {
-		return amount;
+	public void setGewollteMenge(float gewollteMenge) {
+		this.gewollteMenge = gewollteMenge;
 	}
 
 
-	public void setAmount(float amount) {
-		this.amount = amount;
-	}
+
+
+
 
 }

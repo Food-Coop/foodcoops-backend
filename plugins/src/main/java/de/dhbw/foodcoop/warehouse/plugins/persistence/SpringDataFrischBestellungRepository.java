@@ -28,4 +28,7 @@ public interface SpringDataFrischBestellungRepository extends JpaRepository<Fris
     
     @Query("SELECT f FROM FrischBestellung f WHERE f.personId = :person_id")
     List<FrischBestellung> findAllFromPerson(@Param("person_id") String person_id);
+    
+    @Query("SELECT f FROM FrischBestellung f WHERE f.datum > :date")
+    List<FrischBestellung> findAllAfter(@Param("date") Timestamp date);
 }
