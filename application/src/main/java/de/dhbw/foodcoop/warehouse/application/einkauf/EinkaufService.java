@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import javax.naming.InsufficientResourcesException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -38,7 +40,7 @@ public class EinkaufService {
     }
     
 
-    public EinkaufEntity einkaufDurchführen( String personId, List<BestellungEntity> vergleiche, List<BestandBuyEntity> bestandBuy) {
+    public EinkaufEntity einkaufDurchführen( String personId, List<BestellungEntity> vergleiche, List<BestandBuyEntity> bestandBuy) throws Exception {
 
         EinkaufEntity einkauf = new EinkaufEntity();
         einkauf.setId(UUID.randomUUID().toString());
@@ -48,7 +50,6 @@ public class EinkaufService {
         Timestamp t = new Timestamp(timestamp);
         t.setHours(LocalDateTime.now().getHour());
         einkauf.setDate(t);
-        einkauf = einkaufRepository.speichern(einkauf);
         if(bestandBuy != null) {
 	        for(BestandBuyEntity bbe : bestandBuy) {
 	        	//bbe.setEinkauf(einkauf);
@@ -56,6 +57,10 @@ public class EinkaufService {
 	            if(einkauf.getBestandEinkauf() == null) {
 	            	einkauf.setBestandEinkauf(new ArrayList<BestandBuyEntity>());
 	            }
+	            	if(bbe.getBestand().getLagerbestand().getIstLagerbestand() - bbe.getAmount() < 0) {
+	            		throw new Exception("Insufficient Lagerbestand!");
+	            	}
+	            	bbe.getBestand().getLagerbestand().setIstLagerbestand(bbe.getBestand().getLagerbestand().getIstLagerbestand() - bbe.getAmount());
 	        		einkauf.getBestandEinkauf().add(bbe);
 	        }
         }

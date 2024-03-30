@@ -1,7 +1,6 @@
 package de.dhbw.foodcoop.warehouse.application.gebindemanagement;
 
 import java.lang.invoke.WrongMethodTypeException;
-import java.security.KeyStore.Entry;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -16,6 +15,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import de.dhbw.foodcoop.warehouse.application.deadline.DeadlineService;
 import de.dhbw.foodcoop.warehouse.application.frischbestellung.FrischBestellungService;
@@ -24,6 +24,7 @@ import de.dhbw.foodcoop.warehouse.domain.entities.FrischBestand;
 import de.dhbw.foodcoop.warehouse.domain.entities.FrischBestellung;
 import de.dhbw.foodcoop.warehouse.domain.entities.Kategorie;
 
+@Service
 public class GebindemanagementService {
 	
 	@Autowired
@@ -58,15 +59,14 @@ public class GebindemanagementService {
 				b.getFrischbestand().getKategorie() != null &&
 				b.getFrischbestand().getKategorie().equals(kategorie))
 		.sorted(Comparator.comparing(best -> best.getDatum()))
+		.sorted(Comparator.comparing(b -> b.getBestellmenge()))
 		.collect(Collectors.toList());
 		return bestellungen;
 	}
 	
 	
-	 LinkedHashMap<FrischBestand, Float> sortedMap;
 	
-	public List<DiscrepancyEntity> getDiscrepancyListForMixableCategorie(Kategorie kategorie, int threshold, boolean preferExactGebinde) {
-		sortedMap = new LinkedHashMap<>();
+	public List<DiscrepancyEntity> getDiscrepancyListForMixableCategorie(Kategorie kategorie, double threshold) {
 		List<FrischBestellung> bestellungen = filterAndSortAfterCategory(kategorie);
 		if(bestellungen == null) return null;
 		if(!kategorie.isMixable()) 	throw new WrongMethodTypeException("This Method is for mixable orders only! Use Method for non Mixable Categories!");
@@ -82,6 +82,11 @@ public class GebindemanagementService {
 			amountOrdered.merge(b.getFrischbestand(), (float) b.getBestellmenge(), Float::sum);
 
 		}
+		
+		HashMap<FrischBestand, Float> copyOfAmount = new HashMap<>();
+		amountOrdered.entrySet().stream().forEach(t -> {
+			copyOfAmount.put(t.getKey(), t.getValue());
+		});
 				Set<FrischBestand> toBeDeleted = new HashSet<>();
 				HashMap<FrischBestand, Float> toBeUpdated = new HashMap<>();
 				List<DiscrepancyEntity> toBeEdited = new ArrayList<>();
@@ -96,7 +101,7 @@ public class GebindemanagementService {
 							double rest = entry.getValue() % entry.getKey().getGebindegroesse() ;
 							int amountGebinde = (int)( entry.getValue() / entry.getKey().getGebindegroesse());
 							// Später müssen diese hier noch editiert werden!
-							toBeEdited.add(new DiscrepancyEntity(UUID.randomUUID().toString(), entry.getKey(), amountGebinde, 0f,entry.getValue()));
+							done.add(new DiscrepancyEntity(UUID.randomUUID().toString(), entry.getKey(), amountGebinde, 0f,entry.getValue()));
 
 							toBeUpdated.put(entry.getKey(), (float)rest);
 						}
@@ -110,22 +115,28 @@ public class GebindemanagementService {
 				
 				//Erneut durchgehen mit rest, um kombinationen zu finden
 				
-					FrischBestand favourit = null;
 					float currentTry = 0;
 				
+					LinkedHashMap<FrischBestand, Float> sortedMap = amountOrdered.entrySet()
+						    .stream()
+						    .sorted(Map.Entry.<FrischBestand, Float>comparingByValue().reversed())
+						    .collect(Collectors.toMap(
+						        Map.Entry::getKey,
+						        Map.Entry::getValue,
+						        (e1, e2) -> e1,
+						        LinkedHashMap::new));
 					
-				  	amountOrdered.entrySet()
-		            .stream()
-		            .sorted(Map.Entry.comparingByValue())
-		            .forEachOrdered(entry -> sortedMap.put(entry.getKey(), entry.getValue()));
+				  
 				  	
-				  	
-				  while(getSolutions(sortedMap)) {
-					  sortedMap = new LinkedHashMap<>();
-					  	amountOrdered.entrySet()
-			            .stream()
-			            .sorted(Map.Entry.comparingByValue())
-			            .forEachOrdered(entry -> sortedMap.put(entry.getKey(), entry.getValue()));
+				  while(getSolutions(sortedMap, done, copyOfAmount)) {
+					  sortedMap = sortedMap.entrySet()
+							    .stream()
+							    .sorted(Map.Entry.<FrischBestand, Float>comparingByValue().reversed())
+							    .collect(Collectors.toMap(
+							        Map.Entry::getKey,
+							        Map.Entry::getValue,
+							        (e1, e2) -> e1,
+							        LinkedHashMap::new));
 				  }
 				
 				  sortedMap.entrySet().stream().filter(entry -> entry.getValue() == 0);
@@ -138,20 +149,47 @@ public class GebindemanagementService {
 					  for(Map.Entry<FrischBestand, Float> entry : sortedMap.entrySet()) {
 						  counter = counter + entry.getValue();
 					  }
-						 threshold = threshold/100;
+						 threshold = threshold/100 * lowestGebinde.get().getGebindegroesse();
 						 if(counter >= (threshold)) {
-							done.add(new DiscrepancyEntity(UUID.randomUUID().toString(),lowestGebinde.get(), 1 , lowestGebinde.get().getGebindegroesse() - counter, counter)) ;
-						 } else {
+							  Optional<DiscrepancyEntity> de = done.stream().filter(d -> d.getBestand().getId().equalsIgnoreCase(lowestGebinde.get().getId())).findFirst();
+							  DiscrepancyEntity finalObject;
+							  if(de.isEmpty()) {
+								  finalObject = new DiscrepancyEntity(UUID.randomUUID().toString(),lowestGebinde.get(), 1 , lowestGebinde.get().getGebindegroesse() - counter, copyOfAmount.get(lowestGebinde.get()));			
+								  done.add(finalObject) ;
+							  } else {
+								  finalObject = de.get();
+								  de.get().setZuBestellendeGebinde(de.get().getZuBestellendeGebinde() + 1);
+								  de.get().setZuVielzuWenig(de.get().getZuBestellendeGebinde() * lowestGebinde.get().getGebindegroesse() - de.get().getGewollteMenge());
+							  }
+							 sortedMap.entrySet().stream()
+							 .filter(entry -> entry.getKey().getId() != finalObject.getId())
+							 .forEach(e -> {
+								  Optional<DiscrepancyEntity> discrepancy = done.stream().filter(d -> d.getBestand().getId().equalsIgnoreCase(e.getKey().getId())).findFirst();
+								  if(discrepancy.isEmpty()) {
+									  done.add(new DiscrepancyEntity(UUID.randomUUID().toString(), e.getKey(), 0, -copyOfAmount.get(e.getKey()), copyOfAmount.get(e.getKey())));
+								  } else {
+									  discrepancy.get().setZuVielzuWenig(discrepancy.get().getZuBestellendeGebinde() * e.getKey().getGebindegroesse() - discrepancy.get().getGewollteMenge());
+								  }
+							 });
+						} else {
 							  for(Map.Entry<FrischBestand, Float> entry : sortedMap.entrySet()) {
-								 done.add(new DiscrepancyEntity(UUID.randomUUID().toString(), entry.getKey(), 0, entry.getKey().getGebindegroesse() - entry.getValue(), entry.getValue()));
+								  Optional<DiscrepancyEntity> de = done.stream().filter(d -> d.getBestand().getId().equalsIgnoreCase(entry.getKey().getId())).findFirst();
+									
+									if(de.isEmpty()) {
+										 done.add(new DiscrepancyEntity(UUID.randomUUID().toString(), entry.getKey(), 0, -copyOfAmount.get(entry.getKey()), copyOfAmount.get(entry.getKey()) ));
+									} else {
+										
+										de.get().setZuVielzuWenig(de.get().getZuBestellendeGebinde() * entry.getKey().getGebindegroesse() - de.get().getGewollteMenge());
+									}
 							  }	 
 						 }
 				  }
 				  return done;
 	}
 	
-	private boolean getSolutions(LinkedHashMap<FrischBestand, Float> sorted) {
+	private boolean getSolutions(LinkedHashMap<FrischBestand, Float> sorted, List<DiscrepancyEntity> done, HashMap<FrischBestand, Float> copyOfAmount) {
 		float currentTry = 0;
+		 List<FrischBestand> potentionUpdate = new ArrayList<>();
 		HashMap<FrischBestand, Float> newList = new HashMap<>();
 		FrischBestand favourit = null;
 		boolean roundMissing = false;
@@ -165,40 +203,53 @@ public class GebindemanagementService {
 			}
 			
 				if(currentTry + entry.getValue() >= favourit.getGebindegroesse()) {
-					newList.put(entry.getKey(), currentTry + entry.getValue() % favourit.getGebindegroesse() );
-					currentTry = favourit.getGebindegroesse();
-					newList.put(favourit, currentTry);
+					newList.put(entry.getKey(), (currentTry + entry.getValue()) % favourit.getGebindegroesse() );
+					String id = favourit.getId();
 					roundMissing = true;
+					Optional<DiscrepancyEntity> de = done.stream().filter(d -> d.getBestand().getId().equalsIgnoreCase(id)).findFirst();
+					potentionUpdate.forEach(t -> newList.put(t, 0f));
+					potentionUpdate.clear();
+					if(de.isEmpty()) {
+						done.add(new DiscrepancyEntity(UUID.randomUUID().toString(), favourit, 1, favourit.getGebindegroesse() - sorted.get(favourit), copyOfAmount.get(favourit)));
+					} else {
+						de.get().setZuBestellendeGebinde(de.get().getZuBestellendeGebinde() + 1);
+						de.get().setZuVielzuWenig(de.get().getZuBestellendeGebinde() * favourit.getGebindegroesse() - de.get().getGewollteMenge());
+					}
 					break;
 				} else {
 					currentTry = currentTry + entry.getValue();
-					newList.put(entry.getKey(), 0f);
+					
+					//Hier müssen irgendwie alle vermerkt werden, die mit drin hängen
+					// z.B- bei 3 Salaten : 3 + 3 + 4 = 10, müssten alle bei rest auf 0
+					potentionUpdate.add(entry.getKey());
 				}
 			}
 		
 		sorted.putAll(newList);
-		
+		if(roundMissing) {
+			sorted.remove(favourit);
+			}
 		return roundMissing;
 	}
 	
 	
-	public DiscrepancyEntity getDiscrepancyForNotMixableCategory(FrischBestellung bestellung, int threshold) {
+	public DiscrepancyEntity getDiscrepancyForNotMixableOrder(FrischBestellung bestellung, double threshold) {
 		List<FrischBestellung> bestellungen = filterAndSortAfterCategory(bestellung.getFrischbestand().getKategorie());
 		if(bestellungen == null) return null;
 		if(bestellung.getFrischbestand() == null) return null;
-		if(bestellung.getFrischbestand().getGebindegroesse() <= 1) return null;
+	
 		
 		//Falls die Bestellungen nicht aufgefüllt werden sollen.
 		// Also z.B. Kategorie Kräuter -> 2x Dill, 1x Petersilie, aber gebindegröße bei beiden 3 dann soll nicht 3x Dill 0x Petersilie.
 		// Bei Salat z.B. hingegen schon. Also 6x Eichblatt und 2x Kopfsalat -> Gebindegröße = 10 dann 8x Eichblatt 0x Kopfsalat 
 		if(!bestellung.getFrischbestand().getKategorie().isMixable()) {
 			 bestellungen = bestellungen.stream().filter(b -> b.getFrischbestand() != null &&
-					 b.getFrischbestand().equals(bestellung.getFrischbestand())).collect(Collectors.toList());
+					 b.getFrischbestand().getId().equalsIgnoreCase(bestellung.getFrischbestand().getId())).collect(Collectors.toList());
 			 //wie viel wurde insgesamt von der Ware bestellt
 			 double amount = bestellungen.stream()
 					 .mapToDouble(b -> b.getBestellmenge())
 					 .sum();
-			 
+				if(bestellung.getFrischbestand().getGebindegroesse() <= 1) return new DiscrepancyEntity(UUID.randomUUID().toString(), bestellung.getFrischbestand(), (int)amount, 0,(float) amount);
 			 //Gebindegröße der Ware
 			 float gebindegroesse = bestellung.getFrischbestand().getGebindegroesse();
 			 DiscrepancyEntity de = new DiscrepancyEntity();
@@ -210,7 +261,7 @@ public class GebindemanagementService {
 			 
 			 int gesamtZuBestellend = sicherZuBestellendeGebinde;
 			 float zuVielZuWenig = 0;
-			 threshold = threshold/100;
+			 threshold = threshold/100 * gebindegroesse;
 			 if(rest >= (threshold)) {
 				 gesamtZuBestellend = gesamtZuBestellend + 1;
 				 zuVielZuWenig = ((float)gesamtZuBestellend * gebindegroesse ) - (float)amount;
