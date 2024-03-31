@@ -8,13 +8,13 @@ import de.dhbw.foodcoop.warehouse.domain.entities.BestandBuyEntity;
 public class EinkaufRepresentation {
 	private String id;
 	private String personId;
-	Set<BestellungRepresentation> bestellungsEinkauf;
+	Set<BestellungBuyRepresentation> bestellungsEinkauf;
 	Set<BestandBuyRepresentation> bestandEinkauf;
 	private Timestamp date;
 	private double breadPriceAtTime;
 	private double freshPriceAtTime;
 	private double bestandPriceAtTime;
-	public EinkaufRepresentation(String id, String personId, Set<BestellungRepresentation> bestellungsEinkauf,
+	public EinkaufRepresentation(String id, String personId, Set<BestellungBuyRepresentation> bestellungsEinkauf,
 			Set<BestandBuyRepresentation> bestandEinkauf, Timestamp date, double breadPriceAtTime,
 			double freshPriceAtTime, double bestandPriceAtTime) {
 		super();
@@ -33,7 +33,7 @@ public class EinkaufRepresentation {
 	public String getPersonId() {
 		return personId;
 	}
-	public Set<BestellungRepresentation> getBestellungsEinkauf() {
+	public Set<BestellungBuyRepresentation> getBestellungsEinkauf() {
 		return bestellungsEinkauf;
 	}
 	public Set<BestandBuyRepresentation> getBestandEinkauf() {

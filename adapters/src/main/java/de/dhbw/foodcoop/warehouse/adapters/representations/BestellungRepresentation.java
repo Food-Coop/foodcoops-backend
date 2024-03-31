@@ -26,16 +26,14 @@ public abstract class BestellungRepresentation {
 	private Timestamp datum;
 	private double bestellmenge;
 	private boolean isDone;
-	private double reeleMenge;
-	public BestellungRepresentation(String id, String personId, Timestamp datum, double bestellmenge, boolean isDone,
-			double reeleMenge) {
+	public BestellungRepresentation(String id, String personId, Timestamp datum, double bestellmenge, boolean isDone
+		) {
 		super();
 		this.id = id;
 		this.personId = personId;
 		this.datum = datum;
 		this.bestellmenge = bestellmenge;
 		this.isDone = isDone;
-		this.reeleMenge = reeleMenge;
 	}
 	
 	public String getId() {
@@ -52,9 +50,6 @@ public abstract class BestellungRepresentation {
 	}
 	public boolean isDone() {
 		return isDone;
-	}
-	public double getReeleMenge() {
-		return reeleMenge;
 	}
 	
 	

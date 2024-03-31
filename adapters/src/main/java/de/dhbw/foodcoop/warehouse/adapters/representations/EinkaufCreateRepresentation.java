@@ -5,13 +5,13 @@ import java.util.Set;
 public class EinkaufCreateRepresentation {
 	private String id;
 	private String personId;
-	Set<BestellungRepresentation> bestellungsEinkauf;
+	Set<BestellungBuyRepresentation> bestellungsEinkauf;
 	Set<BestandBuyRepresentation> bestandEinkauf;
 	
 	
 	
 	
-	public EinkaufCreateRepresentation(String id, String personId, Set<BestellungRepresentation> bestellungsEinkauf,
+	public EinkaufCreateRepresentation(String id, String personId, Set<BestellungBuyRepresentation> bestellungsEinkauf,
 			Set<BestandBuyRepresentation> bestandEinkauf) {
 		super();
 		this.id = id;
@@ -25,7 +25,7 @@ public class EinkaufCreateRepresentation {
 	public String getPersonId() {
 		return personId;
 	}
-	public Set<BestellungRepresentation> getBestellungsEinkauf() {
+	public Set<BestellungBuyRepresentation> getBestellungsEinkauf() {
 		return bestellungsEinkauf;
 	}
 	public Set<BestandBuyRepresentation> getBestandEinkauf() {

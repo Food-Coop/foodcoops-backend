@@ -9,16 +9,18 @@ import org.springframework.cglib.core.internal.Function;
 import org.springframework.stereotype.Component;
 
 import de.dhbw.foodcoop.warehouse.adapters.representations.BestandBuyRepresentation;
+import de.dhbw.foodcoop.warehouse.adapters.representations.BestellungBuyRepresentation;
 import de.dhbw.foodcoop.warehouse.adapters.representations.BestellungRepresentation;
 import de.dhbw.foodcoop.warehouse.adapters.representations.EinkaufRepresentation;
 import de.dhbw.foodcoop.warehouse.domain.entities.BestandBuyEntity;
+import de.dhbw.foodcoop.warehouse.domain.entities.BestellungBuyEntity;
 import de.dhbw.foodcoop.warehouse.domain.entities.BestellungEntity;
 import de.dhbw.foodcoop.warehouse.domain.entities.EinkaufEntity;
 
 @Component
 public class RepresentationToEinkaufMapper implements Function<EinkaufRepresentation, EinkaufEntity> {
     @Autowired
-    RepresentationToBestellungMapper bestellungMapper;
+    RepresentationToBestellungBuyMapper bestellungBuyMapper;
     
     @Autowired
     RepresentationToBestandBuyMapper bestandBuyMapper;
@@ -41,13 +43,13 @@ public class RepresentationToEinkaufMapper implements Function<EinkaufRepresenta
 		
 	}
 	
-	private List<BestellungEntity> convertBestellungToList(Set<BestellungRepresentation> set) {
+	private List<BestellungBuyEntity> convertBestellungToList(Set<BestellungBuyRepresentation> set) {
 		if(set == null) {
 			return null;
 		}
-		List<BestellungEntity> bestellung = new ArrayList<>();
-		for(BestellungRepresentation b : set) {
-			bestellung.add(bestellungMapper.apply(b));
+		List<BestellungBuyEntity> bestellung = new ArrayList<>();
+		for(BestellungBuyRepresentation b : set) {
+			bestellung.add(bestellungBuyMapper.apply(b));
 		}
 		return bestellung;
 		

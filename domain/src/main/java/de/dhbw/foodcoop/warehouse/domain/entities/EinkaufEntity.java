@@ -28,7 +28,7 @@ public class EinkaufEntity {
 	
 	//Dies sind die Frisch/Brot Produkte die tatsächlich von der Bestellung gekauft wurden
     @OneToMany( cascade = CascadeType.ALL, orphanRemoval = true)
-	List<BestellungEntity> bestellungsEinkauf;
+	List<BestellungBuyEntity> bestellungsEinkauf;
 	
     
     //Dies sind weitere Produkte die  z.B. aus der zuviel Liste oder Lagerware! die gekauft wurden, aber keine Bestellung waren
@@ -54,7 +54,7 @@ public class EinkaufEntity {
 	}
 
 
-	public EinkaufEntity(String id, String personId, List<BestellungEntity> einkauf,
+	public EinkaufEntity(String id, String personId, List<BestellungBuyEntity> einkauf,
 			 List<BestandBuyEntity> bestandEinkauf, Timestamp date, double breadPriceAtTime,
 			double freshPriceAtTime,  double bestandPriceAtTime) {
 		super();
@@ -132,11 +132,11 @@ public class EinkaufEntity {
 		this.personId = personId;
 	}
 
-	public List<BestellungEntity> getBestellungsEinkauf() {
+	public List<BestellungBuyEntity> getBestellungsEinkauf() {
 		return bestellungsEinkauf;
 	}
 
-	public void setBestellungsEinkauf(List<BestellungEntity> einkauf) {
+	public void setBestellungsEinkauf(List<BestellungBuyEntity> einkauf) {
 		this.bestellungsEinkauf = einkauf;
 	}
 	

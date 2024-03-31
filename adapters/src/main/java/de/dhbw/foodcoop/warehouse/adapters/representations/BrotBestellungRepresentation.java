@@ -5,8 +5,8 @@ import java.sql.Timestamp;
 public class BrotBestellungRepresentation extends BestellungRepresentation {
     private BrotBestandRepresentation brotbestand;
 
-    public BrotBestellungRepresentation(String id, String person_id, BrotBestandRepresentation brotbestand, double bestellmenge, Timestamp datum, boolean isDone, double reeleMenge) {
-     super(id, person_id, datum, bestellmenge, isDone, reeleMenge);
+    public BrotBestellungRepresentation(String id, String person_id, BrotBestandRepresentation brotbestand, double bestellmenge, Timestamp datum, boolean isDone) {
+     super(id, person_id, datum, bestellmenge, isDone);
         this.brotbestand = brotbestand;
     }
 
