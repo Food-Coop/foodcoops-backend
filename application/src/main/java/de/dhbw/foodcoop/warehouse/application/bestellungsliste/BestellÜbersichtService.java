@@ -42,7 +42,24 @@ public class BestellÜbersichtService {
 	@Autowired
 	private BrotBestellungService brotService;
 	
+	public BestellUebersicht getLastUebersicht() {
+		Deadline d = deadlineService.last();
+		return repo.findeMitDeadline(d);
+	}
 	
+	public BestellUebersicht getByDeadline(Deadline d) {
+		return repo.findeMitDeadline(d);
+	}
+	
+	public void deleteById(String id) {
+		repo.deleteById(id);
+	}
+	
+	public BestellUebersicht findById(String id) {
+		
+		
+		return repo.findeMitId(id).orElseThrow();
+	}
 	
 	public Optional<BestellUebersicht> createList(int threshold) {
 		BestellUebersicht bestellÜbersicht = new BestellUebersicht();
