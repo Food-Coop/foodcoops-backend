@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import de.dhbw.foodcoop.warehouse.domain.entities.BrotBestellung;
+import de.dhbw.foodcoop.warehouse.domain.entities.FrischBestellung;
 
 public interface SpringDataBrotBestellungRepository extends JpaRepository<BrotBestellung, String>{
 
@@ -25,4 +26,7 @@ public interface SpringDataBrotBestellungRepository extends JpaRepository<BrotBe
     
     @Query("SELECT b FROM BrotBestellung b WHERE b.personId = :person_id")
     List<BrotBestellung> findAllFromPerson(@Param("person_id") String person_id);
+    
+    @Query("SELECT f FROM BrotBestellung f WHERE f.datum > :date")
+    List<BrotBestellung> findAllAfter(@Param("date") Timestamp date);
 }

@@ -12,10 +12,21 @@ public final class KategorieRepresentation {
     }
     
     
+    
 
-    public boolean isMixable() {
+	public boolean isMixable() {
 		return isMixable;
 	}
+
+
+
+
+	public void setMixable(boolean isMixable) {
+		this.isMixable = isMixable;
+	}
+
+
+
 
 	public String getId() {
         return id;

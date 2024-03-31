@@ -58,4 +58,10 @@ public class BrotBestellungRepositoryBridge implements BrotBestellungRepository{
 	public List<BrotBestellung> alleVonPerson(String person_id) {
 		return springDataBrotBestellungRepository.findAllFromPerson(person_id);
 	}
+
+	@Override
+	public List<BrotBestellung> findAllOrdersAfterDate(Timestamp datum) {
+		// TODO Auto-generated method stub
+		return springDataBrotBestellungRepository.findAllAfter(datum);
+	}
 }
