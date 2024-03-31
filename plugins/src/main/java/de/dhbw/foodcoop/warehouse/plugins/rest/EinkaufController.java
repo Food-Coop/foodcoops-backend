@@ -105,6 +105,7 @@ public class EinkaufController {
                 UUID.randomUUID().toString() :
                 	newEinkauf.getId();
         newEinkauf.setId(id);
+        newEinkauf.getBestellungsEinkauf().stream().forEach(d -> d.setId(UUID.randomUUID().toString()));
         EinkaufEntity e = createMapper.apply(newEinkauf);
         EinkaufEntity einkauf;
 		try {
