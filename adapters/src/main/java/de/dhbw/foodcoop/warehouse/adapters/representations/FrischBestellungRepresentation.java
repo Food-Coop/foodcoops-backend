@@ -7,8 +7,8 @@ public class FrischBestellungRepresentation extends BestellungRepresentation{
     private FrischBestandRepresentation frischbestand;
 
 
-    public FrischBestellungRepresentation(String id, String person_id, FrischBestandRepresentation frischbestand, double bestellmenge, Timestamp datum, boolean isDone, double reeleMenge) {
-      super(id, person_id, datum, bestellmenge, isDone, reeleMenge);
+    public FrischBestellungRepresentation(String id, String person_id, FrischBestandRepresentation frischbestand, double bestellmenge, Timestamp datum, boolean isDone) {
+      super(id, person_id, datum, bestellmenge, isDone);
         this.frischbestand = frischbestand;
     }
 

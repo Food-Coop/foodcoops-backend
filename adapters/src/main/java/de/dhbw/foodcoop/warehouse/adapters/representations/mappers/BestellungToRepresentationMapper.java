@@ -38,8 +38,7 @@ public class BestellungToRepresentationMapper implements Function<BestellungEnti
 					((FrischBestandRepresentation)bestandMapper.apply(fb.getFrischbestand())),
 					fb.getBestellmenge(),
 					fb.getDatum(),
-					fb.isDone(),
-					fb.getReeleMenge());
+					fb.isDone());
 		}
 		if(t instanceof BrotBestellung) {
 			BrotBestellung bb = (BrotBestellung) t;
@@ -48,8 +47,7 @@ public class BestellungToRepresentationMapper implements Function<BestellungEnti
 					((BrotBestandRepresentation) bestandMapper.apply(bb.getBrotBestand())),
 					bb.getBestellmenge(),
 					bb.getDatum(),
-					bb.isDone(),
-					bb.getReeleMenge());
+					bb.isDone());
 		}
 		return null;
 	}

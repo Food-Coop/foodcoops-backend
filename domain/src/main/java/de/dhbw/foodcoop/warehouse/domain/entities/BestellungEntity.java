@@ -43,8 +43,6 @@ public abstract class BestellungEntity {
 	@Column
 	protected boolean isDone;
 	
-	@Column
-	private double reeleMenge;
 	
 
  public BestellungEntity() {
@@ -79,14 +77,6 @@ public abstract class BestellungEntity {
 		return datum;
 	}
 
-	
-	public double getReeleMenge() {
-		return reeleMenge;
-	}
-
-	public void setReeleMenge(double reeleMenge) {
-		this.reeleMenge = reeleMenge;
-	}
 
 	public void setDatum(Timestamp datum) {
 		this.datum = datum;

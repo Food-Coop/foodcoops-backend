@@ -9,14 +9,12 @@ import org.springframework.cglib.core.internal.Function;
 import org.springframework.stereotype.Component;
 
 import de.dhbw.foodcoop.warehouse.adapters.representations.BestandBuyRepresentation;
-import de.dhbw.foodcoop.warehouse.adapters.representations.BestandRepresentation;
+import de.dhbw.foodcoop.warehouse.adapters.representations.BestellungBuyRepresentation;
 import de.dhbw.foodcoop.warehouse.adapters.representations.BestellungRepresentation;
-import de.dhbw.foodcoop.warehouse.adapters.representations.DeadlineRepresentation;
 import de.dhbw.foodcoop.warehouse.adapters.representations.EinkaufRepresentation;
 import de.dhbw.foodcoop.warehouse.domain.entities.BestandBuyEntity;
-import de.dhbw.foodcoop.warehouse.domain.entities.BestandEntity;
+import de.dhbw.foodcoop.warehouse.domain.entities.BestellungBuyEntity;
 import de.dhbw.foodcoop.warehouse.domain.entities.BestellungEntity;
-import de.dhbw.foodcoop.warehouse.domain.entities.Deadline;
 import de.dhbw.foodcoop.warehouse.domain.entities.EinkaufEntity;
 
 @Component
@@ -24,7 +22,7 @@ public class EinkaufToRepresentationMapper implements Function<EinkaufEntity, Ei
    
 
 	@Autowired
-	BestellungToRepresentationMapper bestellungMapper;
+	BestellungBuyToRepresentationMapper bestellungBuyMapper;
 	
 	@Autowired
 	BestandBuyToRepresentationMapper bestandBuyMapper;
@@ -41,13 +39,13 @@ public class EinkaufToRepresentationMapper implements Function<EinkaufEntity, Ei
 	}
 	
 	
-	private Set<BestellungRepresentation> listToSetBestellung(List<BestellungEntity> list) {
+	private Set<BestellungBuyRepresentation> listToSetBestellung(List<BestellungBuyEntity> list) {
 		if(list == null) {
 			return null;
 		}
-		Set<BestellungRepresentation> set = new HashSet<>();
-		for(BestellungEntity be : list) {
-			set.add(bestellungMapper.apply(be));
+		Set<BestellungBuyRepresentation> set = new HashSet<>();
+		for(BestellungBuyEntity be : list) {
+			set.add(bestellungBuyMapper.apply(be));
 		}
 		return set;
 	}
