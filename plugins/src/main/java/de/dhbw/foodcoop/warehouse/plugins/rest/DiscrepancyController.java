@@ -38,8 +38,17 @@ public class DiscrepancyController {
 	}
 	
 	@PostMapping("/gebinde/DiscrepancyForNonMixableOrder")
-	public DiscrepancyEntity getDiscrepancyForNonMixableOrder(@RequestBody OrderAndPercentHolder orderAndPercentHolder) {
-		return service.getDiscrepancyForNotMixableOrder(orderAndPercentHolder.getBestellung(), orderAndPercentHolder.getPercentage());
+	public List<DiscrepancyEntity> getDiscrepancyForNonMixableOrder(@RequestBody CategoryAndPercentHolder orderAndPercentHolder) {
+		return service.getDiscrepancyForNotMixableOrder(orderAndPercentHolder.getKategorie(), orderAndPercentHolder.getPercentage());
+	}
+	
+	@PostMapping("/gebinde/DiscrepancyAutoDecide")
+	public List<DiscrepancyEntity> getDiscrepancyForBoth(@RequestBody CategoryAndPercentHolder categoryAndPercent) {
+		if(categoryAndPercent.getKategorie().isMixable()) {
+			return service.getDiscrepancyListForMixableCategorie(categoryAndPercent.getKategorie(), categoryAndPercent.getPercentage());
+		} else {
+			return service.getDiscrepancyForNotMixableOrder(categoryAndPercent.getKategorie(), categoryAndPercent.getPercentage());
+		}
 	}
 	
 	@GetMapping("/gebinde")

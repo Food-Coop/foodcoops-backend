@@ -1,5 +1,6 @@
 package de.dhbw.foodcoop.warehouse.domain.entities;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -13,7 +14,7 @@ public class BestandBuyEntity {
 	@Id
 	private String id;
 	
-	@ManyToOne 
+	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "bestand_id")
 	private Produkt bestand;
 	
