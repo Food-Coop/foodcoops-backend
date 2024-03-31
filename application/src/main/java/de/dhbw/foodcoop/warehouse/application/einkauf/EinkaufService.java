@@ -50,6 +50,7 @@ public class EinkaufService {
         Timestamp t = new Timestamp(timestamp);
         t.setHours(LocalDateTime.now().getHour());
         einkauf.setDate(t);
+        einkauf = einkaufRepository.speichern(einkauf);
         if(bestandBuy != null) {
 	        for(BestandBuyEntity bbe : bestandBuy) {
 	        	//bbe.setEinkauf(einkauf);
@@ -58,6 +59,7 @@ public class EinkaufService {
 	            	einkauf.setBestandEinkauf(new ArrayList<BestandBuyEntity>());
 	            }
 	            	if(bbe.getBestand().getLagerbestand().getIstLagerbestand() - bbe.getAmount() < 0) {
+	            		einkaufRepository.deleteById(einkauf.getId());
 	            		throw new Exception("Insufficient Lagerbestand!");
 	            	}
 	            	bbe.getBestand().getLagerbestand().setIstLagerbestand(bbe.getBestand().getLagerbestand().getIstLagerbestand() - bbe.getAmount());
