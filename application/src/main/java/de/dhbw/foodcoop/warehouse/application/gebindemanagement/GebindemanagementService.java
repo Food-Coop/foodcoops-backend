@@ -50,7 +50,7 @@ public class GebindemanagementService {
 	
 	
 	private List<FrischBestellung> filterAndSortAfterCategory(Kategorie kategorie) {
-		List<FrischBestellung> bestellungen = frischBestellungService.findAllOrdersAfterDate(deadlineService.last().getDatum());
+		List<FrischBestellung> bestellungen = frischBestellungService.findAllOrdersAfterDate(deadlineService.getByPosition(1).get().getDatum());
 		if(bestellungen == null) return null;
 		
 		// Nur Bestellungen welche die gleiche Kategorie haben, sortiert nach ältesten Timestamp
@@ -154,8 +154,8 @@ public class GebindemanagementService {
 					  for(Map.Entry<FrischBestand, Float> entry : sortedMap.entrySet()) {
 						  counter = counter + entry.getValue();
 					  }
-						 threshold = threshold/100 * lowestGebinde.get().getGebindegroesse();
-						 if(counter >= (threshold)) {
+						 double thresholdNew = (threshold/100) * lowestGebinde.get().getGebindegroesse();
+						 if(counter >= (thresholdNew)) {
 							  Optional<DiscrepancyEntity> de = done.stream().filter(d -> d.getBestand().getId().equalsIgnoreCase(lowestGebinde.get().getId())).findFirst();
 							  DiscrepancyEntity finalObject;
 							  if(de.isEmpty()) {
@@ -278,8 +278,8 @@ public class GebindemanagementService {
 			 
 			 int gesamtZuBestellend = sicherZuBestellendeGebinde;
 			 float zuVielZuWenig = 0;
-			 threshold = threshold/100 * gebindegroesse;
-			 if(rest >= (threshold)) {
+			 double thresholdNew = (threshold/100) * gebindegroesse;
+			 if(rest >= (thresholdNew)) {
 				 gesamtZuBestellend = gesamtZuBestellend + 1;
 				 zuVielZuWenig = ((float)gesamtZuBestellend * gebindegroesse ) - entry.getValue();
 			 } else {

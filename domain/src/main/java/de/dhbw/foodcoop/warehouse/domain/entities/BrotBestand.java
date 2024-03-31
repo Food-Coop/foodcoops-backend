@@ -9,10 +9,10 @@ import java.util.UUID;
 public class BrotBestand extends BestandEntity{
 
     @Column
-    private long gewicht;
+    private double gewicht;
 
 
-    public BrotBestand(String id, String name, boolean verfuegbarkeit, long gewicht, float preis) {
+    public BrotBestand(String id, String name, boolean verfuegbarkeit, double gewicht, float preis) {
         // Validate.notBlank(id);
         // Validate.notBlank(name);
         // Validate.notNull(verfuegbarkeit);
@@ -25,7 +25,7 @@ public class BrotBestand extends BestandEntity{
         this.preis = preis;
     }
 
-    public BrotBestand(String name, boolean verfuegbarkeit, long gewicht, float preis) {
+    public BrotBestand(String name, boolean verfuegbarkeit, double gewicht, float preis) {
         this(UUID.randomUUID().toString(), name, verfuegbarkeit, gewicht, preis);
     }
 
@@ -35,13 +35,13 @@ public class BrotBestand extends BestandEntity{
 
 
 
-    public long getGewicht() {
+    public double getGewicht() {
         return gewicht;
     }
 
    
 
-    public void setGewicht(long gewicht){
+    public void setGewicht(double gewicht){
         this.gewicht = gewicht;
     }
 

@@ -20,11 +20,7 @@ public class DiscrepancyService {
 
     private final DiscrepancyRepository discrepancy;
     
-    @Autowired
-    private FrischBestellungService frischBestellungService;
     
-    @Autowired
-    private DeadlineService deadlineService;
 
     @Autowired
     public DiscrepancyService(DiscrepancyRepository discrepancy) {
@@ -47,35 +43,5 @@ public class DiscrepancyService {
     	return discrepancy.speichern(entity);
     }
     
-    public List<DiscrepancyEntity> calculateDiscrepancyForAll() {
-    	List<FrischBestellung> all = frischBestellungService.findAllOrdersAfterDate(deadlineService.last().getDatum());
-    	List<DiscrepancyEntity> de = new ArrayList<>();
-    
-    	all = all.stream()
-    		    .filter(frischBestellung -> frischBestellung.getFrischbestand().getGebindegroesse() != 0)
-    		    .collect(Collectors.toList());
-    	for(FrischBestellung b : all) {
-//    		DiscrepancyEntity d =  de.stream()
-//                    .filter(entity -> entity.getBestand() != null && entity.getBestand().getId().equals(b.getFrischbestand().getId()))
-//                    .findFirst().orElseGet(() -> new DiscrepancyEntity(UUID.randomUUID().toString(), b.getFrischbestand(),0,0));
-    		
-    	//	d.setBestellteMenge((float) (d.getBestellteMenge() + b.getBestellmenge()));
-    	}
-    	return de;
-    }
-    
-    
-    
-    /** Der Amount kann negativ sein, wenn z.B. zu viel Eingetragen wurde, und etwas davon genommen wurde
-     * Ansonsten positiv, wenn zu wenig eingetragen wurde, und eine Person deshalb weniger nimmt.
-     *  TODO: Eventuell muss hier der Einkauf automatisch aufrufen wenn bei einer Bestellung zu viel/zu wenig genommen wurde.
-     * 
-     * @param amount
-     * @return
-     */
-//    public DiscrepancyEntity updateDiscrepancy(String id, float amount) {
-//    	DiscrepancyEntity entity = findById(id);
-//    	entity.setAmount(entity.getAmount() + amount);
-//    	return save(entity);
-//    }
+   
 }

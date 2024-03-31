@@ -77,11 +77,11 @@ public class DeadlineController {
 
     @GetMapping("/deadline/getByPosition/{id}")
     public EntityModel<DeadlineRepresentation> getByPosition(@PathVariable int id) {
-        Deadline deadline = service.getByPosition(id);
-        if(deadline == null) {
+        Optional<Deadline> deadline = service.getByPosition(id);
+        if(deadline.isEmpty()) {
         	return null;
         }
-        DeadlineRepresentation presentation = toPresentation.apply(deadline);
+        DeadlineRepresentation presentation = toPresentation.apply(deadline.get());
         return assembler.toModel(presentation);
     }
     

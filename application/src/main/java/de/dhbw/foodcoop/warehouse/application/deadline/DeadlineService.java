@@ -19,6 +19,8 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import de.dhbw.foodcoop.warehouse.application.bestellungsliste.BestellÜbersichtService;
+import de.dhbw.foodcoop.warehouse.application.gebindemanagement.GebindemanagementService;
 import de.dhbw.foodcoop.warehouse.domain.entities.Deadline;
 import de.dhbw.foodcoop.warehouse.domain.exceptions.DeadlineNotFoundException;
 import de.dhbw.foodcoop.warehouse.domain.repositories.DeadlineRepository;
@@ -26,6 +28,9 @@ import de.dhbw.foodcoop.warehouse.domain.repositories.DeadlineRepository;
 @Service
 public class DeadlineService {
     private final DeadlineRepository repository;
+    
+    @Autowired
+    BestellÜbersichtService gbmService;
 
     @Autowired
     public DeadlineService(DeadlineRepository repository) {
@@ -41,7 +46,9 @@ public class DeadlineService {
     }
 
     public Deadline save(Deadline deadline) {
-        return repository.speichern(deadline);
+        Deadline d = repository.speichern(deadline);
+        gbmService.createList(80);
+        return d;
     }
 
     public Optional<Deadline> findById(String id) {
@@ -52,8 +59,8 @@ public class DeadlineService {
         repository.deleteById(id);
     }
     
-    public Deadline getByPosition(int position) {
-    	return repository.findeNachReihenfolge(position).orElseThrow();
+    public Optional<Deadline> getByPosition(int position) {
+    	return repository.findeNachReihenfolge(position);
     }
     
     /**

@@ -24,6 +24,10 @@ public class BrotBestellungService {
     public List<BrotBestellung> all() {
         return repository.alle();
     }
+    
+    public List<BrotBestellung> findAllAftetDate(Timestamp date) {
+    	return repository.findAllOrdersAfterDate(date);
+    }
 
     public List<BrotBestellung> findByDateAfterAndPerson(Timestamp datum, String person_id){
         return repository.findeMitDatumNachUndPerson(datum, person_id);

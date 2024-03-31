@@ -14,6 +14,8 @@ public interface BrotBestellungRepository {
     List<BrotBestellung> findeMitDatumNachUndPerson(Timestamp datum, String person_id);
 
     List<BrotBestellung> findeMitDatumNachUndSum(Timestamp datum);
+   
+    List<BrotBestellung> findAllOrdersAfterDate(Timestamp datum);
 
     List<BrotBestellung> findeMitDatumZwischen(Timestamp datum1, Timestamp datum2, String person_id);
 

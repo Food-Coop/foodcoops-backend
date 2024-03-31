@@ -53,7 +53,7 @@ public class ExterneBestellungslisteServiceBridge implements ExterneBestellungsl
     @Override
     public byte[] createExterneListeGebinde() throws IOException {   
     	//ANSCHAUEN!
-        Timestamp date = Timestamp.valueOf(deadlineService.calculateDateFromDeadline(deadlineService.getByPosition(1)));
+        Timestamp date = Timestamp.valueOf(deadlineService.calculateDateFromDeadline(deadlineService.getByPosition(1).get()));
         List<FrischBestellung> frischBestellungList = frischBestellungSerivce.findByDateAfterAndSum(date);
         return pdfService.createFrischBestellungDocument(getBriefKopf(), frischBestellungList);
     }
