@@ -22,17 +22,20 @@ import org.springframework.web.bind.annotation.RestController;
 
 import de.dhbw.foodcoop.warehouse.adapters.representations.EinkaufCreateRepresentation;
 import de.dhbw.foodcoop.warehouse.adapters.representations.EinkaufRepresentation;
-import de.dhbw.foodcoop.warehouse.adapters.representations.FrischBestellungRepresentation;
+import de.dhbw.foodcoop.warehouse.adapters.representations.FrischBestandRepresentation;
 import de.dhbw.foodcoop.warehouse.adapters.representations.mappers.EinkaufCreateToEntityMapper;
 import de.dhbw.foodcoop.warehouse.adapters.representations.mappers.EinkaufToRepresentationMapper;
 import de.dhbw.foodcoop.warehouse.adapters.representations.mappers.RepresentationToEinkaufMapper;
 import de.dhbw.foodcoop.warehouse.application.einkauf.EinkaufService;
 import de.dhbw.foodcoop.warehouse.domain.entities.BestandBuyEntity;
 import de.dhbw.foodcoop.warehouse.domain.entities.EinkaufEntity;
-import de.dhbw.foodcoop.warehouse.domain.exceptions.FrischBestandInUseException;
 import de.dhbw.foodcoop.warehouse.plugins.helpObjects.BestandBuyCreator;
-import de.dhbw.foodcoop.warehouse.plugins.helpObjects.EinkaufRequest;
 import de.dhbw.foodcoop.warehouse.plugins.rest.assembler.EinkaufModelAssembler;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
 @RestController
 public class EinkaufController {
@@ -89,7 +92,14 @@ public class EinkaufController {
     
     
     @PostMapping("/einkauf")
-    public ResponseEntity<?> executeShopping(@RequestBody EinkaufCreateRepresentation newEinkauf) {
+    @Operation(summary = "Führe einen Einkauf durch", description = "Liefert ein Einkaufs Entity zurück")
+    @ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "Success", content = {
+					@Content(schema = @Schema(implementation = EinkaufRepresentation.class)) }),
+			@ApiResponse(responseCode = "400", description = "Bad Request", content = @Content),
+			@ApiResponse(responseCode = "401", description = "Not Authorized", content = @Content),
+			@ApiResponse(responseCode = "403", description = "Forbidden", content = @Content) })
+    public ResponseEntity<?> executeShopping(@io.swagger.v3.oas.annotations.parameters.RequestBody(content = {@Content(schema = @Schema(implementation = EinkaufCreateRepresentation.class)),@Content(schema = @Schema(implementation = FrischBestandRepresentation.class)) }) @RequestBody EinkaufCreateRepresentation newEinkauf) {
         String id = newEinkauf.getId() == null ||
         		newEinkauf.getId().equals("undefined") ?
                 UUID.randomUUID().toString() :

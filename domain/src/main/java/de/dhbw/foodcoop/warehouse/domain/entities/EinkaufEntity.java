@@ -7,6 +7,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -27,7 +28,7 @@ public class EinkaufEntity {
 	private String personId;
 	
 	//Dies sind die Frisch/Brot Produkte die tatsächlich von der Bestellung gekauft wurden
-    @OneToMany( cascade = CascadeType.ALL, orphanRemoval = true)
+    @ManyToMany( cascade = CascadeType.ALL)
 	List<BestellungEntity> bestellungsEinkauf;
 	
     
