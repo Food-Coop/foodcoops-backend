@@ -71,12 +71,17 @@ public class GebindemanagementService {
 		if(bestellungen == null) return null;
 		if(!kategorie.isMixable()) 	throw new WrongMethodTypeException("This Method is for mixable orders only! Use Method for non Mixable Categories!");
 		List<DiscrepancyEntity> done = new ArrayList<>();
-		List<DiscrepancyEntity> toFindSolution = new ArrayList<>();
 		HashMap<FrischBestand, Float> amountOrdered = new HashMap<>();
 		
 		for(FrischBestellung b : bestellungen) {
 			if(b.getFrischbestand().getGebindegroesse() <= 1) {
-				done.add(new DiscrepancyEntity(UUID.randomUUID().toString(), b.getFrischbestand(), (int) (b.getBestellmenge()), 0f, (float) b.getBestellmenge()));
+				 Optional<DiscrepancyEntity> de = done.stream().filter(d -> d.getBestand().getId().equalsIgnoreCase(b.getId())).findFirst();
+				 if(de.isEmpty()) {
+					 done.add(new DiscrepancyEntity(UUID.randomUUID().toString(), b.getFrischbestand(), (int) (b.getBestellmenge()), 0f, (float) b.getBestellmenge()));
+				 } else {
+					 de.get().setZuBestellendeGebinde((int) (de.get().getZuBestellendeGebinde() + b.getBestellmenge()));
+					 de.get().setGewollteMenge((float) (de.get().getGewollteMenge() + b.getBestellmenge()));
+				 }
 				continue;
 			}
 			amountOrdered.merge(b.getFrischbestand(), (float) b.getBestellmenge(), Float::sum);
@@ -233,50 +238,64 @@ public class GebindemanagementService {
 	}
 	
 	
-	public DiscrepancyEntity getDiscrepancyForNotMixableOrder(FrischBestellung bestellung, double threshold) {
-		List<FrischBestellung> bestellungen = filterAndSortAfterCategory(bestellung.getFrischbestand().getKategorie());
+	public List<DiscrepancyEntity> getDiscrepancyForNotMixableOrder(Kategorie kategorie, double threshold) {
+		List<FrischBestellung> bestellungen = filterAndSortAfterCategory(kategorie);
 		if(bestellungen == null) return null;
-		if(bestellung.getFrischbestand() == null) return null;
-	
+		
 		
 		//Falls die Bestellungen nicht aufgefüllt werden sollen.
 		// Also z.B. Kategorie Kräuter -> 2x Dill, 1x Petersilie, aber gebindegröße bei beiden 3 dann soll nicht 3x Dill 0x Petersilie.
 		// Bei Salat z.B. hingegen schon. Also 6x Eichblatt und 2x Kopfsalat -> Gebindegröße = 10 dann 8x Eichblatt 0x Kopfsalat 
-		if(!bestellung.getFrischbestand().getKategorie().isMixable()) {
-			 bestellungen = bestellungen.stream().filter(b -> b.getFrischbestand() != null &&
-					 b.getFrischbestand().getId().equalsIgnoreCase(bestellung.getFrischbestand().getId())).collect(Collectors.toList());
-			 //wie viel wurde insgesamt von der Ware bestellt
-			 double amount = bestellungen.stream()
-					 .mapToDouble(b -> b.getBestellmenge())
-					 .sum();
-				if(bestellung.getFrischbestand().getGebindegroesse() <= 1) return new DiscrepancyEntity(UUID.randomUUID().toString(), bestellung.getFrischbestand(), (int)amount, 0,(float) amount);
+		if(!kategorie.isMixable()) {
+			List<DiscrepancyEntity> done = new ArrayList<>();
+			HashMap<FrischBestand, Float> amountOrdered = new HashMap<>();	
+			for(FrischBestellung b : bestellungen) {
+				if(b.getFrischbestand().getGebindegroesse() <= 1) {
+				 Optional<DiscrepancyEntity> de = done.stream().filter(d -> d.getBestand().getId().equalsIgnoreCase(b.getId())).findFirst();
+				 if(de.isEmpty()) {
+					 done.add(new DiscrepancyEntity(UUID.randomUUID().toString(), b.getFrischbestand(), (int) (b.getBestellmenge()), 0f, (float) b.getBestellmenge()));
+				 } else {
+					 de.get().setZuBestellendeGebinde((int) (de.get().getZuBestellendeGebinde() + b.getBestellmenge()));
+					 de.get().setGewollteMenge((float) (de.get().getGewollteMenge() + b.getBestellmenge()));
+				 }
+				continue;
+				}
+				amountOrdered.merge(b.getFrischbestand(), (float) b.getBestellmenge(), Float::sum);
+
+			}
+			
+		
+	
 			 //Gebindegröße der Ware
-			 float gebindegroesse = bestellung.getFrischbestand().getGebindegroesse();
+			for(Map.Entry<FrischBestand,Float> entry : amountOrdered.entrySet()) {
+			 float gebindegroesse = entry.getKey().getGebindegroesse();
 			 DiscrepancyEntity de = new DiscrepancyEntity();
 			 de.setId(UUID.randomUUID().toString());
-			 de.setBestand(bestellung.getFrischbestand());
+			 de.setBestand(entry.getKey());
 			 
-			 int sicherZuBestellendeGebinde =  (int) (amount / gebindegroesse);
-			 float rest = (float)amount % gebindegroesse;
+			 int sicherZuBestellendeGebinde =  (int) (entry.getValue() / gebindegroesse);
+			 float rest = (float)entry.getValue() % gebindegroesse;
 			 
 			 int gesamtZuBestellend = sicherZuBestellendeGebinde;
 			 float zuVielZuWenig = 0;
 			 threshold = threshold/100 * gebindegroesse;
 			 if(rest >= (threshold)) {
 				 gesamtZuBestellend = gesamtZuBestellend + 1;
-				 zuVielZuWenig = ((float)gesamtZuBestellend * gebindegroesse ) - (float)amount;
+				 zuVielZuWenig = ((float)gesamtZuBestellend * gebindegroesse ) - entry.getValue();
 			 } else {
 				 if(gesamtZuBestellend == 0) {
 					 zuVielZuWenig = 0;
 				 } else {
-					 zuVielZuWenig = -((float)amount - ((float)gesamtZuBestellend * gebindegroesse));
+					 zuVielZuWenig = -(entry.getValue() - ((float)gesamtZuBestellend * gebindegroesse));
 				 }
 			 }
 			 de.setZuVielzuWenig(zuVielZuWenig);
 			 de.setZuBestellendeGebinde(gesamtZuBestellend);
-			 de.setGewollteMenge((float) amount);
-			 return de;
+			 de.setGewollteMenge(entry.getValue());
+			 done.add(de);
 			 
+			}
+			return done;
 		} else {
 			//Dies ist der Fall, wenn Produkte gemixt werden können wie z.B. Salat um ein Gebindevoll zu bekommen,
 			//andere Methode nutzen
