@@ -97,7 +97,7 @@ public class EinkaufController {
     
     @PostMapping("/einkauf/pdf/{id}")
     public byte[] sendPdfAndMail(@RequestBody String email, @PathVariable String id) {
-    	
+    			System.out.println(email + " <--- Email");
     		
   	       try {
   	    	   EinkaufEntity einkauf = einkaufService.findById(id);
