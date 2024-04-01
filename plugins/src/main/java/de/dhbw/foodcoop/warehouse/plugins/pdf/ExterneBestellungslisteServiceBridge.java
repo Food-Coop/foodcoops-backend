@@ -47,7 +47,7 @@ public class ExterneBestellungslisteServiceBridge implements ExterneBestellungsl
     public byte[] createExterneListe() throws IOException {
         List<Produkt> produktList = produktService.all();
         List<Bestellung> bestellungList = extractBestellungen(produktList);
-        return pdfService.createDocument(getBriefKopf(), bestellungList);
+        return pdfService.createDocument( bestellungList);
     }
 
     @Override
@@ -55,7 +55,7 @@ public class ExterneBestellungslisteServiceBridge implements ExterneBestellungsl
     	//ANSCHAUEN!
         Timestamp date = Timestamp.valueOf(deadlineService.calculateDateFromDeadline(deadlineService.getByPosition(1).get()));
         List<FrischBestellung> frischBestellungList = frischBestellungSerivce.findByDateAfterAndSum(date);
-        return pdfService.createFrischBestellungDocument(getBriefKopf(), frischBestellungList);
+        return pdfService.createFrischBestellungDocument( frischBestellungList);
     }
 
     private List<Bestellung> extractBestellungen(List<Produkt> produktList) {
