@@ -95,12 +95,73 @@ public class EinkaufController {
                 linkTo(methodOn(EinkaufController.class).all()).withSelfRel());
     }
     
-    @GetMapping("/einkauf/pdf")
-    public byte[] testPDF( EinkaufEntity einkauf) {
+    @GetMapping("/einkauf/pdf/{id}")
+    public byte[] sendPdfAndMail(@RequestBody String email, @PathVariable String id) {
     	
     		
   	       try {
-			return  pdf.createEinkauf(einkauf);
+  	    	   EinkaufEntity einkauf = einkaufService.findById(id);
+  	    	  String fileName = "Einkauf-FoodCoop-" + einkauf.getPersonId() + "-" + LocalDate.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")) + ".pdf";
+  	        byte[] pdfd = pdf.createEinkauf(einkauf);
+
+  	        
+  	        StringBuilder frischString = new StringBuilder();
+  	        einkauf.getBestellungsEinkauf().stream()
+  	    	.forEach(item -> {
+  	    		if(item.getBestellung() instanceof FrischBestellung) {
+  	    			FrischBestellung item2 = (FrischBestellung) item.getBestellung();
+  	    	        	frischString.append(item2.getFrischbestand().getName() + "  je ");
+  	    	        	frischString.append(item2.getFrischbestand().getPreis() + " €   ");
+  	    	        	frischString.append("Bestellt: " + item2.getBestellmenge() + "   ");
+  	    	        	frischString.append("Genommen: " + item.getAmount() + "\n");
+  	    		}
+  	    	});
+
+  	        StringBuilder brotString = new StringBuilder();
+  	        einkauf.getBestellungsEinkauf().stream()
+  	    	.forEach(item -> {
+  	    		if(item.getBestellung() instanceof BrotBestellung) {
+  	    			BrotBestellung item2 = (BrotBestellung) item.getBestellung();
+  	    	        	frischString.append(item2.getBrotBestand().getName() + "  je ");
+  	    	        	frischString.append(item2.getBrotBestand().getPreis() + " €   ");
+  	    	        	frischString.append("Bestellt: " + item2.getBestellmenge() + "   ");
+  	    	        	frischString.append("Genommen: " + item.getAmount() + "\n");
+  	    		}
+  	    	});
+  	        StringBuilder lagerString = new StringBuilder();
+  	        einkauf.getBestandEinkauf().forEach(item -> {
+  	        	frischString.append(item.getBestand().getName() + "  je ");
+  	        	frischString.append(item.getBestand().getPreis() + " €   ");
+  	        	frischString.append("Genommen: " + item.getAmount() + "\n");
+  	        });
+  	        
+  	        float lieferkosten = (float) (einkauf.getFreshPriceAtTime() * 0.05);
+  	        float gesamt = (float) (lieferkosten + einkauf.getTotalPriceAtTime());
+  	        
+  	        String text = "Hallo " + einkauf.getPersonId()+ ",\n"
+  	        		+ "\n"
+  	        		+ "Dein Einkauf bei der Foodcoop in der Karlsruher Nordstadt am "+ LocalDate.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")) + " war erfolgreich!\n"
+  	        				+ "Anbei befindet sich der Beleg für den Einkauf als Pdf.\n"
+  	        				+ "Hier nochmal eine Auflistung deines Einkaufs\n"
+  	        				+ "\n"
+  	        				+ "Frischwaren:\n"
+  	        				+ frischString.toString() + "\n\n\n"
+  	        						+ "Brot: \n"
+  	        						+ brotString.toString() + "\n\n\n"
+  	        								+ "Lagerware: \n"
+  	        								+ lagerString.toString() + "\n\n\n"
+  	        										+ "Gesamtpreis: " + (Math.round(gesamt * 100.0) / 100.0)  + "€ \n"
+  	        												+ "\n"
+  	        												+ "Weitere Details können aus der PDF entnommen werden! \n\n\n"
+  	        												+ "Viele Grüße\n"
+  	        												+ "Ihre Foodcoop Karlsruhe Nordstadt";
+  	        
+  	        try {
+  				emailService.sendSimpleMessage(email, "Einkauf bei der FoodCoop Karlsruhe am " + LocalDate.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")), text, pdfd, fileName);
+  			} catch (MessagingException e1) {
+  				// TODO Auto-generated catch block
+  				e1.printStackTrace();
+  			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -150,67 +211,7 @@ public class EinkaufController {
 		}
         EntityModel<EinkaufRepresentation> entityModel = assembler.toModel( toPresentation.apply(einkauf));
         
-        String fileName = "Einkauf-FoodCoop-" + einkauf.getPersonId() + "-" + LocalDate.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
-        byte[] pdf = testPDF(einkauf);
-
-        
-        StringBuilder frischString = new StringBuilder();
-        einkauf.getBestellungsEinkauf().stream()
-    	.forEach(item -> {
-    		if(item.getBestellung() instanceof FrischBestellung) {
-    			FrischBestellung item2 = (FrischBestellung) item.getBestellung();
-    	        	frischString.append(item2.getFrischbestand().getName() + "  je ");
-    	        	frischString.append(item2.getFrischbestand().getPreis() + " €   ");
-    	        	frischString.append("Bestellt: " + item2.getBestellmenge() + "   ");
-    	        	frischString.append("Genommen: " + item.getAmount() + "\n");
-    		}
-    	});
-
-        StringBuilder brotString = new StringBuilder();
-        einkauf.getBestellungsEinkauf().stream()
-    	.forEach(item -> {
-    		if(item.getBestellung() instanceof BrotBestellung) {
-    			BrotBestellung item2 = (BrotBestellung) item.getBestellung();
-    	        	frischString.append(item2.getBrotBestand().getName() + "  je ");
-    	        	frischString.append(item2.getBrotBestand().getPreis() + " €   ");
-    	        	frischString.append("Bestellt: " + item2.getBestellmenge() + "   ");
-    	        	frischString.append("Genommen: " + item.getAmount() + "\n");
-    		}
-    	});
-        StringBuilder lagerString = new StringBuilder();
-        einkauf.getBestandEinkauf().forEach(item -> {
-        	frischString.append(item.getBestand().getName() + "  je ");
-        	frischString.append(item.getBestand().getPreis() + " €   ");
-        	frischString.append("Genommen: " + item.getAmount() + "\n");
-        });
-        
-        float lieferkosten = (float) (einkauf.getFreshPriceAtTime() * 0.05);
-        float gesamt = (float) (lieferkosten + einkauf.getTotalPriceAtTime());
-        
-        String text = "Hallo " + einkauf.getPersonId()+ ",\n"
-        		+ "\n"
-        		+ "Dein Einkauf bei der Foodcoop in der Karlsruher Nordstadt am "+ LocalDate.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")) + " war erfolgreich!\n"
-        				+ "Anbei befindet sich der Beleg für den Einkauf als Pdf.\n"
-        				+ "Hier nochmal eine Auflistung deines Einkaufs\n"
-        				+ "\n"
-        				+ "Frischwaren:\n"
-        				+ frischString.toString() + "\n\n\n"
-        						+ "Brot: \n"
-        						+ brotString.toString() + "\n\n\n"
-        								+ "Lagerware: \n"
-        								+ lagerString.toString() + "\n\n\n"
-        										+ "Gesamtpreis: " + (Math.round(gesamt * 100.0) / 100.0)  + "€ \n"
-        												+ "\n"
-        												+ "Weitere Details können aus der PDF entnommen werden! \n\n\n"
-        												+ "Viele Grüße\n"
-        												+ "Ihre Foodcoop Karlsruhe Nordstadt";
-        
-        try {
-			emailService.sendSimpleMessage(newEinkauf.getEmail(), "Einkauf bei der FoodCoop Karlsruhe am " + LocalDate.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")), text, pdf, fileName);
-		} catch (MessagingException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+      
         
         return ResponseEntity
                 .created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri())
