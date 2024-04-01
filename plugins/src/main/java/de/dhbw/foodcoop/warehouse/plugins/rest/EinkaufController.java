@@ -95,7 +95,7 @@ public class EinkaufController {
                 linkTo(methodOn(EinkaufController.class).all()).withSelfRel());
     }
     
-    @GetMapping("/einkauf/pdf/{id}")
+    @PostMapping("/einkauf/pdf/{id}")
     public byte[] sendPdfAndMail(@RequestBody String email, @PathVariable String id) {
     	
     		
