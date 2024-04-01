@@ -1,26 +1,40 @@
 package de.dhbw.foodcoop.warehouse.plugins.pdf;
 
-import de.dhbw.foodcoop.warehouse.application.gebindemanagement.GebindemanagementService;
-import de.dhbw.foodcoop.warehouse.domain.entities.FrischBestellung;
-import de.dhbw.foodcoop.warehouse.domain.values.Bestellung;
-import de.dhbw.foodcoop.warehouse.domain.values.Briefkopf;
-import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.pdmodel.PDPage;
-import org.apache.pdfbox.pdmodel.common.PDRectangle;
-import org.apache.pdfbox.pdmodel.font.PDType1Font;
-import org.springframework.stereotype.Service;
-import org.vandeseer.easytable.RepeatedHeaderTableDrawer;
-import org.vandeseer.easytable.structure.Row;
-import org.vandeseer.easytable.structure.Table;
-import org.vandeseer.easytable.structure.cell.TextCell;
-
-import java.awt.*;
+import java.awt.Color;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
-import java.util.Arrays;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+import java.util.function.BiConsumer;
+import java.util.stream.Collectors;
+
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.common.PDRectangle;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.vandeseer.easytable.RepeatedHeaderTableDrawer;
+import org.vandeseer.easytable.TableDrawer;
+import org.vandeseer.easytable.structure.Row;
+import org.vandeseer.easytable.structure.Row.RowBuilder;
+import org.vandeseer.easytable.structure.Table;
+import org.vandeseer.easytable.structure.cell.TextCell;
+
+import de.dhbw.foodcoop.warehouse.application.bestellungsliste.BestellÜbersichtService;
+import de.dhbw.foodcoop.warehouse.application.gebindemanagement.GebindemanagementService;
+import de.dhbw.foodcoop.warehouse.domain.entities.BestellUebersicht;
+import de.dhbw.foodcoop.warehouse.domain.entities.BrotBestellung;
+import de.dhbw.foodcoop.warehouse.domain.entities.EinkaufEntity;
+import de.dhbw.foodcoop.warehouse.domain.entities.FrischBestand;
+import de.dhbw.foodcoop.warehouse.domain.entities.FrischBestellung;
+import de.dhbw.foodcoop.warehouse.domain.values.Bestellung;
 
 @Service
 public class PdfService {
@@ -29,8 +43,463 @@ public class PdfService {
     }
 
     private final GebindemanagementService gebindemanagementService = new GebindemanagementService();
+    
+    @Autowired
+    private BestellÜbersichtService service;
+    
+    
+    public byte[] createEinkauf(EinkaufEntity einkauf) throws IOException {
+        try (PDDocument document = new PDDocument()) {
+            PDPage page = new PDPage(PDRectangle.A4);
+            document.addPage(page);
 
-    public byte[] createDocument(Briefkopf briefKopf, List<Bestellung> bestellungList) throws IOException {
+            try (PDPageContentStream contentStream = new PDPageContentStream(document, page)) {
+                // Datum oben rechts
+                contentStream.beginText();
+                contentStream.setFont(PDType1Font.HELVETICA, 12);
+                contentStream.newLineAtOffset(450, 800);
+                contentStream.showText(LocalDate.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")));
+                contentStream.endText();
+
+                // Titel
+                contentStream.beginText();
+                contentStream.setFont(PDType1Font.HELVETICA_BOLD, 18);
+                contentStream.newLineAtOffset(150, 780);
+                contentStream.showText("Foodcoop Einkauf " + einkauf.getPersonId());
+                contentStream.endText();
+            } catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+         // Zeichnen der Frischwaren-Tabelle
+            List<FrischBestellung> list = new ArrayList<>();
+            
+            einkauf.getBestellungsEinkauf().stream().forEach(b -> {
+            	if(b.getBestellung() instanceof FrischBestellung) {
+            		list.add((FrischBestellung) b.getBestellung());
+            	}});
+            
+            List<BrotBestellung> listBrot = new ArrayList<>();
+            
+            einkauf.getBestellungsEinkauf().stream().forEach(b -> {
+            	if(b.getBestellung() instanceof BrotBestellung) {
+            		listBrot.add((BrotBestellung) b.getBestellung());
+            	}});
+            
+            try (PDPageContentStream contentStream = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.APPEND, true, true)) {
+                contentStream.beginText();
+                contentStream.setFont(PDType1Font.HELVETICA_BOLD, 14);
+                contentStream.newLineAtOffset(50, 720); // Position etwas über der Tabelle
+                contentStream.showText("Frischwaren Einkauf");
+                contentStream.endText();
+            }
+            int abstandZwischenTabellen = 70; // Abstand zwischen den Tabellen
+
+            // Berechne die tatsächliche StartY-Position für die Brot Bestellungen-Tabelle
+          
+            
+          
+            // Tabelle für Frisch Bestellungen
+            Table.TableBuilder tableBuilderFrisch = Table.builder()
+                    .addColumnsOfWidth(120, 70, 100, 100, 120)
+                    .fontSize(12).borderColor(Color.LIGHT_GRAY);
+
+            // Kopfzeile Frisch Bestellungen
+            tableBuilderFrisch.addRow(Row.builder()
+                    .add(TextCell.builder().text("Produkt").borderWidth(1).build())
+                    .add(TextCell.builder().text("Preis in €").borderWidth(1).build())
+                    .add(TextCell.builder().text("Einheit").borderWidth(1).build())
+                    .add(TextCell.builder().text("Bestellmenge").borderWidth(1).build())
+                    .add(TextCell.builder().text("genommene Menge").borderWidth(1).build())
+                    .backgroundColor(Color.LIGHT_GRAY)
+                    .build());
+
+            // Daten für Frisch Einkauf
+            einkauf.getBestellungsEinkauf().stream()
+            	.forEach(item -> {
+            		if(item.getBestellung() instanceof FrischBestellung) {
+            			FrischBestellung item2 = (FrischBestellung) item.getBestellung();
+            		  RowBuilder rowBuilder = Row.builder()
+            		            .add(TextCell.builder().text(item2.getFrischbestand().getName()).borderWidth(1).build())
+            		            .add(TextCell.builder().text(String.valueOf(item2.getFrischbestand().getPreis())).borderWidth(1).build())
+            		            .add(TextCell.builder().text(item2.getFrischbestand().getEinheit().getName()).borderWidth(1).build())
+            		            .add(TextCell.builder().text(String.valueOf(item2.getBestellmenge())).borderWidth(1).build())
+            		            .add(TextCell.builder().text(String.valueOf(item.getAmount())).borderWidth(1).build());
+            		  				
+            		  tableBuilderFrisch.addRow(rowBuilder.build());
+            		}
+            		        
+            	});
+//                	tableBuilderFrisch.addRow(Row.builder()
+//                        .add(TextCell.builder().text(item.getBestand().getName()).borderWidth(1).build())
+//                        .add(TextCell.builder().text(String.valueOf(item.getZuBestellendeGebinde())).borderWidth(1).build())
+//                        .add(TextCell.builder().text(item.getBestand() instanceof FrischBestand ? String.valueOf(((FrischBestand)item.getBestand()).getGebindegroesse()) : "unknown" ).borderWidth(1)
+//                        .build())));
+
+            // Tabelle zeichnen
+           TableDrawer d =  TableDrawer.builder()
+                    .table(tableBuilderFrisch.build())
+                    .startX(50)
+                    .startY(710)
+                    .endY(50) // Margin bottom
+                    .build();
+                    d.draw(() -> document, () -> new PDPage(PDRectangle.A4), 50);
+            
+                    int startYBrotEinkaufUeberschrift = (int) (d.getFinalY() - abstandZwischenTabellen);
+                    int startYBrotEinkaufTabelle = startYBrotEinkaufUeberschrift - 10; // Etwas Platz für die Überschrift
+                 
+                 
+
+                    int gesamtpreisFrischPositionY = (int) (d.getFinalY()  - 20);
+                    
+            try (PDPageContentStream contentStream = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.APPEND, true, true)) {
+                contentStream.beginText();
+                
+                contentStream.setFont(PDType1Font.HELVETICA, 12);
+                contentStream.newLineAtOffset(297.5f - (PDType1Font.HELVETICA.getStringWidth("Frisch-Preis: " + Math.round( einkauf.getFreshPriceAtTime() * 100.0) / 100.0 + " €") / 2 / 1000 * 12), gesamtpreisFrischPositionY);
+                contentStream.showText("Frisch-Preis: " + Math.round( einkauf.getFreshPriceAtTime() * 100.0) / 100.0 + " €");
+                contentStream.endText();
+            }
+
+            // Zeichnen der Brot-Tabelle
+            try (PDPageContentStream contentStream = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.APPEND, true, true)) {
+                contentStream.beginText();
+                contentStream.setFont(PDType1Font.HELVETICA_BOLD, 14);
+                contentStream.newLineAtOffset(50, startYBrotEinkaufUeberschrift); // Anpassen basierend auf der Höhe der ersten Tabelle
+                contentStream.showText("Brot Einkauf");
+                contentStream.endText();
+            }
+         //   .addColumnsOfWidth(150, 50, 100, 50, 50)
+            // Tabelle für Brot Bestellungen
+            Table.TableBuilder tableBuilderBrot = Table.builder()
+                    .addColumnsOfWidth(120, 70, 100, 120)
+                    .fontSize(12).borderColor(Color.LIGHT_GRAY);
+
+            // .addColumnsOfWidth(120, 70, 100, 100, 120)
+            // Kopfzeile Brot Bestellungen
+            tableBuilderBrot.addRow(Row.builder()
+                    .add(TextCell.builder().text("Produkt").borderWidth(1).build())
+                    .add(TextCell.builder().text("Preis in €").borderWidth(1).build())
+                    .add(TextCell.builder().text("Bestellmenge").borderWidth(1).build())
+                    .add(TextCell.builder().text("genommene Menge").borderWidth(1).build())
+                    .backgroundColor(Color.LIGHT_GRAY)
+                    .build());
+
+            // Daten für Brot Einkauf
+            einkauf.getBestellungsEinkauf().stream()
+            	.forEach(item -> {
+            		if(item.getBestellung() instanceof BrotBestellung) {
+            			BrotBestellung item2 = (BrotBestellung) item.getBestellung();
+            		  RowBuilder rowBuilder = Row.builder()
+            		            .add(TextCell.builder().text(item2.getBrotBestand().getName()).borderWidth(1).build())
+            		            .add(TextCell.builder().text(String.valueOf(item2.getBrotBestand().getPreis())).borderWidth(1).build())
+            		            .add(TextCell.builder().text(String.valueOf(item2.getBestellmenge())).borderWidth(1).build())
+            		            .add(TextCell.builder().text(String.valueOf(item.getAmount())).borderWidth(1).build());
+            		  				
+            		  tableBuilderBrot.addRow(rowBuilder.build());
+            		}
+            		        
+            	});
+
+            // Tabelle zeichnen
+            TableDrawer bd = TableDrawer.builder()
+                    .table(tableBuilderBrot.build())
+                    .startX(50)
+                    .startY(startYBrotEinkaufTabelle) //  basierend auf der Position der Überschrift
+                    .endY(50) // Margin bottom, könnte angepasst werden basierend auf dem Inhalt
+                    .build();
+                    bd.draw(() -> document, () -> new PDPage(PDRectangle.A4), 50);
+
+            
+            
+            
+            int startYLagerEinkaufUeberschrift = (int) (bd.getFinalY() - abstandZwischenTabellen);
+            int startYLagerEinkaufTabelle = startYLagerEinkaufUeberschrift - 10; // Etwas Platz für die Überschrift
+            
+            int gesamtpreisBrotPositionY = (int) (bd.getFinalY() - 20);
+            
+            
+            try (PDPageContentStream contentStream = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.APPEND, true, true)) {
+                contentStream.beginText();
+                
+                contentStream.setFont(PDType1Font.HELVETICA, 12);
+                contentStream.newLineAtOffset(297.5f - (PDType1Font.HELVETICA.getStringWidth("Brot-Preis: " + Math.round( einkauf.getBreadPriceAtTime() * 100.0) / 100.0 + " €") / 2 / 1000 * 12), gesamtpreisBrotPositionY);
+                contentStream.showText("Brot-Preis: " + Math.round( einkauf.getBreadPriceAtTime() * 100.0) / 100.0 + " €");
+                contentStream.endText();
+            }
+            // Zeichnen der Lagerware-Tabelle
+            try (PDPageContentStream contentStream = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.APPEND, true, true)) {
+                contentStream.beginText();
+                contentStream.setFont(PDType1Font.HELVETICA_BOLD, 14);
+                contentStream.newLineAtOffset(50, startYLagerEinkaufUeberschrift); // Anpassen basierend auf der Höhe der ersten Tabelle
+                contentStream.showText("Lagerware Einkauf");
+                contentStream.endText();
+            }
+
+            // Tabelle für Lagerware Bestellungen  .addColumnsOfWidth(150, 50, 100, 50, 50)
+            Table.TableBuilder tableBuilderLager = Table.builder()
+                    .addColumnsOfWidth(120, 70, 100, 120)
+                    // .addColumnsOfWidth(120, 70, 100, 100, 120)
+                    .fontSize(12).borderColor(Color.LIGHT_GRAY);
+
+            // Kopfzeile Lagerware Bestellungen
+            tableBuilderLager.addRow(Row.builder()
+                    .add(TextCell.builder().text("Produkt").borderWidth(1).build())
+                    .add(TextCell.builder().text("Preis in €").borderWidth(1).build())
+                    .add(TextCell.builder().text("Einheit").borderWidth(1).build())
+                    .add(TextCell.builder().text("genommene Menge").borderWidth(1).build())
+                    .backgroundColor(Color.LIGHT_GRAY)
+                    .build());
+
+            // Daten für Lagerware Bestellungen
+            
+            einkauf.getBestandEinkauf().stream().forEach(item -> {
+            	
+            	
+            	 RowBuilder rowBuilder = Row.builder()
+            			 .add(TextCell.builder().text(item.getBestand().getName()).borderWidth(1).build())
+                         .add(TextCell.builder().text(String.valueOf(item.getBestand().getPreis())).borderWidth(1).build())
+                         .add(TextCell.builder().text(item.getBestand().getLagerbestand().getEinheit().getName()).borderWidth(1).build())
+                         .add(TextCell.builder().text(String.valueOf(item.getAmount())).borderWidth(1).build());
+                        
+            	 tableBuilderLager.addRow(rowBuilder.build());
+            });
+      
+            
+
+            // Tabelle zeichnen
+            TableDrawer ld = TableDrawer.builder()
+                    .table(tableBuilderLager.build())
+                    .startX(50)
+                    .startY(startYLagerEinkaufTabelle) //  basierend auf der Position der Überschrift
+                    .endY(50) // Margin bottom, könnte angepasst werden basierend auf dem Inhalt
+                    .build();
+                    ld.draw(() -> document, () -> new PDPage(PDRectangle.A4), 50);
+                    int gesamtpreisLagerPositionY = (int) (ld.getFinalY()  - 20);
+            try (PDPageContentStream contentStream = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.APPEND, true, true)) {
+                contentStream.beginText();
+                
+                contentStream.setFont(PDType1Font.HELVETICA, 12);
+                contentStream.newLineAtOffset(297.5f - (PDType1Font.HELVETICA.getStringWidth("Lager-Preis: " + Math.round( einkauf.getBestandPriceAtTime() * 100.0) / 100.0 + " €") / 2 / 1000 * 12), gesamtpreisLagerPositionY);
+                contentStream.showText("Lager-Preis: " + Math.round( einkauf.getBestandPriceAtTime() * 100.0) / 100.0 + " €");
+                contentStream.endText();
+            }
+            
+            
+            int startY = gesamtpreisLagerPositionY - 50; // zum Beispiel 100;
+
+            // Konstanten für das Layout
+            float pageWidth = page.getMediaBox().getWidth();
+            float leftMargin = (pageWidth - 550) / 2; // um das Ganze zentriert zu halten
+            float rightMargin = (pageWidth - 50) / 2; 
+            float lineWidth = 550; // die Länge des grauen Strichs
+            float startX = 200; // Dies ist der Startpunkt für den Text auf der X-Achse, den Sie anpassen müssen.
+            float priceX = 350; // Dies ist der Startpunkt für den Preis auf der X-Achse, den Sie anpassen müssen.
+            float lineStartX = 150; // Start der grauen Linie auf der X-Achse
+            float lineEndX = 450; // Ende der grauen Linie auf der X-Achse
+
+            String[] labels = {"Frischware:", "Brot:", "Lagerware:", "5 % Lieferkosten:"};
+            
+            float lieferkosten = (float) (einkauf.getFreshPriceAtTime() * 0.05);
+            float gesamt = (float) (lieferkosten + einkauf.getTotalPriceAtTime());
+            float[] prices = {(float) (Math.round( einkauf.getFreshPriceAtTime() * 100.0) / 100.0), (float) (Math.round( einkauf.getBreadPriceAtTime() * 100.0) / 100.0), (float) (Math.round( einkauf.getBestandPriceAtTime() * 100.0) / 100.0), lieferkosten, gesamt}; 
+            
+            try (PDPageContentStream contentStream = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.APPEND, true, true)) {
+                contentStream.setFont(PDType1Font.HELVETICA_BOLD, 12);
+
+                for (int i = 0; i < labels.length; i++) {
+                    // Text linksbündig ausrichten
+                    contentStream.beginText();
+                    contentStream.newLineAtOffset(startX, startY);
+                    contentStream.showText(labels[i]);
+                    contentStream.endText();
+
+                    // Preise rechtsbündig neben dem Text ausrichten
+                    String priceString = String.format(Locale.GERMANY, "%,.2f €", prices[i]);
+                    float priceWidth = PDType1Font.HELVETICA_BOLD.getStringWidth(priceString) / 1000 * 12;
+                    contentStream.beginText();
+                    contentStream.newLineAtOffset(priceX + (40 - priceWidth), startY); // 80 ist die angenommene Breite für den Preis
+                    contentStream.showText(priceString);
+                    contentStream.endText();
+
+                    // Einfügen des grauen Strichs nach den Lieferkosten und vor "Insgesamt"
+                    if (i == labels.length - 1) { // Nach dem letzten Item in der Liste (vor "Insgesamt")
+                        startY -= 15; // Abstand vor der Linie
+                        contentStream.setStrokingColor(Color.GRAY);
+                        contentStream.moveTo(lineStartX, startY);
+                        contentStream.lineTo(lineEndX, startY);
+                        contentStream.stroke();
+                        startY -= 15; // Abstand nach der Linie
+                    } else {
+                        startY -= 15; // Zeilenabstand für die nächste Zeile
+                    }
+                }
+
+                // "Insgesamt" Text und Preis hinzufügen
+                contentStream.beginText();
+                contentStream.newLineAtOffset(startX, startY);
+                contentStream.showText("Insgesamt:");
+                contentStream.endText();
+
+                String totalString = String.format(Locale.GERMANY, "%,.2f €", gesamt); 
+                float totalWidth = PDType1Font.HELVETICA_BOLD.getStringWidth(totalString) / 1000 * 12;
+                contentStream.beginText();
+                contentStream.newLineAtOffset(priceX + (40 - totalWidth), startY);
+                contentStream.showText(totalString);
+                contentStream.endText();
+            }
+            // Stream und Dokument schließen
+          
+           
+            
+            
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            document.save(out);
+            document.close();
+            return out.toByteArray();
+
+           
+        }
+    }
+
+ 
+
+
+	public byte[] createUebersicht(BestellUebersicht bestellungUebersicht) {
+        try (PDDocument document = new PDDocument()) {
+            PDPage page = new PDPage(PDRectangle.A4);
+            document.addPage(page);
+
+            try (PDPageContentStream contentStream = new PDPageContentStream(document, page)) {
+                // Datum oben rechts
+                contentStream.beginText();
+                contentStream.setFont(PDType1Font.HELVETICA, 12);
+                contentStream.newLineAtOffset(450, 800);
+                contentStream.showText(LocalDate.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")));
+                contentStream.endText();
+
+                // Titel
+                contentStream.beginText();
+                contentStream.setFont(PDType1Font.HELVETICA_BOLD, 18);
+                contentStream.newLineAtOffset(150, 780);
+                contentStream.showText("Foodcoop Bestellungs Übersicht");
+                contentStream.endText();
+            }
+
+            try (PDPageContentStream contentStream = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.APPEND, true, true)) {
+                contentStream.beginText();
+                contentStream.setFont(PDType1Font.HELVETICA_BOLD, 14);
+                contentStream.newLineAtOffset(50, 720); // Position etwas über der Tabelle
+                contentStream.showText("Frisch Bestellungen");
+                contentStream.endText();
+            }
+            
+            int anzahlFrischBestellungenZeilen = bestellungUebersicht.getDiscrepancy().stream().filter(d -> d.getZuBestellendeGebinde() != 0 ).collect(Collectors.toList()).size() + 1; // +1 für die Kopfzeile
+            int startYFrischBestellungen = 720; // Startposition der Frisch Bestellungen Überschrift
+            int zeilenHoehe = 20; // Geschätzte Höhe jeder Zeile
+            int abstandZwischenTabellen = 50; // Abstand zwischen den Tabellen
+
+            // Berechne die tatsächliche StartY-Position für die Brot Bestellungen-Tabelle
+            int startYBrotBestellungenUeberschrift = startYFrischBestellungen - (anzahlFrischBestellungenZeilen * zeilenHoehe) - abstandZwischenTabellen;
+            int startYBrotBestellungenTabelle = startYBrotBestellungenUeberschrift - 10; // Etwas Platz für die Überschrift
+
+            
+            // Tabelle für Frisch Bestellungen
+            Table.TableBuilder tableBuilderFrisch = Table.builder()
+                    .addColumnsOfWidth(200, 150, 100)
+                    .fontSize(12).borderColor(Color.LIGHT_GRAY);
+
+            // Kopfzeile Frisch Bestellungen
+            tableBuilderFrisch.addRow(Row.builder()
+                    .add(TextCell.builder().text("Name").borderWidth(1).build())
+                    .add(TextCell.builder().text("zu Bestellende Gebinde").borderWidth(1).build())
+                    .add(TextCell.builder().text("Gebindegroesse").borderWidth(1).build())
+                    .backgroundColor(Color.LIGHT_GRAY)
+                    .build());
+
+            // Daten für Frisch Bestellungen
+            bestellungUebersicht.getDiscrepancy().stream()
+            	.filter(d -> d.getZuBestellendeGebinde() != 0 )
+            	.forEach(item -> {
+            		
+            		  RowBuilder rowBuilder = Row.builder()
+            		            .add(TextCell.builder().text(item.getBestand().getName()).borderWidth(1).build())
+            		            .add(TextCell.builder().text(String.valueOf(item.getZuBestellendeGebinde())).borderWidth(1).build());
+            		  if (item.getBestand() instanceof FrischBestand) {
+            	            rowBuilder.add(TextCell.builder().text(String.valueOf(((FrischBestand) item.getBestand()).getGebindegroesse()) + " " + String.valueOf(((FrischBestand) item.getBestand()).getEinheit().getName() )).borderWidth(1).build());
+            	        } else {
+            	            rowBuilder.add(TextCell.builder().text("unknown").borderWidth(1).build());
+            	        }
+            		  tableBuilderFrisch.addRow(rowBuilder.build());
+            		        
+            	});
+//                	tableBuilderFrisch.addRow(Row.builder()
+//                        .add(TextCell.builder().text(item.getBestand().getName()).borderWidth(1).build())
+//                        .add(TextCell.builder().text(String.valueOf(item.getZuBestellendeGebinde())).borderWidth(1).build())
+//                        .add(TextCell.builder().text(item.getBestand() instanceof FrischBestand ? String.valueOf(((FrischBestand)item.getBestand()).getGebindegroesse()) : "unknown" ).borderWidth(1)
+//                        .build())));
+
+            // Tabelle zeichnen
+            TableDrawer.builder()
+                    .table(tableBuilderFrisch.build())
+                    .startX(50)
+                    .startY(710)
+                    .endY(50) // Margin bottom
+                    .build()
+                    .draw(() -> document, () -> new PDPage(PDRectangle.A4), 50);
+
+            //Überschrit Brotbestellung
+            try (PDPageContentStream contentStream = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.APPEND, true, true)) {
+                contentStream.beginText();
+                contentStream.setFont(PDType1Font.HELVETICA_BOLD, 14);
+                contentStream.newLineAtOffset(50, startYBrotBestellungenUeberschrift); // Anpassen basierend auf der Höhe der ersten Tabelle
+                contentStream.showText("Brot Bestellungen");
+                contentStream.endText();
+            }
+
+            // Tabelle für Brot Bestellungen
+            Table.TableBuilder tableBuilderBrot = Table.builder()
+                    .addColumnsOfWidth(200, 150)
+                    .fontSize(12).borderColor(Color.LIGHT_GRAY);
+
+            // Kopfzeile Brot Bestellungen
+            tableBuilderBrot.addRow(Row.builder()
+                    .add(TextCell.builder().text("Brotname").borderWidth(1).build())
+                    .add(TextCell.builder().text("Stückzahl").borderWidth(1).build())
+                    .backgroundColor(Color.LIGHT_GRAY)
+                    .build());
+
+            // Daten für Brot Bestellungen
+            bestellungUebersicht.getBrotBestellung().stream().filter(b -> b.getBestellmenge() != 0).forEach(item -> 
+                tableBuilderBrot.addRow(Row.builder()
+                        .add(TextCell.builder().text(item.getBrotBestand().getName()).borderWidth(1).build())
+                        .add(TextCell.builder().text(String.valueOf(item.getBestellmenge())).borderWidth(1).build())
+                        .build())
+            );
+
+            // Tabelle zeichnen
+            TableDrawer.builder()
+                    .table(tableBuilderBrot.build())
+                    .startX(50)
+                    .startY(startYBrotBestellungenTabelle) //  basierend auf der Position der Überschrift
+                    .endY(50) // Margin bottom, könnte angepasst werden basierend auf dem Inhalt
+                    .build()
+                    .draw(() -> document, () -> new PDPage(PDRectangle.A4), 50);
+            
+            
+          
+            
+            
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            document.save(out);
+            return out.toByteArray();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public byte[] createDocument(List<Bestellung> bestellungList) throws IOException {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 
         try (final PDDocument document = new PDDocument()) {
@@ -51,7 +520,7 @@ public class PdfService {
         return outputStream.toByteArray();
     }
 
-    public byte[] createFrischBestellungDocument(Briefkopf briefKopf, List<FrischBestellung> frischBestellungList) throws IOException {
+    public byte[] createFrischBestellungDocument( List<FrischBestellung> frischBestellungList) throws IOException {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 
         try (final PDDocument document = new PDDocument()) {

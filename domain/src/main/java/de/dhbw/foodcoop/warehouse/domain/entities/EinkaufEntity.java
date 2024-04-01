@@ -88,7 +88,7 @@ public class EinkaufEntity {
 	}
 
 	public double getTotalPriceAtTime() {
-		return freshPriceAtTime + breadPriceAtTime;
+		return freshPriceAtTime + breadPriceAtTime + bestandPriceAtTime;
 	}
 
 

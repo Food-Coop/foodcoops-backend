@@ -3,15 +3,24 @@ package de.dhbw.foodcoop.warehouse.plugins.rest;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+
+import javax.mail.MessagingException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.IanaLinkRelations;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,6 +28,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
 import de.dhbw.foodcoop.warehouse.adapters.representations.EinkaufCreateRepresentation;
 import de.dhbw.foodcoop.warehouse.adapters.representations.EinkaufRepresentation;
@@ -28,8 +38,12 @@ import de.dhbw.foodcoop.warehouse.adapters.representations.mappers.EinkaufToRepr
 import de.dhbw.foodcoop.warehouse.adapters.representations.mappers.RepresentationToEinkaufMapper;
 import de.dhbw.foodcoop.warehouse.application.einkauf.EinkaufService;
 import de.dhbw.foodcoop.warehouse.domain.entities.BestandBuyEntity;
+import de.dhbw.foodcoop.warehouse.domain.entities.BrotBestellung;
 import de.dhbw.foodcoop.warehouse.domain.entities.EinkaufEntity;
+import de.dhbw.foodcoop.warehouse.domain.entities.FrischBestellung;
+import de.dhbw.foodcoop.warehouse.plugins.email.EmailService;
 import de.dhbw.foodcoop.warehouse.plugins.helpObjects.BestandBuyCreator;
+import de.dhbw.foodcoop.warehouse.plugins.pdf.PdfService;
 import de.dhbw.foodcoop.warehouse.plugins.rest.assembler.EinkaufModelAssembler;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -46,6 +60,8 @@ public class EinkaufController {
     private  RepresentationToEinkaufMapper toEinkauf;
     
     @Autowired
+    private PdfService pdf;
+    @Autowired
     private  EinkaufToRepresentationMapper toPresentation;
     
     @Autowired
@@ -53,6 +69,9 @@ public class EinkaufController {
     
     @Autowired
     private  EinkaufModelAssembler assembler;
+    
+    @Autowired
+    private EmailService emailService;
     
 
     @Autowired
@@ -74,6 +93,20 @@ public class EinkaufController {
        
         return CollectionModel.of(e,
                 linkTo(methodOn(EinkaufController.class).all()).withSelfRel());
+    }
+    
+    @GetMapping("/einkauf/pdf")
+    public byte[] testPDF( EinkaufEntity einkauf) {
+    	
+    		
+  	       try {
+			return  pdf.createEinkauf(einkauf);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+  	       
     }
     
     @GetMapping("/einkauf/{id}")
@@ -116,6 +149,69 @@ public class EinkaufController {
 			return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(e1.getCause().toString());
 		}
         EntityModel<EinkaufRepresentation> entityModel = assembler.toModel( toPresentation.apply(einkauf));
+        
+        String fileName = "Einkauf-FoodCoop-" + einkauf.getPersonId() + "-" + LocalDate.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+        byte[] pdf = testPDF(einkauf);
+
+        
+        StringBuilder frischString = new StringBuilder();
+        einkauf.getBestellungsEinkauf().stream()
+    	.forEach(item -> {
+    		if(item.getBestellung() instanceof FrischBestellung) {
+    			FrischBestellung item2 = (FrischBestellung) item.getBestellung();
+    	        	frischString.append(item2.getFrischbestand().getName() + "  je ");
+    	        	frischString.append(item2.getFrischbestand().getPreis() + " €   ");
+    	        	frischString.append("Bestellt: " + item2.getBestellmenge() + "   ");
+    	        	frischString.append("Genommen: " + item.getAmount() + "\n");
+    		}
+    	});
+
+        StringBuilder brotString = new StringBuilder();
+        einkauf.getBestellungsEinkauf().stream()
+    	.forEach(item -> {
+    		if(item.getBestellung() instanceof BrotBestellung) {
+    			BrotBestellung item2 = (BrotBestellung) item.getBestellung();
+    	        	frischString.append(item2.getBrotBestand().getName() + "  je ");
+    	        	frischString.append(item2.getBrotBestand().getPreis() + " €   ");
+    	        	frischString.append("Bestellt: " + item2.getBestellmenge() + "   ");
+    	        	frischString.append("Genommen: " + item.getAmount() + "\n");
+    		}
+    	});
+        StringBuilder lagerString = new StringBuilder();
+        einkauf.getBestandEinkauf().forEach(item -> {
+        	frischString.append(item.getBestand().getName() + "  je ");
+        	frischString.append(item.getBestand().getPreis() + " €   ");
+        	frischString.append("Genommen: " + item.getAmount() + "\n");
+        });
+        
+        float lieferkosten = (float) (einkauf.getFreshPriceAtTime() * 0.05);
+        float gesamt = (float) (lieferkosten + einkauf.getTotalPriceAtTime());
+        
+        String text = "Hallo " + einkauf.getPersonId()+ ",\n"
+        		+ "\n"
+        		+ "Dein Einkauf bei der Foodcoop in der Karlsruher Nordstadt am "+ LocalDate.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")) + " war erfolgreich!\n"
+        				+ "Anbei befindet sich der Beleg für den Einkauf als Pdf.\n"
+        				+ "Hier nochmal eine Auflistung deines Einkaufs\n"
+        				+ "\n"
+        				+ "Frischwaren:\n"
+        				+ frischString.toString() + "\n\n\n"
+        						+ "Brot: \n"
+        						+ brotString.toString() + "\n\n\n"
+        								+ "Lagerware: \n"
+        								+ lagerString.toString() + "\n\n\n"
+        										+ "Gesamtpreis: " + (Math.round(gesamt * 100.0) / 100.0)  + "€ \n"
+        												+ "\n"
+        												+ "Weitere Details können aus der PDF entnommen werden! \n\n\n"
+        												+ "Viele Grüße\n"
+        												+ "Ihre Foodcoop Karlsruhe Nordstadt";
+        
+        try {
+			emailService.sendSimpleMessage(newEinkauf.getEmail(), "Einkauf bei der FoodCoop Karlsruhe am " + LocalDate.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")), text, pdf, fileName);
+		} catch (MessagingException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+        
         return ResponseEntity
                 .created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri())
                 .body(entityModel);
