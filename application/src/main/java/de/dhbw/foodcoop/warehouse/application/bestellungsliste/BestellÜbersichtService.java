@@ -61,6 +61,10 @@ public class BestellÜbersichtService {
 		return repo.findeMitId(id).orElseThrow();
 	}
 	
+	public BestellUebersicht update(BestellUebersicht bu) {
+		return repo.speichern(bu);
+	}
+	
 	public Optional<BestellUebersicht> createList(int threshold) {
 		BestellUebersicht bestellÜbersicht = new BestellUebersicht();
 		bestellÜbersicht.setId(UUID.randomUUID().toString());

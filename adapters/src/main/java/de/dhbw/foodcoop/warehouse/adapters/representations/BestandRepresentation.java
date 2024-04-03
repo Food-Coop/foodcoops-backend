@@ -1,5 +1,23 @@
 package de.dhbw.foodcoop.warehouse.adapters.representations;
 
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+
+import de.dhbw.foodcoop.warehouse.domain.entities.BrotBestand;
+import de.dhbw.foodcoop.warehouse.domain.entities.FrischBestand;
+import de.dhbw.foodcoop.warehouse.domain.entities.Produkt;
+
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
+@JsonSubTypes({
+    @JsonSubTypes.Type(value = FrischBestandRepresentation.class, name = "frisch"),
+    @JsonSubTypes.Type(value = BrotBestandRepresentation.class, name ="brot"),
+    @JsonSubTypes.Type(value = ProduktRepresentation.class, name="lager")
+    // Andere Subtypen hier
+})
+@Inheritance(strategy = InheritanceType.JOINED)
 public class BestandRepresentation {
 		protected String id;
 	    protected String name;
