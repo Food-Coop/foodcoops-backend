@@ -11,6 +11,9 @@ import java.util.UUID;
 @Table(name = "lagerprodukt")
 public class Produkt extends BestandEntity {
 
+	@Column
+	private String produktName;
+	
     @Embedded
     private Lagerbestand lagerbestand;
     @ManyToOne
@@ -19,7 +22,7 @@ public class Produkt extends BestandEntity {
     
 
 
-    public Produkt(String id, String name, Kategorie kategorie, Lagerbestand lagerbestand) {
+    public Produkt(String id, String name, String produktname, Kategorie kategorie, Lagerbestand lagerbestand, float preis) {
         Validate.notBlank(id);
         Validate.notBlank(name);
         Validate.notNull(lagerbestand);
@@ -29,8 +32,8 @@ public class Produkt extends BestandEntity {
         this.lagerbestand = lagerbestand;
     }
 
-    public Produkt(String name, Kategorie kategorie, Lagerbestand lagerbestand) {
-        this(UUID.randomUUID().toString(), name, kategorie, lagerbestand);
+    public Produkt(String name, String produktname, Kategorie kategorie, Lagerbestand lagerbestand, float preis) {
+        this(UUID.randomUUID().toString(), name,produktname,  kategorie, lagerbestand, preis);
     }
 
     protected Produkt() {
@@ -45,7 +48,20 @@ public class Produkt extends BestandEntity {
         this.kategorie = kategorie;
     }
 
-    public Lagerbestand getLagerbestand() {
+    
+    public String getProduktName() {
+		return produktName;
+	}
+
+	public void setProduktName(String produktName) {
+		this.produktName = produktName;
+	}
+
+	public void setLagerbestand(Lagerbestand lagerbestand) {
+		this.lagerbestand = lagerbestand;
+	}
+
+	public Lagerbestand getLagerbestand() {
         return lagerbestand;
     }
     
