@@ -40,7 +40,7 @@ public class FrischBestand extends BestandEntity{
         this.preis = preis;
     }
 
-    public FrischBestand(String name, boolean verfuegbarkeit, String herkunftsland, int gebindegroesse, Einheit einheit, Kategorie kategorie, float preis) {
+    public FrischBestand(String name, boolean verfuegbarkeit, String herkunftsland, float gebindegroesse, Einheit einheit, Kategorie kategorie, float preis) {
         this(UUID.randomUUID().toString(), name, verfuegbarkeit, herkunftsland, gebindegroesse, einheit, kategorie, preis);
     }
 
