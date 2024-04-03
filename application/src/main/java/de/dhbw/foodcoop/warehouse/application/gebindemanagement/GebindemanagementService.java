@@ -121,7 +121,6 @@ public class GebindemanagementService {
 				//Erneut durchgehen mit rest, um kombinationen zu finden
 				
 					float currentTry = 0;
-				
 					LinkedHashMap<FrischBestand, Float> sortedMap = amountOrdered.entrySet()
 						    .stream()
 						    .sorted(Map.Entry.<FrischBestand, Float>comparingByValue().reversed())
@@ -131,8 +130,6 @@ public class GebindemanagementService {
 						        (e1, e2) -> e1,
 						        LinkedHashMap::new));
 					
-				  
-				  	
 				  while(getSolutions(sortedMap, done, copyOfAmount)) {
 					  sortedMap = sortedMap.entrySet()
 							    .stream()
@@ -143,7 +140,6 @@ public class GebindemanagementService {
 							        (e1, e2) -> e1,
 							        LinkedHashMap::new));
 				  }
-				
 				  sortedMap.entrySet().stream().filter(entry -> entry.getValue() == 0);
 				  
 				  // In sortedMap sind nur noch Rest einträge. Hier kann man nochmal schauen ob man mit Threshold adden kann

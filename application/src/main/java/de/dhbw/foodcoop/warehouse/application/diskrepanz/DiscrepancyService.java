@@ -35,8 +35,8 @@ public class DiscrepancyService {
     	discrepancy.deleteById(id);
     }
     
-    public DiscrepancyEntity findById(String id) {
-    	return discrepancy.findeMitId(id).orElseThrow();
+    public Optional<DiscrepancyEntity> findById(String id) {
+    	return discrepancy.findeMitId(id);
     }
     
     public DiscrepancyEntity save(DiscrepancyEntity entity) {

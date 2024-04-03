@@ -7,8 +7,18 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
+@JsonSubTypes({
+    @JsonSubTypes.Type(value = FrischBestand.class, name = "frisch"),
+    @JsonSubTypes.Type(value = BrotBestand.class, name ="brot"),
+    @JsonSubTypes.Type(value = Produkt.class, name="lager")
+    // Andere Subtypen hier
+})
 @Table(name = "bestand")
 public abstract class BestandEntity {
 
