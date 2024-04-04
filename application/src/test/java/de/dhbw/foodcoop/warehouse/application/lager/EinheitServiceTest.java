@@ -59,7 +59,7 @@ class EinheitServiceTest {
        Produkt produkt = new Produkt(TestUtils.PRODUKT_TEST_ID
                , "Blutwurst"
                , kategorie
-               , lagerbestand);
+               , lagerbestand, 3f);
        when(mockRepository.findeMitId(TestUtils.EINHEIT_TEST_ID))
                .thenReturn(Optional.of(oldEinheint));
        when(mockProduktService.all())
