@@ -1,15 +1,15 @@
 package de.dhbw.foodcoop.warehouse.adapters.representations;
 
-import java.sql.Timestamp;
 import java.sql.Time;
+import java.time.LocalDateTime;
 
 public class DeadlineRepresentation {
     private String id;
     private String weekday;
     private Time time;
-    private Timestamp datum;
+    private LocalDateTime datum;
 
-    public DeadlineRepresentation(String id, String weekday, Time time, Timestamp datum){
+    public DeadlineRepresentation(String id, String weekday, Time time, LocalDateTime datum){
         this.id = id;
         this.weekday = weekday;
         this.time = time;
@@ -33,11 +33,11 @@ public class DeadlineRepresentation {
     }
     
 
-    public Timestamp getDatum() {
+    public LocalDateTime getDatum() {
         return datum;
     }
 
-    public void setDatum(Timestamp datum){
+    public void setDatum(LocalDateTime datum){
         this.datum = datum;
     }
 

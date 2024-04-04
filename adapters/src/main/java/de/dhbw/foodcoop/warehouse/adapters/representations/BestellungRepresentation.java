@@ -1,15 +1,12 @@
 package de.dhbw.foodcoop.warehouse.adapters.representations;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-
-import de.dhbw.foodcoop.warehouse.domain.entities.BrotBestellung;
-import de.dhbw.foodcoop.warehouse.domain.entities.FrischBestellung;
 
 //Parent class
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
@@ -23,10 +20,10 @@ public abstract class BestellungRepresentation {
 
 	protected String id;
 	private String personId;
-	private Timestamp datum;
+	private LocalDateTime datum;
 	private double bestellmenge;
 	private boolean isDone;
-	public BestellungRepresentation(String id, String personId, Timestamp datum, double bestellmenge, boolean isDone
+	public BestellungRepresentation(String id, String personId, LocalDateTime datum, double bestellmenge, boolean isDone
 		) {
 		super();
 		this.id = id;
@@ -42,7 +39,7 @@ public abstract class BestellungRepresentation {
 	public String getPersonId() {
 		return personId;
 	}
-	public Timestamp getDatum() {
+	public LocalDateTime getDatum() {
 		return datum;
 	}
 	public double getBestellmenge() {

@@ -1,6 +1,13 @@
 package de.dhbw.foodcoop.warehouse.plugins.pdf;
 
-import de.dhbw.foodcoop.warehouse.adapters.representations.DeadlineRepresentation;
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import de.dhbw.foodcoop.warehouse.adapters.representations.mappers.DeadlineToRepresentationMapper;
 import de.dhbw.foodcoop.warehouse.application.bestellungsliste.ExterneBestellungslisteService;
 import de.dhbw.foodcoop.warehouse.application.deadline.DeadlineService;
@@ -11,18 +18,6 @@ import de.dhbw.foodcoop.warehouse.domain.entities.Produkt;
 import de.dhbw.foodcoop.warehouse.domain.values.Bestellung;
 import de.dhbw.foodcoop.warehouse.domain.values.Briefkopf;
 import de.dhbw.foodcoop.warehouse.plugins.rest.assembler.DeadlineModelAssembler;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.EntityModel;
-import org.springframework.stereotype.Service;
-
-import java.io.IOException;
-import java.sql.Time;
-import java.sql.Timestamp;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class ExterneBestellungslisteServiceBridge implements ExterneBestellungslisteService {
@@ -53,7 +48,7 @@ public class ExterneBestellungslisteServiceBridge implements ExterneBestellungsl
     @Override
     public byte[] createExterneListeGebinde() throws IOException {   
     	//ANSCHAUEN!
-        Timestamp date = Timestamp.valueOf(deadlineService.calculateDateFromDeadline(deadlineService.getByPosition(1).get()));
+    	LocalDateTime date = deadlineService.calculateDateFromDeadline(deadlineService.getByPosition(1).get());
         List<FrischBestellung> frischBestellungList = frischBestellungSerivce.findByDateAfterAndSum(date);
         return pdfService.createFrischBestellungDocument( frischBestellungList);
     }

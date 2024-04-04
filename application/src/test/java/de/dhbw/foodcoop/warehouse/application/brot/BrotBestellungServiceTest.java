@@ -5,6 +5,7 @@ import static org.mockito.Mockito.when;
 
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -68,5 +69,5 @@ public class BrotBestellungServiceTest {
     }
 
     BrotBestand bb = new BrotBestand("1234", "Bauernbrot", true, 500, (float) 1.5);
-    Timestamp ts= Timestamp.from(Instant.now());  
+    LocalDateTime ts= LocalDateTime.now();
 }

@@ -3,14 +3,11 @@ package de.dhbw.foodcoop.warehouse.plugins.rest;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
-import java.sql.Time;
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
@@ -25,16 +22,14 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import de.dhbw.foodcoop.warehouse.adapters.representations.BrotBestandRepresentation;
 import de.dhbw.foodcoop.warehouse.adapters.representations.BrotBestellungRepresentation;
-import de.dhbw.foodcoop.warehouse.adapters.representations.DeadlineRepresentation;
 import de.dhbw.foodcoop.warehouse.adapters.representations.mappers.BestellungToRepresentationMapper;
 import de.dhbw.foodcoop.warehouse.adapters.representations.mappers.DeadlineToRepresentationMapper;
 import de.dhbw.foodcoop.warehouse.adapters.representations.mappers.RepresentationToBestellungMapper;
 import de.dhbw.foodcoop.warehouse.application.brot.BrotBestellungService;
 import de.dhbw.foodcoop.warehouse.application.deadline.DeadlineService;
-import de.dhbw.foodcoop.warehouse.domain.entities.BrotBestand;
 import de.dhbw.foodcoop.warehouse.domain.entities.BrotBestellung;
+import de.dhbw.foodcoop.warehouse.domain.entities.Deadline;
 import de.dhbw.foodcoop.warehouse.domain.exceptions.BrotBestellungInUseException;
 import de.dhbw.foodcoop.warehouse.domain.exceptions.BrotBestellungNotFoundException;
 import de.dhbw.foodcoop.warehouse.plugins.rest.assembler.BrotBestellungModelAssembler;
@@ -86,7 +81,11 @@ public class BrotBestellungController {
     @GetMapping("/brotBestellung/datum/{person_id}")
     public CollectionModel<EntityModel<BrotBestellungRepresentation>> findByDateAfterAndPerson(@PathVariable String person_id){
         //Timestamp datum1 = getTimestampNow();
-        Timestamp datum = deadlineService.getByPosition(1).get().getDatum();
+    	Optional<Deadline> deadline = deadlineService.getByPosition(0);
+    	if(deadline.isEmpty()) {
+    		return null;
+    	}
+    	LocalDateTime datum = deadlineService.getByPosition(0).get().getDatum();
      	List<BrotBestellung> brotBestellungen = service.findByDateAfterAndPerson(datum, person_id);
     	List<EntityModel<BrotBestellungRepresentation>> brote = new ArrayList<>();
     	for(BrotBestellung b : brotBestellungen) {
@@ -101,8 +100,18 @@ public class BrotBestellungController {
 
     @GetMapping("/brotBestellung/person/{person_id}")
     public CollectionModel<EntityModel<BrotBestellungRepresentation>> findByDateBetween(@PathVariable String person_id){
-        Timestamp datum1 = deadlineService.getByPosition(1).get().getDatum();
-        Timestamp datum2 = deadlineService.getByPosition(2).get().getDatum();
+    	Optional<Deadline> date1 = deadlineService.getByPosition(0);
+    	Optional<Deadline> date2 = deadlineService.getByPosition(1);
+    	
+    	if(date1.isEmpty()) {
+    		return null;
+    	}
+    	if(date2.isEmpty()) {
+    		return findByDateAfterAndPerson(person_id);
+    	}
+    	
+    	LocalDateTime datum1 = date1.get().getDatum();
+    	LocalDateTime datum2 = date2.get().getDatum();
      	List<BrotBestellung> brotBestellungen = service.findByDateBetween(datum1, datum2, person_id);
     	List<EntityModel<BrotBestellungRepresentation>> brote = new ArrayList<>();
     	for(BrotBestellung b : brotBestellungen) {
@@ -118,7 +127,7 @@ public class BrotBestellungController {
     @GetMapping("/brotBestellung/datum/menge")
     public CollectionModel<EntityModel<BrotBestellungRepresentation>> findByDateAfterAndSum(){//@PathVariable Timestamp datum1, @PathVariable Timestamp datum2){
         //Timestamp datum1 = getTimestampNow();
-        Timestamp datum = deadlineService.getByPosition(1).get().getDatum();
+    	LocalDateTime datum = deadlineService.getByPosition(0).get().getDatum();
      	List<BrotBestellung> brotBestellungen = service.findByDateAfterAndSum(datum);
     	List<EntityModel<BrotBestellungRepresentation>> brote = new ArrayList<>();
     	for(BrotBestellung b : brotBestellungen) {

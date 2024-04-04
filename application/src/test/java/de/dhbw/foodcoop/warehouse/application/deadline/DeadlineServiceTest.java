@@ -8,6 +8,7 @@ import static org.mockito.Mockito.when;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
@@ -80,5 +81,5 @@ public class DeadlineServiceTest {
 
     long milli = 123456789999l;
     Time time = new Time(milli);
-    Timestamp ts = Timestamp.from(Instant.now());
+    LocalDateTime ts = LocalDateTime.now();
 }

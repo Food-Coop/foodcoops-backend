@@ -1,13 +1,13 @@
 package de.dhbw.foodcoop.warehouse.adapters.representations;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 public class FrischBestellungRepresentation extends BestellungRepresentation{
 
     private FrischBestandRepresentation frischbestand;
 
 
-    public FrischBestellungRepresentation(String id, String person_id, FrischBestandRepresentation frischbestand, double bestellmenge, Timestamp datum, boolean isDone) {
+    public FrischBestellungRepresentation(String id, String person_id, FrischBestandRepresentation frischbestand, double bestellmenge, LocalDateTime datum, boolean isDone) {
       super(id, person_id, datum, bestellmenge, isDone);
         this.frischbestand = frischbestand;
     }

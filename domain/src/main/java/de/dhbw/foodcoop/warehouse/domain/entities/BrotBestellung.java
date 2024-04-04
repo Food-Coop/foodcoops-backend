@@ -1,8 +1,12 @@
 package de.dhbw.foodcoop.warehouse.domain.entities;
 
-import javax.persistence.*;
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.UUID;
+
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 @Entity
 @Table(name="brotbestellung")
@@ -15,7 +19,7 @@ public class BrotBestellung extends BestellungEntity{
 
 
 
-    public  BrotBestellung(String id, String personId, BrotBestand brotbestand, double bestellmenge, Timestamp datum) {
+    public  BrotBestellung(String id, String personId, BrotBestand brotbestand, double bestellmenge, LocalDateTime datum) {
     	super();
         this.id = id;
         this.personId = personId;
@@ -34,7 +38,7 @@ public class BrotBestellung extends BestellungEntity{
         this.bestellmenge = bestellmenge;
     }
 
-    public BrotBestellung(String personId, BrotBestand brotbestand, double bestellmenge, Timestamp datum) {
+    public BrotBestellung(String personId, BrotBestand brotbestand, double bestellmenge, LocalDateTime datum) {
         this(UUID.randomUUID().toString(), personId, brotbestand, bestellmenge, datum);
     }
 

@@ -1,6 +1,6 @@
 package de.dhbw.foodcoop.warehouse.plugins.persistence;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,17 +25,17 @@ public class FrischBestellungRepositoryBridge implements FrischBestellungReposit
     }
 
     @Override
-    public List<FrischBestellung> findeMitDatumNachUndPerson(Timestamp date, String person_id){
+    public List<FrischBestellung> findeMitDatumNachUndPerson(LocalDateTime date, String person_id){
         return springDataFrischBestellungRepository.findByDateAfterAndPerson(date, person_id);
     }
 
     @Override
-    public List<FrischBestellung> findeMitDatumNachUndSum(Timestamp date){
+    public List<FrischBestellung> findeMitDatumNachUndSum(LocalDateTime date){
         return springDataFrischBestellungRepository.findByDateAfterAndSum(date);
     }
 
     @Override
-    public List<FrischBestellung> findeMitDatumZwischen(Timestamp date1, Timestamp date2, String person_id){
+    public List<FrischBestellung> findeMitDatumZwischen(LocalDateTime date1, LocalDateTime date2, String person_id){
         return springDataFrischBestellungRepository.findByDateBetween(date1, date2, person_id);
     }
 
@@ -60,7 +60,7 @@ public class FrischBestellungRepositoryBridge implements FrischBestellungReposit
 	}
 
 	@Override
-	public List<FrischBestellung> findeAlleBestellungenNachDatum(Timestamp datum) {
+	public List<FrischBestellung> findeAlleBestellungenNachDatum(LocalDateTime datum) {
 		return springDataFrischBestellungRepository.findAllAfter(datum);
 	}
 }

@@ -1,21 +1,19 @@
 package de.dhbw.foodcoop.warehouse.adapters.representations;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.Set;
-
-import de.dhbw.foodcoop.warehouse.domain.entities.BestandBuyEntity;
 
 public class EinkaufRepresentation {
 	private String id;
 	private String personId;
 	Set<BestellungBuyRepresentation> bestellungsEinkauf;
 	Set<BestandBuyRepresentation> bestandEinkauf;
-	private Timestamp date;
+	private LocalDateTime date;
 	private double breadPriceAtTime;
 	private double freshPriceAtTime;
 	private double bestandPriceAtTime;
 	public EinkaufRepresentation(String id, String personId, Set<BestellungBuyRepresentation> bestellungsEinkauf,
-			Set<BestandBuyRepresentation> bestandEinkauf, Timestamp date, double breadPriceAtTime,
+			Set<BestandBuyRepresentation> bestandEinkauf, LocalDateTime date, double breadPriceAtTime,
 			double freshPriceAtTime, double bestandPriceAtTime) {
 		super();
 		this.id = id;
@@ -39,7 +37,7 @@ public class EinkaufRepresentation {
 	public Set<BestandBuyRepresentation> getBestandEinkauf() {
 		return bestandEinkauf;
 	}
-	public Timestamp getDate() {
+	public LocalDateTime getDate() {
 		return date;
 	}
 	public double getBreadPriceAtTime() {

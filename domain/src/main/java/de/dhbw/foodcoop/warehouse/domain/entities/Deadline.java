@@ -1,10 +1,13 @@
 package de.dhbw.foodcoop.warehouse.domain.entities;
 
-import javax.persistence.*;
-
-import java.sql.Timestamp;
 import java.sql.Time;
+import java.time.LocalDateTime;
 import java.util.UUID;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity
 @Table(name = "deadline")
@@ -16,16 +19,16 @@ public class Deadline {
     @Column
     private Time time;
     @Column
-    private Timestamp datum;
+    private LocalDateTime datum;
 
-    public Deadline(String id, String weekday, Time time, Timestamp datum){
+    public Deadline(String id, String weekday, Time time, LocalDateTime datum){
         this.id = id;
         this.weekday = weekday;
         this.time = time;
         this.datum = datum;
     }
 
-    public Deadline(String weekday, Time time,Timestamp datum){
+    public Deadline(String weekday, Time time,LocalDateTime datum){
         this(UUID.randomUUID().toString(), weekday, time, datum);
     }
 
@@ -57,11 +60,11 @@ public class Deadline {
         this.time = time;
     }
 
-    public Timestamp getDatum() {
+    public LocalDateTime getDatum() {
         return datum;
     }
 
-    public void setDatum(Timestamp datum) {
+    public void setDatum(LocalDateTime datum) {
         this.datum = datum;
     }
 
