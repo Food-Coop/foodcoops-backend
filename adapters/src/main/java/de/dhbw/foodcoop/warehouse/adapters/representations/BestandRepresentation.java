@@ -18,7 +18,7 @@ import de.dhbw.foodcoop.warehouse.domain.entities.Produkt;
     // Andere Subtypen hier
 })
 @Inheritance(strategy = InheritanceType.JOINED)
-public class BestandRepresentation {
+public abstract class BestandRepresentation {
 		protected String id;
 	    protected String name;
 	    private boolean verfuegbarkeit;
