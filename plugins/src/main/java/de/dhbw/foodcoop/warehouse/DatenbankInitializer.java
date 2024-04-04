@@ -1,5 +1,7 @@
 package de.dhbw.foodcoop.warehouse;
 
+import java.util.TimeZone;
+
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +45,8 @@ public class DatenbankInitializer {
 
     @PostConstruct
     public void init() {
+    	
+    	TimeZone.setDefault(TimeZone.getTimeZone("Europe/Berlin"));
     	if(cfgService.getConfig().isEmpty()) {
     		cfgService.updateConfig(new ConfigurationEntity(ConstantsUtils.EMAIL_TEXT_EINKAUF_UEBERSICHT, null, null));
     	}
