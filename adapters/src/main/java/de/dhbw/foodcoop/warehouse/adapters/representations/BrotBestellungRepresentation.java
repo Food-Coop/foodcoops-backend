@@ -1,11 +1,11 @@
 package de.dhbw.foodcoop.warehouse.adapters.representations;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 public class BrotBestellungRepresentation extends BestellungRepresentation {
     private BrotBestandRepresentation brotbestand;
 
-    public BrotBestellungRepresentation(String id, String person_id, BrotBestandRepresentation brotbestand, double bestellmenge, Timestamp datum, boolean isDone) {
+    public BrotBestellungRepresentation(String id, String person_id, BrotBestandRepresentation brotbestand, double bestellmenge, LocalDateTime datum, boolean isDone) {
      super(id, person_id, datum, bestellmenge, isDone);
         this.brotbestand = brotbestand;
     }

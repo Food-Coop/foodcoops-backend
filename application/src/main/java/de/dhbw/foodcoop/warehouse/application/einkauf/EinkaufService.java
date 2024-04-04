@@ -1,26 +1,17 @@
 package de.dhbw.foodcoop.warehouse.application.einkauf;
 
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-
-import javax.naming.InsufficientResourcesException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import de.dhbw.foodcoop.warehouse.domain.entities.BestandBuyEntity;
-import de.dhbw.foodcoop.warehouse.domain.entities.BestandEntity;
 import de.dhbw.foodcoop.warehouse.domain.entities.BestellungBuyEntity;
-import de.dhbw.foodcoop.warehouse.domain.entities.BestellungEntity;
-import de.dhbw.foodcoop.warehouse.domain.entities.BrotBestand;
 import de.dhbw.foodcoop.warehouse.domain.entities.BrotBestellung;
 import de.dhbw.foodcoop.warehouse.domain.entities.EinkaufEntity;
-import de.dhbw.foodcoop.warehouse.domain.entities.FrischBestand;
 import de.dhbw.foodcoop.warehouse.domain.entities.FrischBestellung;
 import de.dhbw.foodcoop.warehouse.domain.entities.Produkt;
 import de.dhbw.foodcoop.warehouse.domain.repositories.EinkaufRepository;
@@ -46,11 +37,8 @@ public class EinkaufService {
         EinkaufEntity einkauf = new EinkaufEntity();
         einkauf.setId(UUID.randomUUID().toString());
         einkauf.setPersonId(personId);
-        ZonedDateTime jetztInDeutschland = ZonedDateTime.now(ZoneId.of("Europe/Berlin"));
-        long timestamp = jetztInDeutschland.toInstant().toEpochMilli();
-        Timestamp t = new Timestamp(timestamp);
-        t.setHours(LocalDateTime.now().getHour());
-        einkauf.setDate(t);
+
+        einkauf.setDate(LocalDateTime.now());
         einkauf = einkaufRepository.speichern(einkauf);
         if(bestandBuy != null) {
 	        for(BestandBuyEntity bbe : bestandBuy) {

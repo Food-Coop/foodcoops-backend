@@ -1,11 +1,8 @@
 package de.dhbw.foodcoop.warehouse.application.deadline;
 
-import java.sql.Timestamp;
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.time.format.TextStyle;
 import java.time.temporal.TemporalAdjusters;
 import java.util.Arrays;
@@ -20,7 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import de.dhbw.foodcoop.warehouse.application.bestellungsliste.BestellÜbersichtService;
-import de.dhbw.foodcoop.warehouse.application.gebindemanagement.GebindemanagementService;
 import de.dhbw.foodcoop.warehouse.domain.entities.Deadline;
 import de.dhbw.foodcoop.warehouse.domain.exceptions.DeadlineNotFoundException;
 import de.dhbw.foodcoop.warehouse.domain.repositories.DeadlineRepository;
@@ -82,11 +78,8 @@ public class DeadlineService {
     	Deadline d = optDead.get();
     	LocalDateTime dateForDeadline = calculateDateFromDeadline(d);
     	if(LocalDateTime.now().isAfter(dateForDeadline)) {
-            ZonedDateTime jetztInDeutschland = ZonedDateTime.now(ZoneId.of("Europe/Berlin"));
-            long timestamp = jetztInDeutschland.toInstant().toEpochMilli();
-            Timestamp t = new Timestamp(timestamp);
-            t.setHours(LocalDateTime.now().getHour());
-    		Deadline deadline = new Deadline(UUID.randomUUID().toString(), d.getWeekday(), d.getTime(), t);
+
+    		Deadline deadline = new Deadline(UUID.randomUUID().toString(), d.getWeekday(), d.getTime(), LocalDateTime.now());
     		return Optional.of(save(deadline));
     	}
 		return Optional.empty();
@@ -101,7 +94,7 @@ public class DeadlineService {
     public LocalDateTime calculateDateFromDeadline(Deadline d) {
     	
     	
-    	LocalDateTime date = d.getDatum().toLocalDateTime(); // Der Timestamp an dem die deadline gesetzt wurde
+    	LocalDateTime date = d.getDatum(); // Der Timestamp an dem die deadline gesetzt wurde
     	LocalTime t = date.toLocalTime(); // die Zeit des timestamps
     	LocalTime target = LocalTime.of(d.getTime().getHours(), d.getTime().getMinutes(), d.getTime().getSeconds()); //Die Zeit des ziels
     	

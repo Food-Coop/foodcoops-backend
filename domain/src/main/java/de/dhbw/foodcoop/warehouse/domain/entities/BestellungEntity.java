@@ -1,17 +1,14 @@
 package de.dhbw.foodcoop.warehouse.domain.entities;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
@@ -35,7 +32,7 @@ public abstract class BestellungEntity {
 	protected String personId;
 	
 	@Column
-	protected Timestamp datum;
+	protected LocalDateTime datum;
 	
 	@Column
 	protected double bestellmenge;
@@ -73,12 +70,12 @@ public abstract class BestellungEntity {
 		this.personId = personId;
 	}
 
-	public Timestamp getDatum() {
+	public LocalDateTime getDatum() {
 		return datum;
 	}
 
 
-	public void setDatum(Timestamp datum) {
+	public void setDatum(LocalDateTime datum) {
 		this.datum = datum;
 	}
 	

@@ -1,12 +1,9 @@
 package de.dhbw.foodcoop.warehouse.application.frischbestellung;
 
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.lenient;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.sql.Timestamp;
-import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -16,7 +13,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import de.dhbw.foodcoop.warehouse.domain.entities.FrischBestand;
@@ -75,5 +71,5 @@ public class FrischBestellungServiceTest {
     Einheit e1 = new Einheit("111", "Stück");
     Kategorie k1 = new Kategorie("222", "Salat", true);
     FrischBestand fb = new FrischBestand("1234", "Kopfsalat", true, "DE", 20, e1, k1, (float) 1.5);
-    Timestamp ts= Timestamp.from(Instant.now());  
+    LocalDateTime ts= LocalDateTime.now();  
 }

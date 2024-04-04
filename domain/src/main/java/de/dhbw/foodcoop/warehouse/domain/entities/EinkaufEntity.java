@@ -1,6 +1,6 @@
 package de.dhbw.foodcoop.warehouse.domain.entities;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -9,8 +9,6 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 /**
  * @author MStaar
@@ -37,7 +35,7 @@ public class EinkaufEntity {
     
     
 	@Column
-	private Timestamp date;
+	private LocalDateTime date;
 	
 	
 	@Column
@@ -55,7 +53,7 @@ public class EinkaufEntity {
 
 
 	public EinkaufEntity(String id, String personId, List<BestellungBuyEntity> einkauf,
-			 List<BestandBuyEntity> bestandEinkauf, Timestamp date, double breadPriceAtTime,
+			 List<BestandBuyEntity> bestandEinkauf, LocalDateTime date, double breadPriceAtTime,
 			double freshPriceAtTime,  double bestandPriceAtTime) {
 		super();
 		this.id = id;
@@ -108,11 +106,11 @@ public class EinkaufEntity {
 		this.freshPriceAtTime = freshPriceAtTime;
 	}
 
-	public Timestamp getDate() {
+	public LocalDateTime getDate() {
 		return date;
 	}
 
-	public void setDate(Timestamp date) {
+	public void setDate(LocalDateTime date) {
 		this.date = date;
 	}
 
