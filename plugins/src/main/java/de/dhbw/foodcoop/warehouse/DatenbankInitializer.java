@@ -158,124 +158,129 @@ public class DatenbankInitializer {
        	fbService.save(new FrischBestand("Eier", true, "D", 1f, St, eier, 0.55f));
        	
        	// Erstellung von Brot
-       	brotService.save(new BrotBestand("11", "Demeter-Dinkellaib", true, 500, 0));
-       	brotService.save(new BrotBestand("12", "Dinkel-Wurzelbrot", true, 500, 0));
-       	brotService.save(new BrotBestand("14", "Schweizer Kruste", true, 750, 0));
-       	brotService.save(new BrotBestand("15", "Kamut-Brot", true, 750, 0));
-       	brotService.save(new BrotBestand("16", "Saftbrot ESSENER Art", true, 750, 0));
-       	brotService.save(new BrotBestand("20", "Genetztes Dinkelbrotb", true, 750, 0));
-       	brotService.save(new BrotBestand("22", "Dinkel Saatenbrot", true, 500, 0));
-       	brotService.save(new BrotBestand("23", "Hafer-Dinkelbrot", true, 500, 0));
-       	brotService.save(new BrotBestand("27", "Kürbisbrot mit Hirse", true, 500, 0));
-       	brotService.save(new BrotBestand("28", "Möhren-Kürbisbrot", true, 750, 0));
-       	brotService.save(new BrotBestand("30", "Sonnenblumenbrot", true, 750, 0));
-       	brotService.save(new BrotBestand("32", "Mischbrot", true, 750, 0));
-       	brotService.save(new BrotBestand("33", "Mehrkornbrot", true, 750, 0));
-       	brotService.save(new BrotBestand("34", "Blankenlocher", true, 500, 0));
-       	brotService.save(new BrotBestand("35", "Reichenbacher", true, 1000, 0));
-       	brotService.save(new BrotBestand("37", "Kasten-Weissbrot", true, 500, 0));
-       	brotService.save(new BrotBestand("40", "Hausbrot", true, 750, 0));
-       	brotService.save(new BrotBestand("41", "Walnußbrot", true, 500, 0));
-       	brotService.save(new BrotBestand("50", "Roggenbrot", true, 750, 0));
-       	brotService.save(new BrotBestand("56", "Rhein Schwarzbrot", true, 500, 0));
-       	brotService.save(new BrotBestand("61", "Brauer Kruste", true, 500, 0));
-       	brotService.save(new BrotBestand("71", "Kleine Hirse", true, 500, 0));
-       	brotService.save(new BrotBestand("77", "Roggenmischbrot", true, 500, 0));
-       	brotService.save(new BrotBestand("92", "Low-Carb-Brot", true, 320, 0));
-       	brotService.save(new BrotBestand("120", "Dinkelbrötchen Vollkorn", true, 0, 0));
-       	brotService.save(new BrotBestand("124", "Dinkelbaguette Vollkorn", true, 0, 0));
-       	brotService.save(new BrotBestand("125", "Brötchen-Rad, verziert", true, 0, 0));
-       	brotService.save(new BrotBestand("130", "Mohnbrötchen", true, 0, 0));
-       	brotService.save(new BrotBestand("131", "Sonnenblumenbrötchen", true, 0, 0));
-       	brotService.save(new BrotBestand("132", "Sesambrötchen", true, 0, 0));
+       	brotService.save(new BrotBestand("11", "Demeter-Dinkellaib", true, 500, 3.3));
+       	brotService.save(new BrotBestand("12", "Dinkel-Wurzelbrot", true, 500, 3.1));
+       	brotService.save(new BrotBestand("14", "Schweizer Kruste", true, 750, 3.7));
+       	brotService.save(new BrotBestand("15", "Kamut-Brot", true, 750, 4.85));
+       	brotService.save(new BrotBestand("16", "Saftbrot ESSENER Art", true, 750, 4.05));
+       	brotService.save(new BrotBestand("20", "Genetztes Dinkelbrotb", true, 750, 3.95));
+       	brotService.save(new BrotBestand("22", "Dinkel Saatenbrot", true, 500, 3.25));
+       	brotService.save(new BrotBestand("23", "Hafer-Dinkelbrot", true, 500, 3.4));
+       	brotService.save(new BrotBestand("27", "Kürbisbrot mit Hirse", true, 500, 3.35));
+       	brotService.save(new BrotBestand("28", "Möhren-Kürbisbrot", true, 750, 4.25));
+       	brotService.save(new BrotBestand("30", "Sonnenblumenbrot", true, 750, 4.05));
+       	brotService.save(new BrotBestand("32", "Mischbrot", true, 750, 3.25));
+       	brotService.save(new BrotBestand("33", "Mehrkornbrot", true, 750, 3.85));
+       	brotService.save(new BrotBestand("34", "Blankenlocher", true, 500, 2.5));
+       	brotService.save(new BrotBestand("35", "Reichenbacher", true, 1000, 4.5));
+       	brotService.save(new BrotBestand("37", "Kasten-Weissbrot", true, 500, 2.65));
+       	brotService.save(new BrotBestand("40", "Hausbrot", true, 750, 3.25));
+       	brotService.save(new BrotBestand("41", "Walnußbrot", true, 500, 3.65));
+       	brotService.save(new BrotBestand("50", "Roggenbrot", true, 750, 3.4));
+       	brotService.save(new BrotBestand("56", "Rhein. Schwarzbrot", true, 500, 2.45));
+       	brotService.save(new BrotBestand("61", "Brauer KRUSTE", true, 500, 2.85));
+       	brotService.save(new BrotBestand("71", "Kleine Hirse", true, 500, 3));
+       	brotService.save(new BrotBestand("77", "Roggenmischbrot", true, 500, 2.7));,
+        brotService.save(new BrotBestand("91", "Backmischung SOWIE LowCarb", true, 250, 6.2));
+       	brotService.save(new BrotBestand("92", "Low-Carb-Brot", true, 320, 4.85));
+        brotService.save(new BrotBestand("95", "Glutenfreies Brot", true, 380, 2.75));
+       	brotService.save(new BrotBestand("120", "Dinkelbrötchen Vollkorn", true, 0, 0.7));
+       	brotService.save(new BrotBestand("124", "Dinkelbaguette Vollkorn", true, 0, 2));
+       	brotService.save(new BrotBestand("125", "Brötchen-Rad, verziert", true, 0, 7.7));
+       	brotService.save(new BrotBestand("130", "Mohnbrötchen", true, 0, 0.6));
+       	brotService.save(new BrotBestand("131", "Sonnenblumenbrötchen", true, 0, 0.6));
+       	brotService.save(new BrotBestand("132", "Sesambrötchen", true, 0, 0.6));
        	
-       	brotService.save(new BrotBestand("133", "Kürbiskernbrötchen", true, 0, 0));
-       	brotService.save(new BrotBestand("135", "Thomasbrötchen", true, 0, 0));
-       	brotService.save(new BrotBestand("139", "Fladen Weizen-Vollkorn", true, 0, 0));
-       	brotService.save(new BrotBestand("146", "Dinkel-Krusti", true, 0, 0));
-       	brotService.save(new BrotBestand("147", "Dinkel-Bauernbaguette", true, 0, 0));
-       	brotService.save(new BrotBestand("150", "Elsässer Doppelweck", true, 0, 0));
-       	brotService.save(new BrotBestand("151", "Roggenweck", true, 0, 0));
-       	brotService.save(new BrotBestand("156", "Dinkel-Kamut-Panini", true, 0, 0));
-       	brotService.save(new BrotBestand("157", "Dinkel-Kamut Seele", true, 0, 0));
-       	brotService.save(new BrotBestand("158", "Dinkel-Kamut Ciabatta", true, 0, 0));
-       	brotService.save(new BrotBestand("159", "Dinkel-Kamut Ciabatta Olive", true, 0, 0));
-       	brotService.save(new BrotBestand("370", "Berliner", false, 0, 0));
-       	brotService.save(new BrotBestand("331", "Faschingsmaske", false, 0, 0));
-       	brotService.save(new BrotBestand("332", "Osterhase", true, 0, 0));
-       	brotService.save(new BrotBestand("339", "Osterbrot", true, 0, 0));
-       	brotService.save(new BrotBestand("334", "Martinsgans", false, 0, 0));
-       	brotService.save(new BrotBestand("335", "Dambedei", false, 0, 0));
-       	brotService.save(new BrotBestand("336", "Neujahrsbr 110g", false, 110, 0));
-       	brotService.save(new BrotBestand("337", "Neujahrsbr 600g", true, 600, 0));
-       	brotService.save(new BrotBestand("432", "D.-Schoko-Herz Zartb.", true, 18, 0));
+       	brotService.save(new BrotBestand("133", "Kürbiskernbrötchen", true, 0, 0.6));
+       	brotService.save(new BrotBestand("135", "Thomasbrötchen", true, 0, 0.55));
+       	brotService.save(new BrotBestand("139", "Fladen Weizen-Vollkorn", true, 0, 1));
+        brotService.save(new BrotBestand("142", "Sesambaguette, Vollkorn", true, 0, 2.2));
+       	brotService.save(new BrotBestand("146", "Dinkel-Krusti", true, 0, 1.2));
+       	brotService.save(new BrotBestand("147", "Dinkel-Bauernbaguette", true, 0, 2.35));
+       	brotService.save(new BrotBestand("150", "Elsässer Doppelweck", true, 0, 0.85));
+       	brotService.save(new BrotBestand("151", "Roggenweck", true, 0, 0.6));
+       	brotService.save(new BrotBestand("156", "Dinkel-Kamut-Panini", true, 0, 1.1));
+       	brotService.save(new BrotBestand("157", "Dinkel-Kamut Seele", true, 0, 1.3));
+       	brotService.save(new BrotBestand("158", "Dinkel-Kamut Ciabatta", true, 0, 2.35));
+       	brotService.save(new BrotBestand("159", "Dinkel-Kamut Ciabatta Olive", true, 0, 2.65));
+        
+       	brotService.save(new BrotBestand("370", "Berliner", false, 0, 1.55));
+       	brotService.save(new BrotBestand("331", "Faschingsmaske", false, 0, 1.55));
+       	brotService.save(new BrotBestand("332", "Osterhase", true, 0, 1.55));
+       	brotService.save(new BrotBestand("339", "Osterbrot", true, 0, 3.5));
+       	brotService.save(new BrotBestand("334", "Martinsgans", false, 0, 1.7));
+       	brotService.save(new BrotBestand("335", "Dambedei", false, 0, 1.7));
+       	brotService.save(new BrotBestand("336", "Neujahrsbr 110g", false, 110, 1.7));
+       	brotService.save(new BrotBestand("337", "Neujahrsbr 600g", true, 600, 10.4));
+        brotService.save(new BrotBestand("463", "Honig-Lebkuchen Platte", false, 0, 1.7));
+       	brotService.save(new BrotBestand("464", "Honig-Lebkuchen Herz", false, 0, 1.7));
+    	brotService.save(new BrotBestand("467", "Hutzelbrot", false, 0, 4.55));
+            
+       	/* brotService.save(new BrotBestand("432", "D.-Schoko-Herz Zartb.", true, 18, 0));
        	brotService.save(new BrotBestand("433", "D.-Mandel-Stern Zartb.", true, 15, 0));
        	brotService.save(new BrotBestand("434", "Dinkel-Mandel-Lebk", true, 18, 0));
-       	brotService.save(new BrotBestand("463", "Honig-Lebkuchen Platte", false, 0, 0));
-       	brotService.save(new BrotBestand("464", "Honig-Lebkuchen Herz", false, 0, 0));
-    	brotService.save(new BrotBestand("467", "Hutzelbrot", false, 0, 0));
-    	
-       	brotService.save(new BrotBestand("160", "Dinkellaugen-Ring Vollkorn", true, 0, 0));
-       	brotService.save(new BrotBestand("162", "Dinkellaugen-Brezel ab 5 St", true, 0, 0));
-       	brotService.save(new BrotBestand("163", "Laugen-Brezel Salz ab 5 St", true, 0, 0));
-       	brotService.save(new BrotBestand("164", "Schlemmerschleife", true, 0, 0));
-       	brotService.save(new BrotBestand("165", "Laugen-Brezel Sesam ab 5 St", true, 0, 0));
-       	brotService.save(new BrotBestand("166", "Käse-Laugenweck", true, 0, 0));
-       	brotService.save(new BrotBestand("167", "Laugenknoten", true, 0, 0));
-       	brotService.save(new BrotBestand("168", "Laugenstange", true, 0, 0));
-       	brotService.save(new BrotBestand("169", "Laugenbaguette", true, 0, 0));
-       	brotService.save(new BrotBestand("171", "Baguette Tradition", true, 0, 0));
-       	brotService.save(new BrotBestand("172", "Baguette Campaillou", true, 0, 0));
-       	brotService.save(new BrotBestand("175", "Petite", true, 0, 0));
-       	brotService.save(new BrotBestand("201", "Gemüsekuchen rund 12 St", true, 0, 0));
-    	brotService.save(new BrotBestand("202", "Zwiebelkuchen", false, 0, 0));
-    	
-       	brotService.save(new BrotBestand("203", "Zwiebelkuchen m. Speck", false, 0, 0));
-       	brotService.save(new BrotBestand("211", "Pizza-Schnecke", true, 0, 0));
-       	brotService.save(new BrotBestand("214", "Napoli", true, 0, 0));
-       	brotService.save(new BrotBestand("215", "Spinaci", true, 0, 0));
-       	brotService.save(new BrotBestand("252", "6-Korn Laugencroissant", true, 0, 0));
-       	brotService.save(new BrotBestand("290", "Schokofranzbrötchen vegan", true, 0, 0));
-       	brotService.save(new BrotBestand("301", "Franzbrötchen (Zimtschnecke)", true, 0, 0));
-    	brotService.save(new BrotBestand("302", "Rosinenbrötchen", true, 0, 0));
-    	
-       	brotService.save(new BrotBestand("303", "Dinkel-Apfelschnecke", true, 0, 0));
-       	brotService.save(new BrotBestand("304", "Dinkel-Mohnschnecke", true, 0, 0));
-       	brotService.save(new BrotBestand("305", "Topfen/Quarktasche", true, 0, 0));
-       	brotService.save(new BrotBestand("306", "Kirschplunder vegan", true, 0, 0));
-       	brotService.save(new BrotBestand("308", "Apfeltasche", true, 0, 0));
-       	brotService.save(new BrotBestand("309", "Rosinenschnecke la Creme", true, 0, 0));
-    	brotService.save(new BrotBestand("310", "Schoko Croissant", true, 0, 0));
-    	
-       	brotService.save(new BrotBestand("313", "Dinkel-Croissant hell", true, 0, 0));
-       	brotService.save(new BrotBestand("315", "Croissant französisch", true, 0, 0));
-       	brotService.save(new BrotBestand("322", "Stutenseer Zopf", true, 0, 0));
-       	brotService.save(new BrotBestand("323", "Mohn Zopf", true, 0, 0));
-       	brotService.save(new BrotBestand("324", "Dinkel Mohn Tartes", true, 0, 0));
-       	brotService.save(new BrotBestand("325", "Dinkel Apfel Tartes", true, 0, 0));
-    	brotService.save(new BrotBestand("326", "Dinkel Käse Tartes", true, 0, 0));
-    	
-       	brotService.save(new BrotBestand("327", "Dinkel Gemüse Tartes", true, 0, 0));
-       	brotService.save(new BrotBestand("328", "Quarkbällchen ab 3 St", true, 0, 0));
-       	brotService.save(new BrotBestand("329", "Amerikaner", true, 0, 0));
+        brotService.save(new BrotBestand("329", "Amerikaner", true, 0, 0));
        	brotService.save(new BrotBestand("330", "Auszogne", false, 0, 0));
-       	brotService.save(new BrotBestand("341", "Apfel-Blech-Kuchen", true, 0, 0));
-       	brotService.save(new BrotBestand("342", "Schoko-Kirsch-Kuchen", true, 0, 0));
-    	brotService.save(new BrotBestand("343", "Schwarze Johannisbeer-Kuchen", true, 0, 0));
-    	
-       	brotService.save(new BrotBestand("344", "Käsekuchen", true, 0, 0));
-       	brotService.save(new BrotBestand("351", "Rhabarberkuchen", true, 0, 0));
-       	brotService.save(new BrotBestand("352", "Zwetschgenkuchen", false, 0, 0));
-       	brotService.save(new BrotBestand("353", "Mohnkuchen", true, 0, 0));
-       	brotService.save(new BrotBestand("401", "Amaranth-Taler vegan", true, 18, 0));
-       	brotService.save(new BrotBestand("402", "Linzer-Torte", true, 0, 0));
-    	brotService.save(new BrotBestand("405", "Dinkel-Mandel-Zungen", true, 16, 0));
-    	
-       	brotService.save(new BrotBestand("406", "Dinkel-Nougat-Ring", true, 16, 0));
-       	brotService.save(new BrotBestand("407", "Schoko-Peanuts Vollm.", true, 18, 0));
-       	brotService.save(new BrotBestand("420", "Mürbegebäch Nuss", false, 4, 0));
+        brotService.save(new BrotBestand("420", "Mürbegebäch Nuss", false, 4, 0));
        	brotService.save(new BrotBestand("421", "Mürbegebäck Frucht", false, 4, 0));
-       	brotService.save(new BrotBestand("422", "Kernbeißer", true, 12, 0));
+        brotService.save(new BrotBestand("344", "Käsekuchen", true, 0, 0)); */
+    	
+       	brotService.save(new BrotBestand("160", "Dinkellaugen-Ring Vollkorn", true, 0, 0.9));
+       	brotService.save(new BrotBestand("162", "Dinkellaugen-Brezel ab 5 St", true, 0, 0.95));
+       	brotService.save(new BrotBestand("163", "Laugen-Brezel Salz ab 5 St", true, 0, 1));
+       	brotService.save(new BrotBestand("164", "Schlemmerschleife", true, 0, 1.85));
+       	brotService.save(new BrotBestand("165", "Laugen-Brezel Sesam ab 5 St", true, 0, 1));
+       	brotService.save(new BrotBestand("166", "Käse-Laugenweck", true, 0, 1.3));
+       	brotService.save(new BrotBestand("167", "Laugenknoten", true, 0, 0.95));
+       	brotService.save(new BrotBestand("168", "Laugenstange", true, 0, 0.95));
+       	brotService.save(new BrotBestand("169", "Laugenbaguette", true, 0, 2.55));
+       	brotService.save(new BrotBestand("171", "Baguette Tradition", true, 0, 2.2));
+       	brotService.save(new BrotBestand("172", "Baguette Campaillou", true, 0, 2.2));
+       	brotService.save(new BrotBestand("175", "Petite", true, 0, 0.85));
+       	brotService.save(new BrotBestand("201", "Gemüsekuchen rund 12 St", true, 0, 25.45));
+    	brotService.save(new BrotBestand("202", "Zwiebelkuchen", false, 0, 22.5));
+    	
+       	brotService.save(new BrotBestand("203", "Zwiebelkuchen m. Speck", false, 0, 23.75));
+       	brotService.save(new BrotBestand("211", "Pizza-Schnecke", true, 0, 2));
+       	brotService.save(new BrotBestand("214", "Napoli", true, 0, 2.2));
+       	brotService.save(new BrotBestand("215", "Spinaci", true, 0, 2.2));
+       	brotService.save(new BrotBestand("252", "6-Korn Laugencroissant", true, 0, 1.55));
+       	brotService.save(new BrotBestand("290", "Schokofranzbrötchen vegan", true, 0, 2));
+       	brotService.save(new BrotBestand("301", "Franzbrötchen (Zimtschnecke)", true, 0, 1.75));
+    	brotService.save(new BrotBestand("302", "Rosinenbrötchen", true, 0, 1));
+    	
+       	brotService.save(new BrotBestand("303", "Dinkel-Apfelschnecke", true, 0, 2.1));
+       	brotService.save(new BrotBestand("304", "Dinkel-Mohnschnecke", true, 0, 2.15));
+       	brotService.save(new BrotBestand("305", "Topfen/Quarktasche", true, 0, 2.15));
+       	brotService.save(new BrotBestand("306", "Kirschplunder vegan", true, 0, 2.2));
+       	brotService.save(new BrotBestand("308", "Apfeltasche", true, 0, 2.2));
+       	brotService.save(new BrotBestand("309", "Rosinenschnecke la Créme", true, 0, 1.85));
+    	brotService.save(new BrotBestand("310", "Schoko Croissant", true, 0, 1.55));
+    	
+       	brotService.save(new BrotBestand("313", "Dinkel-Croissant hell", true, 0, 1.65));
+       	brotService.save(new BrotBestand("315", "Croissant französisch", true, 0, 1.5));
+       	brotService.save(new BrotBestand("322", "Stutenseer Zopf", true, 0, 3.25));
+       	brotService.save(new BrotBestand("323", "Mohn Zopf", true, 0, 3.5));
+       	brotService.save(new BrotBestand("324", "Dinkel Mohn Tartes", true, 0, 2.5));
+       	brotService.save(new BrotBestand("325", "Dinkel Apfel Tartes", true, 0, 2.5));
+    	brotService.save(new BrotBestand("326", "Dinkel Käse Tartes", true, 0, 2.5));
+    	
+       	brotService.save(new BrotBestand("327", "Dinkel Gemüse Tartes", true, 0, 2.5));
+       	brotService.save(new BrotBestand("328", "Quarkbällchen ab 3 St", true, 0, 0.8));
+       	brotService.save(new BrotBestand("341", "Apfel-Blech-Kuchen", true, 0, 2.1));
+       	brotService.save(new BrotBestand("342", "Schoko-Kirsch-Kuchen", true, 0, 2.1));
+    	brotService.save(new BrotBestand("343", "Schwarze Johannisbeer-Kuchen", true, 0, 2.1));
+    	
+       	brotService.save(new BrotBestand("351", "Rhabarberkuchen", true, 0, 2.1));
+       	brotService.save(new BrotBestand("352", "Zwetschgenkuchen", false, 0, 2.1));
+       	brotService.save(new BrotBestand("353", "Mohnkuchen", true, 0, 2.2));
+       	brotService.save(new BrotBestand("401", "18 Amaranth-Taler vegan", true, 0, 26.4));
+       	brotService.save(new BrotBestand("402", "Linzer-Torte", true, 0, 10.45));
+    	brotService.save(new BrotBestand("405", "16 Dinkel-Mandel-Zungen", true, 0, 28.4));
+    	
+       	brotService.save(new BrotBestand("406", "16 Dinkel-Nougat-Ring", true, 0, 28.4));
+       	brotService.save(new BrotBestand("407", "18 Schoko-Peanuts Vollm.", true, 0, 30.3));
+       	brotService.save(new BrotBestand("422", "12 Kernbeißer", true, 0, 21.2));
 
        	
        	//Lagerware
