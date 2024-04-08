@@ -42,9 +42,11 @@ public class DatenbankInitializer {
     
     @Autowired
     private ConfigurationService cfgService;
+    
 
     @PostConstruct
     public void init() {
+
     	
     	TimeZone.setDefault(TimeZone.getTimeZone("Europe/Berlin"));
     	if(cfgService.getConfig().isEmpty()) {

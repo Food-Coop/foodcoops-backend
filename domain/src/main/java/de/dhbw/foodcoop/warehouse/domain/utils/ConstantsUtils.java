@@ -7,13 +7,13 @@ public class ConstantsUtils {
 
 	public final static String EINKAUF_PLACEHOLDER_BROT = "%brotEinkauf%";
 	public final static String EINKAUF_PLACEHOLDER_FRISCH = "%frischEinkauf%";
-	public final static String EINKAUF_PLACEHOLDER_LAGER = "%lagerEInkauf%";
+	public final static String EINKAUF_PLACEHOLDER_LAGER = "%lagerEinkauf%";
 	public final static String EINKAUF_PLACEHOLDER_DATE = "%currentDate%";
 	
 	public final static String PLACEHOLDER_PERSONID = "%personID%";
 	public final static String PLACEHOLDER_GESAMT_KOSTEN = "%gesamtKosten%";
 	
-	public final static String EMAIL_TEXT_EINKAUF_UEBERSICHT =  "Hallo " + ConstantsUtils.EINKAUF_PLACEHOLDER_BROT+ ",\n"
+	public final static String EMAIL_TEXT_EINKAUF_UEBERSICHT =  "Hallo " + ConstantsUtils.PLACEHOLDER_PERSONID + ",\n"
       		+ "\n"
       		+ "Dein Einkauf bei der Foodcoop in der Karlsruher Nordstadt am "+ ConstantsUtils.EINKAUF_PLACEHOLDER_DATE+ " war erfolgreich!\n"
       				+ "Anbei befindet sich der Beleg für den Einkauf als Pdf.\n"
