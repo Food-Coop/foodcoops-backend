@@ -41,7 +41,7 @@ public class ConfigurationEntity {
 		this.emailFromEinkaufAdmin = emailFromEinkaufAdmin;
 	}
 
-	public String getBestellEmailText() {
+	public String getEinkaufEmailText() {
 		if(bestellEmailText == null || bestellEmailText.isBlank()) {
 			return ConstantsUtils.EMAIL_TEXT_EINKAUF_UEBERSICHT;
 		}

@@ -18,6 +18,7 @@ public class FrischBestand extends BestandEntity{
     @ManyToOne
     @JoinColumn(name = "einheit_id")
     private Einheit einheit;
+    
     @ManyToOne
     @JoinColumn(name = "kategorie_id")
     private Kategorie kategorie;

@@ -109,7 +109,7 @@ public class FrischBestellungController {
     		return null;
     	}
     	if(date2.isEmpty()) {
-    		return findByDateAfterAndPerson(person_id);
+    		return null;
     	}
     	
     	LocalDateTime datum1 = date1.get().getDatum();
