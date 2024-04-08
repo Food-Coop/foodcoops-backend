@@ -10,18 +10,19 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
+import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.vandeseer.easytable.RepeatedHeaderTableDrawer;
 import org.vandeseer.easytable.TableDrawer;
+import org.vandeseer.easytable.settings.HorizontalAlignment;
 import org.vandeseer.easytable.structure.Row;
 import org.vandeseer.easytable.structure.Row.RowBuilder;
 import org.vandeseer.easytable.structure.Table;
@@ -361,7 +362,95 @@ public class PdfService {
            
         }
     }
+    public byte[] createFrischUebersicht() {
+    	  try (PDDocument document = new PDDocument()) {
+              PDPage page = new PDPage();
+              document.addPage(page);
+              
+              
+              
+              // Erstelle die Tabelle mit festgelegten Spaltenbreiten
+//              Table.TableBuilder tableBuilder = Table.builder()
+//            		  // 130px = 3,9cm     => 1 cm = 33,333 px
+//            		  // 3,3 cm = 110px     2,8 Höhe cm = 93,3333
+//                      .addColumnOfWidth(110) // Breite für "Lieferdatum"
+//                      .addColumnOfWidth(110)
+//                      .addColumnOfWidth(80) // Breite für "Herkunft"
+//                      .addColumnOfWidth(150) // Breite für "Artikel"
+//                      // Weitere Spalten hinzufügen nach Bedarf
+//                      .fontSize(10)
+//                      .font(PDType1Font.HELVETICA_BOLD);
+//
+//              // Kopfzeile hinzufügen
+//              Row row1 = Row.builder()
+//            	        .add(TextCell.builder().text("Lieferdatum").rowSpan(2).borderWidth(1).build())
+//            	        .add(TextCell.builder().text("Herkunft").colSpan(1).borderWidth(1).build())
+//            	        .add(TextCell.builder().text("Preis\nin €").borderWidth(1).build())
+//            	        .height(93.33333f) // Höhe für "Lieferdatum"
+//            	        .build();
+//            	tableBuilder.addRow(row1);
 
+              Table myTable = Table.builder()
+                      .addColumnsOfWidth(20, 20, 20, 20, 20, 20)
+                      .padding(2)
+                      .borderWidth(1)
+                      .borderColor(Color.gray)
+                      .horizontalAlignment(HorizontalAlignment.CENTER)
+                      .addRow(Row.builder()
+                              .add(TextCell.builder().text("a").colSpan(8).build())
+                              .build())
+                      .addRow(Row.builder()
+                              .add(TextCell.builder().text("Lieferdatum").rowSpan(5).build())
+                              .add(TextCell.builder().text("Herkunft").colSpan(3).build())
+                              .add(TextCell.builder().text("Preis in €").build())
+                              .add(TextCell.builder().text("gültig für").build())
+                              .add(TextCell.builder().text("Gebindegröße").build())
+                              .add(TextCell.builder().text("Bestellung").build())
+                              .build())
+                      .addRow(Row.builder()
+
+                              .add(TextCell.builder().text("h").build())
+                              .add(TextCell.builder().text("i").build())
+                              .add(TextCell.builder().text("j").build())
+                              .build())
+                      .build();
+            	// Füge eine weitere Zeile für "Gemüse/Obst" hinzu, die die erste Spalte einnimmt
+//            	Row row2 = Row.builder()
+//            	        .add(TextCell.builder().text("07.05.2019\nKW19-2019").borderWidth(1).build())
+//            	        .add(TextCell.builder().text("Gemüse/Obst").borderWidth(1).build())
+//            	        .height(20f) // Höhe für "Gemüse/Obst"
+//            	        .build();
+//            	tableBuilder.addRow(row2);
+//            
+              // Beispiel für eine Zeile mit Daten (muss für tatsächliche Daten angepasst werden)
+//              tableBuilder.addRow(Row.builder()
+//                      .add(TextCell.builder().text("07.05.2019").borderWidth(1).build())
+//                      .add(TextCell.builder().text("DE").borderWidth(1).build())
+//                      .add(TextCell.builder().text("Tomaten").borderWidth(1).build())
+//                      // Weitere Zellen für Daten hinzufügen
+//                      .build());
+
+              // Tabelle zeichnen
+              TableDrawer ld = TableDrawer.builder()
+                      .page(page)
+                      .table(myTable)
+                      .startX(50) // X-Position anpassen
+                      .startY(page.getMediaBox().getHeight() - 50) // Y-Position anpassen
+                      .build();
+              
+    
+                      ld.draw(() -> document, () -> new PDPage(PDRectangle.A4), 50);
+              // Dokument speichern
+              
+              ByteArrayOutputStream out = new ByteArrayOutputStream();
+              document.save(out);
+              document.close();
+              return out.toByteArray();
+          } catch (Exception e) {
+              e.printStackTrace();
+          }
+		return null;
+    }
  
 
 
@@ -492,6 +581,7 @@ public class PdfService {
             
             ByteArrayOutputStream out = new ByteArrayOutputStream();
             document.save(out);
+            document.close();
             return out.toByteArray();
         } catch (Exception e) {
             e.printStackTrace();

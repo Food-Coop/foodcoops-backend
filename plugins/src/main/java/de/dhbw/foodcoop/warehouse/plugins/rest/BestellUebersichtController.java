@@ -50,8 +50,8 @@ public class BestellUebersichtController {
 	
 	 	@GetMapping(value = "/bestellUebersicht/pdf")
 	    public ResponseEntity<StreamingResponseBody> getUebersichtPDF() throws IOException {
-	        String fileName = "UebersichtsPDF";
-	        byte[] pdfInBytes = pdfService.createUebersicht(getLastBestellUebersicht());
+	        String fileName = "UebersichtFrischPDF";
+	        byte[] pdfInBytes = pdfService.createFrischUebersicht(/*getLastBestellUebersicht()*/);
 	        ByteArrayInputStream inputStream = new ByteArrayInputStream(pdfInBytes);
 	        StreamingResponseBody responseBody = outputStream -> {
 
