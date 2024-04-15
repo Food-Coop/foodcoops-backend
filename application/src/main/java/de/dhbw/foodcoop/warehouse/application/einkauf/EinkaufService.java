@@ -165,7 +165,7 @@ public class EinkaufService {
          				katSet.add(f.getFrischbestand().getKategorie());
          			} else  {
          				double sumOrderedFromPerson =  (Math.round( t.getBestellung().getBestellmenge() * 100.0) / 100.0); 
-         				double sumTakenFromPerson = (Math.round( t.getAmount() * 100.0) / 100.0);
+         				double sumTakenFromPerson = (Math.round( mapAmountForOrder.get(f.getFrischbestand()) * 100.0) / 100.0);
              	    	if(sumTakenFromPerson != sumOrderedFromPerson) {
              	    		BestellungBuyEntity  bbe = null;
              	    		for(BestellungBuyEntity bestellung : bestellungen) {
@@ -189,7 +189,7 @@ public class EinkaufService {
          	
          	for(Kategorie k : katSet) {
          		double sumOrderedFromPerson = (Math.round( sumByKategorie(k, frischBestellungen) * 100.0) / 100.0);
-         	    double sumTakenFromPerson = (Math.round( sumBestellungBuyByKategorie(k, bestellungen) * 100.0) / 100.0);
+         	    double sumTakenFromPerson = (Math.round( sumBestellungBuyByKategorie(k, bestellungen, mapAmountForOrder) * 100.0) / 100.0);
          	    		if(sumTakenFromPerson != sumOrderedFromPerson) {
          	    			double sumToAdjust = sumOrderedFromPerson - sumTakenFromPerson;
          	    			boolean isDone = true;
@@ -295,13 +295,14 @@ public class EinkaufService {
     	return bestellungen.stream().filter(t -> t.getFrischbestand().getKategorie().getId().equalsIgnoreCase(k.getId())).mapToDouble( x -> x.getBestellmenge()).sum();
     }
     
-    private double sumBestellungBuyByKategorie(Kategorie k, List<BestellungBuyEntity> bestellungen) {
+    private double sumBestellungBuyByKategorie(Kategorie k, List<BestellungBuyEntity> bestellungen, HashMap<FrischBestand, Double> map) {
     	double counter = 0;
     	for(BestellungBuyEntity bbe : bestellungen) {
     		if(bbe.getBestellung() instanceof FrischBestellung) {
     			FrischBestellung f = (FrischBestellung) bbe.getBestellung();
     			if(f.getFrischbestand().getKategorie().getId().equalsIgnoreCase(k.getId()))  {
-    				counter = counter + bbe.getAmount();
+    				counter = counter + bbe.getAmount() + map.get(f.getFrischbestand());
+    				
     			}
     		}
     	}
