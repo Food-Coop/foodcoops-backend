@@ -1,5 +1,6 @@
 package de.dhbw.foodcoop.warehouse.domain.repositories;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,4 +18,6 @@ public interface EinkaufRepository {
     EinkaufEntity speichern(EinkaufEntity einkaufId);
 
     Optional<EinkaufEntity> findeMitId(String id);
+    
+    List<EinkaufEntity> alleDazwischenVonPerson(LocalDateTime date1, LocalDateTime date2, String person);
 }

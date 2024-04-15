@@ -1,12 +1,12 @@
 package de.dhbw.foodcoop.warehouse.plugins.persistence;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import de.dhbw.foodcoop.warehouse.domain.entities.BrotBestellung;
 import de.dhbw.foodcoop.warehouse.domain.entities.EinkaufEntity;
 import de.dhbw.foodcoop.warehouse.domain.repositories.EinkaufRepository;
 @Repository
@@ -48,6 +48,11 @@ public class EinkaufRepositoryBridge implements EinkaufRepository {
 	public Optional<EinkaufEntity> findeMitId(String id) {
 		// TODO Auto-generated method stub
 		return springDataEinkaufRepository.findById(id);
+	}
+
+	@Override
+	public List<EinkaufEntity> alleDazwischenVonPerson(LocalDateTime date1, LocalDateTime date2, String person) {
+		return springDataEinkaufRepository.findByDateBetween(date1, date2, person);
 	}
 	
 
