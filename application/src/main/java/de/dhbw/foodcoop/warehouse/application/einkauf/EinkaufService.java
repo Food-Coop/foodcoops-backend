@@ -111,12 +111,13 @@ public class EinkaufService {
         	LocalDateTime datum1 = date1.get().getDatum();
         	LocalDateTime datum2 = date2.get().getDatum();
          	List<FrischBestellung> frischBestellungen = frischService.findByDateBetween(datum1, datum2, personId);
-         	List<EinkaufEntity> einkaufeFromPerson = einkaufRepository.alleDazwischenVonPerson(datum1, datum2, personId);
+         	String eID = einkauf.getId();
+         	List<EinkaufEntity> einkaufeFromPerson = einkaufRepository.alleDazwischenVonPerson(datum1, datum2, personId).stream().filter(t -> t.getId() != eID).collect(Collectors.toList());
          	HashMap<FrischBestand, Double> mapAmountForOrder = new HashMap<>();
          	 if(vergleiche != null) {
          		for (BestellungBuyEntity ebv : vergleiche) {
          			if(ebv.getBestellung() != null && ebv.getBestellung() instanceof FrischBestellung)  {
-         				mapAmountForOrder.put(((FrischBestellung)ebv.getBestellung()).getFrischbestand(), ebv.getAmount());
+         				mapAmountForOrder.merge(((FrischBestellung) ebv.getBestellung()).getFrischbestand(), ebv.getAmount(), Double::sum);
          			}
          		}
          		einkaufeFromPerson.forEach(t -> {
@@ -175,6 +176,7 @@ public class EinkaufService {
              	    		}
              	    		if(bbe != null) {
              	    			double sumToAdjust = sumOrderedFromPerson - sumTakenFromPerson;
+             	    			System.err.println("Done? " + bbe.getBestellung().isDone());
              	    			if(bbe.getBestellung().isDone()) {
              	    				sumToAdjust = -sumTakenFromPerson;
              	    			}
