@@ -19,5 +19,5 @@ public interface EinkaufRepository {
 
     Optional<EinkaufEntity> findeMitId(String id);
     
-    List<EinkaufEntity> alleDazwischenVonPerson(LocalDateTime date1, LocalDateTime date2, String person);
+    List<EinkaufEntity> alleAktuellenVonPerson(LocalDateTime date, String person);
 }

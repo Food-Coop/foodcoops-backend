@@ -112,7 +112,7 @@ public class EinkaufService {
         	LocalDateTime datum2 = date2.get().getDatum();
          	List<FrischBestellung> frischBestellungen = frischService.findByDateBetween(datum1, datum2, personId);
          	String eID = einkauf.getId();
-         	List<EinkaufEntity> einkaufeFromPerson = einkaufRepository.alleDazwischenVonPerson(datum1, datum2, personId).stream().filter(t -> t.getId() != eID).collect(Collectors.toList());
+         	List<EinkaufEntity> einkaufeFromPerson = einkaufRepository.alleAktuellenVonPerson(datum1, personId).stream().filter(t -> t.getId() != eID).collect(Collectors.toList());
          	HashMap<FrischBestand, Double> mapAmountForOrder = new HashMap<>();
          	 if(vergleiche != null) {
          		for (BestellungBuyEntity ebv : vergleiche) {
