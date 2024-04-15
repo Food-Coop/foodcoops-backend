@@ -38,4 +38,8 @@ public class BrotBestandService {
         }
         repository.deleteById(id);
     }
+    
+    public List<BrotBestand> allOrdered() {
+    	return repository.alleSortiert();
+    }
 }

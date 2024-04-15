@@ -37,4 +37,10 @@ public class FrischBestandRepositoryBridge implements FrischBestandRepository{
     public void deleteById(String id) {
         springDataFrischBestandRepository.deleteById(id);
     }
+
+	@Override
+	public List<FrischBestand> alleSortiert() {
+		// TODO Auto-generated method stub
+		return springDataFrischBestandRepository.findAllByOrderByIdAsc();
+	}
 }

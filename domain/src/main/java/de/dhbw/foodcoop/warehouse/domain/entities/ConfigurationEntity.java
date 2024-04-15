@@ -25,6 +25,9 @@ public class ConfigurationEntity {
 	@Column
 	private String emailFromEinkaufAdmin;
 	
+	@Column
+	private double deliverycost;
+	
 	@Id
 	private String id;
 	
@@ -33,8 +36,9 @@ public class ConfigurationEntity {
 		this.id = ConstantsUtils.CONFIGURATION_ID;
 	}
 
-	public ConfigurationEntity(String bestellEmailText, String emailFromBestellAdmin, String emailFromEinkaufAdmin) {
+	public ConfigurationEntity(String bestellEmailText, String emailFromBestellAdmin, String emailFromEinkaufAdmin, double deliverycost) {
 		super();
+		this.deliverycost = deliverycost;
 		this.id = ConstantsUtils.CONFIGURATION_ID;
 		this.bestellEmailText = bestellEmailText;
 		this.emailFromBestellAdmin = emailFromBestellAdmin;
@@ -66,6 +70,14 @@ public class ConfigurationEntity {
 
 	public void setEmailFromEinkaufAdmin(String emailFromEinkaufAdmin) {
 		this.emailFromEinkaufAdmin = emailFromEinkaufAdmin;
+	}
+	
+	public double getDeliverycost() {
+		return deliverycost;
+	}
+
+	public void setDeliverycost(double deliverycost) {
+		this.deliverycost = deliverycost;
 	}
 
 	public String getId() {

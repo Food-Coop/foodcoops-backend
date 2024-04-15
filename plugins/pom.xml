@@ -83,13 +83,18 @@
         <dependency>
             <groupId>org.apache.pdfbox</groupId>
             <artifactId>pdfbox</artifactId>
-            <version>3.0.0-RC1</version>
+            <version>3.0.2</version>
         </dependency>
-
+	<dependency>
+		<groupId>org.projectlombok</groupId>
+		<artifactId>lombok</artifactId>
+		<version>1.18.32</version>
+		<scope>provided</scope>
+	</dependency>
         <dependency>
             <groupId>com.github.vandeseer</groupId>
             <artifactId>easytable</artifactId>
-            <version>0.8.2</version>
+            <version>1.0.0</version>
         </dependency>
 
     </dependencies>

@@ -118,8 +118,16 @@ public class EinkaufService {
          				double sumOrderedFromPerson =  (Math.round( t.getBestellung().getBestellmenge() * 100.0) / 100.0); 
          				double sumTakenFromPerson = (Math.round( t.getAmount() * 100.0) / 100.0);
              	    	if(sumTakenFromPerson != sumOrderedFromPerson) {
-             	    	//	double rest = adjustDiscrepency(discrepancies, sumOrderedFromPerson - sumTakenFromPerson, k);
-             	    		//REST BEHANDELN
+             	    		BestellungBuyEntity  bbe = null;
+             	    		for(BestellungBuyEntity bestellung : bestellungen) {
+             	    			if(bestellung.getBestellung().getId().equalsIgnoreCase(t.getBestellung().getId())) {
+             	    				bbe = bestellung;
+             	    				break;
+             	    			}
+             	    		}
+             	    		if(bbe != null) {
+             	    			adjustNonMixDiscrepency(discrepancies, sumOrderedFromPerson - sumTakenFromPerson, bbe );
+             	    		}
              	    	}
          			}
          		}
@@ -128,32 +136,38 @@ public class EinkaufService {
          	for(Kategorie k : katSet) {
          		double sumOrderedFromPerson = (Math.round( sumByKategorie(k, frischBestellungen) * 100.0) / 100.0);
          	    double sumTakenFromPerson = (Math.round( sumBestellungBuyByKategorie(k, bestellungen) * 100.0) / 100.0);
-         	    	if(sumTakenFromPerson != sumOrderedFromPerson) {
-         	    		double rest = adjustMixDiscrepency(discrepancies, sumOrderedFromPerson - sumTakenFromPerson, k);
+         	    		if(sumTakenFromPerson != sumOrderedFromPerson) {
+         	    			double rest = adjustMixDiscrepency(discrepancies, sumOrderedFromPerson - sumTakenFromPerson, k);
          	    		//REST BEHANDELN
-         	    	}
-         	}
+         	    			handleRest(discrepancies, rest, k);
+         	    		}
+         			}
         		}
         	}
         }
-        
+       EinkaufEntity e = einkaufRepository.speichern(einkauf);
+        service.update(be);
         // Speichere den Einkauf in der Datenbank
-        return einkaufRepository.speichern(einkauf);
+        return e;
     }
 
-    private double adjustMixDiscrepency(List<DiscrepancyEntity> discrepancies, double sumToAdjust, BestandBuyEntity bbe ) {
+    private double adjustNonMixDiscrepency(List<DiscrepancyEntity> discrepancies, double sumToAdjust, BestellungBuyEntity bbe ) {
     	for(DiscrepancyEntity d : discrepancies) {
     		if(d.getZuVielzuWenig() == 0) continue;
     		if(d.getBestand() instanceof FrischBestand) {
     			FrischBestand frisch = (FrischBestand) d.getBestand();
-    			if(bbe.getBestand().getId().equalsIgnoreCase(d.getBestand().getId())) {
+    			if(bbe.getBestellung() instanceof FrischBestellung) {
+    				FrischBestellung fb = (FrischBestellung) bbe.getBestellung();
+    			if(fb.getFrischbestand().getId().equalsIgnoreCase(frisch.getId())) {
     			
     				//HIER WEITER MACHEN!!
     				d.setZuVielzuWenig((float) (d.getZuVielzuWenig() + sumToAdjust));
-    				
+    				return 0;
     			}
     		}
+    		}
     	}
+    	//Eventuell neues Discrepancy objekt anlegen, TODO: Naschauen ob auch 0er in db gespeichert sind
     	return sumToAdjust;
     }
 
@@ -193,6 +207,18 @@ public class EinkaufService {
     	return sumToAdjust;
     }
 
+   private void handleRest(List<DiscrepancyEntity> discrepancies, double rest, Kategorie k) {
+	   for(DiscrepancyEntity d : discrepancies) {
+   		if(d.getZuVielzuWenig() == 0) continue;
+   		if(d.getBestand() instanceof FrischBestand) {
+   			FrischBestand frisch = (FrischBestand) d.getBestand();
+   			if(k.getId().equalsIgnoreCase(frisch.getKategorie().getId())) {
+   				d.setZuVielzuWenig(d.getZuVielzuWenig() + (float)rest);
+   				
+   			 }
+   		  }
+	   }
+   }
 
 	private double sumByKategorie(Kategorie k, List<FrischBestellung> bestellungen) {
     	return bestellungen.stream().filter(t -> t.getFrischbestand().getKategorie().getId().equalsIgnoreCase(k.getId())).mapToDouble( x -> x.getBestellmenge()).sum();

@@ -104,7 +104,6 @@ public class FrischBestellungController {
     public CollectionModel<EntityModel<FrischBestellungRepresentation>> findByDateBetween(@PathVariable String person_id){
     	Optional<Deadline> date1 = deadlineService.getByPosition(0);
     	Optional<Deadline> date2 = deadlineService.getByPosition(1);
-    	
     	if(date1.isEmpty()) {
     		return null;
     	}

@@ -63,4 +63,9 @@ public class FrischBestellungRepositoryBridge implements FrischBestellungReposit
 	public List<FrischBestellung> findeAlleBestellungenNachDatum(LocalDateTime datum) {
 		return springDataFrischBestellungRepository.findAllAfter(datum);
 	}
+
+	@Override
+	public List<FrischBestellung> findeMitDatumZwischen(LocalDateTime datum1, LocalDateTime datum2) {
+		return springDataFrischBestellungRepository.findByDateBetween(datum1, datum2);
+	}
 }

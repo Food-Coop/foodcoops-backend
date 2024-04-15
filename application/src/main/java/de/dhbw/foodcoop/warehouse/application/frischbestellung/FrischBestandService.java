@@ -41,4 +41,8 @@ public class FrischBestandService {
         // }
         repository.deleteById(id);
     }
+    
+    public List<FrischBestand> allOrdered() {
+    	return repository.alleSortiert();
+    }
 }

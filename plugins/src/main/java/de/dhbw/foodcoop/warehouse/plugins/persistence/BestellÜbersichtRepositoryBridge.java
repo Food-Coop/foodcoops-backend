@@ -23,6 +23,7 @@ public class BestellÜbersichtRepositoryBridge implements BestellÜbersichtRepos
 	@Override
 	public BestellUebersicht speichern(BestellUebersicht bestellÜbersicht) {
 		// TODO Auto-generated method stub
+	
 		return repo.save(bestellÜbersicht);
 	}
 

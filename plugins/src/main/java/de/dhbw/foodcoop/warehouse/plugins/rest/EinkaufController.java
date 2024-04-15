@@ -76,6 +76,8 @@ public class EinkaufController {
     private ConfigurationService configService;
     
     
+    
+    
 
     @Autowired
     public EinkaufController(EinkaufService einkaufService) {
@@ -138,7 +140,7 @@ public class EinkaufController {
   	        	lagerString.append("Genommen: " + item.getAmount() + "\n");
   	        });
   	        
-  	        float lieferkosten = (float) (einkauf.getFreshPriceAtTime() * 0.05);
+  	        double lieferkosten =(Math.round((einkauf.getFreshPriceAtTime() * (configService.getConfig().get().getDeliverycost() /100) * 100.0) / 100.0)  );
   	        float gesamt = (float) (lieferkosten + einkauf.getTotalPriceAtTime());
   	        Optional<ConfigurationEntity> optionalE = configService.getConfig();
   	        if(optionalE.isPresent()) {
