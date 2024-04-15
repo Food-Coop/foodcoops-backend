@@ -51,8 +51,8 @@ public class EinkaufRepositoryBridge implements EinkaufRepository {
 	}
 
 	@Override
-	public List<EinkaufEntity> alleDazwischenVonPerson(LocalDateTime date1, LocalDateTime date2, String person) {
-		return springDataEinkaufRepository.findByDateBetween(date1, date2, person);
+	public List<EinkaufEntity> alleAktuellenVonPerson(LocalDateTime date, String person) {
+		return springDataEinkaufRepository.findByDateBetween(date, person);
 	}
 	
 
