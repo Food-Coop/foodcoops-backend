@@ -166,6 +166,7 @@ public class EinkaufService {
          			} else  {
          				double sumOrderedFromPerson =  (Math.round( t.getBestellung().getBestellmenge() * 100.0) / 100.0); 
          				double sumTakenFromPerson = (Math.round( mapAmountForOrder.get(f.getFrischbestand()) * 100.0) / 100.0);
+         				System.out.println("Amount taken from person: " + sumTakenFromPerson + " Amount ordered From person: " + sumOrderedFromPerson);
              	    	if(sumTakenFromPerson != sumOrderedFromPerson) {
              	    		BestellungBuyEntity  bbe = null;
              	    		for(BestellungBuyEntity bestellung : bestellungen) {
@@ -174,6 +175,7 @@ public class EinkaufService {
              	    				break;
              	    			}
              	    		}
+             	    		System.out.println("Is bbe null? " + bbe);
              	    		if(bbe != null) {
              	    			double sumToAdjust = sumOrderedFromPerson - sumTakenFromPerson;
              	    			System.err.println("Done? " + bbe.getBestellung().isDone());
