@@ -2,11 +2,13 @@ package de.dhbw.foodcoop.warehouse.application.einkauf;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -82,6 +84,7 @@ public class EinkaufService {
             	if(einkauf.getBestellungsEinkauf() == null) {
             		einkauf.setBestellungsEinkauf(new ArrayList<BestellungBuyEntity>());
             	}
+           
             		einkauf.getBestellungsEinkauf().add(ebv);
         	}
         }
@@ -108,6 +111,51 @@ public class EinkaufService {
         	LocalDateTime datum1 = date1.get().getDatum();
         	LocalDateTime datum2 = date2.get().getDatum();
          	List<FrischBestellung> frischBestellungen = frischService.findByDateBetween(datum1, datum2, personId);
+         	List<EinkaufEntity> einkaufeFromPerson = einkaufRepository.alleDazwischenVonPerson(datum1, datum2, personId);
+         	HashMap<FrischBestand, Double> mapAmountForOrder = new HashMap<>();
+         	 if(vergleiche != null) {
+         		for (BestellungBuyEntity ebv : vergleiche) {
+         			if(ebv.getBestellung() != null && ebv.getBestellung() instanceof FrischBestellung)  {
+         				mapAmountForOrder.put(((FrischBestellung)ebv.getBestellung()).getFrischbestand(), ebv.getAmount());
+         			}
+         		}
+         		einkaufeFromPerson.forEach(t -> {
+         			if(t.getBestellungsEinkauf() != null) {
+         				for(BestellungBuyEntity eb : t.getBestellungsEinkauf()) {
+         					if(eb.getBestellung() != null && eb.getBestellung() instanceof FrischBestellung) {
+         						mapAmountForOrder.merge(((FrischBestellung) eb.getBestellung()).getFrischbestand(), eb.getAmount(), Double::sum);
+         					}
+         				}
+         			}
+         		});
+         	 }
+         	
+         	 for(EinkaufEntity efk : einkaufeFromPerson) {
+         		 for(BestellungBuyEntity bbe : efk.getBestellungsEinkauf()) {
+         			if(bbe.getBestellung() != null && bbe.getBestellung() instanceof FrischBestellung) {
+         				FrischBestellung b = (FrischBestellung) bbe.getBestellung();
+         				if(mapAmountForOrder.get(b.getFrischbestand()) >= b.getBestellmenge()) {
+                			b.setDone(true);
+                		}
+         			}
+         		 }
+         		 einkaufRepository.speichern(efk);
+         	 }
+         	 
+         	 
+         	 if(vergleiche != null) {
+             	for (BestellungBuyEntity ebv : vergleiche) {
+             		if(ebv.getBestellung() != null && ebv.getBestellung() instanceof FrischBestellung) {
+         				FrischBestellung b = (FrischBestellung) ebv.getBestellung();
+         				if(mapAmountForOrder.get(b.getFrischbestand()) >= b.getBestellmenge()) {
+                			b.setDone(true);
+                		}
+             	}
+         	 }
+         	 }
+         	 
+         	 
+         	 
          	Set<Kategorie> katSet = new HashSet<>();
          	bestellungen.forEach(t -> {
          		if(t.getBestellung() instanceof FrischBestellung) {
@@ -126,7 +174,11 @@ public class EinkaufService {
              	    			}
              	    		}
              	    		if(bbe != null) {
-             	    			adjustNonMixDiscrepency(discrepancies, sumOrderedFromPerson - sumTakenFromPerson, bbe );
+             	    			double sumToAdjust = sumOrderedFromPerson - sumTakenFromPerson;
+             	    			if(bbe.getBestellung().isDone()) {
+             	    				sumToAdjust = -sumTakenFromPerson;
+             	    			}
+             	    			adjustNonMixDiscrepency(discrepancies, sumToAdjust, bbe );
              	    		}
              	    	}
          			}
@@ -137,7 +189,21 @@ public class EinkaufService {
          		double sumOrderedFromPerson = (Math.round( sumByKategorie(k, frischBestellungen) * 100.0) / 100.0);
          	    double sumTakenFromPerson = (Math.round( sumBestellungBuyByKategorie(k, bestellungen) * 100.0) / 100.0);
          	    		if(sumTakenFromPerson != sumOrderedFromPerson) {
-         	    			double rest = adjustMixDiscrepency(discrepancies, sumOrderedFromPerson - sumTakenFromPerson, k);
+         	    			double sumToAdjust = sumOrderedFromPerson - sumTakenFromPerson;
+         	    			boolean isDone = true;
+         	    			if(bestellungen != null ) {
+         	    				for(BestellungBuyEntity b : bestellungen) {
+         	    					if(!b.getBestellung().isDone()) {
+         	    						isDone = false;
+         	    						break;
+         	    					}
+         	    				}
+         	    			}
+         	    			if(isDone) {
+         	    				sumToAdjust = -sumTakenFromPerson;
+         	    			}
+         	    			
+         	    			double rest = adjustMixDiscrepency(discrepancies, sumToAdjust, k);
          	    		//REST BEHANDELN
          	    			handleRest(discrepancies, rest, k);
          	    		}
@@ -146,7 +212,9 @@ public class EinkaufService {
         	}
         }
        EinkaufEntity e = einkaufRepository.speichern(einkauf);
+       if(be != null) {
         service.update(be);
+       }
         // Speichere den Einkauf in der Datenbank
         return e;
     }
@@ -161,6 +229,7 @@ public class EinkaufService {
     			if(fb.getFrischbestand().getId().equalsIgnoreCase(frisch.getId())) {
     			
     				//HIER WEITER MACHEN!!
+    			
     				d.setZuVielzuWenig((float) (d.getZuVielzuWenig() + sumToAdjust));
     				return 0;
     			}
