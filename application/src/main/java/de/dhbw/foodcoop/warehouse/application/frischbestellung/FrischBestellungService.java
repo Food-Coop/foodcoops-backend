@@ -37,6 +37,10 @@ public class FrischBestellungService {
     public List<FrischBestellung> findByDateBetween(LocalDateTime datum1, LocalDateTime datum2, String person_id){
         return repository.findeMitDatumZwischen(datum1, datum2, person_id);
     }
+    
+    public List<FrischBestellung> findByDateBetween(LocalDateTime datum1, LocalDateTime datum2){
+        return repository.findeMitDatumZwischen(datum1, datum2);
+    }
 
     //Hier wird für den Einkauf direkt ein Vergleichs Objekt angelegt
     public FrischBestellung save(FrischBestellung bestellung) {

@@ -16,6 +16,8 @@ public interface FrischBestellungRepository {
     List<FrischBestellung> findeMitDatumNachUndSum(LocalDateTime datum);
 
     List<FrischBestellung> findeMitDatumZwischen(LocalDateTime datum1, LocalDateTime datum2, String person_id);
+    
+    List<FrischBestellung> findeMitDatumZwischen(LocalDateTime datum1, LocalDateTime datum2);
 
     FrischBestellung speichern(FrischBestellung frischBestellung);
 

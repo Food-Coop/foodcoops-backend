@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import de.dhbw.foodcoop.warehouse.domain.entities.BrotBestand;
+import de.dhbw.foodcoop.warehouse.domain.entities.FrischBestand;
 import de.dhbw.foodcoop.warehouse.domain.repositories.BrotBestandRepository;
 
 @Repository
@@ -37,4 +38,10 @@ public class BrotBestandRepositoryBridge implements BrotBestandRepository{
     public void deleteById(String id) {
         springDataBrotBestandRepository.deleteById(id);
     }
+
+	@Override
+	public List<BrotBestand> alleSortiert() {
+		// TODO Auto-generated method stub
+		return springDataBrotBestandRepository.findAllByOrderByIdAsc();
+	}
 }

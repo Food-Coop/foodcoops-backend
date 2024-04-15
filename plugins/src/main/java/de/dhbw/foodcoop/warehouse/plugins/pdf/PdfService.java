@@ -2,36 +2,59 @@ package de.dhbw.foodcoop.warehouse.plugins.pdf;
 
 import java.awt.Color;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAdjusters;
+import java.time.temporal.WeekFields;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
+import java.util.Queue;
+import java.util.Set;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.stream.Collectors;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
-import org.apache.pdfbox.pdmodel.font.PDFont;
+import org.apache.pdfbox.pdmodel.font.PDType0Font;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import org.apache.pdfbox.pdmodel.font.Standard14Fonts;
+import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
+import org.vandeseer.easytable.OverflowOnSamePageTableDrawer;
 import org.vandeseer.easytable.RepeatedHeaderTableDrawer;
 import org.vandeseer.easytable.TableDrawer;
 import org.vandeseer.easytable.settings.HorizontalAlignment;
+import org.vandeseer.easytable.settings.VerticalAlignment;
 import org.vandeseer.easytable.structure.Row;
 import org.vandeseer.easytable.structure.Row.RowBuilder;
 import org.vandeseer.easytable.structure.Table;
 import org.vandeseer.easytable.structure.cell.TextCell;
 
+import de.dhbw.foodcoop.warehouse.application.admin.ConfigurationService;
 import de.dhbw.foodcoop.warehouse.application.bestellungsliste.BestellÜbersichtService;
+import de.dhbw.foodcoop.warehouse.application.brot.BrotBestandService;
+import de.dhbw.foodcoop.warehouse.application.deadline.DeadlineService;
+import de.dhbw.foodcoop.warehouse.application.frischbestellung.FrischBestandService;
+import de.dhbw.foodcoop.warehouse.application.frischbestellung.FrischBestellungService;
 import de.dhbw.foodcoop.warehouse.application.gebindemanagement.GebindemanagementService;
 import de.dhbw.foodcoop.warehouse.domain.entities.BestellUebersicht;
 import de.dhbw.foodcoop.warehouse.domain.entities.BrotBestellung;
+import de.dhbw.foodcoop.warehouse.domain.entities.Deadline;
 import de.dhbw.foodcoop.warehouse.domain.entities.EinkaufEntity;
 import de.dhbw.foodcoop.warehouse.domain.entities.FrischBestand;
 import de.dhbw.foodcoop.warehouse.domain.entities.FrischBestellung;
@@ -48,6 +71,23 @@ public class PdfService {
     @Autowired
     private BestellÜbersichtService service;
     
+    @Autowired
+    private ResourceLoader resourceLoader;
+    
+    @Autowired
+    private FrischBestandService frischBestandService;
+
+    @Autowired
+	private BrotBestandService brotBestandService;
+
+    @Autowired
+	private ConfigurationService configService;
+    
+    @Autowired
+	private FrischBestellungService frischService;
+    
+    @Autowired
+	private DeadlineService deadService;
     
     public byte[] createEinkauf(EinkaufEntity einkauf) throws IOException {
         try (PDDocument document = new PDDocument()) {
@@ -57,14 +97,14 @@ public class PdfService {
             try (PDPageContentStream contentStream = new PDPageContentStream(document, page)) {
                 // Datum oben rechts
                 contentStream.beginText();
-                contentStream.setFont(PDType1Font.HELVETICA, 12);
+                contentStream.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA), 12);
                 contentStream.newLineAtOffset(450, 800);
                 contentStream.showText(LocalDate.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")));
                 contentStream.endText();
 
                 // Titel
                 contentStream.beginText();
-                contentStream.setFont(PDType1Font.HELVETICA_BOLD, 18);
+                contentStream.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA_BOLD), 18);
                 contentStream.newLineAtOffset(150, 780);
                 contentStream.showText("Foodcoop Einkauf " + einkauf.getPersonId());
                 contentStream.endText();
@@ -89,7 +129,7 @@ public class PdfService {
             
             try (PDPageContentStream contentStream = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.APPEND, true, true)) {
                 contentStream.beginText();
-                contentStream.setFont(PDType1Font.HELVETICA_BOLD, 14);
+                contentStream.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA_BOLD), 14);
                 contentStream.newLineAtOffset(50, 720); // Position etwas über der Tabelle
                 contentStream.showText("Frischwaren Einkauf");
                 contentStream.endText();
@@ -156,8 +196,8 @@ public class PdfService {
             try (PDPageContentStream contentStream = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.APPEND, true, true)) {
                 contentStream.beginText();
                 
-                contentStream.setFont(PDType1Font.HELVETICA, 12);
-                contentStream.newLineAtOffset(297.5f - (PDType1Font.HELVETICA.getStringWidth("Frisch-Preis: " + Math.round( einkauf.getFreshPriceAtTime() * 100.0) / 100.0 + " €") / 2 / 1000 * 12), gesamtpreisFrischPositionY);
+                contentStream.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA), 12);
+                contentStream.newLineAtOffset(297.5f - (new PDType1Font(Standard14Fonts.FontName.HELVETICA).getStringWidth("Frisch-Preis: " + Math.round( einkauf.getFreshPriceAtTime() * 100.0) / 100.0 + " €") / 2 / 1000 * 12), gesamtpreisFrischPositionY);
                 contentStream.showText("Frisch-Preis: " + Math.round( einkauf.getFreshPriceAtTime() * 100.0) / 100.0 + " €");
                 contentStream.endText();
             }
@@ -165,7 +205,7 @@ public class PdfService {
             // Zeichnen der Brot-Tabelle
             try (PDPageContentStream contentStream = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.APPEND, true, true)) {
                 contentStream.beginText();
-                contentStream.setFont(PDType1Font.HELVETICA_BOLD, 14);
+                contentStream.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA_BOLD), 14);
                 contentStream.newLineAtOffset(50, startYBrotEinkaufUeberschrift); // Anpassen basierend auf der Höhe der ersten Tabelle
                 contentStream.showText("Brot Einkauf");
                 contentStream.endText();
@@ -223,15 +263,15 @@ public class PdfService {
             try (PDPageContentStream contentStream = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.APPEND, true, true)) {
                 contentStream.beginText();
                 
-                contentStream.setFont(PDType1Font.HELVETICA, 12);
-                contentStream.newLineAtOffset(297.5f - (PDType1Font.HELVETICA.getStringWidth("Brot-Preis: " + Math.round( einkauf.getBreadPriceAtTime() * 100.0) / 100.0 + " €") / 2 / 1000 * 12), gesamtpreisBrotPositionY);
+                contentStream.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA), 12);
+                contentStream.newLineAtOffset(297.5f - (new PDType1Font(Standard14Fonts.FontName.HELVETICA).getStringWidth("Brot-Preis: " + Math.round( einkauf.getBreadPriceAtTime() * 100.0) / 100.0 + " €") / 2 / 1000 * 12), gesamtpreisBrotPositionY);
                 contentStream.showText("Brot-Preis: " + Math.round( einkauf.getBreadPriceAtTime() * 100.0) / 100.0 + " €");
                 contentStream.endText();
             }
             // Zeichnen der Lagerware-Tabelle
             try (PDPageContentStream contentStream = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.APPEND, true, true)) {
                 contentStream.beginText();
-                contentStream.setFont(PDType1Font.HELVETICA_BOLD, 14);
+                contentStream.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA_BOLD), 14);
                 contentStream.newLineAtOffset(50, startYLagerEinkaufUeberschrift); // Anpassen basierend auf der Höhe der ersten Tabelle
                 contentStream.showText("Lagerware Einkauf");
                 contentStream.endText();
@@ -280,8 +320,8 @@ public class PdfService {
             try (PDPageContentStream contentStream = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.APPEND, true, true)) {
                 contentStream.beginText();
                 
-                contentStream.setFont(PDType1Font.HELVETICA, 12);
-                contentStream.newLineAtOffset(297.5f - (PDType1Font.HELVETICA.getStringWidth("Lager-Preis: " + Math.round( einkauf.getBestandPriceAtTime() * 100.0) / 100.0 + " €") / 2 / 1000 * 12), gesamtpreisLagerPositionY);
+                contentStream.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA), 12);
+                contentStream.newLineAtOffset(297.5f - (new PDType1Font(Standard14Fonts.FontName.HELVETICA).getStringWidth("Lager-Preis: " + Math.round( einkauf.getBestandPriceAtTime() * 100.0) / 100.0 + " €") / 2 / 1000 * 12), gesamtpreisLagerPositionY);
                 contentStream.showText("Lager-Preis: " + Math.round( einkauf.getBestandPriceAtTime() * 100.0) / 100.0 + " €");
                 contentStream.endText();
             }
@@ -301,12 +341,12 @@ public class PdfService {
 
             String[] labels = {"Frischware:", "Brot:", "Lagerware:", "5 % Lieferkosten:"};
             
-            float lieferkosten = (float) (einkauf.getFreshPriceAtTime() * 0.05);
+            float lieferkosten = (float) (Math.round((einkauf.getFreshPriceAtTime() * (configService.getConfig().get().getDeliverycost() /100) * 100.0) / 100.0)  );
             float gesamt = (float) (lieferkosten + einkauf.getTotalPriceAtTime());
             float[] prices = {(float) (Math.round( einkauf.getFreshPriceAtTime() * 100.0) / 100.0), (float) (Math.round( einkauf.getBreadPriceAtTime() * 100.0) / 100.0), (float) (Math.round( einkauf.getBestandPriceAtTime() * 100.0) / 100.0), lieferkosten, gesamt}; 
             
             try (PDPageContentStream contentStream = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.APPEND, true, true)) {
-                contentStream.setFont(PDType1Font.HELVETICA_BOLD, 12);
+                contentStream.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA_BOLD), 12);
 
                 for (int i = 0; i < labels.length; i++) {
                     // Text linksbündig ausrichten
@@ -317,7 +357,7 @@ public class PdfService {
 
                     // Preise rechtsbündig neben dem Text ausrichten
                     String priceString = String.format(Locale.GERMANY, "%,.2f €", prices[i]);
-                    float priceWidth = PDType1Font.HELVETICA_BOLD.getStringWidth(priceString) / 1000 * 12;
+                    float priceWidth = new PDType1Font(Standard14Fonts.FontName.HELVETICA_BOLD).getStringWidth(priceString) / 1000 * 12;
                     contentStream.beginText();
                     contentStream.newLineAtOffset(priceX + (40 - priceWidth), startY); // 80 ist die angenommene Breite für den Preis
                     contentStream.showText(priceString);
@@ -343,7 +383,7 @@ public class PdfService {
                 contentStream.endText();
 
                 String totalString = String.format(Locale.GERMANY, "%,.2f €", gesamt); 
-                float totalWidth = PDType1Font.HELVETICA_BOLD.getStringWidth(totalString) / 1000 * 12;
+                float totalWidth = new PDType1Font(Standard14Fonts.FontName.HELVETICA_BOLD).getStringWidth(totalString) / 1000 * 12;
                 contentStream.beginText();
                 contentStream.newLineAtOffset(priceX + (40 - totalWidth), startY);
                 contentStream.showText(totalString);
@@ -362,58 +402,412 @@ public class PdfService {
            
         }
     }
+    
+    public byte[] createBrotUebersicht() {
+    	  try (PDDocument document = new PDDocument()) {
+              PDPage page = new PDPage(PDRectangle.A4);
+              document.addPage(page);
+              
+              float toPx = 33.3333333333f;
+              
+              PDType0Font arial = PDType0Font.load(document,resourceLoader.getResource("classpath:Arial.ttf").getFile());
+              PDType0Font arialBold = PDType0Font.load(document, resourceLoader.getResource("classpath:Arial_Bold.ttf").getFile());
+              
+              PDPageContentStream contentStream = new PDPageContentStream(document, page);
+                  // Datum oben rechts
+                  contentStream.beginText();
+                  contentStream.setFont(arialBold, 11);
+                  contentStream.newLineAtOffset(2f * toPx + 8f * toPx + 0.5f*toPx, page.getBBox().getHeight() - 1.8f - (1.6f*toPx)/2);
+                  contentStream.setNonStrokingColor(Color.black);
+                  contentStream.showText("Name:");
+                  contentStream.endText();
+                  
+                  contentStream.setStrokingColor(Color.black);
+                  contentStream.moveTo(2f * toPx + 8f * toPx + 0.5f*toPx + toPx * 1.2f , page.getBBox().getHeight() - 1.8f - (1.6f*toPx)/2);
+                  contentStream.lineTo(2f * toPx + 8f * toPx + 0.5f*toPx  + toPx * 5.0f, page.getBBox().getHeight() - 1.8f - (1.6f*toPx)/2 );
+                  contentStream.stroke();
+                  
+                  
+                  contentStream.beginText();
+                  contentStream.setFont(arial, 14);
+                  contentStream.newLineAtOffset(2f * toPx + 8f * toPx + 0.5f*toPx + toPx * 1.2f, page.getBBox().getHeight() - 1.8f - (1.6f*toPx)/2 + 0.1f * toPx);
+                  contentStream.setNonStrokingColor(Color.black);
+                  contentStream.showText("MIKA-FOODCOOP");
+                  contentStream.endText();
+                  
+                  contentStream.beginText();
+                  contentStream.setFont(arialBold, 11);
+                  contentStream.newLineAtOffset(2f * toPx + 8f * toPx + 0.5f*toPx, page.getBBox().getHeight() - 1.8f - (1.6f*toPx)/2 - (0.7f* toPx));
+                  contentStream.setNonStrokingColor(Color.black);
+                  contentStream.showText("Kunden-Nr.:");
+                  contentStream.endText();
+                  
+                  contentStream.setStrokingColor(Color.black);
+                  contentStream.moveTo(2f * toPx + 8f * toPx + 0.5f*toPx + toPx * 2.1f , page.getBBox().getHeight() - 1.8f - (1.6f*toPx)/2 - (0.7f* toPx));
+                  contentStream.lineTo(2f * toPx + 8f * toPx + 0.5f*toPx  + toPx * 5.0f,page.getBBox().getHeight() - 1.8f - (1.6f*toPx)/2 - (0.7f* toPx) );
+                  contentStream.stroke();
+                  
+                  contentStream.beginText();
+                  contentStream.setFont(arial, 14);
+                  contentStream.setNonStrokingColor(Color.decode("#7874c9"));
+                  contentStream.newLineAtOffset(2f * toPx + 8f * toPx + 0.5f*toPx + toPx * 2.1f,page.getBBox().getHeight() - 1.8f - (1.6f*toPx)/2 - (0.7f* toPx) + 0.1f *toPx);
+                  contentStream.setNonStrokingColor(Color.decode("#7874c9"));
+                  contentStream.showText("12306");
+                  contentStream.endText();
+                  // Titel
+                  File picture = resourceLoader.getResource("classpath:fasanbaecker.png").getFile();
+                  
+                  PDImageXObject pdImage = PDImageXObject.createFromFileByContent(picture,document);  
+                  contentStream.drawImage(pdImage, 	2f *toPx, page.getBBox().getHeight() - 1.8f * toPx, 8f * toPx, 1.6f*toPx);
+                  
+                  
+                  final Table.TableBuilder myTableBuilder = Table.builder()
+                          .addColumnsOfWidth(1.2f * toPx, 4f * toPx, 1.2f * toPx)
+                          .padding(2)
+                          .borderColor(Color.gray)
+                          .horizontalAlignment(HorizontalAlignment.LEFT)
+                          .verticalAlignment(VerticalAlignment.MIDDLE)
+                          .addRow(Row.builder()
+                        		  .font(arial)
+                                  .add(TextCell.builder().borderWidthBottom(1).fontSize(10).borderWidthTop(0).borderWidthLeft(0).borderWidthRight(0).font(arialBold).horizontalAlignment(HorizontalAlignment.CENTER).text("Nr.").build())
+                                  .add(TextCell.builder().borderWidthBottom(1).font(arialBold).font(arialBold).borderWidthTop(0).borderWidthLeft(0).borderWidthRight(0).fontSize(10).text("Artikel          Datum:").borderWidthRight(1).build())
+                                  .add(TextCell.builder().borderWidthBottom(1).font(arialBold).borderWidth(1).fontSize(10).text(LocalDateTime.now().with(TemporalAdjusters.nextOrSame(DayOfWeek.TUESDAY)).format(DateTimeFormatter.ofPattern("dd.MM")) + "").build())
+
+                                  .height(0.4f * toPx)
+                                  // 2.3f
+                                  .build());
+                  
+
+                  
+                  
+                  
+                  brotBestandService.allOrdered().forEach(t -> {
+                	  int id = Integer.parseInt(t.getId());
+                	  String idString;
+                	  if(id <= 100) {
+                		  idString = "0" + id;
+                	  } else {
+                		  idString = t.getId();
+                	  }
+                	  String nameBuilder = t.getName();
+                	  if(t.getGewicht() != 0) {
+                		  nameBuilder = (int)(t.getGewicht()) + "g " + t.getName();
+                	  }
+                  	myTableBuilder
+                  		.addRow(Row.builder()
+      	        			 .add(TextCell.builder().borderWidth(1).text(idString).horizontalAlignment(HorizontalAlignment.CENTER).fontSize(8).font(arial).build())
+      	        			 .add(TextCell.builder().borderWidth(1).text(nameBuilder).horizontalAlignment(HorizontalAlignment.LEFT).fontSize(6).font(arialBold).build())
+      	        			 .add(TextCell.builder().borderWidth(1).text("").horizontalAlignment(HorizontalAlignment.LEFT).fontSize(8).font(arialBold).build())
+
+      	        			 .height(0.35f * toPx)
+              			 .build());
+                   });
+              OverflowOnSamePageTableDrawer ld = OverflowOnSamePageTableDrawer.builder()
+                      .page(page)
+                      .lanesPerPage(2)
+                      
+                      .table(myTableBuilder.build())
+                      .startX(1.8f*toPx) // X-Position anpassen
+                    //  .startY(page.getMediaBox().getHeight() - 2.4f*toPx) // Y-Position anpassen
+                      .startY(page.getMediaBox().getHeight() - 2.4f*toPx)
+                      .endY(1.7f*toPx)
+                      .build();
+              
+    
+                      ld.draw(() -> document, () ->  new PDPage(PDRectangle.A4), 2.4f*toPx);
+                      
+                      
+              contentStream.close();  
+              ByteArrayOutputStream out = new ByteArrayOutputStream();
+              document.save(out);
+              document.close();
+              return out.toByteArray();
+         
+    	  } catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		return null;
+    
+    }
+    
+    public static String formatDouble(double value) {
+        // Runde den Wert auf eine Nachkommastelle
+        double rounded = Math.round(value * 10.0) / 10.0;
+        if (rounded == (long) rounded) {
+            return String.format("%d", (long) rounded);
+        } else {
+            return String.format("%.1f", rounded);
+        }
+    }
+    int pageCounter;
     public byte[] createFrischUebersicht() {
     	  try (PDDocument document = new PDDocument()) {
-              PDPage page = new PDPage();
+    		  pageCounter = 2;
+              PDPage page = new PDPage(new PDRectangle(PDRectangle.A4.getHeight(), PDRectangle.A4.getWidth()));
               document.addPage(page);
               
               
               
-              // Erstelle die Tabelle mit festgelegten Spaltenbreiten
-//              Table.TableBuilder tableBuilder = Table.builder()
-//            		  // 130px = 3,9cm     => 1 cm = 33,333 px
-//            		  // 3,3 cm = 110px     2,8 Höhe cm = 93,3333
-//                      .addColumnOfWidth(110) // Breite für "Lieferdatum"
-//                      .addColumnOfWidth(110)
-//                      .addColumnOfWidth(80) // Breite für "Herkunft"
-//                      .addColumnOfWidth(150) // Breite für "Artikel"
-//                      // Weitere Spalten hinzufügen nach Bedarf
-//                      .fontSize(10)
-//                      .font(PDType1Font.HELVETICA_BOLD);
-//
-//              // Kopfzeile hinzufügen
-//              Row row1 = Row.builder()
-//            	        .add(TextCell.builder().text("Lieferdatum").rowSpan(2).borderWidth(1).build())
-//            	        .add(TextCell.builder().text("Herkunft").colSpan(1).borderWidth(1).build())
-//            	        .add(TextCell.builder().text("Preis\nin €").borderWidth(1).build())
-//            	        .height(93.33333f) // Höhe für "Lieferdatum"
-//            	        .build();
-//            	tableBuilder.addRow(row1);
+              float toPx = 33.3333333333f;
+              String hexColorHeader = "#8b918f";
+              String hexColorLieferdatum = "#6b7680";
+              String hexCodeBestellung = "#ea8a99";
+              String hexCodeGebindegroesse = "#585e5c";
+              String hexCodeTable = "#394a44";
+              
+              Color header = Color.decode(hexColorHeader);
+              Color lieferdatum = Color.decode(hexColorLieferdatum);
+              Color bestellung = Color.decode(hexCodeBestellung);
+              Color gebinde = Color.decode(hexCodeGebindegroesse);
+              Color table = Color.decode(hexCodeTable);
+              
+              PDType0Font arial = PDType0Font.load(document,resourceLoader.getResource("classpath:Arial.ttf").getFile());
+              PDType0Font arialBold = PDType0Font.load(document, resourceLoader.getResource("classpath:Arial_Bold.ttf").getFile());
+              
+              try (PDPageContentStream contentStream = new PDPageContentStream(document, page)) {
+                  // Datum oben rechts
+                  contentStream.beginText();
+                  contentStream.setFont(arialBold, 11);
+                  contentStream.newLineAtOffset(page.getBBox().getWidth() - 4.7f * toPx , page.getBBox().getHeight() - 1.1f * toPx);
+                  contentStream.setNonStrokingColor(table);
+                  contentStream.showText("Fax Petrik: 465442");
+                  contentStream.endText();
 
-              Table myTable = Table.builder()
-                      .addColumnsOfWidth(20, 20, 20, 20, 20, 20)
+                  // Titel
+                  contentStream.beginText();
+                  contentStream.setNonStrokingColor(table);
+                  contentStream.setFont(arialBold, 11);
+                  contentStream.newLineAtOffset(2.2f * toPx, page.getBBox().getHeight() - 1.1f * toPx);
+                  
+                  contentStream.showText("Gemüsebestellung Food-Coop Mika");
+                  contentStream.endText();
+                  
+                  contentStream.beginText();
+                  contentStream.setNonStrokingColor(table);
+                  contentStream.setFont(arialBold, 11);
+                  contentStream.newLineAtOffset(page.getBBox().getWidth()/2, page.getBBox().getHeight() - 1.1f * toPx);
+                  
+                  contentStream.showText("Seite 1");
+                  contentStream.endText();
+              } catch (IOException e) {
+  				// TODO Auto-generated catch block
+  				e.printStackTrace();
+  			}
+
+            		 
+            	 
+          //    Queue<String> person = new  ConcurrentLinkedQueue<>();
+          	Optional<Deadline> date1 = deadService.getByPosition(0);
+        	Optional<Deadline> date2 = deadService.getByPosition(1);
+        	HashMap<Integer, HashMap<String, Double>> map= new HashMap<>();
+        	String[] personNames = new String[16];
+        	Arrays.fill(personNames, " ");
+        	if(!date1.isEmpty()) {
+        		if(!date2.isEmpty()) {
+        			LocalDateTime datum1 = date1.get().getDatum();
+                	LocalDateTime datum2 = date2.get().getDatum();
+                 	List<FrischBestellung> frischBestellungen = frischService.findByDateBetween(datum1, datum2);
+                 	Set<String> personNamesSet = new HashSet<>();
+                 	frischBestellungen.forEach(t -> {personNamesSet.add(t.getPersonId());});
+                 //	person.addAll(personNames);
+                 	int counterForSet = 0;
+                 	for(String pName : personNamesSet) {
+                 		personNames[counterForSet++] = pName;
+                 	}
+                 	for(int i = 0; i < personNames.length ; i++) {
+                 		if(personNames[i].equalsIgnoreCase(" ")) continue;
+                 		HashMap<String, Double> idAmountMap= new HashMap<>();
+                 		frischService.findByDateBetween(datum1, datum2, personNames[i]).forEach(t -> {idAmountMap.put(t.getFrischbestand().getId(), t.getBestellmenge());});
+                 		map.put(i, idAmountMap);
+                 	}
+        		}
+        	}
+        	
+        	System.err.println(personNames.length);
+              int counterForHeader = 0;
+             final Table.TableBuilder myTableBuilder = Table.builder()
+            		 
+                      .addColumnsOfWidth(4.2f * toPx, 0.6f * toPx, 0.8f * toPx, 1.4f * toPx, 0.7f * toPx, 1.5f * toPx, 1.4f * toPx, 0.7f * toPx, 0.7f * toPx, 0.7f * toPx, 0.7f * toPx, 0.7f * toPx, 0.7f * toPx, 0.7f * toPx, 0.7f * toPx, 0.7f * toPx, 0.7f * toPx, 0.7f * toPx, 0.7f * toPx, 0.7f * toPx, 0.7f * toPx, 0.7f * toPx, 0.7f * toPx, toPx * 1.6f)
                       .padding(2)
-                      .borderWidth(1)
                       .borderColor(Color.gray)
                       .horizontalAlignment(HorizontalAlignment.CENTER)
+                      .verticalAlignment(VerticalAlignment.MIDDLE)
                       .addRow(Row.builder()
-                              .add(TextCell.builder().text("a").colSpan(8).build())
-                              .build())
-                      .addRow(Row.builder()
-                              .add(TextCell.builder().text("Lieferdatum").rowSpan(5).build())
-                              .add(TextCell.builder().text("Herkunft").colSpan(3).build())
-                              .add(TextCell.builder().text("Preis in €").build())
-                              .add(TextCell.builder().text("gültig für").build())
-                              .add(TextCell.builder().text("Gebindegröße").build())
-                              .add(TextCell.builder().text("Bestellung").build())
+                    		  .font(arial)
+                              .add(TextCell.builder().borderWidthTop(1).borderWidthLeft(1).borderWidthBottom(0).horizontalAlignment(HorizontalAlignment.LEFT).textColor(lieferdatum).font(arialBold).text("Lieferdatum\n" + LocalDateTime.now().with(TemporalAdjusters.nextOrSame(DayOfWeek.TUESDAY)).format(DateTimeFormatter.ofPattern("dd.MM.yyyy")) + "\nKW" + LocalDateTime.now().with(TemporalAdjusters.next(DayOfWeek.TUESDAY)).get(WeekFields.of(Locale.GERMANY).weekOfYear()) + " - " + LocalDateTime.now().getYear() + "\n ").borderWidthBottom(1f).build())
+                              .add(TextCell.builder().borderWidth(1).minHeight(0.7f*toPx).fontSize(10).borderWidthBottom(0).textColor(lieferdatum).verticalAlignment(VerticalAlignment.TOP).text("Herkunft").borderWidthRight(1).rowSpan(1).colSpan(2).build())
+                              .add(CustomVerticalTextCell.builder().font(arialBold).textColor(gebinde).borderWidth(1).fontSize(10).text("Preis in €").borderWidthRight(1).rowSpan(2).build())
+                              .add(CustomVerticalTextCell.builder().textColor(gebinde).borderWidth(1).fontSize(8).text("gültig für kg St. Bd.").rowSpan(2).build())
+                              .add(CustomVerticalTextCell.builder().font(arialBold).fontSize(10).textColor(gebinde).borderWidth(1).text("Gebindegröße").rowSpan(2).build())
+                              .add(CustomVerticalTextCell.builder().textColor(bestellung).borderWidth(1).font(arialBold).text("Bestellung").rowSpan(2).build())
+                              
+                              .add(CustomVerticalTextCell.builder().textColor(gebinde).borderWidth(1).font(arialBold).text(personNames[counterForHeader++]).rowSpan(2).build())
+                              .add(CustomVerticalTextCell.builder().textColor(gebinde).borderWidth(1).font(arialBold).text(personNames[counterForHeader++]).rowSpan(2).build())
+                              .add(CustomVerticalTextCell.builder().textColor(gebinde).borderWidth(1).font(arialBold).text(personNames[counterForHeader++]).rowSpan(2).build())
+                              .add(CustomVerticalTextCell.builder().textColor(gebinde).borderWidth(1).font(arialBold).text(personNames[counterForHeader++]).rowSpan(2).build())
+                              .add(CustomVerticalTextCell.builder().textColor(gebinde).borderWidth(1).font(arialBold).text(personNames[counterForHeader++]).rowSpan(2).build())
+                              .add(CustomVerticalTextCell.builder().textColor(gebinde).borderWidth(1).font(arialBold).text(personNames[counterForHeader++]).rowSpan(2).build())
+                              .add(CustomVerticalTextCell.builder().textColor(gebinde).borderWidth(1).font(arialBold).text(personNames[counterForHeader++]).rowSpan(2).build())
+                              .add(CustomVerticalTextCell.builder().textColor(gebinde).borderWidth(1).font(arialBold).text(personNames[counterForHeader++]).rowSpan(2).build())
+                              .add(CustomVerticalTextCell.builder().textColor(gebinde).borderWidth(1).font(arialBold).text(personNames[counterForHeader++]).rowSpan(2).build())
+                              .add(CustomVerticalTextCell.builder().textColor(gebinde).borderWidth(1).font(arialBold).text(personNames[counterForHeader++]).rowSpan(2).build())
+                              .add(CustomVerticalTextCell.builder().textColor(gebinde).borderWidth(1).font(arialBold).text(personNames[counterForHeader++]).rowSpan(2).build())
+                              .add(CustomVerticalTextCell.builder().textColor(gebinde).borderWidth(1).font(arialBold).text(personNames[counterForHeader++]).rowSpan(2).build())
+                              .add(CustomVerticalTextCell.builder().textColor(gebinde).borderWidth(1).font(arialBold).text(personNames[counterForHeader++]).rowSpan(2).build())
+                              .add(CustomVerticalTextCell.builder().textColor(gebinde).borderWidth(1).font(arialBold).text(personNames[counterForHeader++]).rowSpan(2).build())
+                              .add(CustomVerticalTextCell.builder().textColor(gebinde).borderWidth(1).font(arialBold).text(personNames[counterForHeader++]).rowSpan(2).build())
+                              .add(CustomVerticalTextCell.builder().textColor(gebinde).borderWidth(1).font(arialBold).text(personNames[counterForHeader]).rowSpan(2).build())
+                              .add(TextCell.builder().borderWidth(1).textColor(lieferdatum).font(arialBold).text("Summe").rowSpan(2).build())
+                              .height(0.4f * toPx)
+                              // 2.3f
                               .build())
                       .addRow(Row.builder()
 
-                              .add(TextCell.builder().text("h").build())
-                              .add(TextCell.builder().text("i").build())
-                              .add(TextCell.builder().text("j").build())
+                              .add(TextCell.builder().borderWidth(1).borderWidthTop(0).fontSize(8).horizontalAlignment(HorizontalAlignment.LEFT).verticalAlignment(VerticalAlignment.BOTTOM).text("Gemüse/Obst\n").build())
+                              .add(CustomVerticalTextCell.builder().borderWidthRight(1).fontSize(8).verticalAlignment(VerticalAlignment.TOP).minHeight(1.9f*toPx).textColor(lieferdatum).borderWidthTop(0).text("Land").build())
+                              .add(CustomVerticalTextCell.builder().borderWidthLeft(1).fontSize(8).verticalAlignment(VerticalAlignment.TOP).minHeight(1.9f*toPx).borderWidthTop(0).textColor(lieferdatum).text("Verband").build())
+                              .height(1.9f * toPx)
                               .build())
-                      .build();
+                      .addRow(Row.builder()
+                    		  .add(TextCell.builder().horizontalAlignment(HorizontalAlignment.LEFT).borderWidth(1).textColor(table).fontSize(8).font(arialBold).text("Bestelleinheit (kg/Stück) beachten! 'x' für Stück hinzufügen, falls Einheit 'Kg' (z.B. Blumenkohl)").colSpan(24).build())
+                    		  .height(0.5f*toPx)
+                    		  .build());
+            
+             frischBestandService.allOrdered().forEach(t -> {
+            	 if(t.getVerfuegbarkeit() ) {
+            		 
+                int counter = 0;
+            	myTableBuilder
+            		.addRow(Row.builder()
+	        			 .add(TextCell.builder().borderWidth(1).text(t.getName()).horizontalAlignment(HorizontalAlignment.LEFT).fontSize(10).font(arialBold).build())
+	        			 .add(TextCell.builder().borderWidth(1).text(t.getHerkunftsland()).horizontalAlignment(HorizontalAlignment.LEFT).fontSize(10).font(arial).build())
+	        			 .add(TextCell.builder().borderWidth(1).text("").horizontalAlignment(HorizontalAlignment.LEFT).fontSize(10).font(arial).build())
+	        			 .add(TextCell.builder().borderWidth(1).text(t.getPreis() + "").horizontalAlignment(HorizontalAlignment.RIGHT).fontSize(10).font(arialBold).build())
+	        			 .add(TextCell.builder().borderWidth(1).text(t.getEinheit().getName().equalsIgnoreCase("Stück") ? "St" : t.getEinheit().getName()).horizontalAlignment(HorizontalAlignment.CENTER).fontSize(10).font(arial).build())
+	        			 .add(TextCell.builder().borderWidth(1).text(t.getGebindegroesse() + "").horizontalAlignment(HorizontalAlignment.CENTER).fontSize(10).font(arial).build())
+	        			 .add(TextCell.builder().borderWidth(1).text("").horizontalAlignment(HorizontalAlignment.LEFT).fontSize(10).font(arialBold).build())
+	        			 
+	        			 .add(TextCell.builder().borderWidth(1).text(map.get(counter++) == null ? "" : map.get(counter-1).get(t.getId()) == null ? "" : formatDouble( map.get(counter-1).get(t.getId())) + "" ).horizontalAlignment(HorizontalAlignment.CENTER).fontSize(10).font(arial).build())
+	        			 .add(TextCell.builder().borderWidth(1).text(map.get(counter++) == null ? "" : map.get(counter-1).get(t.getId()) == null ? "" : formatDouble(map.get(counter-1).get(t.getId())) + "" ).horizontalAlignment(HorizontalAlignment.CENTER).fontSize(10).font(arial).build())
+	        			 .add(TextCell.builder().borderWidth(1).text(map.get(counter++) == null ? "" : map.get(counter-1).get(t.getId()) == null ? "" : formatDouble(map.get(counter-1).get(t.getId())) + "" ).horizontalAlignment(HorizontalAlignment.CENTER).fontSize(10).font(arial).build())
+	        			 .add(TextCell.builder().borderWidth(1).text(map.get(counter++) == null ? "" : map.get(counter-1).get(t.getId()) == null ? "" : formatDouble(map.get(counter-1).get(t.getId())) + "" ).horizontalAlignment(HorizontalAlignment.CENTER).fontSize(10).font(arial).build())
+	        			 .add(TextCell.builder().borderWidth(1).text(map.get(counter++) == null ? "" : map.get(counter-1).get(t.getId()) == null ? "" : formatDouble(map.get(counter-1).get(t.getId())) + "" ).horizontalAlignment(HorizontalAlignment.CENTER).fontSize(10).font(arial).build())
+	        			 .add(TextCell.builder().borderWidth(1).text(map.get(counter++) == null ? "" : map.get(counter-1).get(t.getId()) == null ? "" : formatDouble(map.get(counter-1).get(t.getId())) + "" ).horizontalAlignment(HorizontalAlignment.CENTER).fontSize(10).font(arial).build())
+	        			 .add(TextCell.builder().borderWidth(1).text(map.get(counter++) == null ? "" : map.get(counter-1).get(t.getId()) == null ? "" : formatDouble(map.get(counter-1).get(t.getId())) + "" ).horizontalAlignment(HorizontalAlignment.CENTER).fontSize(10).font(arial).build())
+	        			 .add(TextCell.builder().borderWidth(1).text(map.get(counter++) == null ? "" : map.get(counter-1).get(t.getId()) == null ? "" : formatDouble(map.get(counter-1).get(t.getId())) + "" ).horizontalAlignment(HorizontalAlignment.CENTER).fontSize(10).font(arial).build())
+
+	        			 .add(TextCell.builder().borderWidth(1).text(map.get(counter++) == null ? "" : map.get(counter-1).get(t.getId()) == null ? "" : formatDouble( map.get(counter-1).get(t.getId())) + "" ).horizontalAlignment(HorizontalAlignment.CENTER).fontSize(10).font(arial).build())
+	        			 .add(TextCell.builder().borderWidth(1).text(map.get(counter++) == null ? "" : map.get(counter-1).get(t.getId()) == null ? "" : formatDouble(map.get(counter-1).get(t.getId())) + "" ).horizontalAlignment(HorizontalAlignment.CENTER).fontSize(10).font(arial).build())
+	        			 .add(TextCell.builder().borderWidth(1).text(map.get(counter++) == null ? "" : map.get(counter-1).get(t.getId()) == null ? "" : formatDouble(map.get(counter-1).get(t.getId())) + "" ).horizontalAlignment(HorizontalAlignment.CENTER).fontSize(10).font(arial).build())
+	        			 .add(TextCell.builder().borderWidth(1).text(map.get(counter++) == null ? "" : map.get(counter-1).get(t.getId()) == null ? "" : formatDouble(map.get(counter-1).get(t.getId())) + "" ).horizontalAlignment(HorizontalAlignment.CENTER).fontSize(10).font(arial).build())
+	        			 .add(TextCell.builder().borderWidth(1).text(map.get(counter++) == null ? "" : map.get(counter-1).get(t.getId()) == null ? "" : formatDouble(map.get(counter-1).get(t.getId())) + "" ).horizontalAlignment(HorizontalAlignment.CENTER).fontSize(10).font(arial).build())
+	        			 .add(TextCell.builder().borderWidth(1).text(map.get(counter++) == null ? "" : map.get(counter-1).get(t.getId()) == null ? "" : formatDouble(map.get(counter-1).get(t.getId())) + "" ).horizontalAlignment(HorizontalAlignment.CENTER).fontSize(10).font(arial).build())
+	        			 .add(TextCell.builder().borderWidth(1).text(map.get(counter++) == null ? "" : map.get(counter-1).get(t.getId()) == null ? "" : formatDouble(map.get(counter-1).get(t.getId())) + "" ).horizontalAlignment(HorizontalAlignment.CENTER).fontSize(10).font(arial).build())
+	        			 .add(TextCell.builder().borderWidth(1).text(map.get(counter++) == null ? "" : map.get(counter-1).get(t.getId()) == null ? "" : formatDouble(map.get(counter-1).get(t.getId())) + "" ).horizontalAlignment(HorizontalAlignment.CENTER).fontSize(10).font(arial).build())
+
+	        			 .add(TextCell.builder().borderWidth(1).text("-   €").horizontalAlignment(HorizontalAlignment.CENTER).fontSize(10).font(arialBold).build())
+	        			 .height(0.4f * toPx)
+        			 .build());
+            	 }
+             });
+
+             
+             myTableBuilder
+             			.borderColor(Color.gray)
+             			.addRow(Row.builder()
+			            		 .add(TextCell.builder().borderWidth(1).text("Reklamationen").borderColorTop(Color.BLACK).borderWidthTop(2).horizontalAlignment(HorizontalAlignment.LEFT).font(arialBold).fontSize(10).build())
+			            		 .add(TextCell.builder().borderWidth(1).borderColorTop(Color.BLACK).borderWidthTop(2).text("").build())
+			            		 .add(TextCell.builder().borderWidth(1).borderColorTop(Color.BLACK).borderWidthTop(2).text("").build())
+			            		 .add(TextCell.builder().borderWidth(1).borderColorTop(Color.BLACK).borderWidthTop(2).text("").build())
+			            		 .add(TextCell.builder().borderWidth(1).borderColorTop(Color.BLACK).borderWidthTop(2).text("").build())
+			            		 .add(TextCell.builder().borderWidth(1).borderColorTop(Color.BLACK).borderWidthTop(2).text("").build())
+			            		 .add(TextCell.builder().borderWidth(1).borderColorTop(Color.BLACK).borderWidthTop(2).text("").build())
+			            		 .add(TextCell.builder().borderWidth(1).borderColorTop(Color.BLACK).borderWidthTop(2).text("").build())
+			            		 
+			            		 .add(TextCell.builder().borderWidth(1).borderColorTop(Color.BLACK).borderWidthTop(2).text("").build())
+			            		 .add(TextCell.builder().borderWidth(1).borderColorTop(Color.BLACK).borderWidthTop(2).text("").build())
+			            		 .add(TextCell.builder().borderWidth(1).borderColorTop(Color.BLACK).borderWidthTop(2).text("").build())
+			            		 .add(TextCell.builder().borderWidth(1).borderColorTop(Color.BLACK).borderWidthTop(2).text("").build())
+			            		 .add(TextCell.builder().borderWidth(1).borderColorTop(Color.BLACK).borderWidthTop(2).text("").build())
+			            		 .add(TextCell.builder().borderWidth(1).borderColorTop(Color.BLACK).borderWidthTop(2).text("").build())
+			            		 .add(TextCell.builder().borderWidth(1).borderColorTop(Color.BLACK).borderWidthTop(2).text("").build())
+			            		 .add(TextCell.builder().borderWidth(1).borderColorTop(Color.BLACK).borderWidthTop(2).text("").build())
+			            		 .add(TextCell.builder().borderWidth(1).borderColorTop(Color.BLACK).borderWidthTop(2).text("").build())
+			            		 .add(TextCell.builder().borderWidth(1).borderColorTop(Color.BLACK).borderWidthTop(2).text("").build())
+			            		 .add(TextCell.builder().borderWidth(1).borderColorTop(Color.BLACK).borderWidthTop(2).text("").build())
+			            		 .add(TextCell.builder().borderWidth(1).borderColorTop(Color.BLACK).borderWidthTop(2).text("").build())
+			            		 .add(TextCell.builder().borderWidth(1).borderColorTop(Color.BLACK).borderWidthTop(2).text("").build())
+			            		 .add(TextCell.builder().borderWidth(1).borderColorTop(Color.BLACK).borderWidthTop(2).text("").build())
+			            		 .add(TextCell.builder().borderWidth(1).borderColorTop(Color.BLACK).borderWidthTop(2).text("").build())
+			            		 .add(TextCell.builder().borderWidth(1).borderColorTop(Color.BLACK).borderWidthTop(2).text("").build())
+			            		 .height(0.4f * toPx)
+			            		 .build())
+             			.addRow(Row.builder()
+             					 .add(TextCell.builder().borderWidth(1).text("Pfand (Napf)").horizontalAlignment(HorizontalAlignment.LEFT).font(arialBold).fontSize(10).build())
+             					 .add(TextCell.builder().borderWidth(1).text("").build())
+             					 .add(TextCell.builder().borderWidth(1).text("").build())
+             					 .add(TextCell.builder().borderWidth(1).text("").build())
+             					 .add(TextCell.builder().borderWidth(1).text("St").build())
+             					 .add(TextCell.builder().borderWidth(1).text("").build())
+             					 .add(TextCell.builder().borderWidth(1).text("").build())
+             					 .add(TextCell.builder().borderWidth(1).text("").build())
+            					 .add(TextCell.builder().borderWidth(1).text("").build())
+            					 .add(TextCell.builder().borderWidth(1).text("").build())
+            					 .add(TextCell.builder().borderWidth(1).text("").build())
+            					 .add(TextCell.builder().borderWidth(1).text("").build())
+            					 .add(TextCell.builder().borderWidth(1).text("").build())
+            					 .add(TextCell.builder().borderWidth(1).text("").build())
+            					 .add(TextCell.builder().borderWidth(1).text("").build())
+            					 .add(TextCell.builder().borderWidth(1).text("").build())
+            					 .add(TextCell.builder().borderWidth(1).text("").build())
+            					 .add(TextCell.builder().borderWidth(1).text("").build())
+            					 .add(TextCell.builder().borderWidth(1).text("").build())
+            					 .add(TextCell.builder().borderWidth(1).text("").build())
+            					 .add(TextCell.builder().borderWidth(1).text("").build())
+            					 .add(TextCell.builder().borderWidth(1).text("").build())
+            					 .add(TextCell.builder().borderWidth(1).text("").build())
+            					 .add(TextCell.builder().borderWidth(1).text("").build())
+             					 
+             					.height(0.4f * toPx)
+             					 .build())
+             			.addRow(Row.builder()
+            					 .add(TextCell.builder().borderWidth(1).text("zurück").horizontalAlignment(HorizontalAlignment.LEFT).font(arialBold).fontSize(10).build())
+            					 .add(TextCell.builder().borderWidth(1).text("").build())
+            					 .add(TextCell.builder().borderWidth(1).text("").build())
+            					 .add(TextCell.builder().borderWidth(1).text("").build())
+            					 .add(TextCell.builder().borderWidth(1).text("St").build())
+            					 .add(TextCell.builder().borderWidth(1).text("").build())
+            					 .add(TextCell.builder().borderWidth(1).text("").build())
+            					 .add(TextCell.builder().borderWidth(1).text("").build())
+            					 
+            					 .add(TextCell.builder().borderWidth(1).text("").build())
+            					 .add(TextCell.builder().borderWidth(1).text("").build())
+            					 .add(TextCell.builder().borderWidth(1).text("").build())
+            					 .add(TextCell.builder().borderWidth(1).text("").build())
+            					 .add(TextCell.builder().borderWidth(1).text("").build())
+            					 .add(TextCell.builder().borderWidth(1).text("").build())
+            					 .add(TextCell.builder().borderWidth(1).text("").build())
+            					 .add(TextCell.builder().borderWidth(1).text("").build())
+            					 .add(TextCell.builder().borderWidth(1).text("").build())
+            					 .add(TextCell.builder().borderWidth(1).text("").build())
+            					 .add(TextCell.builder().borderWidth(1).text("").build())
+            					 .add(TextCell.builder().borderWidth(1).text("").build())
+            					 .add(TextCell.builder().borderWidth(1).text("").build())
+            					 .add(TextCell.builder().borderWidth(1).text("").build())
+            					 .add(TextCell.builder().borderWidth(1).text("").build())
+            					 .add(TextCell.builder().borderWidth(1).text("").build())
+            					 .height(0.4f * toPx)
+            					 .build())
+             			.addRow(Row.builder()
+           					 .add(TextCell.builder().borderWidth(1).text("Gesamtsumme").colSpan(5).horizontalAlignment(HorizontalAlignment.LEFT).font(arialBold).fontSize(12).build())
+           					 .add(TextCell.builder().borderWidth(1).text("").build())
+           					 .add(TextCell.builder().borderWidth(1).text("").build())
+           					.add(TextCell.builder().borderWidth(1).text("").colSpan(16).build())
+           					 .add(TextCell.builder().borderWidth(1).text("").build())
+           					 .height(0.5f * toPx)
+           					 .build());
+
             	// Füge eine weitere Zeile für "Gemüse/Obst" hinzu, die die erste Spalte einnimmt
 //            	Row row2 = Row.builder()
 //            	        .add(TextCell.builder().text("07.05.2019\nKW19-2019").borderWidth(1).build())
@@ -431,15 +825,51 @@ public class PdfService {
 //                      .build());
 
               // Tabelle zeichnen
-              TableDrawer ld = TableDrawer.builder()
+              RepeatedHeaderTableDrawer ld = RepeatedHeaderTableDrawer.builder()
                       .page(page)
-                      .table(myTable)
-                      .startX(50) // X-Position anpassen
-                      .startY(page.getMediaBox().getHeight() - 50) // Y-Position anpassen
+                      .table(myTableBuilder.build())
+                      .headerHeight(2.3f * toPx)
+                      .numberOfRowsToRepeat(2)
+                      .startX(toPx * 1.5f) // X-Position anpassen
+                      .endY(toPx*2.6f)
+                      .startY(page.getMediaBox().getHeight() - (1.7f * toPx)) // Y-Position anpassen
                       .build();
               
     
-                      ld.draw(() -> document, () -> new PDPage(PDRectangle.A4), 50);
+                      ld.draw(() -> document, () -> {
+                    	  PDPage p = new PDPage(new PDRectangle(PDRectangle.A4.getHeight(), PDRectangle.A4.getWidth()));
+                          try (PDPageContentStream contentStream = new PDPageContentStream(document, p)) {
+                              // Datum oben rechts
+                              contentStream.beginText();
+                              contentStream.setFont(arialBold, 11);
+                              contentStream.newLineAtOffset(page.getBBox().getWidth() - 4.7f * toPx , page.getBBox().getHeight() - 1.1f * toPx);
+                              contentStream.setNonStrokingColor(table);
+                              contentStream.showText("Fax Petrik: 465442");
+                              contentStream.endText();
+
+                              // Titel
+                              contentStream.beginText();
+                              contentStream.setNonStrokingColor(table);
+                              contentStream.setFont(arialBold, 11);
+                              contentStream.newLineAtOffset(2.2f*toPx, page.getBBox().getHeight() - 1.1f * toPx);
+                              
+                              contentStream.showText("Gemüsebestellung Food-Coop Mika");
+                              contentStream.endText();
+                              
+                              contentStream.beginText();
+                              contentStream.setNonStrokingColor(table);
+                              contentStream.setFont(arialBold, 11);
+                              contentStream.newLineAtOffset(p.getBBox().getWidth()/2, page.getBBox().getHeight() - 1.1f * toPx);
+                              
+                              contentStream.showText("Seite " + (pageCounter - 1));
+                              contentStream.endText();
+                              pageCounter++;
+                          } catch (IOException e) {
+              				// TODO Auto-generated catch block
+              				e.printStackTrace();
+              			}
+                    	  return p;
+                    	  }, 50);
               // Dokument speichern
               
               ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -462,14 +892,14 @@ public class PdfService {
             try (PDPageContentStream contentStream = new PDPageContentStream(document, page)) {
                 // Datum oben rechts
                 contentStream.beginText();
-                contentStream.setFont(PDType1Font.HELVETICA, 12);
+                contentStream.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA), 12);
                 contentStream.newLineAtOffset(450, 800);
                 contentStream.showText(LocalDate.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")));
                 contentStream.endText();
 
                 // Titel
                 contentStream.beginText();
-                contentStream.setFont(PDType1Font.HELVETICA_BOLD, 18);
+                contentStream.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA_BOLD), 18);
                 contentStream.newLineAtOffset(150, 780);
                 contentStream.showText("Foodcoop Bestellungs Übersicht");
                 contentStream.endText();
@@ -477,7 +907,7 @@ public class PdfService {
 
             try (PDPageContentStream contentStream = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.APPEND, true, true)) {
                 contentStream.beginText();
-                contentStream.setFont(PDType1Font.HELVETICA_BOLD, 14);
+                contentStream.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA_BOLD), 14);
                 contentStream.newLineAtOffset(50, 720); // Position etwas über der Tabelle
                 contentStream.showText("Frisch Bestellungen");
                 contentStream.endText();
@@ -540,7 +970,7 @@ public class PdfService {
             //Überschrit Brotbestellung
             try (PDPageContentStream contentStream = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.APPEND, true, true)) {
                 contentStream.beginText();
-                contentStream.setFont(PDType1Font.HELVETICA_BOLD, 14);
+                contentStream.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA_BOLD), 14);
                 contentStream.newLineAtOffset(50, startYBrotBestellungenUeberschrift); // Anpassen basierend auf der Höhe der ersten Tabelle
                 contentStream.showText("Brot Bestellungen");
                 contentStream.endText();
@@ -775,8 +1205,9 @@ public class PdfService {
     }
 
     private TextCell createHeaderCell(String text) {
+    	
         return TextCell.builder()
-                .font(PDType1Font.HELVETICA_BOLD)
+        		.font(new PDType1Font(Standard14Fonts.FontName.HELVETICA_BOLD))
                 .text(text.toUpperCase())
                 .backgroundColor(Color.BLUE)
                 .padding(8f)

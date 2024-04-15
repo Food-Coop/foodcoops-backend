@@ -50,7 +50,7 @@ public class DatenbankInitializer {
     	
     	TimeZone.setDefault(TimeZone.getTimeZone("Europe/Berlin"));
     	if(cfgService.getConfig().isEmpty()) {
-    		cfgService.updateConfig(new ConfigurationEntity(ConstantsUtils.EMAIL_TEXT_EINKAUF_UEBERSICHT, null, null));
+    		cfgService.updateConfig(new ConfigurationEntity(ConstantsUtils.EMAIL_TEXT_EINKAUF_UEBERSICHT, null, null, 5.0));
     	}
     	//Erstellung aller Einheiten
     	if(einheitService.all().isEmpty() && kategorieService.all().isEmpty() && fbService.all().isEmpty() && produktService.all().isEmpty() && brotService.all().isEmpty()) {
@@ -102,60 +102,60 @@ public class DatenbankInitializer {
     	
     	
     	//Erstellung aller FrischBestände
-    	
-    	fbService.save(new FrischBestand("Kartoffeln fk", true, "D", 12.50f, kg , kartoffeln, 1.60f));
-    	fbService.save(new FrischBestand("Kartoffeln vfk", true, "D", 12.50f, kg, kartoffeln, 1.60f));
-    	fbService.save(new FrischBestand("Kartoffeln ml", true, "D", 12.50f, kg, kartoffeln, 1.60f));
+    	int counter = 1000;
+    	fbService.save(new FrischBestand(counter++ + "", "Kartoffeln fk", true, "D", 12.50f, kg , kartoffeln, 1.60f));
+    	fbService.save(new FrischBestand(counter++ + "","Kartoffeln vfk", true, "D", 12.50f, kg, kartoffeln, 1.60f));
+    	fbService.save(new FrischBestand(counter++ + "","Kartoffeln ml", true, "D", 12.50f, kg, kartoffeln, 1.60f));
     		
-    	fbService.save(new FrischBestand("Zwiebeln gelb", true, "D", 10f, kg, zwiebeln, 2.70f));
+    	fbService.save(new FrischBestand(counter++ + "","Zwiebeln gelb", true, "D", 10f, kg, zwiebeln, 2.70f));
     		
-    	fbService.save(new FrischBestand("Möhren", true, "D", 12.50f, kg, wurzelgemüse, 1.80f));
-    	fbService.save(new FrischBestand("Rote Bete", true, "D", 5f, kg, wurzelgemüse, 2.90f));
-    	fbService.save(new FrischBestand("Pastinaken", true, "D", 5f, kg, wurzelgemüse, 3.20f));
-    	fbService.save(new FrischBestand("Knollensellerie", true, "F", 5f, kg, wurzelgemüse, 2.90f));
-    	fbService.save(new FrischBestand("Staudensellerie", true, "E", 1f, kg, wurzelgemüse, 5.20f));
+    	fbService.save(new FrischBestand(counter++ + "","Möhren", true, "D", 12.50f, kg, wurzelgemüse, 1.80f));
+    	fbService.save(new FrischBestand(counter++ + "","Rote Bete", true, "D", 5f, kg, wurzelgemüse, 2.90f));
+    	fbService.save(new FrischBestand(counter++ + "","Pastinaken", true, "D", 5f, kg, wurzelgemüse, 3.20f));
+    	fbService.save(new FrischBestand(counter++ + "","Knollensellerie", true, "F", 5f, kg, wurzelgemüse, 2.90f));
+    	fbService.save(new FrischBestand(counter++ + "","Staudensellerie", true, "E", 1f, kg, wurzelgemüse, 5.20f));
     		
-    	fbService.save(new FrischBestand("Batavia grün", true, "D", 8f, St, salat, 2f));
-    	fbService.save(new FrischBestand("Eichblatt grün", true, "D", 8f, St, salat, 2f));
-    	fbService.save(new FrischBestand("Eichblatt rot", true, "D", 8f, St, salat, 2f));
-    	fbService.save(new FrischBestand("Kopfsalat grün", true, "D", 8f, St, salat, 2f));
+    	fbService.save(new FrischBestand(counter++ + "","Batavia grün", true, "D", 8f, St, salat, 2f));
+    	fbService.save(new FrischBestand(counter++ + "","Eichblatt grün", true, "D", 8f, St, salat, 2f));
+    	fbService.save(new FrischBestand(counter++ + "","Eichblatt rot", true, "D", 8f, St, salat, 2f));
+    	fbService.save(new FrischBestand(counter++ + "","Kopfsalat grün", true, "D", 8f, St, salat, 2f));
     		
-       	fbService.save(new FrischBestand("Petersilie glatt", true, "I", 1f, Bd, petersilie, 1.60f));
-       	fbService.save(new FrischBestand("Petersilie kraus", true, "D", 1f, Bd, petersilie, 2f));
+       	fbService.save(new FrischBestand(counter++ + "","Petersilie glatt", true, "I", 1f, Bd, petersilie, 1.60f));
+       	fbService.save(new FrischBestand(counter++ + "","Petersilie kraus", true, "D", 1f, Bd, petersilie, 2f));
     		
-       	fbService.save(new FrischBestand("Lauch", true, "D", 5f, kg, gemüse, 4.60f));
-       	fbService.save(new FrischBestand("Fenchel", true, "I", 5f, kg, gemüse, 3.80f));
-       	fbService.save(new FrischBestand("Spinat", true, "D", 3f, kg, spinat, 7f));
-       	fbService.save(new FrischBestand("Mangold", true, "I", 6f, kg, spinat, 3.80f));
+       	fbService.save(new FrischBestand(counter++ + "","Lauch", true, "D", 5f, kg, gemüse, 4.60f));
+       	fbService.save(new FrischBestand(counter++ + "","Fenchel", true, "I", 5f, kg, gemüse, 3.80f));
+       	fbService.save(new FrischBestand(counter++ + "","Spinat", true, "D", 3f, kg, spinat, 7f));
+       	fbService.save(new FrischBestand(counter++ + "","Mangold", true, "I", 6f, kg, spinat, 3.80f));
        		
-       	fbService.save(new FrischBestand("Chinakohl", true, "E", 8f, kg, kreuzblüten, 4.30f));
-       	fbService.save(new FrischBestand("Blumenkohl", true, "I", 1f, kg, kreuzblüten, 4.20f));
-       	fbService.save(new FrischBestand("Brokkoli", true, "E", 5f, kg, kreuzblüten, 3.90f));
-       	fbService.save(new FrischBestand("Spitzkohl", true, "E", 7f, kg, kreuzblüten, 3.70f));
-       	fbService.save(new FrischBestand("Kohlrabi", true, "I", 14f, St, kreuzblüten, 1.60f));
-       	fbService.save(new FrischBestand("Radieschen", true, "D", 1f, Bd, kreuzblüten, 2.50f));
+       	fbService.save(new FrischBestand(counter++ + "","Chinakohl", true, "E", 8f, kg, kreuzblüten, 4.30f));
+       	fbService.save(new FrischBestand(counter++ + "","Blumenkohl", true, "I", 1f, kg, kreuzblüten, 4.20f));
+       	fbService.save(new FrischBestand(counter++ + "","Brokkoli", true, "E", 5f, kg, kreuzblüten, 3.90f));
+       	fbService.save(new FrischBestand(counter++ + "","Spitzkohl", true, "E", 7f, kg, kreuzblüten, 3.70f));
+       	fbService.save(new FrischBestand(counter++ + "","Kohlrabi", true, "I", 14f, St, kreuzblüten, 1.60f));
+       	fbService.save(new FrischBestand(counter++ + "","Radieschen", true, "D", 1f, Bd, kreuzblüten, 2.50f));
        		
-       	fbService.save(new FrischBestand("Tomaten", true, "E", 5f, kg, gemüse, 3.80f));
-    	fbService.save(new FrischBestand("Gurken", true, "E", 12f, St, gemüse, 1.60f));
-       	fbService.save(new FrischBestand("Zucchini", true, "E", 6f, kg, gemüse, 3.60f));
-       	fbService.save(new FrischBestand("Paprika rot", true, "E", 5f, kg, gemüse, 6.20f));
-       	fbService.save(new FrischBestand("Süßkartoffeln", true, "D", 6f, kg, gemüse, 5.20f));
+       	fbService.save(new FrischBestand(counter++ + "","Tomaten", true, "E", 5f, kg, gemüse, 3.80f));
+    	fbService.save(new FrischBestand(counter++ + "","Gurken", true, "E", 12f, St, gemüse, 1.60f));
+       	fbService.save(new FrischBestand(counter++ + "","Zucchini", true, "E", 6f, kg, gemüse, 3.60f));
+       	fbService.save(new FrischBestand(counter++ + "","Paprika rot", true, "E", 5f, kg, gemüse, 6.20f));
+       	fbService.save(new FrischBestand(counter++ + "","Süßkartoffeln", true, "D", 6f, kg, gemüse, 5.20f));
        		
-       	fbService.save(new FrischBestand("Clementinen", true, "E", 6f, kg, zitrusfrüchte, 2.90f));
-       	fbService.save(new FrischBestand("Grapefruit", true, "E", 1f, St, zitrusfrüchte, 1.30f));
-       	fbService.save(new FrischBestand("Orangen", true, "E", 9f, kg, zitrusfrüchte, 2.80f));
-       	fbService.save(new FrischBestand("Saftorangen", true, "E", 10f, kg, zitrusfrüchte, 2.30f));
-       	fbService.save(new FrischBestand("Kiwi grün", true, "I", 1f, St, frucht, 0.50f));
-       	fbService.save(new FrischBestand("Zitronen", true, "I", 1f, kg, zitrusfrüchte, 0.60f));
+       	fbService.save(new FrischBestand(counter++ + "","Clementinen", true, "E", 6f, kg, zitrusfrüchte, 2.90f));
+       	fbService.save(new FrischBestand(counter++ + "","Grapefruit", true, "E", 1f, St, zitrusfrüchte, 1.30f));
+       	fbService.save(new FrischBestand(counter++ + "","Orangen", true, "E", 9f, kg, zitrusfrüchte, 2.80f));
+       	fbService.save(new FrischBestand(counter++ + "","Saftorangen", true, "E", 10f, kg, zitrusfrüchte, 2.30f));
+       	fbService.save(new FrischBestand(counter++ + "","Kiwi grün", true, "I", 1f, St, frucht, 0.50f));
+       	fbService.save(new FrischBestand(counter++ + "","Zitronen", true, "I", 1f, kg, zitrusfrüchte, 0.60f));
        		
-       	fbService.save(new FrischBestand("Äpfel Topaz", true, "D", 10f, kg, apfel, 3.60f));
-       	fbService.save(new FrischBestand("Äpfel Boskoop", true, "D", 10f, kg, apfel, 3.60f));
-       	fbService.save(new FrischBestand("Äpfel Elstar", true, "D", 10f, kg, apfel, 3.60f));
+       	fbService.save(new FrischBestand(counter++ + "","Äpfel Topaz", true, "D", 10f, kg, apfel, 3.60f));
+       	fbService.save(new FrischBestand(counter++ + "","Äpfel Boskoop", true, "D", 10f, kg, apfel, 3.60f));
+       	fbService.save(new FrischBestand(counter++ + "","Äpfel Elstar", true, "D", 10f, kg, apfel, 3.60f));
        		
-       	fbService.save(new FrischBestand("Champignons", true, "D", 2f, kg, pilze, 9.80f));
-       	fbService.save(new FrischBestand("Kräuterseitlinge", true, "D", 1f, kg, pilze, 22f));
-       	fbService.save(new FrischBestand("Knoblauch", true, "Ar", 1f, kg, gemüse, 12f));
-       	fbService.save(new FrischBestand("Eier", true, "D", 1f, St, eier, 0.55f));
+       	fbService.save(new FrischBestand(counter++ + "","Champignons", true, "D", 2f, kg, pilze, 9.80f));
+       	fbService.save(new FrischBestand(counter++ + "","Kräuterseitlinge", true, "D", 1f, kg, pilze, 22f));
+       	fbService.save(new FrischBestand(counter++ + "","Knoblauch", true, "Ar", 1f, kg, gemüse, 12f));
+       	fbService.save(new FrischBestand(counter++ + "","Eier", true, "D", 1f, St, eier, 0.55f));
        	
        	// Erstellung von Brot
        	brotService.save(new BrotBestand("11", "Demeter-Dinkellaib", true, 500, 3.3f));
@@ -181,7 +181,7 @@ public class DatenbankInitializer {
        	brotService.save(new BrotBestand("61", "Brauer KRUSTE", true, 500, 2.85f));
        	brotService.save(new BrotBestand("71", "Kleine Hirse", true, 500, 3f));
        	brotService.save(new BrotBestand("77", "Roggenmischbrot", true, 500, 2.7f));
-        brotService.save(new BrotBestand("91", "Backmischung SOWIE LowCarb", true, 250, 6.2f));
+      //  brotService.save(new BrotBestand("91", "Backmischung SOWIE LowCarb", true, 250, 6.2f));
        	brotService.save(new BrotBestand("92", "Low-Carb-Brot", true, 320, 4.85f));
         brotService.save(new BrotBestand("95", "Glutenfreies Brot", true, 380, 2.75f));
        	brotService.save(new BrotBestand("120", "Dinkelbrötchen Vollkorn", true, 0, 0.7f));

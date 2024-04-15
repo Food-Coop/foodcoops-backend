@@ -301,6 +301,8 @@ public class GebindemanagementService {
 		
 	}
     
+	
+	//Nicht ganz sicher für was das hier genutzt wird, evtl nochmal anschaune
     public List<List<FrischBestellung>> splitBestellungList(List<FrischBestellung> bestellList){
         List<List<FrischBestellung>> bestellungListKategorie = new ArrayList<List<FrischBestellung>>();
 //        int length = bestellList.size();
