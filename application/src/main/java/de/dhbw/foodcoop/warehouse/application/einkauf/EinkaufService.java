@@ -131,29 +131,7 @@ public class EinkaufService {
          		});
          	 }
          	
-         	 for(EinkaufEntity efk : einkaufeFromPerson) {
-         		 for(BestellungBuyEntity bbe : efk.getBestellungsEinkauf()) {
-         			if(bbe.getBestellung() != null && bbe.getBestellung() instanceof FrischBestellung) {
-         				FrischBestellung b = (FrischBestellung) bbe.getBestellung();
-         				if(mapAmountForOrder.get(b.getFrischbestand()) >= b.getBestellmenge()) {
-                			b.setDone(true);
-                		}
-         			}
-         		 }
-         		 einkaufRepository.speichern(efk);
-         	 }
-         	 
-         	 
-         	 if(vergleiche != null) {
-             	for (BestellungBuyEntity ebv : vergleiche) {
-             		if(ebv.getBestellung() != null && ebv.getBestellung() instanceof FrischBestellung) {
-         				FrischBestellung b = (FrischBestellung) ebv.getBestellung();
-         				if(mapAmountForOrder.get(b.getFrischbestand()) >= b.getBestellmenge()) {
-                			b.setDone(true);
-                		}
-             	}
-         	 }
-         	 }
+         	
          	 
          	 
          	 
@@ -212,6 +190,30 @@ public class EinkaufService {
          	    			handleRest(discrepancies, rest, k);
          	    		}
          			}
+         	
+         	 for(EinkaufEntity efk : einkaufeFromPerson) {
+         		 for(BestellungBuyEntity bbe : efk.getBestellungsEinkauf()) {
+         			if(bbe.getBestellung() != null && bbe.getBestellung() instanceof FrischBestellung) {
+         				FrischBestellung b = (FrischBestellung) bbe.getBestellung();
+         				if(mapAmountForOrder.get(b.getFrischbestand()) >= b.getBestellmenge()) {
+                			b.setDone(true);
+                		}
+         			}
+         		 }
+         		 einkaufRepository.speichern(efk);
+         	 }
+         	 
+         	 
+         	 if(vergleiche != null) {
+             	for (BestellungBuyEntity ebv : vergleiche) {
+             		if(ebv.getBestellung() != null && ebv.getBestellung() instanceof FrischBestellung) {
+         				FrischBestellung b = (FrischBestellung) ebv.getBestellung();
+         				if(mapAmountForOrder.get(b.getFrischbestand()) >= b.getBestellmenge()) {
+                			b.setDone(true);
+                		}
+             	}
+         	 }
+         	 }
         		}
         	}
         }
