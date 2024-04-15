@@ -180,7 +180,7 @@ public class EinkaufService {
              	    			double sumToAdjust = sumOrderedFromPerson - sumTakenFromPerson;
              	    			System.err.println("Done? " + bbe.getBestellung().isDone());
              	    			if(bbe.getBestellung().isDone()) {
-             	    				sumToAdjust = -sumTakenFromPerson;
+             	    				sumToAdjust = -t.getAmount();
              	    			}
              	    			adjustNonMixDiscrepency(discrepancies, sumToAdjust, bbe );
              	    		}
