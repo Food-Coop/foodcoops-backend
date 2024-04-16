@@ -144,8 +144,6 @@ public class EinkaufService {
          			} else  {
          				double sumOrderedFromPerson =  (Math.round( t.getBestellung().getBestellmenge() * 100.0) / 100.0); 
          				double sumTakenFromPerson = (Math.round( mapAmountForOrder.get(f.getFrischbestand()) * 100.0) / 100.0);
-         				System.out.println("Amount taken from person: " + sumTakenFromPerson + " Amount ordered From person: " + sumOrderedFromPerson);
-             	    	if(sumTakenFromPerson != sumOrderedFromPerson) {
              	    		BestellungBuyEntity  bbe = null;
              	    		for(BestellungBuyEntity bestellung : bestellungen) {
              	    			if(bestellung.getBestellung().getId().equalsIgnoreCase(t.getBestellung().getId())) {
@@ -153,21 +151,16 @@ public class EinkaufService {
              	    				break;
              	    			}
              	    		}
-             	    		System.out.println("Is bbe null? " + bbe);
              	    		if(bbe != null) {
              	    			double sumToAdjust; 
-             	    			System.err.println("Done? " + bbe.getBestellung().isDone());
              	    			if(bbe.getBestellung().isDone()) {
              	    				sumToAdjust = -t.getAmount();
              	    			} else {
              	    				 sumToAdjust = sumOrderedFromPerson - sumTakenFromPerson;
              	    				bbe.getBestellung().setDone(true);
              	    			}
-             	    			System.out.println("THIS IS JUST A LONG TEXT SO I CAN READ IT BETTER IN THE CONSOLE!!!\n\n\n"
-             	    					+ "AMOUNT ISSSSSSSSSSSSSSSS: " + sumToAdjust);
              	    			adjustNonMixDiscrepency(discrepancies, sumToAdjust, bbe );
              	    		}
-             	    	}
          			}
          		}
          	});
@@ -175,7 +168,6 @@ public class EinkaufService {
          	for(Kategorie k : katSet) {
          		double sumOrderedFromPerson = (Math.round( sumByKategorie(k, frischBestellungen) * 100.0) / 100.0);
          	    double sumTakenFromPerson = (Math.round( sumBestellungBuyByKategorie(k, bestellungen, mapAmountForOrder) * 100.0) / 100.0);
-         	    		if(sumTakenFromPerson != sumOrderedFromPerson) {
          	    			double sumToAdjust = sumOrderedFromPerson - sumTakenFromPerson;
          	    			boolean isDone = true;
          	    			if(bestellungen != null ) {
@@ -193,7 +185,6 @@ public class EinkaufService {
          	    			double rest = adjustMixDiscrepency(discrepancies, sumToAdjust, k);
          	    		//REST BEHANDELN
          	    			handleRest(discrepancies, rest, k);
-         	    		}
          			}
          	
 //         	 for(EinkaufEntity efk : einkaufeFromPerson) {
