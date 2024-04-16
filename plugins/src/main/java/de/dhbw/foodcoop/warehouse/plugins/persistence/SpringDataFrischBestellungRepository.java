@@ -22,7 +22,7 @@ public interface SpringDataFrischBestellungRepository extends JpaRepository<Fris
     List<FrischBestellung> findByDateBetween(@Param("date1") LocalDateTime date1, @Param("date2") LocalDateTime date2);
     
     
-    @Query("SELECT new FrischBestellung(f.id, f.personId, f.frischbestand, SUM(f.bestellmenge)) " +
+    @Query("SELECT new FrischBestellung(f.id, f.personId, f.frischbestand, SUM(f.bestellmenge), f.isDone) " +
             "FROM FrischBestellung f " +
             "WHERE f.datum > :date " +
             "GROUP BY f.frischbestand " +
