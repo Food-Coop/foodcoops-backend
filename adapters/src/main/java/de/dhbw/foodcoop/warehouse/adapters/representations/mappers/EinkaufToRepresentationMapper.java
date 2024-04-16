@@ -12,10 +12,12 @@ import de.dhbw.foodcoop.warehouse.adapters.representations.BestandBuyRepresentat
 import de.dhbw.foodcoop.warehouse.adapters.representations.BestellungBuyRepresentation;
 import de.dhbw.foodcoop.warehouse.adapters.representations.BestellungRepresentation;
 import de.dhbw.foodcoop.warehouse.adapters.representations.EinkaufRepresentation;
+import de.dhbw.foodcoop.warehouse.adapters.representations.TooMuchBuyRepresentation;
 import de.dhbw.foodcoop.warehouse.domain.entities.BestandBuyEntity;
 import de.dhbw.foodcoop.warehouse.domain.entities.BestellungBuyEntity;
 import de.dhbw.foodcoop.warehouse.domain.entities.BestellungEntity;
 import de.dhbw.foodcoop.warehouse.domain.entities.EinkaufEntity;
+import de.dhbw.foodcoop.warehouse.domain.entities.TooMuchBuyEntity;
 
 @Component
 public class EinkaufToRepresentationMapper implements Function<EinkaufEntity, EinkaufRepresentation> {
@@ -26,16 +28,23 @@ public class EinkaufToRepresentationMapper implements Function<EinkaufEntity, Ei
 	
 	@Autowired
 	BestandBuyToRepresentationMapper bestandBuyMapper;
+	
+	@Autowired
+	TooMuchBuyToRepresentationMapper tooMuchBuyMapper;
+	
+	
 	@Override
 	public EinkaufRepresentation apply(EinkaufEntity e) {
 		 return new EinkaufRepresentation(e.getId(),
 				 e.getPersonId(),
 				 listToSetBestellung(e.getBestellungsEinkauf()),
 				 listToSetBestandBuy( e.getBestandEinkauf()),
+				 listToSetTooMuchBuy(e.getTooMuchEinkauf()),
 				 e.getDate(),
 				 e.getBreadPriceAtTime(),
 				 e.getFreshPriceAtTime(),
-				 e.getBestandPriceAtTime());
+				 e.getBestandPriceAtTime(),
+				 e.getTooMuchPriceAtTime());
 	}
 	
 	
@@ -56,6 +65,17 @@ public class EinkaufToRepresentationMapper implements Function<EinkaufEntity, Ei
 		Set<BestandBuyRepresentation> set = new HashSet<>();
 		for(BestandBuyEntity be : list) {
 			set.add(bestandBuyMapper.apply(be));
+		}
+		return set;
+	}
+	
+	private Set<TooMuchBuyRepresentation> listToSetTooMuchBuy(List<TooMuchBuyEntity> list) {
+		if(list == null) {
+			return null;
+		}
+		Set<TooMuchBuyRepresentation> set = new HashSet<>();
+		for(TooMuchBuyEntity be : list) {
+			set.add(tooMuchBuyMapper.apply(be));
 		}
 		return set;
 	}

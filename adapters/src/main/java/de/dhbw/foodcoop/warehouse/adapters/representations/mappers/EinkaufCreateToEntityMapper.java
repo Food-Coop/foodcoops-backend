@@ -11,12 +11,15 @@ import org.springframework.stereotype.Component;
 import de.dhbw.foodcoop.warehouse.adapters.representations.BestandBuyRepresentation;
 import de.dhbw.foodcoop.warehouse.adapters.representations.BestellungBuyRepresentation;
 import de.dhbw.foodcoop.warehouse.adapters.representations.BestellungRepresentation;
+import de.dhbw.foodcoop.warehouse.adapters.representations.DiscrepancyRepresentation;
 import de.dhbw.foodcoop.warehouse.adapters.representations.EinkaufCreateRepresentation;
 import de.dhbw.foodcoop.warehouse.adapters.representations.EinkaufRepresentation;
+import de.dhbw.foodcoop.warehouse.adapters.representations.TooMuchBuyRepresentation;
 import de.dhbw.foodcoop.warehouse.domain.entities.BestandBuyEntity;
 import de.dhbw.foodcoop.warehouse.domain.entities.BestellungBuyEntity;
 import de.dhbw.foodcoop.warehouse.domain.entities.BestellungEntity;
 import de.dhbw.foodcoop.warehouse.domain.entities.EinkaufEntity;
+import de.dhbw.foodcoop.warehouse.domain.entities.TooMuchBuyEntity;
 
 @Component
 public class EinkaufCreateToEntityMapper implements Function<EinkaufCreateRepresentation, EinkaufEntity> {
@@ -26,6 +29,9 @@ public class EinkaufCreateToEntityMapper implements Function<EinkaufCreateRepres
     
     @Autowired
     RepresentationToBestandBuyMapper bestandBuyMapper;
+    
+    @Autowired
+    RepresentationToTooMuchBuyMapper tooMuchBuyMapper;
 
 
 
@@ -36,7 +42,8 @@ public class EinkaufCreateToEntityMapper implements Function<EinkaufCreateRepres
 				e.getPersonId(),
 				convertBestellungToList(e.getBestellungsEinkauf()),
 				convertBestandToList(e.getBestandEinkauf()),
-				null, 0, 0, 0);
+				convertTooMuchToList(e.getTooMuchEinkauf()),
+				null, 0, 0, 0, 0);
 	}
 	
 	private List<BestellungBuyEntity> convertBestellungToList(Set<BestellungBuyRepresentation> set) {
@@ -62,4 +69,18 @@ public class EinkaufCreateToEntityMapper implements Function<EinkaufCreateRepres
 		return bestellung;
 		
 	}
+	
+	private List<TooMuchBuyEntity> convertTooMuchToList(Set<TooMuchBuyRepresentation> set) {
+		if(set == null) {
+			return null;
+		}
+		List<TooMuchBuyEntity> bestellung = new ArrayList<>();
+		for(TooMuchBuyRepresentation b : set) {
+			bestellung.add(tooMuchBuyMapper.apply(b));
+		}
+		return bestellung;
+		
+	}
+	
+
 }

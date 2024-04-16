@@ -199,7 +199,7 @@ public class EinkaufController {
         EinkaufEntity e = createMapper.apply(newEinkauf);
         EinkaufEntity einkauf;
 		try {
-			einkauf = einkaufService.einkaufDurchführen(e.getPersonId(), e.getBestellungsEinkauf(), e.getBestandEinkauf());
+			einkauf = einkaufService.einkaufDurchführen(e.getPersonId(), e.getBestellungsEinkauf(), e.getBestandEinkauf(), e.getTooMuchEinkauf());
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();

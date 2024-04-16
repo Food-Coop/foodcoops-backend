@@ -27,6 +27,7 @@ import de.dhbw.foodcoop.warehouse.domain.entities.FrischBestand;
 import de.dhbw.foodcoop.warehouse.domain.entities.FrischBestellung;
 import de.dhbw.foodcoop.warehouse.domain.entities.Kategorie;
 import de.dhbw.foodcoop.warehouse.domain.entities.Produkt;
+import de.dhbw.foodcoop.warehouse.domain.entities.TooMuchBuyEntity;
 import de.dhbw.foodcoop.warehouse.domain.repositories.EinkaufRepository;
 
 @Service
@@ -54,8 +55,8 @@ public class EinkaufService {
     }
     
 
-    public EinkaufEntity einkaufDurchführen( String personId, List<BestellungBuyEntity> vergleiche, List<BestandBuyEntity> bestandBuy) throws Exception {
-
+    public EinkaufEntity einkaufDurchführen( String personId, List<BestellungBuyEntity> vergleiche, List<BestandBuyEntity> bestandBuy, List<TooMuchBuyEntity> tooMuchBuy) throws Exception {
+    	
         EinkaufEntity einkauf = new EinkaufEntity();
         einkauf.setId(UUID.randomUUID().toString());
         einkauf.setPersonId(personId);
@@ -89,9 +90,19 @@ public class EinkaufService {
         	}
         }
         
+        if(tooMuchBuy != null) {
+        	for(TooMuchBuyEntity e: tooMuchBuy) {
+        		if(einkauf.getTooMuchEinkauf() == null) {
+        			einkauf.setTooMuchEinkauf(new ArrayList<TooMuchBuyEntity>());
+        		}
+        		e.getDiscrepancy().setZuVielzuWenig(e.getDiscrepancy().getZuVielzuWenig() + (float)e.getAmount());
+        		einkauf.getTooMuchEinkauf().add(e);
+        	}
+        }
+        
 
         
-        
+        einkauf.setTooMuchPriceAtTime(calculatePriceForTooMuch(einkauf));
         einkauf.setBestandPriceAtTime(calculatePriceForBestandBuy(einkauf));
         einkauf.setBreadPriceAtTime(calculatePriceForBread(einkauf));
         einkauf.setFreshPriceAtTime(calculatePriceForFresh(einkauf));
@@ -377,6 +388,18 @@ public class EinkaufService {
 	    			FrischBestellung frisch = (FrischBestellung) ebv.getBestellung();
 	    			price = price + real * frisch.getFrischbestand().getPreis();
 	    		}
+	    	}
+    	}
+
+    	return price;
+    }
+    
+    public double calculatePriceForTooMuch(EinkaufEntity einkauf) {
+    	double price = 0d;
+    	if(einkauf.getTooMuchEinkauf() != null) { 
+	    	for(TooMuchBuyEntity ebv : einkauf.getTooMuchEinkauf()) {
+	    			double real = ebv.getAmount();
+	    			price = price + real * ebv.getDiscrepancy().getBestand().getPreis();
 	    	}
     	}
 
