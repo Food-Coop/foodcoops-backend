@@ -38,20 +38,20 @@ public abstract class BestellungEntity {
 	protected double bestellmenge;
 	
 	@Column
-	protected boolean isDone;
+	protected boolean done;
 	
 	
 
- public BestellungEntity() {
-
- }
+	public BestellungEntity() {
+	
+	}
 	
 	public boolean isDone() {
-		return isDone;
+		return done;
 	}
 
-	public void setDone(boolean isDone) {
-		this.isDone = isDone;
+	public void setDone(boolean done) {
+		this.done = done;
 	}
 
 	public String getId() {

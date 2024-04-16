@@ -22,15 +22,15 @@ public abstract class BestellungRepresentation {
 	private String personId;
 	private LocalDateTime datum;
 	private double bestellmenge;
-	private boolean isDone;
-	public BestellungRepresentation(String id, String personId, LocalDateTime datum, double bestellmenge, boolean isDone
+	private boolean done;
+	public BestellungRepresentation(String id, String personId, LocalDateTime datum, double bestellmenge, boolean done
 		) {
 		super();
 		this.id = id;
 		this.personId = personId;
 		this.datum = datum;
 		this.bestellmenge = bestellmenge;
-		this.isDone = isDone;
+		this.done = done;
 	}
 	
 	public String getId() {
@@ -45,9 +45,11 @@ public abstract class BestellungRepresentation {
 	public double getBestellmenge() {
 		return bestellmenge;
 	}
+
 	public boolean isDone() {
-		return isDone;
+		return done;
 	}
+
 	
 	
 }

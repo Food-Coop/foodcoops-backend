@@ -24,7 +24,7 @@ public class FrischBestellung extends BestellungEntity{
     	super();
         this.id = id;
         this.personId = personId;
-        this.isDone = isDone;
+        this.done = isDone;
         this.frischbestand = frischbestand;
         this.bestellmenge = bestellmenge;
         this.datum = datum;
@@ -35,7 +35,7 @@ public class FrischBestellung extends BestellungEntity{
         //Validate.notNull(datum);
     	super();
         this.id = id;
-        this.isDone = isDone;
+        this.done = isDone;
         this.personId = personId;
         this.frischbestand = frischbestand;
         this.bestellmenge = bestellmenge;
