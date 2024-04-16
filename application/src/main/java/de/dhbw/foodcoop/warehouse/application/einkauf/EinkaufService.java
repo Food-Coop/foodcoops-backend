@@ -163,6 +163,8 @@ public class EinkaufService {
              	    				 sumToAdjust = sumOrderedFromPerson - sumTakenFromPerson;
              	    				bbe.getBestellung().setDone(true);
              	    			}
+             	    			System.out.println("THIS IS JUST A LONG TEXT SO I CAN READ IT BETTER IN THE CONSOLE!!!\n\n\n"
+             	    					+ "AMOUNT ISSSSSSSSSSSSSSSS: " + sumToAdjust);
              	    			adjustNonMixDiscrepency(discrepancies, sumToAdjust, bbe );
              	    		}
              	    	}
