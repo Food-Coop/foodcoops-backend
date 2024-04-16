@@ -63,7 +63,8 @@ public class RepresentationToBestellungMapper implements Function<BestellungRepr
                 fbr.getPersonId(),
                 frischBestand,
                 fbr.getBestellmenge(),
-                fbr.getDatum()
+                fbr.getDatum(),
+                fbr.isDone()
         );
     	}
     	return null;
@@ -92,7 +93,8 @@ public class RepresentationToBestellungMapper implements Function<BestellungRepr
 	                bb.getPersonId(),
 	                frischBestand,
 	                bb.getBestellmenge(),
-	                bb.getDatum()
+	                bb.getDatum(),
+	                bb.isDone()
 	        );
 		}
 		return null;
