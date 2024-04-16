@@ -155,11 +155,12 @@ public class EinkaufService {
              	    		}
              	    		System.out.println("Is bbe null? " + bbe);
              	    		if(bbe != null) {
-             	    			double sumToAdjust = sumOrderedFromPerson - sumTakenFromPerson;
+             	    			double sumToAdjust; 
              	    			System.err.println("Done? " + bbe.getBestellung().isDone());
              	    			if(bbe.getBestellung().isDone()) {
              	    				sumToAdjust = -t.getAmount();
              	    			} else {
+             	    				 sumToAdjust = sumOrderedFromPerson - sumTakenFromPerson;
              	    				bbe.getBestellung().setDone(true);
              	    			}
              	    			adjustNonMixDiscrepency(discrepancies, sumToAdjust, bbe );
