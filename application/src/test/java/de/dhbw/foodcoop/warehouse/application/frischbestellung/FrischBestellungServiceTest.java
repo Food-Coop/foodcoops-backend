@@ -30,9 +30,9 @@ public class FrischBestellungServiceTest {
 
     @Test
     void testAll() {
-        FrischBestellung f0 = new FrischBestellung("1234", "Peter_Meier", fb, 4, ts);
-        FrischBestellung f1 = new FrischBestellung("2345", "Peter_Müller", fb, 2, ts);
-        FrischBestellung f2 = new FrischBestellung("3456", "Peter_Maier", fb, 3, ts);
+        FrischBestellung f0 = new FrischBestellung("1234", "Peter_Meier", fb, 4, ts, false);
+        FrischBestellung f1 = new FrischBestellung("2345", "Peter_Müller", fb, 2, ts, false);
+        FrischBestellung f2 = new FrischBestellung("3456", "Peter_Maier", fb, 3, ts, false);
 
         when(mockRepository.alle()).thenReturn(Arrays.asList(f0, f1, f2));
         List<FrischBestellung> whenReturn = toBeTested.all();
@@ -44,7 +44,7 @@ public class FrischBestellungServiceTest {
 
     @Test
     void testFindById() {
-        FrischBestellung frischBestellung = new FrischBestellung("1234", "Peter_Meier", fb, 4, ts);
+        FrischBestellung frischBestellung = new FrischBestellung("1234", "Peter_Meier", fb, 4, ts, false);
         
         when(mockRepository.findeMitId(frischBestellung.getId())).thenReturn(Optional.of(frischBestellung));
         Optional<FrischBestellung> whenReturn = toBeTested.findById(frischBestellung.getId());
@@ -55,9 +55,9 @@ public class FrischBestellungServiceTest {
 
     @Test
     void testSave() {
-        FrischBestellung newFrischBestellung = new FrischBestellung("1234", "Peter_Meier", fb, 4, ts);
+        FrischBestellung newFrischBestellung = new FrischBestellung("1234", "Peter_Meier", fb, 4, ts, false);
         
-        lenient().when(mockRepository.alle()).thenReturn(List.of(new FrischBestellung("1234", "Peter_Meier", fb, 4, ts)));
+        lenient().when(mockRepository.alle()).thenReturn(List.of(new FrischBestellung("1234", "Peter_Meier", fb, 4, ts, false)));
         lenient().when(mockRepository.speichern(newFrischBestellung)).thenReturn(newFrischBestellung);
         FrischBestellung returnVal = toBeTested.save(newFrischBestellung);
 

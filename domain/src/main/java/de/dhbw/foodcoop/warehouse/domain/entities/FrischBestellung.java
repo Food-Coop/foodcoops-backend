@@ -18,33 +18,35 @@ public class FrischBestellung extends BestellungEntity{
     
  
 
-    public FrischBestellung(String id, String personId, FrischBestand frischbestand, double bestellmenge, LocalDateTime datum) {
+    public FrischBestellung(String id, String personId, FrischBestand frischbestand, double bestellmenge, LocalDateTime datum, boolean isDone) {
         //Validate.notBlank(id);
         //Validate.notNull(datum);
     	super();
         this.id = id;
         this.personId = personId;
+        this.isDone = isDone;
         this.frischbestand = frischbestand;
         this.bestellmenge = bestellmenge;
         this.datum = datum;
     }
 
-    public FrischBestellung(String id, String personId, FrischBestand frischbestand, double bestellmenge) {
+    public FrischBestellung(String id, String personId, FrischBestand frischbestand, double bestellmenge, boolean isDone) {
         //Validate.notBlank(id);
         //Validate.notNull(datum);
     	super();
         this.id = id;
+        this.isDone = isDone;
         this.personId = personId;
         this.frischbestand = frischbestand;
         this.bestellmenge = bestellmenge;
     }
 
-    public FrischBestellung(String personId, FrischBestand frischbestand, double bestellmenge, LocalDateTime datum) {
-        this(UUID.randomUUID().toString(), personId, frischbestand, bestellmenge, datum);
+    public FrischBestellung(String personId, FrischBestand frischbestand, double bestellmenge, LocalDateTime datum, boolean isDone) {
+        this(UUID.randomUUID().toString(), personId, frischbestand, bestellmenge, datum, isDone);
     }
 
-    public FrischBestellung(String personId, FrischBestand frischbestand, double bestellmenge) {
-        this(UUID.randomUUID().toString(), personId, frischbestand, bestellmenge);
+    public FrischBestellung(String personId, FrischBestand frischbestand, double bestellmenge, boolean isDone) {
+        this(UUID.randomUUID().toString(), personId, frischbestand, bestellmenge, isDone);
     }
 
     public FrischBestellung() {
