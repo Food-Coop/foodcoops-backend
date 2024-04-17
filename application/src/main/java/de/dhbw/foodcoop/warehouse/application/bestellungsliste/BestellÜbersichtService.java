@@ -75,13 +75,17 @@ public class BestellÜbersichtService {
 		bestellÜbersicht.setToOrderWithinDeadline(neuErstellte);
 		
 		//Brauchen eins vorher 
-		Optional<Deadline> vorletzte = deadlineService.getByPosition(1);
-		if(vorletzte.isEmpty()) {
+		Optional<Deadline> date1 = deadlineService.getByPosition(0);
+		Optional<Deadline> date2 = deadlineService.getByPosition(1);
+		
+		if(date1.isEmpty()) {
+			if(date2.isEmpty()) {
 			return Optional.empty();
+			}
 		}
 		
 		Set<Kategorie> findAllCategoriesOrderedLastWeek = new HashSet<>();
-		List<FrischBestellung> frischBestellungen = frischService.findAllOrdersAfterDate(vorletzte.get().getDatum());
+		List<FrischBestellung> frischBestellungen = frischService.findByDateBetween(date1.get().getDatum(), date2.get().getDatum());
 		frischBestellungen.stream().forEach(f -> findAllCategoriesOrderedLastWeek.add(f.getFrischbestand().getKategorie()));
 	
 		for(Kategorie kategorie : findAllCategoriesOrderedLastWeek) {
@@ -93,7 +97,7 @@ public class BestellÜbersichtService {
 		}
 		
 		bestellÜbersicht.setDiscrepancy(discrepancy);
-		List<BrotBestellung> brotBestellungen = brotService.findAllAftetDate(vorletzte.get().getDatum());
+		List<BrotBestellung> brotBestellungen = brotService.findByDateBetween(date1.get().getDatum(), date2.get().getDatum());
 		
 		bestellÜbersicht.setBrotBestellung(brotBestellungen);
 		System.out.println("ID: " + bestellÜbersicht.getId());

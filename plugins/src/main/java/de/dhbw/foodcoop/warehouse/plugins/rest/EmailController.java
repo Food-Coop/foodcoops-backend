@@ -26,7 +26,7 @@ public class EmailController {
 	@GetMapping("/email")
 	public void sendEmail() {
 		try {
-			service.sendSimpleMessage("nikolas.gaska.99@gmail.com", "Dies ist ein kleiner Text", "Hallo Niko,\n ich hoffe dir geht es gut! \nIm Anhang ist die aktuelle Bestellübersicht.\n\nViele Grüße \nDeine Foodcoop Karlsruhe Nordstadt", pdf.createUebersicht(bueService.getLastUebersicht()), "BestellÜbersicht.pdf");
+			service.sendSimpleMessage("Matteo.staar@gmx.de", "Dies ist ein kleiner Text", "Hallo Niko,\n ich hoffe dir geht es gut! \nIm Anhang ist die aktuelle Bestellübersicht.\n\nViele Grüße \nDeine Foodcoop Karlsruhe Nordstadt", pdf.createUebersicht(bueService.getLastUebersicht()), "BestellÜbersicht.pdf");
 		} catch (MessagingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

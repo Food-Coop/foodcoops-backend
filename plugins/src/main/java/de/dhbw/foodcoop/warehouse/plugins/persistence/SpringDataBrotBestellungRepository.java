@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import de.dhbw.foodcoop.warehouse.domain.entities.BrotBestellung;
+import de.dhbw.foodcoop.warehouse.domain.entities.FrischBestellung;
 
 public interface SpringDataBrotBestellungRepository extends JpaRepository<BrotBestellung, String>{
 
@@ -17,6 +18,9 @@ public interface SpringDataBrotBestellungRepository extends JpaRepository<BrotBe
     @Query("SELECT b FROM BrotBestellung b WHERE b.datum <= :date1 AND b.datum > :date2 AND b.personId = :person_id")
     List<BrotBestellung> findByDateBetween(@Param("date1") LocalDateTime date1, @Param("date2") LocalDateTime date2, @Param("person_id") String person_id);
 
+    @Query("SELECT f FROM BrotBestellung f WHERE f.datum <= :date1 AND f.datum > :date2")
+    List<BrotBestellung> findByDateBetween(@Param("date1") LocalDateTime date1, @Param("date2") LocalDateTime date2);
+    
     @Query("SELECT new BrotBestellung(b.id, b.personId, b.brotbestand,  SUM(b.bestellmenge)) " +
             "FROM BrotBestellung b " +
             "WHERE b.datum > :date " +
