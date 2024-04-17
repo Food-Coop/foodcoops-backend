@@ -64,4 +64,9 @@ public class BrotBestellungRepositoryBridge implements BrotBestellungRepository{
 		// TODO Auto-generated method stub
 		return springDataBrotBestellungRepository.findAllAfter(datum);
 	}
+
+	@Override
+	public List<BrotBestellung> findeMitDatumZwischen(LocalDateTime datum1, LocalDateTime datum2) {
+		return springDataBrotBestellungRepository.findByDateBetween(datum1, datum2);
+	}
 }

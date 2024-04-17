@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import de.dhbw.foodcoop.warehouse.domain.entities.BrotBestellung;
+import de.dhbw.foodcoop.warehouse.domain.entities.FrischBestellung;
 
 public interface BrotBestellungRepository {
     List<BrotBestellung> alle();
@@ -18,6 +19,8 @@ public interface BrotBestellungRepository {
     List<BrotBestellung> findAllOrdersAfterDate(LocalDateTime datum);
 
     List<BrotBestellung> findeMitDatumZwischen(LocalDateTime datum1, LocalDateTime datum2, String person_id);
+    
+    List<BrotBestellung> findeMitDatumZwischen(LocalDateTime datum1, LocalDateTime datum2);
 
     BrotBestellung speichern(BrotBestellung brotBestellung);
 

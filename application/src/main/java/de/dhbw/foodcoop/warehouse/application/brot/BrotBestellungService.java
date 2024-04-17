@@ -37,6 +37,10 @@ public class BrotBestellungService {
     public List<BrotBestellung> findByDateBetween(LocalDateTime datum1, LocalDateTime datum2, String person_id){
         return repository.findeMitDatumZwischen(datum1, datum2, person_id);
     }
+    
+    public List<BrotBestellung> findByDateBetween(LocalDateTime datum1, LocalDateTime datum2){
+        return repository.findeMitDatumZwischen(datum1, datum2);
+    }
 
     public BrotBestellung save(BrotBestellung bestellung) {
     	//Person p = personService.getOrCreatePerson(bestellung.getPersonId());
