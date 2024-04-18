@@ -95,7 +95,7 @@ public class EinkaufService {
         		if(einkauf.getTooMuchEinkauf() == null) {
         			einkauf.setTooMuchEinkauf(new ArrayList<TooMuchBuyEntity>());
         		}
-        		e.getDiscrepancy().setZuVielzuWenig(e.getDiscrepancy().getZuVielzuWenig() + (float)e.getAmount());
+        		e.getDiscrepancy().setZuVielzuWenig(e.getDiscrepancy().getZuVielzuWenig() - (float)e.getAmount());
         		einkauf.getTooMuchEinkauf().add(e);
         	}
         }
@@ -145,7 +145,7 @@ public class EinkaufService {
          	
          	 
          	 
-         	 
+         	 if(bestellungen != null) {
          	Set<Kategorie> katSet = new HashSet<>();
          	bestellungen.forEach(t -> {
          		if(t.getBestellung() instanceof FrischBestellung) {
@@ -197,30 +197,8 @@ public class EinkaufService {
          	    		//REST BEHANDELN
          	    			handleRest(discrepancies, rest, k);
          			}
-         	
-//         	 for(EinkaufEntity efk : einkaufeFromPerson) {
-//         		 for(BestellungBuyEntity bbe : efk.getBestellungsEinkauf()) {
-//         			if(bbe.getBestellung() != null && bbe.getBestellung() instanceof FrischBestellung) {
-//         				FrischBestellung b = (FrischBestellung) bbe.getBestellung();
-//         				if(mapAmountForOrder.get(b.getFrischbestand()) >= b.getBestellmenge()) {
-//                			b.setDone(true);
-//                		}
-//         			}
-//         		 }
-//         		 einkaufRepository.speichern(efk);
-//         	 }
-//         	 
-//         	 
-//         	 if(vergleiche != null) {
-//             	for (BestellungBuyEntity ebv : vergleiche) {
-//             		if(ebv.getBestellung() != null && ebv.getBestellung() instanceof FrischBestellung) {
-//         				FrischBestellung b = (FrischBestellung) ebv.getBestellung();
-//         				if(mapAmountForOrder.get(b.getFrischbestand()) >= b.getBestellmenge()) {
-//                			b.setDone(true);
-//                		}
-//             	}
-//         	 }
-//         	 }
+
+        		}
         		}
         	}
         }

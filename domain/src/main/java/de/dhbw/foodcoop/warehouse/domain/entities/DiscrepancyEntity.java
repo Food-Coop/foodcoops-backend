@@ -78,9 +78,6 @@ public class DiscrepancyEntity {
 		return bestand;
 	}
 
-
-
-
 	public void setBestand(BestandEntity bestand) {
 		this.bestand = bestand;
 	}
