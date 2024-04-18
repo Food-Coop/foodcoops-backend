@@ -14,14 +14,16 @@ import java.time.temporal.TemporalAdjusters;
 import java.time.temporal.WeekFields;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Optional;
-import java.util.Queue;
 import java.util.Set;
-import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.stream.Collectors;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -35,7 +37,7 @@ import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
-import org.vandeseer.easytable.OverflowOnSamePageTableDrawer;
+import org.vandeseer.easytable.OverflowOnSamePageRepeatableHeaderTableDrawer;
 import org.vandeseer.easytable.RepeatedHeaderTableDrawer;
 import org.vandeseer.easytable.TableDrawer;
 import org.vandeseer.easytable.settings.HorizontalAlignment;
@@ -48,11 +50,13 @@ import org.vandeseer.easytable.structure.cell.TextCell;
 import de.dhbw.foodcoop.warehouse.application.admin.ConfigurationService;
 import de.dhbw.foodcoop.warehouse.application.bestellungsliste.BestellÜbersichtService;
 import de.dhbw.foodcoop.warehouse.application.brot.BrotBestandService;
+import de.dhbw.foodcoop.warehouse.application.brot.BrotBestellungService;
 import de.dhbw.foodcoop.warehouse.application.deadline.DeadlineService;
 import de.dhbw.foodcoop.warehouse.application.frischbestellung.FrischBestandService;
 import de.dhbw.foodcoop.warehouse.application.frischbestellung.FrischBestellungService;
 import de.dhbw.foodcoop.warehouse.application.gebindemanagement.GebindemanagementService;
 import de.dhbw.foodcoop.warehouse.domain.entities.BestellUebersicht;
+import de.dhbw.foodcoop.warehouse.domain.entities.BrotBestand;
 import de.dhbw.foodcoop.warehouse.domain.entities.BrotBestellung;
 import de.dhbw.foodcoop.warehouse.domain.entities.Deadline;
 import de.dhbw.foodcoop.warehouse.domain.entities.EinkaufEntity;
@@ -85,6 +89,9 @@ public class PdfService {
     
     @Autowired
 	private FrischBestellungService frischService;
+    
+    @Autowired
+	private BrotBestellungService brotService;
     
     @Autowired
 	private DeadlineService deadService;
@@ -459,8 +466,15 @@ public class PdfService {
                   
                   PDImageXObject pdImage = PDImageXObject.createFromFileByContent(picture,document);  
                   contentStream.drawImage(pdImage, 	2f *toPx, page.getBBox().getHeight() - 1.8f * toPx, 8f * toPx, 1.6f*toPx);
-                  
-                  
+              	Optional<Deadline> date1 = deadService.getByPosition(0);
+            	Optional<Deadline> date2 = deadService.getByPosition(1);
+            	
+            	Map<String, Integer> amountMapForBread = new HashMap<>();
+            	if(date1.isPresent() && date2.isPresent()) {
+                  List<BrotBestellung> bestellungen = brotService.findByDateBetween(date1.get().getDatum(), date2.get().getDatum());
+                  bestellungen.forEach(t -> amountMapForBread.merge(t.getBrotBestand().getId(), (int) t.getBestellmenge(), Integer::sum));
+            	}
+            	
                   final Table.TableBuilder myTableBuilder = Table.builder()
                           .addColumnsOfWidth(1.2f * toPx, 4f * toPx, 1.2f * toPx)
                           .padding(2)
@@ -478,10 +492,32 @@ public class PdfService {
                                   .build());
                   
 
+           		 Comparator<BrotBestand> customComparator = (a, b) -> {
+                     int rankA = rankNumber(Integer.valueOf(a.getId()));
+                     int rankB = rankNumber(Integer.valueOf(b.getId()));
+                     return Integer.compare(rankA, rankB); // Vergleiche die Rangwerte
+                 };
+
+                  	List<BrotBestand> brotBestand =  brotBestandService.all();
+                  	
+                  	//Vor sortierung, in einer normalen Reihenfolge, 0,1,2,3,4 etc. (wird benötigt, da ansonsten die nachsortierung nicht wie gewollt klappt)
+                  	Collections.sort(brotBestand, (b1, b2) -> {
+                  		return Integer.valueOf(b1.getId()) - Integer.valueOf(b2.getId());
+                  	});
+                  	
+                  	List<BrotBestand> listSorted = brotBestand.stream().sorted(customComparator).collect(Collectors.toList());
+                          // Sortiere die Liste nach dem "Format" der original Brotbestellungsliste
+                  	
+      
+               
+
+           
+                      
+                  
+
                   
                   
-                  
-                  brotBestandService.allOrdered().forEach(t -> {
+                  	listSorted.forEach(t -> {
                 	  int id = Integer.parseInt(t.getId());
                 	  String idString;
                 	  if(id <= 100) {
@@ -493,16 +529,17 @@ public class PdfService {
                 	  if(t.getGewicht() != 0) {
                 		  nameBuilder = (int)(t.getGewicht()) + "g " + t.getName();
                 	  }
+                	  String amount = String.valueOf(amountMapForBread.get(t.getId())).replaceAll("null", ""); 
                   	myTableBuilder
                   		.addRow(Row.builder()
       	        			 .add(TextCell.builder().borderWidth(1).text(idString).horizontalAlignment(HorizontalAlignment.CENTER).fontSize(8).font(arial).build())
       	        			 .add(TextCell.builder().borderWidth(1).text(nameBuilder).horizontalAlignment(HorizontalAlignment.LEFT).fontSize(6).font(arialBold).build())
-      	        			 .add(TextCell.builder().borderWidth(1).text("").horizontalAlignment(HorizontalAlignment.LEFT).fontSize(8).font(arialBold).build())
+      	        			 .add(TextCell.builder().borderWidth(1).text(amount).horizontalAlignment(HorizontalAlignment.CENTER).fontSize(8).font(arialBold).build())
 
       	        			 .height(0.35f * toPx)
               			 .build());
                    });
-              OverflowOnSamePageTableDrawer ld = OverflowOnSamePageTableDrawer.builder()
+              OverflowOnSamePageRepeatableHeaderTableDrawer ld = OverflowOnSamePageRepeatableHeaderTableDrawer.builder()
                       .page(page)
                       .lanesPerPage(2)
                       
@@ -510,11 +547,11 @@ public class PdfService {
                       .startX(1.8f*toPx) // X-Position anpassen
                     //  .startY(page.getMediaBox().getHeight() - 2.4f*toPx) // Y-Position anpassen
                       .startY(page.getMediaBox().getHeight() - 2.4f*toPx)
-                      .endY(1.7f*toPx)
+                      .endY(3.9f*toPx)
                       .build();
               
     
-                      ld.draw(() -> document, () ->  new PDPage(PDRectangle.A4), 2.4f*toPx);
+                      ld.draw(() -> document, () ->  new PDPage(PDRectangle.A4), 2.4f*toPx + 0.4f*toPx);
                       
                       
               contentStream.close();  
@@ -530,8 +567,18 @@ public class PdfService {
 		return null;
     
     }
+    private  int rankNumber(int number) {
+        if (number >= 0 && number <= 159) return 1;
+        else if (number >= 354 && number <= 400) return 2;
+        else if (number >= 331 && number <= 337) return 3;
+        else if (number > 432) return 4;
+        else if (number >= 160 && number <= 330) return 5;
+        else if (number >= 338 && number <= 353) return 6;
+        else if (number >= 401 && number <= 431) return 7;
+        else return 8; // für alle Zahlen, die nicht in den definierten Bereichen liegen
+    }
     
-    public static String formatDouble(double value) {
+    private String formatDouble(double value) {
         // Runde den Wert auf eine Nachkommastelle
         double rounded = Math.round(value * 10.0) / 10.0;
         if (rounded == (long) rounded) {
@@ -540,6 +587,7 @@ public class PdfService {
             return String.format("%.1f", rounded);
         }
     }
+    
     int pageCounter;
     public byte[] createFrischUebersicht() {
     	  try (PDDocument document = new PDDocument()) {
@@ -1019,202 +1067,6 @@ public class PdfService {
         }
     }
 
-    public byte[] createDocument(List<Bestellung> bestellungList) throws IOException {
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 
-        try (final PDDocument document = new PDDocument()) {
-
-            RepeatedHeaderTableDrawer.builder()
-                    .table(createTableWithThreeHeaderRows(bestellungList))
-                    .startX(50)
-                    .startY(545F)
-                    .endY(50F) // note: if not set, table is drawn over the end of the page
-                    .numberOfRowsToRepeat(2)
-                    .build()
-                    .draw(() -> document, () -> new PDPage(PDRectangle.A4), 50f);
-
-
-            document.save(outputStream);
-
-        }
-        return outputStream.toByteArray();
-    }
-
-    public byte[] createFrischBestellungDocument( List<FrischBestellung> frischBestellungList) throws IOException {
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-
-        try (final PDDocument document = new PDDocument()) {
-
-            RepeatedHeaderTableDrawer.builder()
-                    .table(createTableWithFourHeaderRows(frischBestellungList))
-                    .startX(20)
-                    .startY(30F)
-                    .endY(50F) // note: if not set, table is drawn over the end of the page
-                    .numberOfRowsToRepeat(2)
-                    .build()
-                    .draw(() -> document, () -> new PDPage(PDRectangle.A4), 50f);
-
-
-            document.save(outputStream);
-
-        }
-        return outputStream.toByteArray();
-    }
-
-    private Table createTableWithThreeHeaderRows(List<Bestellung> bestellungList) {
-        final Table.TableBuilder tableBuilder = Table.builder()
-                .addColumnsOfWidth(200, 100, 100, 50);
-
-        buildTableWithHeader(tableBuilder);
-
-        if (bestellungList.isEmpty()) {
-            return addTableIsEmptyMessage(tableBuilder);
-        }
-
-        for (Bestellung bestellung : bestellungList) {
-            tableBuilder.addRow(
-                    Row.builder()
-                            .add(getStandardCell(bestellung.getProdukt()))
-                            .add(getStandardCell(bestellung.getEinheit()))
-                            .add(getStandardCell(String.format("% .2f", bestellung.getMenge())))
-                            .add(getStandardCell(""))
-                            .build());
-        }
-
-        return tableBuilder.build();
-    }
-
-    private Table createTableWithFourHeaderRows(List<FrischBestellung> bestellungList) {
-        final Table.TableBuilder tableBuilder = Table.builder()
-                .addColumnsOfWidth(100, 70, 100, 70, 100, 60, 60);
-
-        buildGebindeTableWithHeader(tableBuilder);
-
-        if (bestellungList.isEmpty()) {
-            return addTableIsEmptyMessage(tableBuilder);
-        }
-
-        //Liste mit Sublisten von Frischbestellungen nach der Kategorie sortiert
-        List<List<FrischBestellung>> bestellungListKategorie = gebindemanagementService.splitBestellungList(bestellungList);
-        // System.out.println(bestellungListKategorie);
-        // System.out.println(bestellungListKategorie.get(0).get(0).getBestellmenge());
-
-        for (int i = 0; i < bestellungListKategorie.size(); i++) {
-
-            List<FrischBestellung> kategorie = bestellungListKategorie.get(i);
-            double[][] matrix = gebindemanagementService.VorschlagBerechnen(kategorie);
-            double vgz = 0;
-            double gz = 0;
-
-            for (int j = 0; j < kategorie.size(); j++){
-
-                FrischBestellung bestellung = kategorie.get(j);
-                String vorschlag = Double.toString(matrix[j][3] * bestellung.getFrischbestand().getGebindegroesse());
-                vgz += matrix[j][3] * bestellung.getFrischbestand().getGebindegroesse();
-                gz += bestellung.getBestellmenge();
-                
-                DecimalFormat df = new DecimalFormat("0.##");
-                df.setRoundingMode(RoundingMode.DOWN);
-                String bestellmengeRounded = df.format(gz);
-                bestellmengeRounded = bestellmengeRounded.replace(",", ".");
-                gz = Double.valueOf(bestellmengeRounded);
-
-                tableBuilder.addRow(
-                        Row.builder()
-                                .add(getStandardCell(bestellung.getFrischbestand().getName()))
-                                .add(getStandardCell(Double.toString(gz)))
-                                .add(getStandardCell(bestellung.getFrischbestand().getGebindegroesse()))
-                                .add(getStandardCell(bestellung.getFrischbestand().getPreis()))
-                                .add(getStandardCell(bestellung.getFrischbestand().getKategorie().getName()))
-                                .add(getStandardCell(vorschlag))
-                                .add(getStandardCell(""))
-                                .build());
-            }
-            tableBuilder.addRow(
-                    Row.builder()
-                            .add(getStandardCell("Gesamt:"))
-                            .add(getStandardCell(Double.toString(gz)))
-                            .add(getStandardCell(""))
-                            .add(getStandardCell(""))
-                            .add(getStandardCell(""))
-                            .add(getStandardCell(Double.toString(vgz)))
-                            .add(getStandardCell(""))
-                            .build());
-
-        }
-        return tableBuilder.build();
-    }
-
-
-
-    private Table buildTableWithHeader(Table.TableBuilder tableBuilder) {
-        return tableBuilder
-                .addRow(Row.builder()
-                        .add(createHeaderCell("Produkt"))
-                        .add(createHeaderCell("Einheit"))
-                        .add(createHeaderCell("Menge"))
-                        .add(createHeaderCell("OK"))
-                        .build())
-                .build();
-    }
-
-    private Table buildGebindeTableWithHeader(Table.TableBuilder tableBuilder) {
-        return tableBuilder
-                .addRow(Row.builder()
-                        .add(createHeaderCell("Produkt"))
-                        .add(createHeaderCell("Menge"))
-                        .add(createHeaderCell("Gebindegröße"))
-                        .add(createHeaderCell("Preis"))
-                        .add(createHeaderCell("Kategorie"))
-                        .add(createHeaderCell("Vorschlag"))
-                        .add(createHeaderCell("Korrektur"))
-                        .build())
-                .build();
-    }
-
-    private TextCell getStandardCell(String text) {
-        return TextCell.builder()
-                .text(text)
-                .textColor(Color.BLACK)
-                .borderColor(Color.BLACK)
-                .borderWidth(2f)
-                .padding(12f)
-                .build();
-    }
-
-    private TextCell getStandardCell(float text) {
-        String textToString = Float.toString(text);
-        return TextCell.builder()
-                .text(textToString)
-                .textColor(Color.BLACK)
-                .borderColor(Color.BLACK)
-                .borderWidth(2f)
-                .padding(12f)
-                .build();
-    }
-
-    private Table addTableIsEmptyMessage(Table.TableBuilder tableBuilder) {
-        tableBuilder.addRow(
-                Row.builder()
-                        .add(getStandardCell("Das Lager"))
-                        .add(getStandardCell("ist"))
-                        .add(getStandardCell("voll."))
-                        .add(getStandardCell(""))
-                        .build());
-        return tableBuilder.build();
-    }
-
-    private TextCell createHeaderCell(String text) {
-    	
-        return TextCell.builder()
-        		.font(new PDType1Font(Standard14Fonts.FontName.HELVETICA_BOLD))
-                .text(text.toUpperCase())
-                .backgroundColor(Color.BLUE)
-                .padding(8f)
-                .textColor(Color.WHITE)
-                .borderColor(Color.WHITE)
-                .borderWidth(2f)
-                .build();
-    }
 
 }

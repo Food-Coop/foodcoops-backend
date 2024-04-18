@@ -102,63 +102,58 @@ public class EinkaufController {
     
     @PostMapping("/einkauf/pdf/{id}")
     public byte[] sendPdfAndMail(@RequestBody String email, @PathVariable String id) {
-    			System.out.println(email + " <--- Email");
     		
   	       try {
-  	    	   EinkaufEntity einkauf = einkaufService.findById(id);
-  	    	  String fileName = "Einkauf-FoodCoop-" + einkauf.getPersonId() + "-" + LocalDate.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")) + ".pdf";
-  	        byte[] pdfd = pdf.createEinkauf(einkauf);
+  	    	  EinkaufEntity einkauf = einkaufService.findById(id);
+  	    	  String fileName = "Einkauf-FoodCoop-" + einkauf.getPersonId() + "-" + LocalDate.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")) + ".pdf";
+  	    	  byte[] pdfd = pdf.createEinkauf(einkauf);
   	      
   	        
-  	        StringBuilder frischString = new StringBuilder();
-  	        einkauf.getBestellungsEinkauf().stream()
-  	    	.forEach(item -> {
-  	    		if(item.getBestellung() instanceof FrischBestellung) {
-  	    			FrischBestellung item2 = (FrischBestellung) item.getBestellung();
-  	    	        	frischString.append(item2.getFrischbestand().getName() + "  je ");
-  	    	        	frischString.append(item2.getFrischbestand().getPreis() + " €   ");
-  	    	        	frischString.append("Bestellt: " + item2.getBestellmenge() + "   ");
-  	    	        	frischString.append("Genommen: " + item.getAmount() + "\n");
-  	    		}
-  	    	});
-
-  	        StringBuilder brotString = new StringBuilder();
-  	        einkauf.getBestellungsEinkauf().stream()
-  	    	.forEach(item -> {
-  	    		if(item.getBestellung() instanceof BrotBestellung) {
-  	    			BrotBestellung item2 = (BrotBestellung) item.getBestellung();
-  	    			brotString.append(item2.getBrotBestand().getName() + "  je ");
-  	    			brotString.append(item2.getBrotBestand().getPreis() + " €   ");
-  	    			brotString.append("Bestellt: " + item2.getBestellmenge() + "   ");
-  	    			brotString.append("Genommen: " + item.getAmount() + "\n");
-  	    		}
-  	    	});
-  	        StringBuilder lagerString = new StringBuilder();
-  	        einkauf.getBestandEinkauf().forEach(item -> {
-  	        	lagerString.append(item.getBestand().getName() + "  je ");
-  	        	lagerString.append(item.getBestand().getPreis() + " €   ");
-  	        	lagerString.append("Genommen: " + item.getAmount() + "\n");
-  	        });
-  	        
-  	        double lieferkosten =(Math.round((einkauf.getFreshPriceAtTime() * (configService.getConfig().get().getDeliverycost() /100) * 100.0) / 100.0)  );
-  	        float gesamt = (float) (lieferkosten + einkauf.getTotalPriceAtTime());
-  	        Optional<ConfigurationEntity> optionalE = configService.getConfig();
-  	        if(optionalE.isPresent()) {
-  	        	String text = optionalE.get().getEinkaufEmailText()
-  	        			.replaceAll(ConstantsUtils.EINKAUF_PLACEHOLDER_DATE, LocalDate.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")))
-  	        			.replaceAll(ConstantsUtils.EINKAUF_PLACEHOLDER_FRISCH, frischString.toString())
-  	        			.replaceAll(ConstantsUtils.EINKAUF_PLACEHOLDER_BROT, brotString.toString())
-  	        			.replaceAll(ConstantsUtils.EINKAUF_PLACEHOLDER_LAGER, lagerString.toString())
-  	        			.replaceAll(ConstantsUtils.PLACEHOLDER_GESAMT_KOSTEN, "" +(Math.round(gesamt * 100.0) / 100.0) )
-  	        			.replaceAll(ConstantsUtils.PLACEHOLDER_PERSONID, einkauf.getPersonId());
-  	        try {
-  				emailService.sendSimpleMessage(email, "Einkauf bei der FoodCoop Karlsruhe am " + LocalDate.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")), text, pdfd, fileName);
-  			} catch (MessagingException e1) {
-  				// TODO Auto-generated catch block
-  				e1.printStackTrace();
-  			}
+	  	        StringBuilder frischString = new StringBuilder();
+	  	        einkauf.getBestellungsEinkauf().stream()
+	  	    	.forEach(item -> {
+	  	    		if(item.getBestellung() instanceof FrischBestellung) {
+	  	    			FrischBestellung item2 = (FrischBestellung) item.getBestellung();
+	  	    	        	frischString.append(item2.getFrischbestand().getName() + "  je ");
+	  	    	        	frischString.append(item2.getFrischbestand().getPreis() + " €   ");
+	  	    	        	frischString.append("Bestellt: " + item2.getBestellmenge() + "   ");
+	  	    	        	frischString.append("Genommen: " + item.getAmount() + "\n");
+	  	    		}
+	  	    	});
+	
+	  	        StringBuilder brotString = new StringBuilder();
+	  	        einkauf.getBestellungsEinkauf().stream()
+	  	    	.forEach(item -> {
+	  	    		if(item.getBestellung() instanceof BrotBestellung) {
+	  	    			BrotBestellung item2 = (BrotBestellung) item.getBestellung();
+	  	    			brotString.append(item2.getBrotBestand().getName() + "  je ");
+	  	    			brotString.append(item2.getBrotBestand().getPreis() + " €   ");
+	  	    			brotString.append("Bestellt: " + item2.getBestellmenge() + "   ");
+	  	    			brotString.append("Genommen: " + item.getAmount() + "\n");
+	  	    		}
+	  	    	});
+	  	        StringBuilder lagerString = new StringBuilder();
+	  	        einkauf.getBestandEinkauf().forEach(item -> {
+	  	        	lagerString.append(item.getBestand().getName() + "  je ");
+	  	        	lagerString.append(item.getBestand().getPreis() + " €   ");
+	  	        	lagerString.append("Genommen: " + item.getAmount() + "\n");
+	  	        });
+	  	        
+	  	        double lieferkosten =(Math.round((einkauf.getFreshPriceAtTime() * (configService.getConfig().get().getDeliverycost() /100) * 100.0) / 100.0)  );
+	  	        float gesamt = (float) (lieferkosten + einkauf.getTotalPriceAtTime());
+	  	        Optional<ConfigurationEntity> optionalE = configService.getConfig();
+	  	        if(optionalE.isPresent()) {
+	  	        	String text = optionalE.get().getEinkaufEmailText()
+	  	        			.replaceAll(ConstantsUtils.EINKAUF_PLACEHOLDER_DATE, LocalDate.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")))
+	  	        			.replaceAll(ConstantsUtils.EINKAUF_PLACEHOLDER_FRISCH, frischString.toString())
+	  	        			.replaceAll(ConstantsUtils.EINKAUF_PLACEHOLDER_BROT, brotString.toString())
+	  	        			.replaceAll(ConstantsUtils.EINKAUF_PLACEHOLDER_LAGER, lagerString.toString())
+	  	        			.replaceAll(ConstantsUtils.PLACEHOLDER_GESAMT_KOSTEN, "" +(Math.round(gesamt * 100.0) / 100.0) )
+	  	        			.replaceAll(ConstantsUtils.PLACEHOLDER_PERSONID, einkauf.getPersonId());
+  	      
+	  	        	emailService.sendSimpleMessage(email, "Einkauf bei der FoodCoop Karlsruhe am " + LocalDate.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")), text, pdfd, fileName);
   	        }
-		} catch (IOException e) {
+		} catch (IOException | MessagingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

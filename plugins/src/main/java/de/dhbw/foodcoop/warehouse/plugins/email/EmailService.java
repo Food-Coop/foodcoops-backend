@@ -18,7 +18,7 @@ public class EmailService {
 
     public void sendSimpleMessage(String to, String subject, String text) {
         SimpleMailMessage message = new SimpleMailMessage();
-        message.setFrom("foodcoop-Karlsruhe@gmx.de"); // Optional, je nach Servereinstellungen
+        message.setFrom("foodcoop@orat.de"); // Optional, je nach Servereinstellungen
         message.setTo(to);
         message.setSubject(subject);
         message.setText(text);
@@ -29,7 +29,7 @@ public class EmailService {
     	MimeMessage message = mailSender.createMimeMessage();
     	MimeMessageHelper helper = new MimeMessageHelper(message, true);
     	
-    	helper.setFrom("foodcoop-Karlsruhe@gmx.de"); // Optional, je nach Servereinstellungen
+    	helper.setFrom("foodcoop@orat.de"); // Optional, je nach Servereinstellungen
     	helper.setTo(to);
     	helper.setSubject(subject);
     	helper.setText(text);
