@@ -110,36 +110,52 @@ public class EinkaufController {
   	      
   	        
 	  	        StringBuilder frischString = new StringBuilder();
-	  	        einkauf.getBestellungsEinkauf().stream()
-	  	    	.forEach(item -> {
-	  	    		if(item.getBestellung() instanceof FrischBestellung) {
-	  	    			FrischBestellung item2 = (FrischBestellung) item.getBestellung();
-	  	    	        	frischString.append(item2.getFrischbestand().getName() + "  je ");
-	  	    	        	frischString.append(item2.getFrischbestand().getPreis() + " €   ");
-	  	    	        	frischString.append("Bestellt: " + item2.getBestellmenge() + "   ");
-	  	    	        	frischString.append("Genommen: " + item.getAmount() + "\n");
-	  	    		}
-	  	    	});
+	  	        if(einkauf.getBestellungsEinkauf() != null) {
+		  	        einkauf.getBestellungsEinkauf().stream()
+		  	    	.forEach(item -> {
+		  	    		if(item.getBestellung() instanceof FrischBestellung) {
+		  	    			FrischBestellung item2 = (FrischBestellung) item.getBestellung();
+		  	    	        	frischString.append(item2.getFrischbestand().getName() + "  je ");
+		  	    	        	frischString.append(item2.getFrischbestand().getPreis() + " €   ");
+		  	    	        	frischString.append("Bestellt: " + item2.getBestellmenge() + "   ");
+		  	    	        	frischString.append("Genommen: " + item.getAmount() + "\n");
+		  	    		}
+		  	    	});
+	  	        }
 	
 	  	        StringBuilder brotString = new StringBuilder();
-	  	        einkauf.getBestellungsEinkauf().stream()
-	  	    	.forEach(item -> {
-	  	    		if(item.getBestellung() instanceof BrotBestellung) {
-	  	    			BrotBestellung item2 = (BrotBestellung) item.getBestellung();
-	  	    			brotString.append(item2.getBrotBestand().getName() + "  je ");
-	  	    			brotString.append(item2.getBrotBestand().getPreis() + " €   ");
-	  	    			brotString.append("Bestellt: " + item2.getBestellmenge() + "   ");
-	  	    			brotString.append("Genommen: " + item.getAmount() + "\n");
-	  	    		}
-	  	    	});
-	  	        StringBuilder lagerString = new StringBuilder();
-	  	        einkauf.getBestandEinkauf().forEach(item -> {
-	  	        	lagerString.append(item.getBestand().getName() + "  je ");
-	  	        	lagerString.append(item.getBestand().getPreis() + " €   ");
-	  	        	lagerString.append("Genommen: " + item.getAmount() + "\n");
-	  	        });
+	  	        if(einkauf.getBestellungsEinkauf() != null) {
+		  	        einkauf.getBestellungsEinkauf().stream()
+		  	    	.forEach(item -> {
+		  	    		if(item.getBestellung() instanceof BrotBestellung) {
+		  	    			BrotBestellung item2 = (BrotBestellung) item.getBestellung();
+		  	    			brotString.append(item2.getBrotBestand().getName() + "  je ");
+		  	    			brotString.append(item2.getBrotBestand().getPreis() + " €   ");
+		  	    			brotString.append("Bestellt: " + item2.getBestellmenge() + "   ");
+		  	    			brotString.append("Genommen: " + item.getAmount() + "\n");
+		  	    		}
+		  	    	});
+	  	        }
 	  	        
-	  	        double lieferkosten =(Math.round((einkauf.getFreshPriceAtTime() * (configService.getConfig().get().getDeliverycost() /100) * 100.0) / 100.0)  );
+	  	        StringBuilder zuVielString = new StringBuilder();
+	  	        if(einkauf.getTooMuchEinkauf() != null) {
+		  	        einkauf.getTooMuchEinkauf().forEach(item -> {
+		  	        	zuVielString.append(item.getDiscrepancy().getBestand().getName() + " je ");
+		  	        	zuVielString.append(item.getDiscrepancy().getBestand().getPreis() + " €  ");
+		  	        	zuVielString.append("Genommen: " + item.getAmount() + "\n");
+		  	        });
+	  	        }
+	  	        
+	  	        StringBuilder lagerString = new StringBuilder();
+	  	        if(einkauf.getBestandEinkauf() != null) {
+		  	        einkauf.getBestandEinkauf().forEach(item -> {
+		  	        	lagerString.append(item.getBestand().getName() + "  je ");
+		  	        	lagerString.append(item.getBestand().getPreis() + " €   ");
+		  	        	lagerString.append("Genommen: " + item.getAmount() + "\n");
+		  	        });
+	  	        }
+	  	        
+	  	        double lieferkosten =(Math.round(((einkauf.getFreshPriceAtTime() + einkauf.getTooMuchPriceAtTime()) * (configService.getConfig().get().getDeliverycost() /100) * 100.0) / 100.0)  );
 	  	        float gesamt = (float) (lieferkosten + einkauf.getTotalPriceAtTime());
 	  	        Optional<ConfigurationEntity> optionalE = configService.getConfig();
 	  	        if(optionalE.isPresent()) {
@@ -148,6 +164,7 @@ public class EinkaufController {
 	  	        			.replaceAll(ConstantsUtils.EINKAUF_PLACEHOLDER_FRISCH, frischString.toString())
 	  	        			.replaceAll(ConstantsUtils.EINKAUF_PLACEHOLDER_BROT, brotString.toString())
 	  	        			.replaceAll(ConstantsUtils.EINKAUF_PLACEHOLDER_LAGER, lagerString.toString())
+	  	        			.replaceAll(ConstantsUtils.EINKAUF_PLACEHOLDER_ZUVIEL, zuVielString.toString())
 	  	        			.replaceAll(ConstantsUtils.PLACEHOLDER_GESAMT_KOSTEN, "" +(Math.round(gesamt * 100.0) / 100.0) )
 	  	        			.replaceAll(ConstantsUtils.PLACEHOLDER_PERSONID, einkauf.getPersonId());
   	      

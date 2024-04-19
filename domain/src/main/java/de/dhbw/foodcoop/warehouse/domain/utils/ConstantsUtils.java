@@ -7,6 +7,7 @@ public class ConstantsUtils {
 
 	public final static String EINKAUF_PLACEHOLDER_BROT = "%brotEinkauf%";
 	public final static String EINKAUF_PLACEHOLDER_FRISCH = "%frischEinkauf%";
+	public final static String EINKAUF_PLACEHOLDER_ZUVIEL = "%zuVielEinkauf%";
 	public final static String EINKAUF_PLACEHOLDER_LAGER = "%lagerEinkauf%";
 	public final static String EINKAUF_PLACEHOLDER_DATE = "%currentDate%";
 	
@@ -25,11 +26,13 @@ public class ConstantsUtils {
       						+ ConstantsUtils.EINKAUF_PLACEHOLDER_BROT + "\n\n\n"
       								+ "Lagerware: \n"
       								+ ConstantsUtils.EINKAUF_PLACEHOLDER_LAGER + "\n\n\n"
-      										+ "Gesamtpreis: " + ConstantsUtils.PLACEHOLDER_GESAMT_KOSTEN  + "€ \n"
-      												+ "\n"
-      												+ "Weitere Details können aus der PDF entnommen werden! \n\n\n"
-      												+ "Viele Grüße\n"
-      												+ "Eure Foodcoop Mika";
+      								      	+ "Von der zu Viel Liste: \n"
+      								        + ConstantsUtils.EINKAUF_PLACEHOLDER_ZUVIEL + "\n\n\n"
+      												+ "Gesamtpreis: " + ConstantsUtils.PLACEHOLDER_GESAMT_KOSTEN  + "€ \n"
+      														+ "\n"
+		      												+ "Weitere Details können aus der PDF entnommen werden! \n\n\n"
+		      												+ "Viele Grüße\n"
+		      												+ "Eure Foodcoop Mika";
 	
 	public final static String CONFIGURATION_ID = "ConfigID";
 }
