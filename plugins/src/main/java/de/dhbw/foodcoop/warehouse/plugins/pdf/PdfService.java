@@ -347,7 +347,7 @@ public class PdfService {
 
             // Tabelle für Lagerware Bestellungen  .addColumnsOfWidth(150, 50, 100, 50, 50)
             Table.TableBuilder tableBuilderZuViel = Table.builder()
-                    .addColumnsOfWidth(120, 70, 100)
+                    .addColumnsOfWidth(120, 70, 120)
                     // .addColumnsOfWidth(120, 70, 100, 100, 120)
                     .fontSize(12).borderColor(Color.LIGHT_GRAY);
 
@@ -381,9 +381,19 @@ public class PdfService {
                     .startY(startYZuVielEinkaufTabelle) //  basierend auf der Position der Überschrift
                     .endY(50) // Margin bottom, könnte angepasst werden basierend auf dem Inhalt
                     .build();
-                    ld.draw(() -> document, () -> new PDPage(PDRectangle.A4), 50);
+            zuVielDrawer.draw(() -> document, () -> new PDPage(PDRectangle.A4), 50);
             
             int gesamtpreisZuVielPositionY = (int) (zuVielDrawer.getFinalY()  - 20);
+            
+            
+            try (PDPageContentStream contentStream = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.APPEND, true, true)) {
+                contentStream.beginText();
+                
+                contentStream.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA), 12);
+                contentStream.newLineAtOffset(297.5f - (new PDType1Font(Standard14Fonts.FontName.HELVETICA).getStringWidth("zu Viel Liste Preis: " + Math.round( einkauf.getTooMuchPriceAtTime() * 100.0) / 100.0 + " €") / 2 / 1000 * 12), gesamtpreisZuVielPositionY);
+                contentStream.showText("zu Viel Liste Preis: " + Math.round( einkauf.getTooMuchPriceAtTime() * 100.0) / 100.0 + " €");
+                contentStream.endText();
+            }
             
             int startY = gesamtpreisZuVielPositionY - 50; // zum Beispiel 100;
 
@@ -401,7 +411,7 @@ public class PdfService {
             
             float lieferkosten = (float) (Math.round(((einkauf.getFreshPriceAtTime() + einkauf.getTooMuchPriceAtTime()) * (configService.getConfig().get().getDeliverycost() /100) * 100.0) / 100.0)  );
             float gesamt = (float) (lieferkosten + einkauf.getTotalPriceAtTime());
-            float[] prices = {(float) (Math.round( einkauf.getFreshPriceAtTime() * 100.0) / 100.0), (float) (Math.round( einkauf.getBreadPriceAtTime() * 100.0) / 100.0), (float) (Math.round( einkauf.getBestandPriceAtTime() * 100.0) / 100.0), lieferkosten, gesamt}; 
+            float[] prices = {(float) (Math.round( einkauf.getFreshPriceAtTime() * 100.0) / 100.0), (float) (Math.round( einkauf.getBreadPriceAtTime() * 100.0) / 100.0), (float) (Math.round( einkauf.getBestandPriceAtTime() * 100.0) / 100.0),(float) (Math.round( einkauf.getTooMuchPriceAtTime() * 100.0) / 100.0), lieferkosten, gesamt}; 
             
             try (PDPageContentStream contentStream = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.APPEND, true, true)) {
                 contentStream.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA_BOLD), 12);
