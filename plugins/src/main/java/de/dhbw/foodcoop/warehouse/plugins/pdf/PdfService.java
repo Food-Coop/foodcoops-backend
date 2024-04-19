@@ -263,7 +263,6 @@ public class PdfService {
             
             int startYLagerEinkaufUeberschrift = (int) (bd.getFinalY() - abstandZwischenTabellen);
             int startYLagerEinkaufTabelle = startYLagerEinkaufUeberschrift - 10; // Etwas Platz für die Überschrift
-            
             int gesamtpreisBrotPositionY = (int) (bd.getFinalY() - 20);
             
             
@@ -323,6 +322,9 @@ public class PdfService {
                     .endY(50) // Margin bottom, könnte angepasst werden basierend auf dem Inhalt
                     .build();
                     ld.draw(() -> document, () -> new PDPage(PDRectangle.A4), 50);
+                    
+                    int startYZuVielEinkaufUeberschrift = (int) (ld.getFinalY() - abstandZwischenTabellen);
+                    int startYZuVielEinkaufTabelle = startYZuVielEinkaufUeberschrift - 10; // Etwas Platz für die Überschrift
                     int gesamtpreisLagerPositionY = (int) (ld.getFinalY()  - 20);
             try (PDPageContentStream contentStream = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.APPEND, true, true)) {
                 contentStream.beginText();
@@ -334,7 +336,56 @@ public class PdfService {
             }
             
             
-            int startY = gesamtpreisLagerPositionY - 50; // zum Beispiel 100;
+            // Zeichnen der ZuViel-Tabelle
+            try (PDPageContentStream contentStream = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.APPEND, true, true)) {
+                contentStream.beginText();
+                contentStream.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA_BOLD), 14);
+                contentStream.newLineAtOffset(50, startYZuVielEinkaufUeberschrift); // Anpassen basierend auf der Höhe der ersten Tabelle
+                contentStream.showText("Einkauf von der zu Viel Liste");
+                contentStream.endText();
+            }
+
+            // Tabelle für Lagerware Bestellungen  .addColumnsOfWidth(150, 50, 100, 50, 50)
+            Table.TableBuilder tableBuilderZuViel = Table.builder()
+                    .addColumnsOfWidth(120, 70, 100)
+                    // .addColumnsOfWidth(120, 70, 100, 100, 120)
+                    .fontSize(12).borderColor(Color.LIGHT_GRAY);
+
+            // Kopfzeile Lagerware Bestellungen
+            tableBuilderZuViel.addRow(Row.builder()
+                    .add(TextCell.builder().text("Produkt").borderWidth(1).build())
+                    .add(TextCell.builder().text("Preis in €").borderWidth(1).build())
+                    .add(TextCell.builder().text("genommene Menge").borderWidth(1).build())
+                    .backgroundColor(Color.LIGHT_GRAY)
+                    .build());
+
+            // Daten für Lagerware Bestellungen
+            
+            einkauf.getTooMuchEinkauf().stream().forEach(item -> {
+            	
+            	
+            	 RowBuilder rowBuilder = Row.builder()
+            			 .add(TextCell.builder().text(item.getDiscrepancy().getBestand().getName()).borderWidth(1).build())
+                         .add(TextCell.builder().text(String.valueOf(item.getDiscrepancy().getBestand().getPreis())).borderWidth(1).build())
+                         .add(TextCell.builder().text(String.valueOf(item.getAmount())).borderWidth(1).build());
+                        
+            	 tableBuilderZuViel.addRow(rowBuilder.build());
+            });
+      
+            
+
+            // Tabelle zeichnen
+            TableDrawer zuVielDrawer = TableDrawer.builder()
+                    .table(tableBuilderZuViel.build())
+                    .startX(50)
+                    .startY(startYZuVielEinkaufTabelle) //  basierend auf der Position der Überschrift
+                    .endY(50) // Margin bottom, könnte angepasst werden basierend auf dem Inhalt
+                    .build();
+                    ld.draw(() -> document, () -> new PDPage(PDRectangle.A4), 50);
+            
+            int gesamtpreisZuVielPositionY = (int) (zuVielDrawer.getFinalY()  - 20);
+            
+            int startY = gesamtpreisZuVielPositionY - 50; // zum Beispiel 100;
 
             // Konstanten für das Layout
             float pageWidth = page.getMediaBox().getWidth();
@@ -346,9 +397,9 @@ public class PdfService {
             float lineStartX = 150; // Start der grauen Linie auf der X-Achse
             float lineEndX = 450; // Ende der grauen Linie auf der X-Achse
 
-            String[] labels = {"Frischware:", "Brot:", "Lagerware:", "5 % Lieferkosten:"};
+            String[] labels = {"Frischware:", "Brot:", "Lagerware:", "zu Viel Liste:", "5 % Lieferkosten:"};
             
-            float lieferkosten = (float) (Math.round((einkauf.getFreshPriceAtTime() * (configService.getConfig().get().getDeliverycost() /100) * 100.0) / 100.0)  );
+            float lieferkosten = (float) (Math.round(((einkauf.getFreshPriceAtTime() + einkauf.getTooMuchPriceAtTime()) * (configService.getConfig().get().getDeliverycost() /100) * 100.0) / 100.0)  );
             float gesamt = (float) (lieferkosten + einkauf.getTotalPriceAtTime());
             float[] prices = {(float) (Math.round( einkauf.getFreshPriceAtTime() * 100.0) / 100.0), (float) (Math.round( einkauf.getBreadPriceAtTime() * 100.0) / 100.0), (float) (Math.round( einkauf.getBestandPriceAtTime() * 100.0) / 100.0), lieferkosten, gesamt}; 
             
