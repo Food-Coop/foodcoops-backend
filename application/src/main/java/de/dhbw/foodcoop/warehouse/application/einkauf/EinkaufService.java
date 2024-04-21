@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import de.dhbw.foodcoop.warehouse.application.bestellungsliste.BestellÜbersichtService;
 import de.dhbw.foodcoop.warehouse.application.deadline.DeadlineService;
+import de.dhbw.foodcoop.warehouse.application.diskrepanz.DiscrepancyService;
 import de.dhbw.foodcoop.warehouse.application.frischbestellung.FrischBestellungService;
 import de.dhbw.foodcoop.warehouse.domain.entities.BestandBuyEntity;
 import de.dhbw.foodcoop.warehouse.domain.entities.BestellUebersicht;
@@ -45,6 +46,9 @@ public class EinkaufService {
 	
 	@Autowired
 	private DeadlineService deadlineService;
+	
+	@Autowired
+	private DiscrepancyService discrepancyService;
 
     public BestandBuyEntity createBestandBuyEntityForPersonOrder(Produkt bestand, double amount) {
     	BestandBuyEntity bbe = new BestandBuyEntity();
@@ -170,7 +174,13 @@ public class EinkaufService {
              	    				 sumToAdjust = sumOrderedFromPerson - sumTakenFromPerson;
              	    				bbe.getBestellung().setDone(true);
              	    			}
-             	    			adjustNonMixDiscrepency(discrepancies, sumToAdjust, bbe );
+             	    			//Rest kann hier nur vor kommen wenn es z.B. kein zuViel Objekt gab, ein user aber weniger nimmt als er bestellt hat
+             	    			double rest = adjustNonMixDiscrepency(discrepancies, sumToAdjust, bbe );
+             	    			if(rest != 0) {
+             	    				DiscrepancyEntity disEntity = new DiscrepancyEntity(UUID.randomUUID().toString(), f.getFrischbestand(), 0, (float) rest, 0);
+             	    				discrepancyService.save(disEntity);
+             	    			}
+             	    			
              	    		}
          			}
          		}
