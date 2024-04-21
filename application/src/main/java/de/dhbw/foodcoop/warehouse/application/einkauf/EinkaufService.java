@@ -178,7 +178,7 @@ public class EinkaufService {
              	    			double rest = adjustNonMixDiscrepency(discrepancies, sumToAdjust, bbe );
              	    			if(rest != 0) {
              	    				DiscrepancyEntity disEntity = new DiscrepancyEntity(UUID.randomUUID().toString(), f.getFrischbestand(), 0, (float) rest, 0);
-             	    				discrepancyService.save(disEntity);
+             	    				be.getDiscrepancy().add(discrepancyService.save(disEntity));
              	    			}
              	    			
              	    		}
@@ -222,7 +222,6 @@ public class EinkaufService {
 
     private double adjustNonMixDiscrepency(List<DiscrepancyEntity> discrepancies, double sumToAdjust, BestellungBuyEntity bbe ) {
     	for(DiscrepancyEntity d : discrepancies) {
-    		if(d.getZuVielzuWenig() == 0) continue;
     		if(d.getBestand() instanceof FrischBestand) {
     			FrischBestand frisch = (FrischBestand) d.getBestand();
     			if(bbe.getBestellung() instanceof FrischBestellung) {
