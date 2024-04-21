@@ -177,7 +177,7 @@ public class EinkaufService {
              	    			//Rest kann hier nur vor kommen wenn es z.B. kein zuViel Objekt gab, ein user aber weniger nimmt als er bestellt hat
              	    			double rest = adjustNonMixDiscrepency(discrepancies, sumToAdjust, bbe );
              	    			if(rest != 0) {
-             	    				DiscrepancyEntity disEntity = new DiscrepancyEntity(UUID.randomUUID().toString(), f.getFrischbestand(), 0, (float) rest, 0);
+             	    				DiscrepancyEntity disEntity = new DiscrepancyEntity(UUID.randomUUID().toString(), f.getFrischbestand(), 0, (float) rest * (-1), 0);
              	    				be.getDiscrepancy().add(discrepancyService.save(disEntity));
              	    			}
              	    			
@@ -214,7 +214,7 @@ public class EinkaufService {
         }
        EinkaufEntity e = einkaufRepository.speichern(einkauf);
        if(be != null) {
-        service.update(be);
+        BestellUebersicht test = service.update(be);
        }
         // Speichere den Einkauf in der Datenbank
         return e;
