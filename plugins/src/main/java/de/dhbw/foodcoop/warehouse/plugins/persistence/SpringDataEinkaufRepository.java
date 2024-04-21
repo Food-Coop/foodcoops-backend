@@ -16,6 +16,6 @@ public interface SpringDataEinkaufRepository extends JpaRepository<EinkaufEntity
 	   @Query("SELECT b FROM EinkaufEntity b WHERE b.personId = :person_id")
 	    List<EinkaufEntity> findAllFromPerson(@Param("person_id") String person_id);
 	   
-	    @Query("SELECT f FROM EinkaufEntity f WHERE f.date <= :date AND f.personId = :person_id")
+	    @Query("SELECT f FROM EinkaufEntity f WHERE f.date >= :date AND f.personId = :person_id")
 	    List<EinkaufEntity> findByDateBetween(@Param("date") LocalDateTime date,  @Param("person_id") String person_id);
 }
