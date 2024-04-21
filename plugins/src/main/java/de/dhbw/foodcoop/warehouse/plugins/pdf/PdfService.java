@@ -3,7 +3,9 @@ package de.dhbw.foodcoop.warehouse.plugins.pdf;
 import java.awt.Color;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.time.DayOfWeek;
@@ -478,8 +480,8 @@ public class PdfService {
               
               float toPx = 33.3333333333f;
               
-              PDType0Font arial = PDType0Font.load(document,resourceLoader.getResource("classpath:Arial.ttf").getFile());
-              PDType0Font arialBold = PDType0Font.load(document, resourceLoader.getResource("classpath:Arial_Bold.ttf").getFile());
+              PDType0Font arial = PDType0Font.load(document, getResourceAsStream("/Arial.ttf"));
+              PDType0Font arialBold = PDType0Font.load(document, getResourceAsStream("/Arial_Bold.ttf"));
               
               PDPageContentStream contentStream = new PDPageContentStream(document, page);
                   // Datum oben rechts
@@ -523,9 +525,14 @@ public class PdfService {
                   contentStream.showText("12306");
                   contentStream.endText();
                   // Titel
-                  File picture = resourceLoader.getResource("classpath:fasanbaecker.png").getFile();
-                  
-                  PDImageXObject pdImage = PDImageXObject.createFromFileByContent(picture,document);  
+                  InputStream in = getResourceAsStream("/fasanbaecker.png");
+                  if (in == null) {
+                	  contentStream.close();
+                      throw new IOException("Cannot find 'fasanbaecker.png' in classpath");
+                  }
+
+                  PDImageXObject pdImage =  PDImageXObject.createFromByteArray(document, in.readAllBytes(), "fasanbaecker.png");
+                  in.close(); 
                   contentStream.drawImage(pdImage, 	2f *toPx, page.getBBox().getHeight() - 1.8f * toPx, 8f * toPx, 1.6f*toPx);
               	Optional<Deadline> date1 = deadService.getByPosition(0);
             	Optional<Deadline> date2 = deadService.getByPosition(1);
@@ -648,7 +655,19 @@ public class PdfService {
             return String.format("%.1f", rounded);
         }
     }
-    
+    public InputStream getResourceAsStream(String path) throws IOException {
+        InputStream in = getClass().getResourceAsStream(path);
+        if (in == null) {
+            File file = new File("src/main/resources" + path);
+            if (file.exists()) {
+                return new FileInputStream(file);
+            } else {
+                throw new IOException("Resource not found: " + path);
+            }
+        }
+        return in;
+    }
+
     int pageCounter;
     public byte[] createFrischUebersicht() {
     	  try (PDDocument document = new PDDocument()) {
@@ -671,8 +690,8 @@ public class PdfService {
               Color gebinde = Color.decode(hexCodeGebindegroesse);
               Color table = Color.decode(hexCodeTable);
               
-              PDType0Font arial = PDType0Font.load(document,resourceLoader.getResource("classpath:Arial.ttf").getFile());
-              PDType0Font arialBold = PDType0Font.load(document, resourceLoader.getResource("classpath:Arial_Bold.ttf").getFile());
+              PDType0Font arial = PDType0Font.load(document,getResourceAsStream("/Arial.ttf"));
+              PDType0Font arialBold = PDType0Font.load(document, getResourceAsStream("/Arial_Bold.ttf"));
               
               try (PDPageContentStream contentStream = new PDPageContentStream(document, page)) {
                   // Datum oben rechts
