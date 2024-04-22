@@ -25,15 +25,19 @@ public class FrischBestand extends BestandEntity{
     
     @Column
     private String verband;
+    
+    @Column
+    private boolean spezialfallBestelleinheit;
 
 
-    public FrischBestand(String id, String name, boolean verfuegbarkeit, String herkunftsland, float gebindegroesse, Einheit einheit, Kategorie kategorie, float preis, String verband) {
+    public FrischBestand(String id, String name, boolean verfuegbarkeit, String herkunftsland, float gebindegroesse, Einheit einheit, Kategorie kategorie, float preis, String verband, boolean spezialfallBestelleinheit) {
         // Validate.notBlank(id);
         // Validate.notBlank(name);
         // Validate.notNull(verfuegbarkeit);
         // Validate.notNull(gebindegroesse);
         // Validate.notNull(preis);
 
+    	this.spezialfallBestelleinheit = spezialfallBestelleinheit;
         this.id = id;
         this.name = name;
         this.verfuegbarkeit = verfuegbarkeit;
@@ -45,8 +49,8 @@ public class FrischBestand extends BestandEntity{
         this.verband = verband;
     }
 
-    public FrischBestand(String name, boolean verfuegbarkeit, String herkunftsland, float gebindegroesse, Einheit einheit, Kategorie kategorie, float preis, String verband) {
-        this(UUID.randomUUID().toString(), name, verfuegbarkeit, herkunftsland, gebindegroesse, einheit, kategorie, preis, verband);
+    public FrischBestand(String name, boolean verfuegbarkeit, String herkunftsland, float gebindegroesse, Einheit einheit, Kategorie kategorie, float preis, String verband, boolean spezialfallBestelleinheit) {
+        this(UUID.randomUUID().toString(), name, verfuegbarkeit, herkunftsland, gebindegroesse, einheit, kategorie, preis, verband, spezialfallBestelleinheit);
     }
 
     public FrischBestand() {
@@ -77,8 +81,16 @@ public class FrischBestand extends BestandEntity{
         return kategorie;
     }
 
+    
+    public boolean isSpezialfallBestelleinheit() {
+		return spezialfallBestelleinheit;
+	}
 
-    public void setHerkunftsland(String herkunftsland) {
+	public void setSpezialfallBestelleinheit(boolean spezialfallBestelleinheit) {
+		this.spezialfallBestelleinheit = spezialfallBestelleinheit;
+	}
+
+	public void setHerkunftsland(String herkunftsland) {
         this.herkunftsland = herkunftsland;
     }
 
