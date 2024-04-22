@@ -117,14 +117,11 @@ public class EinkaufService {
         	List<BestellungBuyEntity> bestellungen = einkauf.getBestellungsEinkauf();
         			
         	Optional<Deadline> date1 = deadlineService.getByPosition(0);
-        	Optional<Deadline> date2 = deadlineService.getByPosition(1);
         	
         	if(date1.isPresent()) {
-        		if(date2.isPresent()) {
         	
         	
         	LocalDateTime datum1 = date1.get().getDatum();
-        	LocalDateTime datum2 = date2.get().getDatum();
          //	List<FrischBestellung> frischBestellungen = frischService.findByDateBetween(datum1, datum2, personId);
          	String eID = einkauf.getId();
          	List<EinkaufEntity> einkaufeFromPerson = einkaufRepository.alleAktuellenVonPerson(datum1, personId).stream().filter(t -> t.getId() != eID).collect(Collectors.toList());
@@ -209,7 +206,7 @@ public class EinkaufService {
 //         			}
 
         		}
-        		}
+        		
         	}
         }
        EinkaufEntity e = einkaufRepository.speichern(einkauf);

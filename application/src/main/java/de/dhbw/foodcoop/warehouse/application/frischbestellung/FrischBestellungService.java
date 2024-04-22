@@ -7,12 +7,19 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import de.dhbw.foodcoop.warehouse.application.deadline.DeadlineService;
+import de.dhbw.foodcoop.warehouse.domain.entities.BestandEntity;
+import de.dhbw.foodcoop.warehouse.domain.entities.FrischBestand;
 import de.dhbw.foodcoop.warehouse.domain.entities.FrischBestellung;
 import de.dhbw.foodcoop.warehouse.domain.repositories.FrischBestellungRepository;
 
 @Service
 public class FrischBestellungService {
     private final FrischBestellungRepository repository;
+    
+    @Autowired
+    private DeadlineService deadlineService;
+    
 
     @Autowired
     public FrischBestellungService(FrischBestellungRepository repository) {
@@ -40,6 +47,15 @@ public class FrischBestellungService {
     
     public List<FrischBestellung> findByDateBetween(LocalDateTime datum1, LocalDateTime datum2){
         return repository.findeMitDatumZwischen(datum1, datum2);
+    }
+    
+    public double orderAmountForLastWeek(BestandEntity b) {
+    	if(deadlineService.getByPosition(0).isPresent() && deadlineService.getByPosition(1).isPresent()) {
+    		return findByDateBetween(deadlineService.getByPosition(0).get().getDatum(), deadlineService.getByPosition(1).get().getDatum())
+    		.stream().filter(t -> t.getFrischbestand().getId().equalsIgnoreCase(b.getId())).mapToDouble(t-> t.getBestellmenge()).sum();
+    	
+    	}
+		return 0;
     }
 
     //Hier wird für den Einkauf direkt ein Vergleichs Objekt angelegt
