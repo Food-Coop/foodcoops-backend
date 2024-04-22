@@ -7,14 +7,16 @@ public class FrischBestandRepresentation extends BestandRepresentation{
     private EinheitRepresentation einheit;
     private KategorieRepresentation kategorie;
     private String verband;
-
-    public FrischBestandRepresentation(String id, String name, boolean verfuegbarkeit, String herkunftsland, float gebindegroesse, EinheitRepresentation einheit, KategorieRepresentation kategorie, float preis, String verband) {
+    private boolean spezialfallBestelleinheit;
+    
+    public FrischBestandRepresentation(String id, String name, boolean verfuegbarkeit, String herkunftsland, float gebindegroesse, EinheitRepresentation einheit, KategorieRepresentation kategorie, float preis, String verband, boolean spezialfallBestelleinheit) {
     	super(id, name, verfuegbarkeit, preis);
         this.herkunftsland = herkunftsland;
         this.gebindegroesse = gebindegroesse;
         this.einheit = einheit;
         this.kategorie = kategorie;
         this.verband = verband;
+        this.spezialfallBestelleinheit = spezialfallBestelleinheit;
     }
 
 
@@ -39,6 +41,10 @@ public class FrischBestandRepresentation extends BestandRepresentation{
         return kategorie;
     }
 
+	public boolean isSpezialfallBestelleinheit() {
+		return spezialfallBestelleinheit;
+	}
+    
 
 }
 

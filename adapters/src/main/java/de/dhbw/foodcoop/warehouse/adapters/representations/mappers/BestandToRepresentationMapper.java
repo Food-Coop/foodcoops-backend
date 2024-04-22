@@ -52,7 +52,8 @@ public class BestandToRepresentationMapper implements Function<BestandEntity, Be
 					einheitMapper.apply( bb.getEinheit()),
 					kategorieMapper.apply(bb.getKategorie()),
 					bb.getPreis(),
-					bb.getVerband());
+					bb.getVerband(),
+					bb.isSpezialfallBestelleinheit());
 		}
 		if(t instanceof Produkt) {
 			Produkt p = (Produkt) t;

@@ -129,14 +129,22 @@ public class EinkaufService {
          	 if(vergleiche != null) {
          		for (BestellungBuyEntity ebv : vergleiche) {
          			if(ebv.getBestellung() != null && ebv.getBestellung() instanceof FrischBestellung)  {
-         				mapAmountForOrder.merge(((FrischBestellung) ebv.getBestellung()).getFrischbestand(), ebv.getAmount(), Double::sum);
+         				if(((FrischBestellung) ebv.getBestellung()).getFrischbestand().isSpezialfallBestelleinheit()) {
+         					mapAmountForOrder.merge(((FrischBestellung) ebv.getBestellung()).getFrischbestand(), ebv.getBestellung().getBestellmenge(), Double::sum);
+         				} else {
+         					mapAmountForOrder.merge(((FrischBestellung) ebv.getBestellung()).getFrischbestand(), ebv.getAmount(), Double::sum);
+         				}
          			}
          		}
          		einkaufeFromPerson.forEach(t -> {
          			if(t.getBestellungsEinkauf() != null) {
          				for(BestellungBuyEntity eb : t.getBestellungsEinkauf()) {
          					if(eb.getBestellung() != null && eb.getBestellung() instanceof FrischBestellung) {
-         						mapAmountForOrder.merge(((FrischBestellung) eb.getBestellung()).getFrischbestand(), eb.getAmount(), Double::sum);
+         						if(((FrischBestellung) eb.getBestellung()).getFrischbestand().isSpezialfallBestelleinheit()) {
+                 					mapAmountForOrder.merge(((FrischBestellung) eb.getBestellung()).getFrischbestand(), eb.getBestellung().getBestellmenge(), Double::sum);
+                 				} else {
+                 					mapAmountForOrder.merge(((FrischBestellung) eb.getBestellung()).getFrischbestand(), eb.getAmount(), Double::sum);
+                 				}
          					}
          				}
          			}
