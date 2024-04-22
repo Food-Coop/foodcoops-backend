@@ -751,7 +751,7 @@ public class PdfService {
                  		map.put(i, idAmountMap);
                  	}
                  	if(be != null) {
-                 		be.getDiscrepancy().forEach(t -> {amount.put(t.getBestand().getId(), t.getZuBestellendeGebinde());});
+                 		be.getDiscrepancy().forEach(t -> {amount.merge(t.getBestand().getId(), t.getZuBestellendeGebinde(), Integer::sum);});
                  	}
         		}
         	}
