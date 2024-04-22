@@ -45,7 +45,7 @@ public class RepresentationToBestandMapper implements Function<BestandRepresenta
     		FrischBestandRepresentation fb = (FrischBestandRepresentation) newBestand;
     		Einheit einheit = einheitService.findById(fb.getEinheit().getId()).orElseThrow();
 			Kategorie kategorie = kategorieService.findById(fb.getKategorie().getId()).orElseThrow();
-    		return new FrischBestand(oldBestand.getId(), pickNewIfDefined(oldBestand.getName(), newBestand.getName()), newBestand.getVerfuegbarkeit(), fb.getHerkunftsland(), fb.getGebindegroesse(), einheit, kategorie, fb.getPreis());
+    		return new FrischBestand(oldBestand.getId(), pickNewIfDefined(oldBestand.getName(), newBestand.getName()), newBestand.getVerfuegbarkeit(), fb.getHerkunftsland(), fb.getGebindegroesse(), einheit, kategorie, fb.getPreis(), fb.getVerband());
     	}
     	if(newBestand instanceof ProduktRepresentation) {
     		ProduktRepresentation pr = (ProduktRepresentation) newBestand;
@@ -77,7 +77,7 @@ public class RepresentationToBestandMapper implements Function<BestandRepresenta
 			FrischBestandRepresentation bbr = (FrischBestandRepresentation) t;
 			Einheit einheit = einheitService.findById(bbr.getEinheit().getId()).orElseThrow();
 			Kategorie kategorie = kategorieService.findById(bbr.getKategorie().getId()).orElseThrow();
-			return new FrischBestand(bbr.getId(), bbr.getName(), bbr.getVerfuegbarkeit(), bbr.getHerkunftsland(), bbr.getGebindegroesse(), einheit, kategorie, bbr.getPreis());
+			return new FrischBestand(bbr.getId(), bbr.getName(), bbr.getVerfuegbarkeit(), bbr.getHerkunftsland(), bbr.getGebindegroesse(), einheit, kategorie, bbr.getPreis(), bbr.getVerband());
 		}
 		if(t instanceof ProduktRepresentation) {
 			ProduktRepresentation pr = (ProduktRepresentation) t;

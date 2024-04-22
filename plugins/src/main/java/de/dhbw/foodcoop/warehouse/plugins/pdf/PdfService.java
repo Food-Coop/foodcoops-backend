@@ -6,8 +6,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.math.RoundingMode;
-import java.text.DecimalFormat;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -20,7 +18,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -57,6 +54,7 @@ import de.dhbw.foodcoop.warehouse.application.deadline.DeadlineService;
 import de.dhbw.foodcoop.warehouse.application.frischbestellung.FrischBestandService;
 import de.dhbw.foodcoop.warehouse.application.frischbestellung.FrischBestellungService;
 import de.dhbw.foodcoop.warehouse.application.gebindemanagement.GebindemanagementService;
+import de.dhbw.foodcoop.warehouse.domain.entities.BestandEntity;
 import de.dhbw.foodcoop.warehouse.domain.entities.BestellUebersicht;
 import de.dhbw.foodcoop.warehouse.domain.entities.BrotBestand;
 import de.dhbw.foodcoop.warehouse.domain.entities.BrotBestellung;
@@ -64,7 +62,6 @@ import de.dhbw.foodcoop.warehouse.domain.entities.Deadline;
 import de.dhbw.foodcoop.warehouse.domain.entities.EinkaufEntity;
 import de.dhbw.foodcoop.warehouse.domain.entities.FrischBestand;
 import de.dhbw.foodcoop.warehouse.domain.entities.FrischBestellung;
-import de.dhbw.foodcoop.warehouse.domain.values.Bestellung;
 
 @Service
 public class PdfService {
@@ -729,13 +726,17 @@ public class PdfService {
           	Optional<Deadline> date1 = deadService.getByPosition(0);
         	Optional<Deadline> date2 = deadService.getByPosition(1);
         	HashMap<Integer, HashMap<String, Double>> map= new HashMap<>();
+        	HashMap<String, Integer> amount = new HashMap<>();
+        	BestellUebersicht be = service.getLastUebersicht();
         	String[] personNames = new String[16];
         	Arrays.fill(personNames, " ");
         	if(!date1.isEmpty()) {
         		if(!date2.isEmpty()) {
+        			
         			LocalDateTime datum1 = date1.get().getDatum();
                 	LocalDateTime datum2 = date2.get().getDatum();
                  	List<FrischBestellung> frischBestellungen = frischService.findByDateBetween(datum1, datum2);
+
                  	Set<String> personNamesSet = new HashSet<>();
                  	frischBestellungen.forEach(t -> {personNamesSet.add(t.getPersonId());});
                  //	person.addAll(personNames);
@@ -748,6 +749,9 @@ public class PdfService {
                  		HashMap<String, Double> idAmountMap= new HashMap<>();
                  		frischService.findByDateBetween(datum1, datum2, personNames[i]).forEach(t -> {idAmountMap.put(t.getFrischbestand().getId(), t.getBestellmenge());});
                  		map.put(i, idAmountMap);
+                 	}
+                 	if(be != null) {
+                 		be.getDiscrepancy().forEach(t -> {amount.put(t.getBestand().getId(), t.getZuBestellendeGebinde());});
                  	}
         		}
         	}
@@ -810,11 +814,11 @@ public class PdfService {
             		.addRow(Row.builder()
 	        			 .add(TextCell.builder().borderWidth(1).text(t.getName()).horizontalAlignment(HorizontalAlignment.LEFT).fontSize(10).font(arialBold).build())
 	        			 .add(TextCell.builder().borderWidth(1).text(t.getHerkunftsland()).horizontalAlignment(HorizontalAlignment.LEFT).fontSize(10).font(arial).build())
-	        			 .add(TextCell.builder().borderWidth(1).text("").horizontalAlignment(HorizontalAlignment.LEFT).fontSize(10).font(arial).build())
+	        			 .add(TextCell.builder().borderWidth(1).text(t.getVerband()).horizontalAlignment(HorizontalAlignment.LEFT).fontSize(10).font(arial).build())
 	        			 .add(TextCell.builder().borderWidth(1).text(t.getPreis() + "").horizontalAlignment(HorizontalAlignment.RIGHT).fontSize(10).font(arialBold).build())
 	        			 .add(TextCell.builder().borderWidth(1).text(t.getEinheit().getName().equalsIgnoreCase("Stück") ? "St" : t.getEinheit().getName()).horizontalAlignment(HorizontalAlignment.CENTER).fontSize(10).font(arial).build())
 	        			 .add(TextCell.builder().borderWidth(1).text(t.getGebindegroesse() + "").horizontalAlignment(HorizontalAlignment.CENTER).fontSize(10).font(arial).build())
-	        			 .add(TextCell.builder().borderWidth(1).text("").horizontalAlignment(HorizontalAlignment.LEFT).fontSize(10).font(arialBold).build())
+	        			 .add(TextCell.builder().borderWidth(1).text(amount.get(t.getId()) == null || amount.get(t.getId()) == 0 ? "" : amount.get(t.getId()) + "").horizontalAlignment(HorizontalAlignment.CENTER).fontSize(10).textColor(Color.red).font(arialBold).build())
 	        			 
 	        			 .add(TextCell.builder().borderWidth(1).text(map.get(counter++) == null ? "" : map.get(counter-1).get(t.getId()) == null ? "" : formatDouble( map.get(counter-1).get(t.getId())) + "" ).horizontalAlignment(HorizontalAlignment.CENTER).fontSize(10).font(arial).build())
 	        			 .add(TextCell.builder().borderWidth(1).text(map.get(counter++) == null ? "" : map.get(counter-1).get(t.getId()) == null ? "" : formatDouble(map.get(counter-1).get(t.getId())) + "" ).horizontalAlignment(HorizontalAlignment.CENTER).fontSize(10).font(arial).build())

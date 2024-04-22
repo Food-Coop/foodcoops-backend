@@ -22,9 +22,12 @@ public class FrischBestand extends BestandEntity{
     @ManyToOne
     @JoinColumn(name = "kategorie_id")
     private Kategorie kategorie;
+    
+    @Column
+    private String verband;
 
 
-    public FrischBestand(String id, String name, boolean verfuegbarkeit, String herkunftsland, float gebindegroesse, Einheit einheit, Kategorie kategorie, float preis) {
+    public FrischBestand(String id, String name, boolean verfuegbarkeit, String herkunftsland, float gebindegroesse, Einheit einheit, Kategorie kategorie, float preis, String verband) {
         // Validate.notBlank(id);
         // Validate.notBlank(name);
         // Validate.notNull(verfuegbarkeit);
@@ -39,20 +42,26 @@ public class FrischBestand extends BestandEntity{
         this.einheit = einheit;
         this.kategorie = kategorie;
         this.preis = preis;
+        this.verband = verband;
     }
 
-    public FrischBestand(String name, boolean verfuegbarkeit, String herkunftsland, float gebindegroesse, Einheit einheit, Kategorie kategorie, float preis) {
-        this(UUID.randomUUID().toString(), name, verfuegbarkeit, herkunftsland, gebindegroesse, einheit, kategorie, preis);
+    public FrischBestand(String name, boolean verfuegbarkeit, String herkunftsland, float gebindegroesse, Einheit einheit, Kategorie kategorie, float preis, String verband) {
+        this(UUID.randomUUID().toString(), name, verfuegbarkeit, herkunftsland, gebindegroesse, einheit, kategorie, preis, verband);
     }
 
     public FrischBestand() {
 
     }
 
-   
+    public String getVerband() {
+		return verband;
+	}
 
+	public void setVerband(String verband) {
+		this.verband = verband;
+	}
 
-    public String getHerkunftsland() {
+	public String getHerkunftsland() {
         return herkunftsland;
     }
 

@@ -70,6 +70,6 @@ public class FrischBestellungServiceTest {
 
     Einheit e1 = new Einheit("111", "Stück");
     Kategorie k1 = new Kategorie("222", "Salat", true);
-    FrischBestand fb = new FrischBestand("1234", "Kopfsalat", true, "DE", 20, e1, k1, (float) 1.5);
+    FrischBestand fb = new FrischBestand("1234", "Kopfsalat", true, "DE", 20, e1, k1, (float) 1.5, "e.E.");
     LocalDateTime ts= LocalDateTime.now();  
 }
