@@ -23,6 +23,7 @@ import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBo
 import de.dhbw.foodcoop.warehouse.application.bestellungsliste.BestellÜbersichtService;
 import de.dhbw.foodcoop.warehouse.application.deadline.DeadlineService;
 import de.dhbw.foodcoop.warehouse.plugins.email.EmailService;
+import de.dhbw.foodcoop.warehouse.plugins.helpObjects.PDFInfoObject;
 import de.dhbw.foodcoop.warehouse.plugins.pdf.PdfService;
 
 @RestController
@@ -152,4 +153,19 @@ public class PdfController {
                 .contentType(MediaType.APPLICATION_PDF)
                 .body(responseBody);
     }	
+ 	
+ 	@GetMapping(value = "/pdf/byte/frischBestellungen")
+    public PDFInfoObject getUebersichtFrischPDFasByte() throws IOException {
+        return new PDFInfoObject(pdf.createFrischUebersicht(/*getLastBestellUebersicht()*/), "Frischbestellungen-" + LocalDateTime.now().with(TemporalAdjusters.nextOrSame(DayOfWeek.TUESDAY)).format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+    }
+ 	
+ 	@GetMapping(value = "/pdf/byte/brotBestellungen")
+    public PDFInfoObject getUebersichtBrotPDFasByte() throws IOException {
+        return new PDFInfoObject(pdf.createBrotUebersicht(/*getLastBestellUebersicht()*/),"Brotbestellungen-"+ LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")) );
+    }	
+	
+ 	@GetMapping(value = "/pdf/byte/bestellUebersicht")
+    public PDFInfoObject getBestellUebersichtPDFasByte() throws IOException {
+        return new PDFInfoObject(pdf.createUebersicht(bueService.getLastUebersicht()), "Bestelluebersicht-"+ LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+ 	}
 }
