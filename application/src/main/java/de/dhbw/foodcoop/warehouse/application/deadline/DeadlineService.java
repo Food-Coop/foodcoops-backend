@@ -59,6 +59,9 @@ public class DeadlineService {
     	return repository.findeNachReihenfolge(position);
     }
     
+    public Deadline coldStart(Deadline deadline) {
+    	return repository.speichern(deadline);
+    }
     /**
      * 
      * Berechne vom gesetzten Tag + Uhrzeit das Datum für die nächste Deadline, abhängig vom aktuellen Timestamp
@@ -85,11 +88,15 @@ public class DeadlineService {
 		return Optional.empty();
     	
     }
-    private static final Map<String, DayOfWeek> germanDaysOfWeek =
+    public static final Map<String, DayOfWeek> germanDaysOfWeek =
     	    Arrays.stream(DayOfWeek.values()).collect(
     	        Collectors.toMap(
     	            d -> d.getDisplayName(TextStyle.FULL, Locale.GERMAN), d -> d));
     
+    public static final Map<DayOfWeek, String> germanDaysOfWeekReversed =
+    	    Arrays.stream(DayOfWeek.values()).collect(
+    	        Collectors.toMap(d -> d,
+    	            d -> d.getDisplayName(TextStyle.FULL, Locale.GERMAN)));
     
     public LocalDateTime calculateDateFromDeadline(Deadline d) {
     	

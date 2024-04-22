@@ -32,9 +32,9 @@ public class FrischBestandServiceTest {
 
     @Test
     void testAll() {
-        FrischBestand f0 = new FrischBestand("1234", "Kopfsalat", true, "DE", 20, e1, k1, (float) 1.5);
-        FrischBestand f1 = new FrischBestand("2345", "Eisbergsalat", true, "DE", 10, e1, k1, (float) 2.0);
-        FrischBestand f2 = new FrischBestand("3456", "Endiviensalat", false, "DE", 25, e1, k1, (float) 2.5);
+        FrischBestand f0 = new FrischBestand("1234", "Kopfsalat", true, "DE", 20, e1, k1, (float) 1.5, "e.E.");
+        FrischBestand f1 = new FrischBestand("2345", "Eisbergsalat", true, "DE", 10, e1, k1, (float) 2.0, "e.E.");
+        FrischBestand f2 = new FrischBestand("3456", "Endiviensalat", false, "DE", 25, e1, k1, (float) 2.5, "e.E.");
 
         when(mockRepository.alle()).thenReturn(Arrays.asList(f0, f1, f2));
         List<FrischBestand> whenReturn = toBeTested.all();
@@ -46,7 +46,7 @@ public class FrischBestandServiceTest {
 
     @Test
     void testDeleteById() {
-        FrischBestand frischBestand = new FrischBestand("1234", "Kopfsalat", true, "DE", 20, e1, k1, (float) 1.5);
+        FrischBestand frischBestand = new FrischBestand("1234", "Kopfsalat", true, "DE", 20, e1, k1, (float) 1.5, "e.E.");
 
         when(mockRepository.findeMitId(frischBestand.getId())).thenReturn(Optional.empty());
         toBeTested.deleteById(frischBestand.getId());
@@ -56,7 +56,7 @@ public class FrischBestandServiceTest {
 
     @Test
     void testFindById() {
-        FrischBestand frischBestand = new FrischBestand("1234", "Kopfsalat", true, "DE", 20, e1, k1, (float) 1.5);
+        FrischBestand frischBestand = new FrischBestand("1234", "Kopfsalat", true, "DE", 20, e1, k1, (float) 1.5, "e.E.");
 
         when(mockRepository.findeMitId(frischBestand.getId())).thenReturn(Optional.of(frischBestand));
         Optional<FrischBestand> whenReturn = toBeTested.findById(frischBestand.getId());
@@ -66,9 +66,9 @@ public class FrischBestandServiceTest {
 
     @Test
     void testSave() {
-        FrischBestand newFrischBestand = new FrischBestand("1234", "Kopfsalat", true, "DE", 20, e1, k1, (float) 1.5);
+        FrischBestand newFrischBestand = new FrischBestand("1234", "Kopfsalat", true, "DE", 20, e1, k1, (float) 1.5, "e.E.");
         
-        lenient().when(mockRepository.alle()).thenReturn(List.of(new FrischBestand("1234", "Kopfsalat", true, "DE", 20, e1, k1, (float) 1.5)));
+        lenient().when(mockRepository.alle()).thenReturn(List.of(new FrischBestand("1234", "Kopfsalat", true, "DE", 20, e1, k1, (float) 1.5, "e.E.")));
         lenient().when(mockRepository.speichern(newFrischBestand)).thenReturn(newFrischBestand);
         FrischBestand returnVal = toBeTested.save(newFrischBestand);
 
