@@ -16,9 +16,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import de.dhbw.foodcoop.warehouse.application.bestellungsliste.BestellÜbersichtService;
 import de.dhbw.foodcoop.warehouse.application.diskrepanz.DiscrepancyService;
+import de.dhbw.foodcoop.warehouse.application.frischbestellung.FrischBestellungService;
 import de.dhbw.foodcoop.warehouse.application.gebindemanagement.GebindemanagementService;
 import de.dhbw.foodcoop.warehouse.domain.entities.BestellUebersicht;
 import de.dhbw.foodcoop.warehouse.domain.entities.DiscrepancyEntity;
+import de.dhbw.foodcoop.warehouse.domain.entities.FrischBestand;
 import de.dhbw.foodcoop.warehouse.plugins.helpObjects.CategoryAndPercentHolder;
 
 @RestController
@@ -31,6 +33,8 @@ public class DiscrepancyController {
 	
 	@Autowired
 	private BestellÜbersichtService bestellService;
+	@Autowired
+	private FrischBestellungService frischService;
 	
 	
 	@Autowired
@@ -94,8 +98,13 @@ public class DiscrepancyController {
 		}
 		DiscrepancyEntity de = e.get();
 		de.setZuBestellendeGebinde(zuBestellendeGebinde);
-		
-		return ResponseEntity.status(HttpStatus.OK).body(discrepancyService.save(de));
+		if(de.getBestand() instanceof FrischBestand) {
+			FrischBestand bestand = (FrischBestand) de.getBestand();
+			de.setZuVielzuWenig(de.getZuBestellendeGebinde() * bestand.getGebindegroesse() - (float)frischService.orderAmountForLastWeek(de.getBestand()));
+			
+			return ResponseEntity.status(HttpStatus.OK).body(discrepancyService.save(de));
+		}
+		return ResponseEntity.unprocessableEntity().build();
 	}
 	
 	@PostMapping("/gebinde/discrepancy/add")
