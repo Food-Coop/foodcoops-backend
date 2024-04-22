@@ -125,7 +125,7 @@ public class EinkaufService {
         	
         	LocalDateTime datum1 = date1.get().getDatum();
         	LocalDateTime datum2 = date2.get().getDatum();
-         	List<FrischBestellung> frischBestellungen = frischService.findByDateBetween(datum1, datum2, personId);
+         //	List<FrischBestellung> frischBestellungen = frischService.findByDateBetween(datum1, datum2, personId);
          	String eID = einkauf.getId();
          	List<EinkaufEntity> einkaufeFromPerson = einkaufRepository.alleAktuellenVonPerson(datum1, personId).stream().filter(t -> t.getId() != eID).collect(Collectors.toList());
          	HashMap<FrischBestand, Double> mapAmountForOrder = new HashMap<>();
@@ -154,9 +154,9 @@ public class EinkaufService {
          	bestellungen.forEach(t -> {
          		if(t.getBestellung() instanceof FrischBestellung) {
          			FrischBestellung f = (FrischBestellung) t.getBestellung();
-         			if(f.getFrischbestand().getKategorie().isMixable()) {
-         				katSet.add(f.getFrischbestand().getKategorie());
-         			} else  {
+//         			if(f.getFrischbestand().getKategorie().isMixable()) {
+//         				katSet.add(f.getFrischbestand().getKategorie());
+//         			} else  {
          				double sumOrderedFromPerson =  (Math.round( t.getBestellung().getBestellmenge() * 100.0) / 100.0); 
          				double sumTakenFromPerson = (Math.round( mapAmountForOrder.get(f.getFrischbestand()) * 100.0) / 100.0);
              	    		BestellungBuyEntity  bbe = null;
@@ -182,31 +182,31 @@ public class EinkaufService {
              	    			}
              	    			
              	    		}
-         			}
+         		//	}
          		}
          	});
          	
-         	for(Kategorie k : katSet) {
-         		double sumOrderedFromPerson = (Math.round( sumByKategorie(k, frischBestellungen) * 100.0) / 100.0);
-         	    double sumTakenFromPerson = (Math.round( sumBestellungBuyByKategorie(k, bestellungen, mapAmountForOrder) * 100.0) / 100.0);
-         	    			double sumToAdjust = sumOrderedFromPerson - sumTakenFromPerson;
-         	    			boolean isDone = true;
-         	    			if(bestellungen != null ) {
-         	    				for(BestellungBuyEntity b : bestellungen) {
-         	    					if(!b.getBestellung().isDone()) {
-         	    						isDone = false;
-         	    						break;
-         	    					}
-         	    				}
-         	    			}
-         	    			if(isDone) {
-         	    				sumToAdjust = -sumTakenFromPerson;
-         	    			}
-         	    			
-         	    			double rest = adjustMixDiscrepency(discrepancies, sumToAdjust, k);
-         	    		//REST BEHANDELN
-         	    			handleRest(discrepancies, rest, k);
-         			}
+//         	for(Kategorie k : katSet) {
+//         		double sumOrderedFromPerson = (Math.round( sumByKategorie(k, bestellungen) * 100.0) / 100.0);
+//         	    double sumTakenFromPerson = (Math.round( sumBestellungBuyByKategorie(k, bestellungen, mapAmountForOrder) * 100.0) / 100.0);
+//         	    			double sumToAdjust = sumOrderedFromPerson - sumTakenFromPerson;
+//         	    			boolean isDone = true;
+//         	    			if(bestellungen != null ) {
+//         	    				for(BestellungBuyEntity b : bestellungen) {
+//         	    					if(!b.getBestellung().isDone()) {
+//         	    						isDone = false;
+//         	    						break;
+//         	    					}
+//         	    				}
+//         	    			}
+//         	    			if(isDone) {
+//         	    				sumToAdjust = -sumTakenFromPerson;
+//         	    			}
+//         	    			
+//         	    			double rest = adjustMixDiscrepency(discrepancies, sumToAdjust, k);
+//         	    		//REST BEHANDELN
+//         	    			handleRest(discrepancies, rest, k);
+//         			}
 
         		}
         		}
@@ -289,8 +289,17 @@ public class EinkaufService {
 	   }
    }
 
-	private double sumByKategorie(Kategorie k, List<FrischBestellung> bestellungen) {
-    	return bestellungen.stream().filter(t -> t.getFrischbestand().getKategorie().getId().equalsIgnoreCase(k.getId())).mapToDouble( x -> x.getBestellmenge()).sum();
+	private double sumByKategorie(Kategorie k, List<BestellungBuyEntity> bestellungen) {
+    	return bestellungen.stream().filter( t -> {
+    			if(t.getBestellung() instanceof FrischBestellung) {
+    				FrischBestellung f = (FrischBestellung) t.getBestellung();
+    				return f.getFrischbestand().getKategorie().getId().equalsIgnoreCase(k.getId());
+    			}
+				return false;
+    		}
+    	).mapToDouble( x -> x.getBestellung().getBestellmenge()).sum();
+    		
+    	
     }
     
     private double sumBestellungBuyByKategorie(Kategorie k, List<BestellungBuyEntity> bestellungen, HashMap<FrischBestand, Double> map) {
@@ -299,7 +308,7 @@ public class EinkaufService {
     		if(bbe.getBestellung() instanceof FrischBestellung) {
     			FrischBestellung f = (FrischBestellung) bbe.getBestellung();
     			if(f.getFrischbestand().getKategorie().getId().equalsIgnoreCase(k.getId()))  {
-    				counter = counter + bbe.getAmount() + map.get(f.getFrischbestand());
+    				counter = counter +  map.get(f.getFrischbestand());
     				
     			}
     		}
