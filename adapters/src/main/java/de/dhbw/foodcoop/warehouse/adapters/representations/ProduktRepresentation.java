@@ -1,29 +1,20 @@
 package de.dhbw.foodcoop.warehouse.adapters.representations;
 
-public final class ProduktRepresentation {
-    private final String name;
+public final class ProduktRepresentation extends BestandRepresentation {
     private final KategorieRepresentation kategorie;
     private final LagerbestandRepresentation lagerbestand;
-    private String id;
+    
+    private String produktname;
 
-    public ProduktRepresentation(String id, String name, KategorieRepresentation kategorie, LagerbestandRepresentation lagerbestand) {
-        this.id = id;
-        this.name = name;
+    public ProduktRepresentation(String id, String name, String produktname, KategorieRepresentation kategorie, LagerbestandRepresentation lagerbestand, float price) {
+    	super(id, name, lagerbestand == null ? false : lagerbestand.getIstLagerbestand() > 0 ? true : false, price);
+
         this.kategorie = kategorie;
+        this.produktname = produktname;
         this.lagerbestand = lagerbestand;
     }
 
-    public String getId() {
-        return id;
-    }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
 
     public KategorieRepresentation getKategorie() {
         return kategorie;
@@ -33,7 +24,20 @@ public final class ProduktRepresentation {
         return lagerbestand;
     }
 
-    @Override
+    
+    public String getProduktname() {
+		return produktname;
+	}
+
+
+
+	public void setProduktname(String produktname) {
+		this.produktname = produktname;
+	}
+
+
+
+	@Override
     public String toString() {
         return "Produkt{" +
                 "id='" + id + '\'' +

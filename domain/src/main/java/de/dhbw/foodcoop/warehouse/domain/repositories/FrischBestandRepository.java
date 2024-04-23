@@ -13,5 +13,7 @@ public interface FrischBestandRepository {
     Optional<FrischBestand> findeMitId(String id);
 
     void deleteById(String id);
+    
+    List<FrischBestand> alleSortiert();
 
 }

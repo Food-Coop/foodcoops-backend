@@ -1,43 +1,35 @@
 package de.dhbw.foodcoop.warehouse.adapters.representations;
 
-public class FrischBestandRepresentation {
-    private String id;
-    private String name;
-    private boolean verfuegbarkeit;
+public class FrischBestandRepresentation extends BestandRepresentation{
+
     private String herkunftsland;
-    private int gebindegroesse;
+    private float gebindegroesse;
     private EinheitRepresentation einheit;
     private KategorieRepresentation kategorie;
-    private float preis;
-
-    public FrischBestandRepresentation(String id, String name, boolean verfuegbarkeit, String herkunftsland, int gebindegroesse, EinheitRepresentation einheit, KategorieRepresentation kategorie, float preis) {
-        this.id = id;
-        this.name = name;
-        this.verfuegbarkeit = verfuegbarkeit;
+    private String verband;
+    private boolean spezialfallBestelleinheit;
+    
+    public FrischBestandRepresentation(String id, String name, boolean verfuegbarkeit, String herkunftsland, float gebindegroesse, EinheitRepresentation einheit, KategorieRepresentation kategorie, float preis, String verband, boolean spezialfallBestelleinheit) {
+    	super(id, name, verfuegbarkeit, preis);
         this.herkunftsland = herkunftsland;
         this.gebindegroesse = gebindegroesse;
         this.einheit = einheit;
         this.kategorie = kategorie;
-        this.preis = preis;
+        this.verband = verband;
+        this.spezialfallBestelleinheit = spezialfallBestelleinheit;
     }
 
-    public String getId() {
-        return id;
-    }
 
-    public String getName() {
-        return name;
-    }
+    public String getVerband() {
+		return verband;
+	}
 
-    public boolean getVerfuegbarkeit() {
-        return verfuegbarkeit;
-    }
 
-    public String getHerkunftsland() {
+	public String getHerkunftsland() {
         return herkunftsland;
     }
 
-    public int getGebindegroesse() {
+    public float getGebindegroesse() {
         return gebindegroesse;
     }
 
@@ -49,12 +41,10 @@ public class FrischBestandRepresentation {
         return kategorie;
     }
 
-    public float getPreis() {
-        return preis;
-    }
+	public boolean isSpezialfallBestelleinheit() {
+		return spezialfallBestelleinheit;
+	}
+    
 
-    public void setId(String id) {
-        this.id = id;
-    }
 }
 

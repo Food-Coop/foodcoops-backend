@@ -32,8 +32,8 @@ class ProduktServiceTest {
    public void deleteByIdIsEmpty() {
        Einheit einheit = new Einheit(TestUtils.EINHEIT_TEST_ID, "shilling");
        Lagerbestand lagerbestand = new Lagerbestand(einheit, 0.01, 1.6);
-       Kategorie kategorie = new Kategorie("1234", "Kartoffel");
-       Produkt test = new Produkt(TestUtils.PRODUKT_TEST_ID, kategorie, lagerbestand);
+       Kategorie kategorie = new Kategorie("1234", "Kartoffel", false);
+       Produkt test = new Produkt(TestUtils.PRODUKT_TEST_ID,"test", kategorie, lagerbestand, 3f);
 
        when(mockRepository.findeMitId(test.getId())).thenReturn(Optional.empty());
        toBeTested.deleteById(test.getId());
@@ -45,8 +45,8 @@ class ProduktServiceTest {
    public void deleteByIdIsInStock() {
        Einheit einheit = new Einheit(TestUtils.EINHEIT_TEST_ID, "shilling");
        Lagerbestand lagerbestand = new Lagerbestand(einheit, 0.1, 1.6);
-       Kategorie kategorie = new Kategorie("1234", "Kartoffel");
-       Produkt produkt = new Produkt(TestUtils.PRODUKT_TEST_ID, kategorie, lagerbestand);
+       Kategorie kategorie = new Kategorie("1234", "Kartoffel", false);
+       Produkt produkt = new Produkt(TestUtils.PRODUKT_TEST_ID, "test", kategorie, lagerbestand, 3f);
 
        when(mockRepository.findeMitId(produkt.getId())).thenReturn(Optional.of(produkt));
 
@@ -59,8 +59,8 @@ class ProduktServiceTest {
    public void deleteByIdSuccess() {
        Einheit einheit = new Einheit(TestUtils.EINHEIT_TEST_ID, "shilling");
        Lagerbestand lagerbestand = new Lagerbestand(einheit, 0.001, 1.6);
-       Kategorie kategorie = new Kategorie("1234", "Kartoffel");
-       Produkt produkt = new Produkt(TestUtils.PRODUKT_TEST_ID, kategorie, lagerbestand);
+       Kategorie kategorie = new Kategorie("1234", "Kartoffel", false);
+       Produkt produkt = new Produkt(TestUtils.PRODUKT_TEST_ID,"test", kategorie, lagerbestand,3f);
 
        when(mockRepository.findeMitId(produkt.getId())).thenReturn(Optional.of(produkt));
        toBeTested.deleteById(produkt.getId());

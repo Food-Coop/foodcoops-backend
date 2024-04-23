@@ -3,10 +3,9 @@ package de.dhbw.foodcoop.warehouse.plugins.rest;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
-import java.util.Date;
-import java.sql.Timestamp;
-import java.util.Calendar;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -15,7 +14,13 @@ import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import de.dhbw.foodcoop.warehouse.adapters.representations.DeadlineRepresentation;
 import de.dhbw.foodcoop.warehouse.adapters.representations.mappers.DeadlineToRepresentationMapper;
@@ -48,7 +53,34 @@ public class DeadlineController {
         DeadlineRepresentation presentation = toPresentation.apply(deadline);
         return assembler.toModel(presentation);
     }
+    
+    @GetMapping("/deadline/getEndDateOfDeadline/{id}")
+    public LocalDateTime getEndDate(@PathVariable String id) {
+        Deadline deadline = service.findById(id)
+                .orElseThrow(() -> new DeadlineNotFoundException(id));
+       return service.calculateDateFromDeadline(deadline);
+    }
+    
+    @GetMapping("/deadline/lookForUpdate")
+    public EntityModel<DeadlineRepresentation> update() {
+        Optional<Deadline> deadline = service.updateDeadline();
+        if(deadline.isEmpty()) {
+        	return null;
+        }
+        DeadlineRepresentation presentation = toPresentation.apply(deadline.get());
+        return assembler.toModel(presentation);
+    }
 
+    @GetMapping("/deadline/getByPosition/{id}")
+    public EntityModel<DeadlineRepresentation> getByPosition(@PathVariable int id) {
+        Optional<Deadline> deadline = service.getByPosition(id);
+        if(deadline.isEmpty()) {
+        	return null;
+        }
+        DeadlineRepresentation presentation = toPresentation.apply(deadline.get());
+        return assembler.toModel(presentation);
+    }
+    
     @GetMapping("/deadline")
     public CollectionModel<EntityModel<DeadlineRepresentation>> all() {
         List<EntityModel<DeadlineRepresentation>> deadlines = service.all().stream()
@@ -60,14 +92,11 @@ public class DeadlineController {
     }
 
     @GetMapping("/deadline/last")
-    public CollectionModel<EntityModel<DeadlineRepresentation>> last() {
-        List<EntityModel<DeadlineRepresentation>> deadlines = service.last().stream()
-                .map(toPresentation)
-                .map(assembler::toModel)
-                .collect(Collectors.toList());
-        List<EntityModel<DeadlineRepresentation>> lastDeadline = deadlines.subList(deadlines.size()-1, deadlines.size());
-        return CollectionModel.of(lastDeadline,
-                linkTo(methodOn(DeadlineController.class).all()).withSelfRel());
+    public EntityModel<DeadlineRepresentation> last() {
+        Deadline deadline = service.last();
+                
+        DeadlineRepresentation presentation = toPresentation.apply(deadline);
+        return assembler.toModel(presentation);
     }
 
     @PostMapping("/deadline")
@@ -78,18 +107,8 @@ public class DeadlineController {
                 newDeadline.getId();
             newDeadline.setId(id);
 
-        //Timestamp machen
-        Calendar calendar = Calendar.getInstance();
-        int year = calendar.get(Calendar.YEAR);
-        int month = calendar.get(Calendar.MONTH);
-        int day = calendar.get(Calendar.DATE);
-        int hour = calendar.get(Calendar.HOUR_OF_DAY);
-        int minute = calendar.get(Calendar.MINUTE);
-        int second = calendar.get(Calendar.SECOND);
-        calendar.set(year, month, day, hour, minute, second);
-        Date then = calendar.getTime();
-        Timestamp datum = new Timestamp(then.getTime());
-        newDeadline.setDatum(datum);
+
+        newDeadline.setDatum(LocalDateTime.now());
 
         Deadline deadline = service.save(toDeadline.apply(newDeadline));
         EntityModel<DeadlineRepresentation> entityModel = assembler.toModel(toPresentation.apply(deadline));

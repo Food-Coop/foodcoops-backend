@@ -1,19 +1,26 @@
 package de.dhbw.foodcoop.warehouse.domain.repositories;
 
-import de.dhbw.foodcoop.warehouse.domain.entities.BrotBestellung;
-
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+
+import de.dhbw.foodcoop.warehouse.domain.entities.BrotBestellung;
+import de.dhbw.foodcoop.warehouse.domain.entities.FrischBestellung;
 
 public interface BrotBestellungRepository {
     List<BrotBestellung> alle();
 
-    List<BrotBestellung> findeMitDatumNachUndPerson(Timestamp datum, String person_id);
+    List<BrotBestellung> alleVonPerson(String person_id); 
+    
+    List<BrotBestellung> findeMitDatumNachUndPerson(LocalDateTime datum, String person_id);
 
-    List<BrotBestellung> findeMitDatumNachUndSum(Timestamp datum);
+    List<BrotBestellung> findeMitDatumNachUndSum(LocalDateTime datum);
+   
+    List<BrotBestellung> findAllOrdersAfterDate(LocalDateTime datum);
 
-    List<BrotBestellung> findeMitDatumZwischen(Timestamp datum1, Timestamp datum2, String person_id);
+    List<BrotBestellung> findeMitDatumZwischen(LocalDateTime datum1, LocalDateTime datum2, String person_id);
+    
+    List<BrotBestellung> findeMitDatumZwischen(LocalDateTime datum1, LocalDateTime datum2);
 
     BrotBestellung speichern(BrotBestellung brotBestellung);
 

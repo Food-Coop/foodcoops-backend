@@ -6,19 +6,13 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "brotbestand")
-public class BrotBestand {
-    @Id
-    private String id;
-    @Column
-    private String name;
-    @Column
-    private boolean verfuegbarkeit;
-    @Column
-    private long gewicht;
-    @Column
-    private float preis;
+public class BrotBestand extends BestandEntity{
 
-    public BrotBestand(String id, String name, boolean verfuegbarkeit, long gewicht, float preis) {
+    @Column
+    private double gewicht;
+
+
+    public BrotBestand(String id, String name, boolean verfuegbarkeit, double gewicht, float preis) {
         // Validate.notBlank(id);
         // Validate.notBlank(name);
         // Validate.notNull(verfuegbarkeit);
@@ -31,7 +25,7 @@ public class BrotBestand {
         this.preis = preis;
     }
 
-    public BrotBestand(String name, boolean verfuegbarkeit, long gewicht, float preis) {
+    public BrotBestand(String name, boolean verfuegbarkeit, double gewicht, float preis) {
         this(UUID.randomUUID().toString(), name, verfuegbarkeit, gewicht, preis);
     }
 
@@ -39,41 +33,19 @@ public class BrotBestand {
 
     }
 
-    public String getId() {
-        return id;
-    }
 
-    public String getName() {
-        return name;
-    }
 
-    public boolean getVerfuegbarkeit() {
-        return verfuegbarkeit;
-    }
-
-    public long getGewicht() {
+    public double getGewicht() {
         return gewicht;
     }
 
-    public float getPreis() {
-        return preis;
-    }
+   
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setVerfuegbarkeit(boolean verfuegbarkeit) {
-        this.verfuegbarkeit = verfuegbarkeit;
-    }
-
-    public void setGewicht(long gewicht){
+    public void setGewicht(double gewicht){
         this.gewicht = gewicht;
     }
 
-    public void setPreis(float preis) {
-        this.preis = preis;
-    }
+  
 
     @Override
     public boolean equals(Object o) {

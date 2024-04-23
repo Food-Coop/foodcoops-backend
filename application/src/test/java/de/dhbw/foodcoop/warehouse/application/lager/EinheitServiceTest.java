@@ -35,8 +35,7 @@ class EinheitServiceTest {
        when(mockRepository.alle()).thenReturn(List.of(new Einheit(TestUtils.EINHEIT_TEST_ID_2, "kg")));
        when(mockRepository.speichern(newEinheit)).thenReturn(newEinheit);
        Einheit returnVal = toBeTested.save(newEinheit);
-
-       Assertions.assertEquals(TestUtils.EINHEIT_TEST_ID, returnVal.getId());
+      Assertions.assertEquals(TestUtils.EINHEIT_TEST_ID, returnVal.getId());
        Assertions.assertEquals("Liter", newEinheit.getName());
    }
 
@@ -56,11 +55,11 @@ class EinheitServiceTest {
        Einheit oldEinheint = new Einheit(TestUtils.EINHEIT_TEST_ID, "Gramm");
        Einheit otherEinheit = new Einheit(TestUtils.EINHEIT_TEST_ID_2, "meter");
        Lagerbestand lagerbestand = new Lagerbestand(otherEinheit, 0.8, 1.5);
-       Kategorie kategorie = new Kategorie("1234", "Wurst");
+       Kategorie kategorie = new Kategorie("1234", "Wurst", false);
        Produkt produkt = new Produkt(TestUtils.PRODUKT_TEST_ID
                , "Blutwurst"
                , kategorie
-               , lagerbestand);
+               , lagerbestand, 3f);
        when(mockRepository.findeMitId(TestUtils.EINHEIT_TEST_ID))
                .thenReturn(Optional.of(oldEinheint));
        when(mockProduktService.all())
