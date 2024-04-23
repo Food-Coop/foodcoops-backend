@@ -408,7 +408,8 @@ public class PdfService {
 
             String[] labels = {"Frischware:", "Brot:", "Lagerware:", "zu Viel Liste:", "5 % Lieferkosten:"};
             
-            float lieferkosten = (float) (Math.round((((einkauf.getFreshPriceAtTime() + einkauf.getTooMuchPriceAtTime()) * (configService.getConfig().get().getDeliverycost()) /100) * 100.0) / 100.0)  );
+            float lieferkosten =  (float) ((einkauf.getFreshPriceAtTime() + einkauf.getTooMuchPriceAtTime()) *configService.getConfig().get().getDeliverycost());
+             lieferkosten = (float) (Math.round( lieferkosten * 100.0) / 100.0);
             float gesamt = (float) (lieferkosten + einkauf.getTotalPriceAtTime());
             float[] prices = {(float) (Math.round( einkauf.getFreshPriceAtTime() * 100.0) / 100.0), (float) (Math.round( einkauf.getBreadPriceAtTime() * 100.0) / 100.0), (float) (Math.round( einkauf.getBestandPriceAtTime() * 100.0) / 100.0),(float) (Math.round( einkauf.getTooMuchPriceAtTime() * 100.0) / 100.0), lieferkosten, gesamt}; 
             
