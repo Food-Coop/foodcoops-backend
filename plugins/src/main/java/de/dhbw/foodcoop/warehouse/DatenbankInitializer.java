@@ -64,7 +64,7 @@ public class DatenbankInitializer {
     	if(einheitService.all().isEmpty() && kategorieService.all().isEmpty() && fbService.all().isEmpty() && produktService.all().isEmpty() && brotService.all().isEmpty() && deadlineService.all().isEmpty()) {
 
     		deadlineService.coldStart(new Deadline(UUID.randomUUID().toString(), DeadlineService.germanDaysOfWeekReversed.get(LocalDateTime.now().getDayOfWeek()), Time.valueOf("23:59:00"), LocalDateTime.now()));
-    		deadlineService.coldStart(new Deadline(UUID.randomUUID().toString(), DeadlineService.germanDaysOfWeekReversed.get(LocalDateTime.now().plusDays(1).getDayOfWeek()), Time.valueOf("23:59:00"), LocalDateTime.now().plusMinutes(2)));
+    		deadlineService.coldStart(new Deadline(UUID.randomUUID().toString(), DeadlineService.germanDaysOfWeekReversed.get(LocalDateTime.now().plusDays(1).getDayOfWeek()), Time.valueOf("23:59:00"), LocalDateTime.now().plusSeconds(10)));
     		
     		Einheit kg = einheitService.save(new Einheit("Kg"));
     		Einheit St = einheitService.save(new Einheit("Stück"));

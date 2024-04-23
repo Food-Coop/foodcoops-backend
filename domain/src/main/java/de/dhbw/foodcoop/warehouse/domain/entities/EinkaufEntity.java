@@ -53,6 +53,9 @@ public class EinkaufEntity {
 	@Column
 	private double tooMuchPriceAtTime;
 	
+	@Column
+	private double deliveryCostAtTime;
+	
 	public EinkaufEntity() {
 		// TODO Auto-generated constructor stub
 	}
@@ -60,9 +63,10 @@ public class EinkaufEntity {
 
 	public EinkaufEntity(String id, String personId, List<BestellungBuyEntity> einkauf,
 			 List<BestandBuyEntity> bestandEinkauf, List<TooMuchBuyEntity> tooMuchEinkauf, LocalDateTime date, double breadPriceAtTime,
-			double freshPriceAtTime,  double bestandPriceAtTime, double tooMuchPriceAtTime) {
+			double freshPriceAtTime,  double bestandPriceAtTime, double tooMuchPriceAtTime, double deliveryCostAtTime) {
 		super();
 		this.id = id;
+		this.deliveryCostAtTime = deliveryCostAtTime;
 		this.personId = personId;
 		this.bestellungsEinkauf = einkauf;
 		this.bestandEinkauf = bestandEinkauf;
@@ -77,6 +81,16 @@ public class EinkaufEntity {
 
 	public double getBestandPriceAtTime() {
 		return bestandPriceAtTime;
+	}
+
+	
+	public double getDeliveryCostAtTime() {
+		return deliveryCostAtTime;
+	}
+
+
+	public void setDeliveryCostAtTime(double deliveryCostAtTime) {
+		this.deliveryCostAtTime = deliveryCostAtTime;
 	}
 
 

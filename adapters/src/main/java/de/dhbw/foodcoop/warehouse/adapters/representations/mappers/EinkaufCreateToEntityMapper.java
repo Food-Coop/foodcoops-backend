@@ -43,7 +43,7 @@ public class EinkaufCreateToEntityMapper implements Function<EinkaufCreateRepres
 				convertBestellungToList(e.getBestellungsEinkauf()),
 				convertBestandToList(e.getBestandEinkauf()),
 				convertTooMuchToList(e.getTooMuchEinkauf()),
-				null, 0, 0, 0, 0);
+				null, 0, 0, 0, 0, 0);
 	}
 	
 	private List<BestellungBuyEntity> convertBestellungToList(Set<BestellungBuyRepresentation> set) {

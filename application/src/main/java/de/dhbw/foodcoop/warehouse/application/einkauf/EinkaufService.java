@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import de.dhbw.foodcoop.warehouse.application.admin.ConfigurationService;
 import de.dhbw.foodcoop.warehouse.application.bestellungsliste.BestellÜbersichtService;
 import de.dhbw.foodcoop.warehouse.application.deadline.DeadlineService;
 import de.dhbw.foodcoop.warehouse.application.diskrepanz.DiscrepancyService;
@@ -49,6 +50,9 @@ public class EinkaufService {
 	
 	@Autowired
 	private DiscrepancyService discrepancyService;
+	
+	@Autowired
+	private ConfigurationService configService;
 
     public BestandBuyEntity createBestandBuyEntityForPersonOrder(Produkt bestand, double amount) {
     	BestandBuyEntity bbe = new BestandBuyEntity();
@@ -110,6 +114,7 @@ public class EinkaufService {
         einkauf.setBestandPriceAtTime(calculatePriceForBestandBuy(einkauf));
         einkauf.setBreadPriceAtTime(calculatePriceForBread(einkauf));
         einkauf.setFreshPriceAtTime(calculatePriceForFresh(einkauf));
+        einkauf.setDeliveryCostAtTime(calculateDeliveryCostForShopping(einkauf));
         
         BestellUebersicht be = service.getLastUebersicht();
         if(be != null) {
@@ -233,7 +238,6 @@ public class EinkaufService {
     				FrischBestellung fb = (FrischBestellung) bbe.getBestellung();
     			if(fb.getFrischbestand().getId().equalsIgnoreCase(frisch.getId())) {
     			
-    				//HIER WEITER MACHEN!!
     			
     				d.setZuVielzuWenig((float) (d.getZuVielzuWenig() + sumToAdjust));
     				return 0;
@@ -378,6 +382,14 @@ public class EinkaufService {
     		}
     	}
     	return price;
+    }
+    
+    public double calculateDeliveryCostForShopping(EinkaufEntity ee) {
+    	double price = calculatePriceForFresh(ee) + calculatePriceForTooMuch(ee);
+    	double percent = configService.getConfig().get().getDeliverycost() / 100;
+    	
+    	
+    	return price * percent;
     }
     
     public double calculatePriceForFresh(EinkaufEntity einkauf) {
