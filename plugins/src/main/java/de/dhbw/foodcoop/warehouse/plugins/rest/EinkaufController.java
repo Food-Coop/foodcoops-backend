@@ -155,8 +155,9 @@ public class EinkaufController {
 		  	        });
 	  	        }
 	  	        
-	  	        double lieferkosten =(Math.round(((einkauf.getFreshPriceAtTime() + einkauf.getTooMuchPriceAtTime()) * (configService.getConfig().get().getDeliverycost() /100) * 100.0) / 100.0)  );
+	  	        double lieferkosten = (float) (Math.round( einkauf.getDeliveryCostAtTime() * 100.0) / 100.0);
 	  	        float gesamt = (float) (lieferkosten + einkauf.getTotalPriceAtTime());
+	  	        gesamt = (float) (Math.round( gesamt * 100.0) / 100.0);
 	  	        Optional<ConfigurationEntity> optionalE = configService.getConfig();
 	  	        if(optionalE.isPresent()) {
 	  	        	String text = optionalE.get().getEinkaufEmailText()
@@ -165,7 +166,7 @@ public class EinkaufController {
 	  	        			.replaceAll(ConstantsUtils.EINKAUF_PLACEHOLDER_BROT, brotString.toString())
 	  	        			.replaceAll(ConstantsUtils.EINKAUF_PLACEHOLDER_LAGER, lagerString.toString())
 	  	        			.replaceAll(ConstantsUtils.EINKAUF_PLACEHOLDER_ZUVIEL, zuVielString.toString())
-	  	        			.replaceAll(ConstantsUtils.PLACEHOLDER_GESAMT_KOSTEN, "" +(Math.round(gesamt * 100.0) / 100.0) )
+	  	        			.replaceAll(ConstantsUtils.PLACEHOLDER_GESAMT_KOSTEN, "" + gesamt )
 	  	        			.replaceAll(ConstantsUtils.PLACEHOLDER_PERSONID, einkauf.getPersonId());
   	      
 	  	        	emailService.sendSimpleMessage(email, "Einkauf bei der FoodCoop Karlsruhe am " + LocalDate.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")), text, pdfd, fileName);

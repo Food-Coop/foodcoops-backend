@@ -45,7 +45,8 @@ public class RepresentationToEinkaufMapper implements Function<EinkaufRepresenta
 				e.getBreadPriceAtTime(),
 				e.getFreshPriceAtTime(),
 				e.getBestandPriceAtTime(),
-				e.getTooMuchPriceAtTime());
+				e.getTooMuchPriceAtTime(),
+				e.getDeliveryCostAtTime());
 		
 	}
 	

@@ -14,12 +14,14 @@ public class EinkaufRepresentation {
 	private double freshPriceAtTime;
 	private double bestandPriceAtTime;
 	private double tooMuchPriceAtTime;
+	private double deliveryCostAtTime;
 	
 	public EinkaufRepresentation(String id, String personId, Set<BestellungBuyRepresentation> bestellungsEinkauf,
 			Set<BestandBuyRepresentation> bestandEinkauf, Set<TooMuchBuyRepresentation> tooMuchEinkauf, LocalDateTime date, double breadPriceAtTime,
-			double freshPriceAtTime, double bestandPriceAtTime, double tooMuchPriceAtTime) {
+			double freshPriceAtTime, double bestandPriceAtTime, double tooMuchPriceAtTime, double deliveryCostAtTime) {
 		super();
 		this.id = id;
+		this.deliveryCostAtTime = deliveryCostAtTime;
 		this.personId = personId;
 		this.tooMuchEinkauf = tooMuchEinkauf;
 		this.bestellungsEinkauf = bestellungsEinkauf;
@@ -45,6 +47,11 @@ public class EinkaufRepresentation {
 	public Set<TooMuchBuyRepresentation> getTooMuchEinkauf() {
 		return tooMuchEinkauf;
 	}
+	
+	
+	public double getDeliveryCostAtTime() {
+		return deliveryCostAtTime;
+	}
 	public LocalDateTime getDate() {
 		return date;
 	}
@@ -63,6 +70,8 @@ public class EinkaufRepresentation {
 	public double getTooMuchPriceAtTime() {
 		return tooMuchPriceAtTime;
 	}
+
+	
 	
 	
 	
