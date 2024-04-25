@@ -100,7 +100,9 @@ public class DiscrepancyController {
 		de.setZuBestellendeGebinde(zuBestellendeGebinde);
 		if(de.getBestand() instanceof FrischBestand) {
 			FrischBestand bestand = (FrischBestand) de.getBestand();
-			de.setZuVielzuWenig(de.getZuBestellendeGebinde() * bestand.getGebindegroesse() - (float)frischService.orderAmountForLastWeek(de.getBestand()));
+			
+			de.getGewollteMenge();
+			de.setZuVielzuWenig(de.getZuBestellendeGebinde() * bestand.getGebindegroesse() - de.getGewollteMenge());
 			
 			return ResponseEntity.status(HttpStatus.OK).body(discrepancyService.save(de));
 		}
