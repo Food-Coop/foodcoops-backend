@@ -36,7 +36,6 @@ public class EmailService {
     	
         ByteArrayResource pdfResource = new ByteArrayResource(pdfBytes);
         helper.addAttachment(pdfFileName, pdfResource);
-        
         mailSender.send(message);
     }
 }
