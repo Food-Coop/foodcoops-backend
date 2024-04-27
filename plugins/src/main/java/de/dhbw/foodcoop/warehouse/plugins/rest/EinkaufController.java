@@ -42,6 +42,7 @@ import de.dhbw.foodcoop.warehouse.domain.entities.FrischBestellung;
 import de.dhbw.foodcoop.warehouse.domain.utils.ConstantsUtils;
 import de.dhbw.foodcoop.warehouse.plugins.email.EmailService;
 import de.dhbw.foodcoop.warehouse.plugins.helpObjects.BestandBuyCreator;
+import de.dhbw.foodcoop.warehouse.plugins.helpObjects.Einkaufsmanagement;
 import de.dhbw.foodcoop.warehouse.plugins.pdf.PdfService;
 import de.dhbw.foodcoop.warehouse.plugins.rest.assembler.EinkaufModelAssembler;
 import io.swagger.v3.oas.annotations.Operation;
@@ -156,6 +157,10 @@ public class EinkaufController {
 	  	        }
 	  	        
 	  	        double lieferkosten = (float) (Math.round( einkauf.getDeliveryCostAtTime() * 100.0) / 100.0);
+	  	        double brotkosten = (float) (Math.round(einkauf.getBreadPriceAtTime() * 100.0) / 100.0);
+			    double frischkosten = (float) (Math.round(einkauf.getFreshPriceAtTime() * 100.0) / 100.0);
+			    double lagerkosten = (float) (Math.round(einkauf.getBestandPriceAtTime() * 100.0) / 100.0);
+			    double zuvielkosten = (float) (Math.round(einkauf.getTooMuchPriceAtTime() * 100.0) / 100.0);
 	  	        float gesamt = (float) (lieferkosten + einkauf.getTotalPriceAtTime());
 	  	        gesamt = (float) (Math.round( gesamt * 100.0) / 100.0);
 	  	        Optional<ConfigurationEntity> optionalE = configService.getConfig();
@@ -166,6 +171,11 @@ public class EinkaufController {
 	  	        			.replaceAll(ConstantsUtils.EINKAUF_PLACEHOLDER_BROT, brotString.toString())
 	  	        			.replaceAll(ConstantsUtils.EINKAUF_PLACEHOLDER_LAGER, lagerString.toString())
 	  	        			.replaceAll(ConstantsUtils.EINKAUF_PLACEHOLDER_ZUVIEL, zuVielString.toString())
+	  	        			.replaceAll(ConstantsUtils.PLACEHOLDER_BROT_KOSTEN, brotkosten + "")
+			    			.replaceAll(ConstantsUtils.PLACEHOLDER_FRISCH_KOSTEN, frischkosten + "")
+			    			.replaceAll(ConstantsUtils.PLACEHOLDER_ZUVIEL_KOSTEN, zuvielkosten + "")
+			    			.replaceAll(ConstantsUtils.PLACEHOLDER_LIEFER_KOSTEN, lieferkosten + "")
+			    			.replaceAll(ConstantsUtils.PLACEHOLDER_LAGER_KOSTEN, lagerkosten + "")
 	  	        			.replaceAll(ConstantsUtils.PLACEHOLDER_GESAMT_KOSTEN, "" + gesamt )
 	  	        			.replaceAll(ConstantsUtils.PLACEHOLDER_PERSONID, einkauf.getPersonId());
   	      
@@ -176,6 +186,41 @@ public class EinkaufController {
 			e.printStackTrace();
 		}
 		return null;
+  	       
+    }
+    
+    @PostMapping("/einkauf/mailToEinkaufsmanagement/{id}")
+    public void sendPdfAndMailToEinkaufsmanagement(@RequestBody List<Einkaufsmanagement> management, @PathVariable String id) {
+    		
+  	       EinkaufEntity einkauf = einkaufService.findById(id);
+		 
+ 	   
+		    
+		    double lieferkosten = (float) (Math.round( einkauf.getDeliveryCostAtTime() * 100.0) / 100.0);
+		    double brotkosten = (float) (Math.round(einkauf.getBreadPriceAtTime() * 100.0) / 100.0);
+		    double frischkosten = (float) (Math.round(einkauf.getFreshPriceAtTime() * 100.0) / 100.0);
+		    double lagerkosten = (float) (Math.round(einkauf.getBestandPriceAtTime() * 100.0) / 100.0);
+		    double zuvielkosten = (float) (Math.round(einkauf.getTooMuchPriceAtTime() * 100.0) / 100.0);
+		    float gesamt = (float) (lieferkosten + einkauf.getTotalPriceAtTime());
+		    gesamt = (float) (Math.round( gesamt * 100.0) / 100.0);
+		    Optional<ConfigurationEntity> optionalE = configService.getConfig();
+		    if(optionalE.isPresent()) {
+
+		    	for(Einkaufsmanagement m : management) {
+		    	String text = optionalE.get().getEinkaufsmanagementEmailText()
+		    			.replaceAll(ConstantsUtils.EINKAUF_PLACEHOLDER_DATE, LocalDate.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")))
+		    			.replaceAll(ConstantsUtils.PLACEHOLDER_BROT_KOSTEN, brotkosten + "")
+		    			.replaceAll(ConstantsUtils.PLACEHOLDER_FRISCH_KOSTEN, frischkosten + "")
+		    			.replaceAll(ConstantsUtils.PLACEHOLDER_ZUVIEL_KOSTEN, zuvielkosten + "")
+		    			.replaceAll(ConstantsUtils.PLACEHOLDER_LIEFER_KOSTEN, lieferkosten + "")
+		    			.replaceAll(ConstantsUtils.PLACEHOLDER_LAGER_KOSTEN, lagerkosten + "")
+		    			.replaceAll(ConstantsUtils.PLACEHOLDER_GESAMT_KOSTEN, "" + gesamt )
+		    			.replaceAll(ConstantsUtils.PLACEHOLDER_SHOPPER_PERSONID, einkauf.getPersonId() + "")
+		    			.replaceAll(ConstantsUtils.PLACEHOLDER_PERSONID, m.getUsername());
+	      
+		    	emailService.sendSimpleMessage(m.getEmail(), "Einkaufs Rechnung von " + einkauf.getPersonId() + " bei der FoodCoop am " + LocalDate.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")), text);
+		    	}
+		    }
   	       
     }
     
