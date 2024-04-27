@@ -43,7 +43,7 @@ public class DeadlineService {
 
     public Deadline save(Deadline deadline) {
         Deadline d = repository.speichern(deadline);
-        gbmService.createList(80);
+        gbmService.createList();
         return d;
     }
 

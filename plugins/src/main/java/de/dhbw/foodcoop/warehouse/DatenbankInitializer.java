@@ -58,7 +58,7 @@ public class DatenbankInitializer {
     	
     	TimeZone.setDefault(TimeZone.getTimeZone("Europe/Berlin"));
     	if(cfgService.getConfig().isEmpty()) {
-    		cfgService.updateConfig(new ConfigurationEntity(ConstantsUtils.EMAIL_TEXT_EINKAUF_UEBERSICHT, null, null, 5.0));
+    		cfgService.updateConfig(new ConfigurationEntity(ConstantsUtils.EMAIL_TEXT_EINKAUF_UEBERSICHT, ConstantsUtils.THRESHOLD, 8.0, ConstantsUtils.EMAIL_TEXT_EINKAUFSMANAGEMENT, ConstantsUtils.EMAIL_TEXT_LAGERMEISTER));
     	}
     	//Erstellung aller Einheiten
     	if(einheitService.all().isEmpty() && kategorieService.all().isEmpty() && fbService.all().isEmpty() && produktService.all().isEmpty() && brotService.all().isEmpty() && deadlineService.all().isEmpty()) {
