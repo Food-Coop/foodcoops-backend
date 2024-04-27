@@ -727,7 +727,7 @@ public class PdfService {
           	Optional<Deadline> date1 = deadService.getByPosition(0);
         	Optional<Deadline> date2 = deadService.getByPosition(1);
         	HashMap<Integer, HashMap<String, Double>> map= new HashMap<>();
-        	HashMap<String, Integer> amount = new HashMap<>();
+        	HashMap<String, Double> amount = new HashMap<>();
         	BestellUebersicht be = service.getLastUebersicht();
         	String[] personNames = new String[16];
         	Arrays.fill(personNames, " ");
@@ -752,7 +752,7 @@ public class PdfService {
                  		map.put(i, idAmountMap);
                  	}
                  	if(be != null) {
-                 		be.getDiscrepancy().forEach(t -> {amount.merge(t.getBestand().getId(), t.getZuBestellendeGebinde(), Integer::sum);});
+                 		be.getDiscrepancy().forEach(t -> {amount.merge(t.getBestand().getId(), t.getZuBestellendeGebinde(), Double::sum);});
                  	}
         		}
         	}

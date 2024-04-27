@@ -85,9 +85,9 @@ public class DiscrepancyController {
 	@PutMapping("/gebinde/discrepancy/update/gebindeAmountToOrder/{id}")
 	public ResponseEntity<DiscrepancyEntity> updatedZuBestellen(@PathVariable String id, @RequestBody String body) {
 		
-		 int zuBestellendeGebinde;
+		 double zuBestellendeGebinde;
 		    try {
-		    	zuBestellendeGebinde = Integer.parseInt(body);
+		    	zuBestellendeGebinde = Double.parseDouble(body);
 		    } catch (NumberFormatException e) {
 		        return ResponseEntity.badRequest().build();
 		    }
@@ -102,7 +102,7 @@ public class DiscrepancyController {
 			FrischBestand bestand = (FrischBestand) de.getBestand();
 			
 			de.getGewollteMenge();
-			de.setZuVielzuWenig(de.getZuBestellendeGebinde() * bestand.getGebindegroesse() - de.getGewollteMenge());
+			de.setZuVielzuWenig((float)de.getZuBestellendeGebinde() * bestand.getGebindegroesse() - de.getGewollteMenge());
 			
 			return ResponseEntity.status(HttpStatus.OK).body(discrepancyService.save(de));
 		}
