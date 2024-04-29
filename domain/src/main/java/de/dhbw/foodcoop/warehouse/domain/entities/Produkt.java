@@ -14,8 +14,10 @@ public class Produkt extends BestandEntity {
 	@Column
 	private String produktName;
 	
-    @Embedded
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "lagerbestand_id")
     private Lagerbestand lagerbestand;
+    
     @ManyToOne
     @JoinColumn(name = "kategorie_id")
     private Kategorie kategorie;
@@ -29,6 +31,8 @@ public class Produkt extends BestandEntity {
         this.id = id;
         this.name = name;
         this.kategorie = kategorie;
+        this.produktName = produktname;
+        this.preis = preis;
         this.lagerbestand = lagerbestand;
     }
 
