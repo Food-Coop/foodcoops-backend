@@ -81,13 +81,12 @@ public class DeadlineService {
     	Deadline d = optDead.get();
     	LocalDateTime dateForDeadline = calculateDateFromDeadline(d);
     	if(LocalDateTime.now().isAfter(dateForDeadline)) {
-
     		Deadline deadline = new Deadline(UUID.randomUUID().toString(), d.getWeekday(), d.getTime(), LocalDateTime.now());
     		return Optional.of(save(deadline));
     	}
 		return Optional.empty();
-    	
     }
+    
     public static final Map<String, DayOfWeek> germanDaysOfWeek =
     	    Arrays.stream(DayOfWeek.values()).collect(
     	        Collectors.toMap(
@@ -99,21 +98,16 @@ public class DeadlineService {
     	            d -> d.getDisplayName(TextStyle.FULL, Locale.GERMAN)));
     
     public LocalDateTime calculateDateFromDeadline(Deadline d) {
-    	
-    	
-    	LocalDateTime date = d.getDatum(); // Der Timestamp an dem die deadline gesetzt wurde
-    	LocalTime t = date.toLocalTime(); // die Zeit des timestamps
-    	LocalTime target = LocalTime.of(d.getTime().getHours(), d.getTime().getMinutes(), d.getTime().getSeconds()); //Die Zeit des ziels
-    	
+    	LocalDateTime date = d.getDatum(); 
+    	LocalTime t = date.toLocalTime();
+    	LocalTime target = LocalTime.of(d.getTime().getHours(), d.getTime().getMinutes(), d.getTime().getSeconds());
     	if(germanDaysOfWeek.get(d.getWeekday()).getValue() == date.getDayOfWeek().getValue()) {
     		if(t.isBefore(target)) {
     			return LocalDateTime.of(date.toLocalDate(), target);
     		} else {
-    			
     			return LocalDateTime.of(date.toLocalDate().plusDays(7), target);
     		}
     	}
     	return LocalDateTime.of(date.with(TemporalAdjusters.next(germanDaysOfWeek.get(d.getWeekday()))).toLocalDate(), target);
-    
     }
 }   

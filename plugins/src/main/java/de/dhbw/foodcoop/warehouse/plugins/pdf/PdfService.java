@@ -14,6 +14,7 @@ import java.time.temporal.TemporalAdjusters;
 import java.time.temporal.WeekFields;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -471,6 +472,144 @@ public class PdfService {
         }
     }
     
+    public byte[] createByteArrayFromBase64String(String base64String) {
+    	return Base64.getEncoder().encode(base64String.getBytes());
+    }
+    
+    public byte[] createBrotUebersichtWithPersons() {
+    	 try (PDDocument document = new PDDocument()) {
+             PDPage page = new PDPage(new PDRectangle(PDRectangle.A4.getHeight(), PDRectangle.A4.getWidth()));
+             document.addPage(page);
+             
+             float toPx = 33.3333333333f;
+             
+             PDType0Font arial = PDType0Font.load(document, getResourceAsStream("/Arial.ttf"));
+             PDType0Font arialBold = PDType0Font.load(document, getResourceAsStream("/Arial_Bold.ttf"));
+             
+             String[] personNames = new String[20];
+             Optional<Deadline> date1 = deadService.getByPosition(0);
+         	Optional<Deadline> date2 = deadService.getByPosition(1);
+         	HashMap<Integer, HashMap<String, Double>> map= new HashMap<>();
+         	Arrays.fill(personNames, " ");
+         	if(!date1.isEmpty()) {
+         		if(!date2.isEmpty()) {
+         			
+         			LocalDateTime datum1 = date1.get().getDatum();
+                 	LocalDateTime datum2 = date2.get().getDatum();
+                  	List<BrotBestellung> brotBestellungen = brotService.findByDateBetween(datum1, datum2);
+
+                  	Set<String> personNamesSet = new HashSet<>();
+                  	brotBestellungen.forEach(t -> {personNamesSet.add(t.getPersonId());});
+                  //	person.addAll(personNames);
+                  	int counterForSet = 0;
+                  	for(String pName : personNamesSet) {
+                  		personNames[counterForSet++] = pName;
+                  	}
+                  	for(int i = 0; i < personNames.length ; i++) {
+                  		if(personNames[i].equalsIgnoreCase(" ")) continue;
+                  		HashMap<String, Double> idAmountMap= new HashMap<>();
+                  		brotService.findByDateBetween(datum1, datum2, personNames[i]).forEach(t -> {idAmountMap.put(t.getBrotBestand().getId(), t.getBestellmenge());});
+                  		map.put(i, idAmountMap);
+                  	}
+            
+         		}
+         	}
+         	
+         	System.err.println(personNames.length);
+               int counterForHeader = 0;
+             final Table.TableBuilder myTableBuilder = Table.builder()
+                     .addColumnsOfWidth(6f * toPx, 0.7f * toPx,0.7f * toPx, 0.7f * toPx,0.7f * toPx, 0.7f * toPx,0.7f * toPx, 0.7f * toPx,0.7f * toPx, 0.7f * toPx,0.7f * toPx, 0.7f * toPx,0.7f * toPx, 0.7f * toPx,0.7f * toPx, 0.7f * toPx,0.7f * toPx, 0.7f * toPx,0.7f * toPx, 0.7f * toPx,0.7f * toPx)
+                     .padding(2)
+                     .borderColor(Color.gray)
+                     .horizontalAlignment(HorizontalAlignment.CENTER)
+                     .verticalAlignment(VerticalAlignment.MIDDLE)
+                     .addRow(Row.builder()
+                   		  .font(arial)
+                             .add(TextCell.builder().borderWidthBottom(1).fontSize(10).borderWidthTop(0).borderWidthLeft(0).borderWidthRight(0).font(arialBold).horizontalAlignment(HorizontalAlignment.CENTER).text("Brotbezeichnung").build())
+                             .add(CustomVerticalTextCell.builder().borderWidth(1).font(arial).text(personNames[counterForHeader++]).build())
+                             .add(CustomVerticalTextCell.builder().borderWidth(1).font(arial).text(personNames[counterForHeader++]).build())
+                             .add(CustomVerticalTextCell.builder().borderWidth(1).font(arial).text(personNames[counterForHeader++]).build())
+                             .add(CustomVerticalTextCell.builder().borderWidth(1).font(arial).text(personNames[counterForHeader++]).build())
+                             .add(CustomVerticalTextCell.builder().borderWidth(1).font(arial).text(personNames[counterForHeader++]).build())
+                             .add(CustomVerticalTextCell.builder().borderWidth(1).font(arial).text(personNames[counterForHeader++]).build())
+                             .add(CustomVerticalTextCell.builder().borderWidth(1).font(arial).text(personNames[counterForHeader++]).build())
+                             .add(CustomVerticalTextCell.builder().borderWidth(1).font(arial).text(personNames[counterForHeader++]).build())
+                             .add(CustomVerticalTextCell.builder().borderWidth(1).font(arial).text(personNames[counterForHeader++]).build())
+                             .add(CustomVerticalTextCell.builder().borderWidth(1).font(arial).text(personNames[counterForHeader++]).build())
+                             .add(CustomVerticalTextCell.builder().borderWidth(1).font(arial).text(personNames[counterForHeader++]).build())
+                             .add(CustomVerticalTextCell.builder().borderWidth(1).font(arial).text(personNames[counterForHeader++]).build())
+                             .add(CustomVerticalTextCell.builder().borderWidth(1).font(arial).text(personNames[counterForHeader++]).build())
+                             .add(CustomVerticalTextCell.builder().borderWidth(1).font(arial).text(personNames[counterForHeader++]).build())
+                             .add(CustomVerticalTextCell.builder().borderWidth(1).font(arial).text(personNames[counterForHeader++]).build())
+                             .add(CustomVerticalTextCell.builder().borderWidth(1).font(arial).text(personNames[counterForHeader++]).build())
+                             .add(CustomVerticalTextCell.builder().borderWidth(1).font(arial).text(personNames[counterForHeader++]).build())
+                             .add(CustomVerticalTextCell.builder().borderWidth(1).font(arial).text(personNames[counterForHeader++]).build())
+                             .add(CustomVerticalTextCell.builder().borderWidth(1).font(arial).text(personNames[counterForHeader++]).build())
+                             .add(CustomVerticalTextCell.builder().borderWidth(1).font(arial).text(personNames[counterForHeader++]).build())
+                             .height(2.3f * toPx)
+                             // 2.3f
+                             .build());
+             brotBestandService.allOrdered().forEach(t -> {
+            	 if(t.getVerfuegbarkeit() ) {
+            		 
+                int counter = 0;
+            	myTableBuilder
+            		.addRow(Row.builder()
+	        			 .add(TextCell.builder().borderWidth(1).text(t.getName()).horizontalAlignment(HorizontalAlignment.LEFT).fontSize(10).font(arialBold).build())
+	 
+	        			 .add(TextCell.builder().borderWidth(1).text(map.get(counter++) == null ? "" : map.get(counter-1).get(t.getId()) == null ? "" : formatDouble( map.get(counter-1).get(t.getId())) + "" ).horizontalAlignment(HorizontalAlignment.CENTER).fontSize(10).font(arial).build())
+	        			 .add(TextCell.builder().borderWidth(1).text(map.get(counter++) == null ? "" : map.get(counter-1).get(t.getId()) == null ? "" : formatDouble(map.get(counter-1).get(t.getId())) + "" ).horizontalAlignment(HorizontalAlignment.CENTER).fontSize(10).font(arial).build())
+	        			 .add(TextCell.builder().borderWidth(1).text(map.get(counter++) == null ? "" : map.get(counter-1).get(t.getId()) == null ? "" : formatDouble(map.get(counter-1).get(t.getId())) + "" ).horizontalAlignment(HorizontalAlignment.CENTER).fontSize(10).font(arial).build())
+	        			 .add(TextCell.builder().borderWidth(1).text(map.get(counter++) == null ? "" : map.get(counter-1).get(t.getId()) == null ? "" : formatDouble(map.get(counter-1).get(t.getId())) + "" ).horizontalAlignment(HorizontalAlignment.CENTER).fontSize(10).font(arial).build())
+	        			 .add(TextCell.builder().borderWidth(1).text(map.get(counter++) == null ? "" : map.get(counter-1).get(t.getId()) == null ? "" : formatDouble(map.get(counter-1).get(t.getId())) + "" ).horizontalAlignment(HorizontalAlignment.CENTER).fontSize(10).font(arial).build())
+	        			 .add(TextCell.builder().borderWidth(1).text(map.get(counter++) == null ? "" : map.get(counter-1).get(t.getId()) == null ? "" : formatDouble(map.get(counter-1).get(t.getId())) + "" ).horizontalAlignment(HorizontalAlignment.CENTER).fontSize(10).font(arial).build())
+	        			 .add(TextCell.builder().borderWidth(1).text(map.get(counter++) == null ? "" : map.get(counter-1).get(t.getId()) == null ? "" : formatDouble(map.get(counter-1).get(t.getId())) + "" ).horizontalAlignment(HorizontalAlignment.CENTER).fontSize(10).font(arial).build())
+	        			 .add(TextCell.builder().borderWidth(1).text(map.get(counter++) == null ? "" : map.get(counter-1).get(t.getId()) == null ? "" : formatDouble(map.get(counter-1).get(t.getId())) + "" ).horizontalAlignment(HorizontalAlignment.CENTER).fontSize(10).font(arial).build())
+
+	        			 .add(TextCell.builder().borderWidth(1).text(map.get(counter++) == null ? "" : map.get(counter-1).get(t.getId()) == null ? "" : formatDouble( map.get(counter-1).get(t.getId())) + "" ).horizontalAlignment(HorizontalAlignment.CENTER).fontSize(10).font(arial).build())
+	        			 .add(TextCell.builder().borderWidth(1).text(map.get(counter++) == null ? "" : map.get(counter-1).get(t.getId()) == null ? "" : formatDouble(map.get(counter-1).get(t.getId())) + "" ).horizontalAlignment(HorizontalAlignment.CENTER).fontSize(10).font(arial).build())
+	        			 .add(TextCell.builder().borderWidth(1).text(map.get(counter++) == null ? "" : map.get(counter-1).get(t.getId()) == null ? "" : formatDouble(map.get(counter-1).get(t.getId())) + "" ).horizontalAlignment(HorizontalAlignment.CENTER).fontSize(10).font(arial).build())
+	        			 .add(TextCell.builder().borderWidth(1).text(map.get(counter++) == null ? "" : map.get(counter-1).get(t.getId()) == null ? "" : formatDouble(map.get(counter-1).get(t.getId())) + "" ).horizontalAlignment(HorizontalAlignment.CENTER).fontSize(10).font(arial).build())
+	        			 .add(TextCell.builder().borderWidth(1).text(map.get(counter++) == null ? "" : map.get(counter-1).get(t.getId()) == null ? "" : formatDouble(map.get(counter-1).get(t.getId())) + "" ).horizontalAlignment(HorizontalAlignment.CENTER).fontSize(10).font(arial).build())
+	        			 .add(TextCell.builder().borderWidth(1).text(map.get(counter++) == null ? "" : map.get(counter-1).get(t.getId()) == null ? "" : formatDouble(map.get(counter-1).get(t.getId())) + "" ).horizontalAlignment(HorizontalAlignment.CENTER).fontSize(10).font(arial).build())
+	        			 .add(TextCell.builder().borderWidth(1).text(map.get(counter++) == null ? "" : map.get(counter-1).get(t.getId()) == null ? "" : formatDouble(map.get(counter-1).get(t.getId())) + "" ).horizontalAlignment(HorizontalAlignment.CENTER).fontSize(10).font(arial).build())
+	        			 .add(TextCell.builder().borderWidth(1).text(map.get(counter++) == null ? "" : map.get(counter-1).get(t.getId()) == null ? "" : formatDouble(map.get(counter-1).get(t.getId())) + "" ).horizontalAlignment(HorizontalAlignment.CENTER).fontSize(10).font(arial).build())
+	        			 .add(TextCell.builder().borderWidth(1).text(map.get(counter++) == null ? "" : map.get(counter-1).get(t.getId()) == null ? "" : formatDouble(map.get(counter-1).get(t.getId())) + "" ).horizontalAlignment(HorizontalAlignment.CENTER).fontSize(10).font(arial).build())
+	        			 .add(TextCell.builder().borderWidth(1).text(map.get(counter++) == null ? "" : map.get(counter-1).get(t.getId()) == null ? "" : formatDouble(map.get(counter-1).get(t.getId())) + "" ).horizontalAlignment(HorizontalAlignment.CENTER).fontSize(10).font(arial).build())
+	        			 .add(TextCell.builder().borderWidth(1).text(map.get(counter++) == null ? "" : map.get(counter-1).get(t.getId()) == null ? "" : formatDouble(map.get(counter-1).get(t.getId())) + "" ).horizontalAlignment(HorizontalAlignment.CENTER).fontSize(10).font(arial).build())
+	        			 .add(TextCell.builder().borderWidth(1).text(map.get(counter++) == null ? "" : map.get(counter-1).get(t.getId()) == null ? "" : formatDouble(map.get(counter-1).get(t.getId())) + "" ).horizontalAlignment(HorizontalAlignment.CENTER).fontSize(10).font(arial).build())
+
+	        			 .height(0.4f * toPx)
+        			 .build());
+            	 }
+             });
+             
+             RepeatedHeaderTableDrawer ld = RepeatedHeaderTableDrawer.builder()
+                     .page(page)
+                     .table(myTableBuilder.build())
+                     .headerHeight(2.3f * toPx)
+                     .numberOfRowsToRepeat(1)
+                     .startX(toPx * 1f) // X-Position anpassen
+                     .endY(toPx*1.6f)
+                     .startY(page.getMediaBox().getHeight() - (1.7f * toPx)) // Y-Position anpassen
+                     .build();
+             
+   
+                     ld.draw(() -> document, () -> new PDPage(new PDRectangle(PDRectangle.A4.getHeight(), PDRectangle.A4.getWidth())) 
+                   	  , 50);
+             // Dokument speichern
+             
+             ByteArrayOutputStream out = new ByteArrayOutputStream();
+             document.save(out);
+             document.close();
+             return out.toByteArray();
+             
+    	 } catch (IOException e1) {
+ 			// TODO Auto-generated catch block
+ 			e1.printStackTrace();
+ 		}
+		return null;
+    }
     public byte[] createBrotUebersicht() {
     	  try (PDDocument document = new PDDocument()) {
               PDPage page = new PDPage(PDRectangle.A4);

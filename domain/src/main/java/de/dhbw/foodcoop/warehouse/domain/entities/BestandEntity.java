@@ -17,7 +17,6 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
     @JsonSubTypes.Type(value = FrischBestand.class, name = "frisch"),
     @JsonSubTypes.Type(value = BrotBestand.class, name ="brot"),
     @JsonSubTypes.Type(value = Produkt.class, name="lager")
-    // Andere Subtypen hier
 })
 @Table(name = "bestand")
 public abstract class BestandEntity {

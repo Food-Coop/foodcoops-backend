@@ -31,8 +31,6 @@ public class DiscrepancyEntity {
 	@Column
 	private float gewollteMenge;
 	
-
-	
 	public DiscrepancyEntity(String id, BestandEntity bestand, double zuBestellendeGebinde, float zuVielzuWenig, float gewollteMenge) {
 		super();
 		this.gewollteMenge = gewollteMenge;
@@ -43,20 +41,16 @@ public class DiscrepancyEntity {
 	}
 
 	public DiscrepancyEntity() {
+	
 	}
 	
-
-
 	public String getId() {
 		return id;
 	}
 
-
 	public void setId(String id) {
 		this.id = id;
 	}
-
-
 
 	public double getZuBestellendeGebinde() {
 		return zuBestellendeGebinde;
@@ -89,10 +83,4 @@ public class DiscrepancyEntity {
 	public void setGewollteMenge(float gewollteMenge) {
 		this.gewollteMenge = gewollteMenge;
 	}
-
-
-
-
-
-
 }
