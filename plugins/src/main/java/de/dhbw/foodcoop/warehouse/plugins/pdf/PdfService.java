@@ -549,7 +549,13 @@ public class PdfService {
                              .height(2.3f * toPx)
                              // 2.3f
                              .build());
-             brotBestandService.allOrdered().forEach(t -> {
+         	
+         	if(date1.isPresent() && date2.isPresent()) {
+         		List<String> bestellungenIds = brotService.findByDateBetween(date1.get().getDatum(), date2.get().getDatum())
+         			    .stream()
+         			    .map(brotEntity -> brotEntity.getBrotBestand().getId()) // Ändere hier, um die ID von jeder BrotEntity zu extrahieren
+         			    .collect(Collectors.toList());
+             brotBestandService.allOrdered().stream().filter(t -> bestellungenIds.contains(t.getId())).forEach(t -> {
             	 if(t.getVerfuegbarkeit() ) {
             		 
                 int counter = 0;
@@ -583,7 +589,7 @@ public class PdfService {
         			 .build());
             	 }
              });
-             
+         	}
              RepeatedHeaderTableDrawer ld = RepeatedHeaderTableDrawer.builder()
                      .page(page)
                      .table(myTableBuilder.build())

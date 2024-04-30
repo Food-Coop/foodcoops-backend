@@ -196,7 +196,7 @@ public class EinkaufController {
 		 
  	   
 		    
-		    double lieferkosten = (float) (Math.round( einkauf.getDeliveryCostAtTime() * 100.0) / 100.0);
+		    double lieferkosten = (double) (Math.round( einkauf.getDeliveryCostAtTime() * 100.0) / 100.0);
 		    double brotkosten = (float) (Math.round(einkauf.getBreadPriceAtTime() * 100.0) / 100.0);
 		    double frischkosten = (float) (Math.round(einkauf.getFreshPriceAtTime() * 100.0) / 100.0);
 		    double lagerkosten = (float) (Math.round(einkauf.getBestandPriceAtTime() * 100.0) / 100.0);
