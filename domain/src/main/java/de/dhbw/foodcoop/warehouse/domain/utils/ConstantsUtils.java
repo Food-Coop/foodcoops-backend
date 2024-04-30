@@ -13,7 +13,7 @@ public class ConstantsUtils {
 	public final static String EINKAUF_PLACEHOLDER_DATE = "%currentDate%";
 	
 	public final static String PLACEHOLDER_PERSONID = "%personID%";
-	public final static String PLACEHOLDER_SHOPPER_PERSONID = "%personID%";
+	public final static String PLACEHOLDER_SHOPPER_PERSONID = "%ShopperPersonID%";
 	
 	public final static String PLACEHOLDER_BROT_KOSTEN = "%brotKosten%";
 	public final static String PLACEHOLDER_FRISCH_KOSTEN = "%frischKosten%";
