@@ -17,13 +17,18 @@ public class ConfigurationEntity {
 
 	@Lob
 	@Column
-	private String bestellEmailText;
+	private String einkaufEmailText;
+	
+	@Lob
+	@Column
+	private String einkaufsmanagementEmailText;
+	
+	@Lob
+	@Column
+	private String lagermeisterEmailText;
 
 	@Column
-	private String emailFromBestellAdmin;
-	
-	@Column
-	private String emailFromEinkaufAdmin;
+	private double threshold;
 	
 	@Column
 	private double deliverycost;
@@ -36,42 +41,63 @@ public class ConfigurationEntity {
 		this.id = ConstantsUtils.CONFIGURATION_ID;
 	}
 
-	public ConfigurationEntity(String bestellEmailText, String emailFromBestellAdmin, String emailFromEinkaufAdmin, double deliverycost) {
+	public ConfigurationEntity(String einkaufEmailText, double threshold, double deliverycost, String einkaufsmanagementEmailText, String lagermeisterEmailText) {
 		super();
 		this.deliverycost = deliverycost;
 		this.id = ConstantsUtils.CONFIGURATION_ID;
-		this.bestellEmailText = bestellEmailText;
-		this.emailFromBestellAdmin = emailFromBestellAdmin;
-		this.emailFromEinkaufAdmin = emailFromEinkaufAdmin;
+		this.einkaufEmailText = einkaufEmailText;
+		this.threshold = threshold;
+		this.lagermeisterEmailText = lagermeisterEmailText;
+		this.einkaufsmanagementEmailText = einkaufsmanagementEmailText;
 	}
 
 	public String getEinkaufEmailText() {
-		if(bestellEmailText == null || bestellEmailText.isBlank()) {
+		if(einkaufEmailText == null || einkaufEmailText.isBlank()) {
 			return ConstantsUtils.EMAIL_TEXT_EINKAUF_UEBERSICHT;
 		}
-		return bestellEmailText;
+		return einkaufEmailText;
 	}
 
-	public void setBestellEmailText(String bestellEmailText) {
-		this.bestellEmailText = bestellEmailText;
+	public void setEinkaufEmailText(String einkaufEmailText) {
+		this.einkaufEmailText = einkaufEmailText;
 	}
 
-	public String getEmailFromBestellAdmin() {
-		return emailFromBestellAdmin;
-	}
 
-	public void setEmailFromBestellAdmin(String emailFromBestellAdmin) {
-		this.emailFromBestellAdmin = emailFromBestellAdmin;
-	}
-
-	public String getEmailFromEinkaufAdmin() {
-		return emailFromEinkaufAdmin;
-	}
-
-	public void setEmailFromEinkaufAdmin(String emailFromEinkaufAdmin) {
-		this.emailFromEinkaufAdmin = emailFromEinkaufAdmin;
-	}
 	
+	public String getEinkaufsmanagementEmailText() {
+		if(einkaufsmanagementEmailText == null) {
+			return ConstantsUtils.EMAIL_TEXT_EINKAUFSMANAGEMENT;
+		}
+		return einkaufsmanagementEmailText;
+	}
+
+	public void setEinkaufsmanagementEmailText(String einkaufsmanagementEmailText) {
+		this.einkaufsmanagementEmailText = einkaufsmanagementEmailText;
+	}
+
+	public String getLagermeisterEmailText() {
+		if(lagermeisterEmailText == null) {
+			return ConstantsUtils.EMAIL_TEXT_LAGERMEISTER;
+		}
+		return lagermeisterEmailText;
+	}
+
+	public void setLagermeisterEmailText(String lagermeisterEmailText) {
+		this.lagermeisterEmailText = lagermeisterEmailText;
+	}
+
+	public double getThreshold() {
+		if(threshold == 0) {
+			return ConstantsUtils.THRESHOLD;
+		}
+		return threshold;
+	}
+
+	public void setThreshold(double threshold) {
+		
+		this.threshold = threshold;
+	}
+
 	public double getDeliverycost() {
 		return deliverycost;
 	}

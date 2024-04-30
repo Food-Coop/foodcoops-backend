@@ -6,9 +6,12 @@ import java.util.TimeZone;
 import java.util.UUID;
 
 import javax.annotation.PostConstruct;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import de.dhbw.foodcoop.warehouse.application.admin.ConfigurationService;
 import de.dhbw.foodcoop.warehouse.application.brot.BrotBestandService;
@@ -26,6 +29,9 @@ import de.dhbw.foodcoop.warehouse.domain.entities.Produkt;
 import de.dhbw.foodcoop.warehouse.domain.utils.ConstantsUtils;
 import de.dhbw.foodcoop.warehouse.domain.values.Einheit;
 import de.dhbw.foodcoop.warehouse.domain.values.Lagerbestand;
+import de.dhbw.foodcoop.warehouse.plugins.persistence.SpringDataEinheitRepository;
+import de.dhbw.foodcoop.warehouse.plugins.persistence.SpringDataKategorieRepository;
+import de.dhbw.foodcoop.warehouse.plugins.persistence.SpringDataProduktRepository;
 
 @Component
 public class DatenbankInitializer {
@@ -54,11 +60,10 @@ public class DatenbankInitializer {
 
     @PostConstruct
     public void init() {
-
     	
     	TimeZone.setDefault(TimeZone.getTimeZone("Europe/Berlin"));
     	if(cfgService.getConfig().isEmpty()) {
-    		cfgService.updateConfig(new ConfigurationEntity(ConstantsUtils.EMAIL_TEXT_EINKAUF_UEBERSICHT, null, null, 5.0));
+    		cfgService.updateConfig(new ConfigurationEntity(ConstantsUtils.EMAIL_TEXT_EINKAUF_UEBERSICHT, ConstantsUtils.THRESHOLD, 8.0, ConstantsUtils.EMAIL_TEXT_EINKAUFSMANAGEMENT, ConstantsUtils.EMAIL_TEXT_LAGERMEISTER));
     	}
     	//Erstellung aller Einheiten
     	if(einheitService.all().isEmpty() && kategorieService.all().isEmpty() && fbService.all().isEmpty() && produktService.all().isEmpty() && brotService.all().isEmpty() && deadlineService.all().isEmpty()) {
@@ -111,6 +116,7 @@ public class DatenbankInitializer {
     	Kategorie brotaufstrich = kategorieService.save(new Kategorie("Brotaufstriche", false));
     	Kategorie milch = kategorieService.save(new Kategorie("Milch-Milchersatz", false));
     	Kategorie gemuese = kategorieService.save(new Kategorie("Gemüse-Obstkonserven", false));
+    	Kategorie kaffee = kategorieService.save(new Kategorie("Kaffee", false));
     	
     	
     	//Erstellung aller FrischBestände
@@ -311,7 +317,7 @@ public class DatenbankInitializer {
        	produktService.save(new Produkt("Bratöl (Raps) 0,75l","Byodo", Essigoel, new Lagerbestand(l, 0d, 0d), 4.60f));
        	
        	produktService.save(new Produkt("Basmati Reis 1kg","Rapunzel Himalaya Basmati Reis", reis, new Lagerbestand(kg, 0d, 0d), 5.00f));
-       	produktService.save(new Produkt("Milchreis 500g","Burgermühle", reis, new Lagerbestand(g, 0d, 0d), 2.10f));
+       	produktService.save(new Produkt("Milchreis 500g","Burgermühle", reis, new Lagerbestand(g, 0d, 0d), 3.10f));
        	produktService.save(new Produkt("Milchreis 1kg","Burgermühle", reis, new Lagerbestand(kg, 0d, 0d), 5.20f));
        	produktService.save(new Produkt("Parboiled Reis 1kg weiß","Spielberger/Burger", reis, new Lagerbestand(kg, 0d, 0d), 5.40f));
        	produktService.save(new Produkt("Camarque Reis 500g rot","Rapunzel", reis, new Lagerbestand(g, 0d, 0d), 4.50f));
@@ -320,15 +326,15 @@ public class DatenbankInitializer {
        	produktService.save(new Produkt("Falafel 160g","Bauckhof glutenfrei", Bratlinge, new Lagerbestand(g, 0d, 0d), 1.80f));
        	
        	
-       	produktService.save(new Produkt("Bulgur 500g","Rapunzel", GriesGetreide, new Lagerbestand(g, 0d, 0d), 2.20f));
+       	produktService.save(new Produkt("Bulgur 500g","Rapunzel", GriesGetreide, new Lagerbestand(g, 0d, 0d), 3.10f));
        	produktService.save(new Produkt("Cous Cous 500g","Rapunzel", GriesGetreide, new Lagerbestand(g, 0d, 0d), 2.70f));
        	produktService.save(new Produkt("Minutenpolenta 500g","Rapunzel", GriesGetreide, new Lagerbestand(g, 0d, 0d), 2.50f));
        	produktService.save(new Produkt("Haferflocken Zartblatt 1kg","Spielgerber", GriesGetreide, new Lagerbestand(kg, 0d, 0d), 3.40f));
        	produktService.save(new Produkt("Speisehirse 500g","Rapunzel", GriesGetreide, new Lagerbestand(g, 0d, 0d), 2.20f));
        	produktService.save(new Produkt("Speisehirse 1kg","Rapunzel", GriesGetreide, new Lagerbestand(kg, 0d, 0d), 5.40f));
        	produktService.save(new Produkt("Quinoa weiß 500g","Rapunzel", GriesGetreide, new Lagerbestand(g, 0d, 0d), 4.50f));
-       	produktService.save(new Produkt("Leinsaat 500g","Rapunzel", GriesGetreide, new Lagerbestand(g, 0d, 0d), 3.15f));
-       	produktService.save(new Produkt("Sonnenblumenkerne 500g","Rapunzel", GriesGetreide, new Lagerbestand(g, 0d, 0d), 2.05f));
+       	produktService.save(new Produkt("Leinsaat 500g","Rapunzel", GriesGetreide, new Lagerbestand(g, 0d, 0d), 3.50f));
+       	produktService.save(new Produkt("Sonnenblumenkerne 500g","Rapunzel", GriesGetreide, new Lagerbestand(g, 0d, 0d), 3.00f));
        	produktService.save(new Produkt("Sesam 250g","Rapunzel ungeschält", GriesGetreide, new Lagerbestand(g, 0d, 0d), 2.25f));
        	produktService.save(new Produkt("Dinkelgrieß 500g","Spielberger demeter", GriesGetreide, new Lagerbestand(g, 0d, 0d), 2.50f));
        	produktService.save(new Produkt("Dinkelmehl 630 1kg","Burgermühle", GriesGetreide, new Lagerbestand(kg, 0d, 0d), 2.50f));
@@ -390,6 +396,7 @@ public class DatenbankInitializer {
        	produktService.save(new Produkt("Basilikum gerebelt","Lebensbaum", wuerze, new Lagerbestand(p, 0d, 0d), 1.90f));
        	produktService.save(new Produkt("Pfeffer","Lebensbaum", wuerze, new Lagerbestand(p, 0d, 0d), 2.60f));
        	
+       	produktService.save(new Produkt("Arrabbiata 340g","Rapunzel", Pastasosen, new Lagerbestand(g, 0d, 0d), 3.50f));
        	produktService.save(new Produkt("Ratatouille 350g","Rapunzel", Pastasosen, new Lagerbestand(g, 0d, 0d), 3.70f));
        	produktService.save(new Produkt("Toskana 550g","Rapunzel", Pastasosen, new Lagerbestand(g, 0d, 0d), 3.00f));
        	produktService.save(new Produkt("Familia 550g","Rapunzel", Pastasosen, new Lagerbestand(g, 0d, 0d), 2.80f));
@@ -431,6 +438,13 @@ public class DatenbankInitializer {
        	produktService.save(new Produkt("Kichererbsen Glas 400g","", gemuese, new Lagerbestand(p, 0d, 0d), 1.25f));
        	produktService.save(new Produkt("Gewürzgurken 670g","Marschland", gemuese, new Lagerbestand(p, 0d, 0d), 3.90f));
        	
+       	produktService.save(new Produkt("Espresso italienische Röstung 250g","", kaffee, new Lagerbestand(p, 0d, 0d), 0f));
+       	produktService.save(new Produkt("Espresso italienische Röstung 500g","", kaffee, new Lagerbestand(p, 0d, 0d), 0f));
+       	produktService.save(new Produkt("Espresso Bohne","La cortadora (verfallen)", kaffee, new Lagerbestand(p, 0d, 0d), 0f));
+       	produktService.save(new Produkt("Espresso entkoffeiniert","La cortadora (verfallen)", kaffee, new Lagerbestand(p, 0d, 0d), 0f));
+       	
     	}
     }
+
+
 }

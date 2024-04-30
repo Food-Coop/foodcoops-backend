@@ -20,7 +20,7 @@ public class DiscrepancyEntity {
 	
 	// Wenn ein Gebinde z.B. 2,5kg ist, und zuBestellendeGebinde 3, heißt das 2,5 * 3 für gesamte Kg Menge
 	@Column
-	private int zuBestellendeGebinde;
+	private double zuBestellendeGebinde;
 	
 	// Positive Zahl: Menge die zu viel geliefert wurde. In Stückzahl oder Kg
 	// Negative Zahl: Menge die zu wenig geliefert wurde. In Stückzahl oder Kg
@@ -31,9 +31,7 @@ public class DiscrepancyEntity {
 	@Column
 	private float gewollteMenge;
 	
-
-	
-	public DiscrepancyEntity(String id, BestandEntity bestand, int zuBestellendeGebinde, float zuVielzuWenig, float gewollteMenge) {
+	public DiscrepancyEntity(String id, BestandEntity bestand, double zuBestellendeGebinde, float zuVielzuWenig, float gewollteMenge) {
 		super();
 		this.gewollteMenge = gewollteMenge;
 		this.id = id;
@@ -43,26 +41,22 @@ public class DiscrepancyEntity {
 	}
 
 	public DiscrepancyEntity() {
+	
 	}
 	
-
-
 	public String getId() {
 		return id;
 	}
-
 
 	public void setId(String id) {
 		this.id = id;
 	}
 
-
-
-	public int getZuBestellendeGebinde() {
+	public double getZuBestellendeGebinde() {
 		return zuBestellendeGebinde;
 	}
 
-	public void setZuBestellendeGebinde(int zuBestellendeGebinde) {
+	public void setZuBestellendeGebinde(double zuBestellendeGebinde) {
 		this.zuBestellendeGebinde = zuBestellendeGebinde;
 	}
 
@@ -89,10 +83,4 @@ public class DiscrepancyEntity {
 	public void setGewollteMenge(float gewollteMenge) {
 		this.gewollteMenge = gewollteMenge;
 	}
-
-
-
-
-
-
 }

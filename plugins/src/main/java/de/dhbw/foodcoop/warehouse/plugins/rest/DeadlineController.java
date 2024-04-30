@@ -9,11 +9,15 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,9 +30,17 @@ import de.dhbw.foodcoop.warehouse.adapters.representations.DeadlineRepresentatio
 import de.dhbw.foodcoop.warehouse.adapters.representations.mappers.DeadlineToRepresentationMapper;
 import de.dhbw.foodcoop.warehouse.adapters.representations.mappers.RepresentationToDeadlineMapper;
 import de.dhbw.foodcoop.warehouse.application.deadline.DeadlineService;
+import de.dhbw.foodcoop.warehouse.application.lager.KategorieService;
 import de.dhbw.foodcoop.warehouse.domain.entities.Deadline;
+import de.dhbw.foodcoop.warehouse.domain.entities.Kategorie;
+import de.dhbw.foodcoop.warehouse.domain.entities.Produkt;
 import de.dhbw.foodcoop.warehouse.domain.exceptions.DeadlineInUseException;
 import de.dhbw.foodcoop.warehouse.domain.exceptions.DeadlineNotFoundException;
+import de.dhbw.foodcoop.warehouse.domain.values.Einheit;
+import de.dhbw.foodcoop.warehouse.domain.values.Lagerbestand;
+import de.dhbw.foodcoop.warehouse.plugins.persistence.SpringDataEinheitRepository;
+import de.dhbw.foodcoop.warehouse.plugins.persistence.SpringDataKategorieRepository;
+import de.dhbw.foodcoop.warehouse.plugins.persistence.SpringDataProduktRepository;
 import de.dhbw.foodcoop.warehouse.plugins.rest.assembler.DeadlineModelAssembler;
 
 @RestController
@@ -91,6 +103,7 @@ public class DeadlineController {
                 linkTo(methodOn(DeadlineController.class).all()).withSelfRel());
     }
 
+	
     @GetMapping("/deadline/last")
     public EntityModel<DeadlineRepresentation> last() {
         Deadline deadline = service.last();

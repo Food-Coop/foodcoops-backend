@@ -10,6 +10,7 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import de.dhbw.foodcoop.warehouse.application.admin.ConfigurationService;
 import de.dhbw.foodcoop.warehouse.application.brot.BrotBestellungService;
 import de.dhbw.foodcoop.warehouse.application.deadline.DeadlineService;
 import de.dhbw.foodcoop.warehouse.application.diskrepanz.DiscrepancyService;
@@ -42,6 +43,9 @@ public class BestellÜbersichtService {
 	@Autowired
 	private BrotBestellungService brotService;
 	
+	@Autowired
+	private ConfigurationService cfgService;
+	
 	public BestellUebersicht getLastUebersicht() {
 		Deadline d = deadlineService.last();
 		return repo.findeMitDeadline(d);
@@ -65,10 +69,10 @@ public class BestellÜbersichtService {
 		return repo.speichern(bu);
 	}
 	
-	public Optional<BestellUebersicht> createList(int threshold) {
+	public Optional<BestellUebersicht> createList() {
 		BestellUebersicht bestellÜbersicht = new BestellUebersicht();
 		bestellÜbersicht.setId(UUID.randomUUID().toString());
-		
+		double threshold = cfgService.getConfig().get().getThreshold();
 		List<DiscrepancyEntity> discrepancy = new ArrayList<>();
 		//neuster Eintrag
 		Deadline neuErstellte = deadlineService.last();

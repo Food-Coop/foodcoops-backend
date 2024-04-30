@@ -15,6 +15,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -46,15 +47,7 @@ public class PdfController {
 	// Wenn dies geschehen ist, kann man sich über das Authentification Objekt den Token ziehen
 	// Und damit auch die Email, wenn diese drin steht im Token.
 	// Dann muss keine Email im Body übergeben werden.
-	@GetMapping("/email/send/forTesting")
-	public void sendEmail() {
-		try {
-			service.sendSimpleMessage("Matteo.staar@gmx.de", "Dies ist ein kleiner Text", "Hallo Niko,\n ich hoffe dir geht es gut! \nIm Anhang ist die aktuelle Bestellübersicht.\n\nViele Grüße \nDeine Foodcoop Karlsruhe Nordstadt", pdf.createUebersicht(bueService.getLastUebersicht()), "BestellÜbersicht.pdf");
-		} catch (MessagingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
+
 	
 	@PostMapping("/email/send/bestellUebersicht") 
 	public void sendTotalBestellÜbersicht(@RequestBody String email) {
@@ -72,6 +65,29 @@ public class PdfController {
 		String date = deadlineService.getByPosition(0).get().getDatum().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
 		try {
 			service.sendSimpleMessage(email, "Foodcoop MIKA - zu bestellende Brote vom " + date, "Hallo, \nim Anhang befindet sich die Liste der zu bestellenden Brote für die Deadline vom " + date +".\n\nViele Grüße \nDeine Foodcoop MIKA", pdf.createBrotUebersicht(), "Brotbestellungen-" + date + ".pdf");
+		} catch (MessagingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	@PostMapping("/email/send/brotBestellungenMitPersonen") 
+	public void sendBreadOrderWithPersons(@RequestBody String email) {
+		String date = deadlineService.getByPosition(0).get().getDatum().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+		try {
+			service.sendSimpleMessage(email, "Foodcoop MIKA - Brotbestellungen der Mitglieder " + date, "Hallo, \nim Anhang befindet sich die Liste der einzelnen Brotbestellungen für die Deadline vom " + date +".\n\nViele Grüße \nDeine Foodcoop MIKA", pdf.createBrotUebersichtWithPersons(), "BrotbestellungenPersonen-" + date + ".pdf");
+		} catch (MessagingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	
+	@PostMapping("/email/send/lagerbestand/{email}") 
+	public void sendInventoryStatus(@RequestBody String base64Pdf, @PathVariable String email ) {
+		String date = deadlineService.getByPosition(0).get().getDatum().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+		try {
+			service.sendSimpleMessage(email, "Foodcoop MIKA - aktueller Lagerbestand " + date, "Hallo, \nim Anhang befindet sich der aktuelle Lagerbestand.\n\nViele Grüße \nDeine Foodcoop MIKA", pdf.createByteArrayFromBase64String(base64Pdf), "Lagerbestand-" + date + ".pdf");
 		} catch (MessagingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -154,6 +170,28 @@ public class PdfController {
                 .body(responseBody);
     }	
  	
+ 	@GetMapping(value = "/pdf/download/brotBestellungenMitPerson")
+    public ResponseEntity<StreamingResponseBody> getBrotBestellungenWithPersonPDF() throws IOException {
+        String fileName = "Brotbestellungen-fuer-Personen-"+ LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+        byte[] pdfInBytes = pdf.createBrotUebersichtWithPersons();
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(pdfInBytes);
+        StreamingResponseBody responseBody = outputStream -> {
+
+            int numberOfBytesToWrite;
+            byte[] data = new byte[1024];
+            while ((numberOfBytesToWrite = inputStream.read(data, 0, data.length)) != -1) {
+                outputStream.write(data, 0, numberOfBytesToWrite);
+            }
+
+            inputStream.close();
+        };
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + fileName + ".pdf")
+                .contentType(MediaType.APPLICATION_PDF)
+                .body(responseBody);
+    }
+ 	
  	@GetMapping(value = "/pdf/byte/frischBestellungen")
     public PDFInfoObject getUebersichtFrischPDFasByte() throws IOException {
         return new PDFInfoObject(pdf.createFrischUebersicht(/*getLastBestellUebersicht()*/), "Frischbestellungen-" + LocalDateTime.now().with(TemporalAdjusters.nextOrSame(DayOfWeek.TUESDAY)).format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
@@ -167,5 +205,10 @@ public class PdfController {
  	@GetMapping(value = "/pdf/byte/bestellUebersicht")
     public PDFInfoObject getBestellUebersichtPDFasByte() throws IOException {
         return new PDFInfoObject(pdf.createUebersicht(bueService.getLastUebersicht()), "Bestelluebersicht-"+ LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+ 	}
+ 	
+ 	@GetMapping(value = "/pdf/byte/brotMitPerson")
+    public PDFInfoObject getBreadWithPersonPDFasByte() throws IOException {
+        return new PDFInfoObject(pdf.createBrotUebersichtWithPersons(), "Brotbestellungen-fuer-Personen-"+ LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
  	}
 }

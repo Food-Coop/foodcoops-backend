@@ -11,10 +11,10 @@ public class DiscrepancyRepresentation {
 	
 	private String id;
 	private BestandRepresentation bestand;
-	private int zuBestellendeGebinde;
+	private double zuBestellendeGebinde;
 	private float zuVielzuWenig;
 	private float gewollteMenge;
-	public DiscrepancyRepresentation(String id, BestandRepresentation bestand, int zuBestellendeGebinde,
+	public DiscrepancyRepresentation(String id, BestandRepresentation bestand, double zuBestellendeGebinde,
 			float zuVielzuWenig, float gewollteMenge) {
 		super();
 		this.id = id;
@@ -29,7 +29,7 @@ public class DiscrepancyRepresentation {
 	public BestandRepresentation getBestand() {
 		return bestand;
 	}
-	public int getZuBestellendeGebinde() {
+	public double getZuBestellendeGebinde() {
 		return zuBestellendeGebinde;
 	}
 	public float getZuVielzuWenig() {

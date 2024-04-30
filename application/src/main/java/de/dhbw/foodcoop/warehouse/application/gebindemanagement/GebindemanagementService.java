@@ -160,7 +160,7 @@ public class GebindemanagementService {
 							  } else {
 								  finalObject = de.get();
 								  de.get().setZuBestellendeGebinde(de.get().getZuBestellendeGebinde() + 1);
-								  de.get().setZuVielzuWenig(de.get().getZuBestellendeGebinde() * lowestGebinde.get().getGebindegroesse() - de.get().getGewollteMenge());
+								  de.get().setZuVielzuWenig((float) (de.get().getZuBestellendeGebinde() * lowestGebinde.get().getGebindegroesse() - de.get().getGewollteMenge()));
 							  }
 							 sortedMap.entrySet().stream()
 							 .filter(entry -> entry.getKey().getId() != finalObject.getId())
@@ -169,7 +169,7 @@ public class GebindemanagementService {
 								  if(discrepancy.isEmpty()) {
 									  done.add(new DiscrepancyEntity(UUID.randomUUID().toString(), e.getKey(), 0, -copyOfAmount.get(e.getKey()), copyOfAmount.get(e.getKey())));
 								  } else {
-									  discrepancy.get().setZuVielzuWenig(discrepancy.get().getZuBestellendeGebinde() * e.getKey().getGebindegroesse() - discrepancy.get().getGewollteMenge());
+									  discrepancy.get().setZuVielzuWenig((float) discrepancy.get().getZuBestellendeGebinde() * e.getKey().getGebindegroesse() - discrepancy.get().getGewollteMenge());
 								  }
 							 });
 						} else {
@@ -180,7 +180,7 @@ public class GebindemanagementService {
 										 done.add(new DiscrepancyEntity(UUID.randomUUID().toString(), entry.getKey(), 0, -copyOfAmount.get(entry.getKey()), copyOfAmount.get(entry.getKey()) ));
 									} else {
 										
-										de.get().setZuVielzuWenig(de.get().getZuBestellendeGebinde() * entry.getKey().getGebindegroesse() - de.get().getGewollteMenge());
+										de.get().setZuVielzuWenig((float)de.get().getZuBestellendeGebinde() * entry.getKey().getGebindegroesse() - de.get().getGewollteMenge());
 									}
 							  }	 
 						 }
@@ -214,7 +214,7 @@ public class GebindemanagementService {
 						done.add(new DiscrepancyEntity(UUID.randomUUID().toString(), favourit, 1, favourit.getGebindegroesse() - sorted.get(favourit), copyOfAmount.get(favourit)));
 					} else {
 						de.get().setZuBestellendeGebinde(de.get().getZuBestellendeGebinde() + 1);
-						de.get().setZuVielzuWenig(de.get().getZuBestellendeGebinde() * favourit.getGebindegroesse() - de.get().getGewollteMenge());
+						de.get().setZuVielzuWenig((float)de.get().getZuBestellendeGebinde() * favourit.getGebindegroesse() - de.get().getGewollteMenge());
 					}
 					break;
 				} else {

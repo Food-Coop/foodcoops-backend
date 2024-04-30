@@ -50,7 +50,7 @@ public class RepresentationToBestandMapper implements Function<BestandRepresenta
     	if(newBestand instanceof ProduktRepresentation) {
     		ProduktRepresentation pr = (ProduktRepresentation) newBestand;
     		Kategorie kategorie = kategorieService.findById(pr.getKategorie().getId()).orElseThrow();
-    		Produkt p = new Produkt(oldBestand.getId(), pickNewIfDefined(oldBestand.getName(), newBestand.getName()), pr.getProduktname(), kategorie, lagerbestandMapper.apply(pr.getLagerbestand()), pr.getPreis());
+    		Produkt p = new Produkt(oldBestand.getId(), pickNewIfDefined(oldBestand.getName(), newBestand.getName()), pr.getProduktBezeichnung(), kategorie, lagerbestandMapper.apply(pr.getLagerbestand()), pr.getPreis());
     		p.setPreis(pr.getPreis());
     		p.setVerfuegbarkeit(pr.getVerfuegbarkeit());
     		return p;
@@ -82,7 +82,7 @@ public class RepresentationToBestandMapper implements Function<BestandRepresenta
 		if(t instanceof ProduktRepresentation) {
 			ProduktRepresentation pr = (ProduktRepresentation) t;
 			Kategorie kategorie = kategorieService.findById(pr.getKategorie().getId()).orElseThrow();
-    		Produkt p = new Produkt(pr.getId(), pr.getName(), pr.getProduktname(), kategorie, lagerbestandMapper.apply(pr.getLagerbestand()), pr.getPreis());
+    		Produkt p = new Produkt(pr.getId(), pr.getName(), pr.getProduktBezeichnung(), kategorie, lagerbestandMapper.apply(pr.getLagerbestand()), pr.getPreis());
     		p.setPreis(pr.getPreis());
     		p.setVerfuegbarkeit(pr.getVerfuegbarkeit());
     		return p;
