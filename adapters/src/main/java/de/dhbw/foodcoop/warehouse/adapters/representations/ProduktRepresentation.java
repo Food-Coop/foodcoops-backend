@@ -4,13 +4,13 @@ public final class ProduktRepresentation extends BestandRepresentation {
     private final KategorieRepresentation kategorie;
     private final LagerbestandRepresentation lagerbestand;
     
-    private String produktname;
+    private String produktBezeichnung;
 
-    public ProduktRepresentation(String id, String name, String produktname, KategorieRepresentation kategorie, LagerbestandRepresentation lagerbestand, float price) {
+    public ProduktRepresentation(String id, String name, String produktBezeichnung, KategorieRepresentation kategorie, LagerbestandRepresentation lagerbestand, float price) {
     	super(id, name, lagerbestand == null ? false : lagerbestand.getIstLagerbestand() > 0 ? true : false, price);
 
         this.kategorie = kategorie;
-        this.produktname = produktname;
+        this.produktBezeichnung = produktBezeichnung;
         this.lagerbestand = lagerbestand;
     }
 
@@ -24,15 +24,17 @@ public final class ProduktRepresentation extends BestandRepresentation {
         return lagerbestand;
     }
 
-    
-    public String getProduktname() {
-		return produktname;
+
+
+
+	public String getProduktBezeichnung() {
+		return produktBezeichnung;
 	}
 
 
 
-	public void setProduktname(String produktname) {
-		this.produktname = produktname;
+	public void setProduktBezeichnung(String produktBezeichnung) {
+		this.produktBezeichnung = produktBezeichnung;
 	}
 
 

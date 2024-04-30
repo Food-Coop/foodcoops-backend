@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.DecimalFormat;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -55,7 +56,6 @@ import de.dhbw.foodcoop.warehouse.application.deadline.DeadlineService;
 import de.dhbw.foodcoop.warehouse.application.frischbestellung.FrischBestandService;
 import de.dhbw.foodcoop.warehouse.application.frischbestellung.FrischBestellungService;
 import de.dhbw.foodcoop.warehouse.application.gebindemanagement.GebindemanagementService;
-import de.dhbw.foodcoop.warehouse.domain.entities.BestandEntity;
 import de.dhbw.foodcoop.warehouse.domain.entities.BestellUebersicht;
 import de.dhbw.foodcoop.warehouse.domain.entities.BrotBestand;
 import de.dhbw.foodcoop.warehouse.domain.entities.BrotBestellung;
@@ -948,7 +948,7 @@ public class PdfService {
             
              frischBestandService.allOrdered().forEach(t -> {
             	 if(t.getVerfuegbarkeit() ) {
-            		 
+            		 DecimalFormat formatter = new DecimalFormat("0.##");
                 int counter = 0;
             	myTableBuilder
             		.addRow(Row.builder()
@@ -958,7 +958,7 @@ public class PdfService {
 	        			 .add(TextCell.builder().borderWidth(1).text(t.getPreis() + "").horizontalAlignment(HorizontalAlignment.RIGHT).fontSize(10).font(arialBold).build())
 	        			 .add(TextCell.builder().borderWidth(1).text(t.getEinheit().getName().equalsIgnoreCase("Stück") ? "St" : t.getEinheit().getName()).horizontalAlignment(HorizontalAlignment.CENTER).fontSize(10).font(arial).build())
 	        			 .add(TextCell.builder().borderWidth(1).text(t.getGebindegroesse() + "").horizontalAlignment(HorizontalAlignment.CENTER).fontSize(10).font(arial).build())
-	        			 .add(TextCell.builder().borderWidth(1).text(amount.get(t.getId()) == null || amount.get(t.getId()) == 0 ? "" : amount.get(t.getId()) + "").horizontalAlignment(HorizontalAlignment.CENTER).fontSize(10).textColor(Color.red).font(arialBold).build())
+	        			 .add(TextCell.builder().borderWidth(1).text(amount.get(t.getId()) == null || amount.get(t.getId()) == 0 ? "" : formatDouble(amount.get(t.getId())) + "").horizontalAlignment(HorizontalAlignment.CENTER).fontSize(10).textColor(Color.red).font(arialBold).build())
 	        			 
 	        			 .add(TextCell.builder().borderWidth(1).text(map.get(counter++) == null ? "" : map.get(counter-1).get(t.getId()) == null ? "" : formatDouble( map.get(counter-1).get(t.getId())) + "" ).horizontalAlignment(HorizontalAlignment.CENTER).fontSize(10).font(arial).build())
 	        			 .add(TextCell.builder().borderWidth(1).text(map.get(counter++) == null ? "" : map.get(counter-1).get(t.getId()) == null ? "" : formatDouble(map.get(counter-1).get(t.getId())) + "" ).horizontalAlignment(HorizontalAlignment.CENTER).fontSize(10).font(arial).build())

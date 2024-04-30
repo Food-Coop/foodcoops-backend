@@ -1,18 +1,25 @@
 package de.dhbw.foodcoop.warehouse.domain.entities;
 
-import de.dhbw.foodcoop.warehouse.domain.values.Lagerbestand;
-import org.apache.commons.lang3.Validate;
-
-import javax.persistence.*;
 import java.util.Objects;
 import java.util.UUID;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+import org.apache.commons.lang3.Validate;
+
+import de.dhbw.foodcoop.warehouse.domain.values.Lagerbestand;
 
 @Entity
 @Table(name = "lagerprodukt")
 public class Produkt extends BestandEntity {
 
 	@Column
-	private String produktName;
+	private String produktBezeichnung;
 	
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "lagerbestand_id")
@@ -23,21 +30,20 @@ public class Produkt extends BestandEntity {
     private Kategorie kategorie;
     
 
-
-    public Produkt(String id, String name, String produktname, Kategorie kategorie, Lagerbestand lagerbestand, float preis) {
+    public Produkt(String id, String name, String produktBezeichnung, Kategorie kategorie, Lagerbestand lagerbestand, float preis) {
         Validate.notBlank(id);
         Validate.notBlank(name);
         Validate.notNull(lagerbestand);
         this.id = id;
         this.name = name;
         this.kategorie = kategorie;
-        this.produktName = produktname;
+        this.produktBezeichnung = produktBezeichnung;
         this.preis = preis;
         this.lagerbestand = lagerbestand;
     }
 
-    public Produkt(String name, String produktname, Kategorie kategorie, Lagerbestand lagerbestand, float preis) {
-        this(UUID.randomUUID().toString(), name,produktname,  kategorie, lagerbestand, preis);
+    public Produkt(String name, String produktBezeichnung, Kategorie kategorie, Lagerbestand lagerbestand, float preis) {
+        this(UUID.randomUUID().toString(), name,produktBezeichnung,  kategorie, lagerbestand, preis);
     }
 
     protected Produkt() {
@@ -53,12 +59,14 @@ public class Produkt extends BestandEntity {
     }
 
     
-    public String getProduktName() {
-		return produktName;
+
+
+	public String getProduktBezeichnung() {
+		return produktBezeichnung;
 	}
 
-	public void setProduktName(String produktName) {
-		this.produktName = produktName;
+	public void setProduktBezeichnung(String produktBezeichnung) {
+		this.produktBezeichnung = produktBezeichnung;
 	}
 
 	public void setLagerbestand(Lagerbestand lagerbestand) {

@@ -6,9 +6,12 @@ import java.util.TimeZone;
 import java.util.UUID;
 
 import javax.annotation.PostConstruct;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import de.dhbw.foodcoop.warehouse.application.admin.ConfigurationService;
 import de.dhbw.foodcoop.warehouse.application.brot.BrotBestandService;
@@ -26,6 +29,9 @@ import de.dhbw.foodcoop.warehouse.domain.entities.Produkt;
 import de.dhbw.foodcoop.warehouse.domain.utils.ConstantsUtils;
 import de.dhbw.foodcoop.warehouse.domain.values.Einheit;
 import de.dhbw.foodcoop.warehouse.domain.values.Lagerbestand;
+import de.dhbw.foodcoop.warehouse.plugins.persistence.SpringDataEinheitRepository;
+import de.dhbw.foodcoop.warehouse.plugins.persistence.SpringDataKategorieRepository;
+import de.dhbw.foodcoop.warehouse.plugins.persistence.SpringDataProduktRepository;
 
 @Component
 public class DatenbankInitializer {
@@ -54,7 +60,6 @@ public class DatenbankInitializer {
 
     @PostConstruct
     public void init() {
-
     	
     	TimeZone.setDefault(TimeZone.getTimeZone("Europe/Berlin"));
     	if(cfgService.getConfig().isEmpty()) {
@@ -440,4 +445,6 @@ public class DatenbankInitializer {
        	
     	}
     }
+
+
 }
