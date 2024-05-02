@@ -95,13 +95,14 @@ public class PdfService {
     
     @Autowired
 	private DeadlineService deadService;
-    
+    PDPage lastPage;
     public byte[] createEinkauf(EinkaufEntity einkauf) throws IOException {
         try (PDDocument document = new PDDocument()) {
             PDPage page = new PDPage(PDRectangle.A4);
+             lastPage = page;
             document.addPage(page);
 
-            try (PDPageContentStream contentStream = new PDPageContentStream(document, page)) {
+            try (PDPageContentStream contentStream = new PDPageContentStream(document, lastPage)) {
                 // Datum oben rechts
                 contentStream.beginText();
                 contentStream.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA), 12);
@@ -134,7 +135,7 @@ public class PdfService {
             		listBrot.add((BrotBestellung) b.getBestellung());
             	}});
             
-            try (PDPageContentStream contentStream = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.APPEND, true, true)) {
+            try (PDPageContentStream contentStream = new PDPageContentStream(document, lastPage, PDPageContentStream.AppendMode.APPEND, true, true)) {
                 contentStream.beginText();
                 contentStream.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA_BOLD), 14);
                 contentStream.newLineAtOffset(50, 720); // Position etwas über der Tabelle
@@ -191,7 +192,12 @@ public class PdfService {
                     .startY(710)
                     .endY(50) // Margin bottom
                     .build();
-                    d.draw(() -> document, () -> new PDPage(PDRectangle.A4), 50);
+                    d.draw(() -> document, () -> {
+                    	PDPage p = new PDPage(PDRectangle.A4);
+                    	lastPage = p;
+                    return p;
+                    }, 50);
+                    
             
                     int startYBrotEinkaufUeberschrift = (int) (d.getFinalY() - abstandZwischenTabellen);
                     int startYBrotEinkaufTabelle = startYBrotEinkaufUeberschrift - 10; // Etwas Platz für die Überschrift
@@ -200,7 +206,7 @@ public class PdfService {
 
                     int gesamtpreisFrischPositionY = (int) (d.getFinalY()  - 20);
                     
-            try (PDPageContentStream contentStream = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.APPEND, true, true)) {
+            try (PDPageContentStream contentStream = new PDPageContentStream(document, lastPage, PDPageContentStream.AppendMode.APPEND, true, true)) {
                 contentStream.beginText();
                 
                 contentStream.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA), 12);
@@ -210,7 +216,7 @@ public class PdfService {
             }
 
             // Zeichnen der Brot-Tabelle
-            try (PDPageContentStream contentStream = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.APPEND, true, true)) {
+            try (PDPageContentStream contentStream = new PDPageContentStream(document, lastPage, PDPageContentStream.AppendMode.APPEND, true, true)) {
                 contentStream.beginText();
                 contentStream.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA_BOLD), 14);
                 contentStream.newLineAtOffset(50, startYBrotEinkaufUeberschrift); // Anpassen basierend auf der Höhe der ersten Tabelle
@@ -256,7 +262,11 @@ public class PdfService {
                     .startY(startYBrotEinkaufTabelle) //  basierend auf der Position der Überschrift
                     .endY(50) // Margin bottom, könnte angepasst werden basierend auf dem Inhalt
                     .build();
-                    bd.draw(() -> document, () -> new PDPage(PDRectangle.A4), 50);
+                    bd.draw(() -> document, () -> {
+                    	PDPage p = new PDPage(PDRectangle.A4);
+                    	lastPage = p;
+                    return p;
+                    }, 50);
 
             
             
@@ -266,7 +276,7 @@ public class PdfService {
             int gesamtpreisBrotPositionY = (int) (bd.getFinalY() - 20);
             
             
-            try (PDPageContentStream contentStream = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.APPEND, true, true)) {
+            try (PDPageContentStream contentStream = new PDPageContentStream(document, lastPage, PDPageContentStream.AppendMode.APPEND, true, true)) {
                 contentStream.beginText();
                 
                 contentStream.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA), 12);
@@ -275,7 +285,7 @@ public class PdfService {
                 contentStream.endText();
             }
             // Zeichnen der Lagerware-Tabelle
-            try (PDPageContentStream contentStream = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.APPEND, true, true)) {
+            try (PDPageContentStream contentStream = new PDPageContentStream(document, lastPage, PDPageContentStream.AppendMode.APPEND, true, true)) {
                 contentStream.beginText();
                 contentStream.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA_BOLD), 14);
                 contentStream.newLineAtOffset(50, startYLagerEinkaufUeberschrift); // Anpassen basierend auf der Höhe der ersten Tabelle
@@ -321,12 +331,16 @@ public class PdfService {
                     .startY(startYLagerEinkaufTabelle) //  basierend auf der Position der Überschrift
                     .endY(50) // Margin bottom, könnte angepasst werden basierend auf dem Inhalt
                     .build();
-                    ld.draw(() -> document, () -> new PDPage(PDRectangle.A4), 50);
+                    ld.draw(() -> document, () -> {
+                    	PDPage p = new PDPage(PDRectangle.A4);
+                    	lastPage = p;
+                    return p;
+                    }, 50);
                     
                     int startYZuVielEinkaufUeberschrift = (int) (ld.getFinalY() - abstandZwischenTabellen);
                     int startYZuVielEinkaufTabelle = startYZuVielEinkaufUeberschrift - 10; // Etwas Platz für die Überschrift
                     int gesamtpreisLagerPositionY = (int) (ld.getFinalY()  - 20);
-            try (PDPageContentStream contentStream = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.APPEND, true, true)) {
+            try (PDPageContentStream contentStream = new PDPageContentStream(document, lastPage, PDPageContentStream.AppendMode.APPEND, true, true)) {
                 contentStream.beginText();
                 
                 contentStream.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA), 12);
@@ -337,11 +351,11 @@ public class PdfService {
             
             
             // Zeichnen der ZuViel-Tabelle
-            try (PDPageContentStream contentStream = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.APPEND, true, true)) {
+            try (PDPageContentStream contentStream = new PDPageContentStream(document, lastPage, PDPageContentStream.AppendMode.APPEND, true, true)) {
                 contentStream.beginText();
                 contentStream.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA_BOLD), 14);
                 contentStream.newLineAtOffset(50, startYZuVielEinkaufUeberschrift); // Anpassen basierend auf der Höhe der ersten Tabelle
-                contentStream.showText("Einkauf von der zu Viel Liste");
+                contentStream.showText("Einkauf von der zu viel Liste");
                 contentStream.endText();
             }
 
@@ -381,40 +395,44 @@ public class PdfService {
                     .startY(startYZuVielEinkaufTabelle) //  basierend auf der Position der Überschrift
                     .endY(50) // Margin bottom, könnte angepasst werden basierend auf dem Inhalt
                     .build();
-            zuVielDrawer.draw(() -> document, () -> new PDPage(PDRectangle.A4), 50);
+            zuVielDrawer.draw(() -> document,() -> {
+            	PDPage p = new PDPage(PDRectangle.A4);
+            	lastPage = p;
+            return p;
+            }, 50);
             
             int gesamtpreisZuVielPositionY = (int) (zuVielDrawer.getFinalY()  - 20);
             
             
-            try (PDPageContentStream contentStream = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.APPEND, true, true)) {
+            try (PDPageContentStream contentStream = new PDPageContentStream(document, lastPage, PDPageContentStream.AppendMode.APPEND, true, true)) {
                 contentStream.beginText();
                 
                 contentStream.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA), 12);
-                contentStream.newLineAtOffset(297.5f - (new PDType1Font(Standard14Fonts.FontName.HELVETICA).getStringWidth("zu Viel Liste Preis: " + Math.round( einkauf.getTooMuchPriceAtTime() * 100.0) / 100.0 + " €") / 2 / 1000 * 12), gesamtpreisZuVielPositionY);
-                contentStream.showText("zu Viel Liste Preis: " + Math.round( einkauf.getTooMuchPriceAtTime() * 100.0) / 100.0 + " €");
+                contentStream.newLineAtOffset(297.5f - (new PDType1Font(Standard14Fonts.FontName.HELVETICA).getStringWidth("zu viel Liste Preis: " + Math.round( einkauf.getTooMuchPriceAtTime() * 100.0) / 100.0 + " €") / 2 / 1000 * 12), gesamtpreisZuVielPositionY);
+                contentStream.showText("zu viel Liste Preis: " + Math.round( einkauf.getTooMuchPriceAtTime() * 100.0) / 100.0 + " €");
                 contentStream.endText();
             }
             
             int startY = gesamtpreisZuVielPositionY - 50; // zum Beispiel 100;
 
             // Konstanten für das Layout
-            float pageWidth = page.getMediaBox().getWidth();
+            float pageWidth = lastPage.getMediaBox().getWidth();
             float leftMargin = (pageWidth - 550) / 2; // um das Ganze zentriert zu halten
             float rightMargin = (pageWidth - 50) / 2; 
             float lineWidth = 550; // die Länge des grauen Strichs
-            float startX = 200; // Dies ist der Startpunkt für den Text auf der X-Achse, den Sie anpassen müssen.
-            float priceX = 350; // Dies ist der Startpunkt für den Preis auf der X-Achse, den Sie anpassen müssen.
+            float startX = 200; 
+            float priceX = 350; 
             float lineStartX = 150; // Start der grauen Linie auf der X-Achse
             float lineEndX = 450; // Ende der grauen Linie auf der X-Achse
 
-            String[] labels = {"Frischware:", "Brot:", "Lagerware:", "zu Viel Liste:", "5 % Lieferkosten:"};
+            String[] labels = {"Frischware:", "Brot:", "Lagerware:", "zu Viel Liste:", configService.getConfig().get().getDeliverycost() +"% Lieferkosten:"};
             
             
              float lieferkosten = (float) (Math.round( einkauf.getDeliveryCostAtTime() * 100.0) / 100.0);
             float gesamt = (float) (lieferkosten + einkauf.getTotalPriceAtTime());
             float[] prices = {(float) (Math.round( einkauf.getFreshPriceAtTime() * 100.0) / 100.0), (float) (Math.round( einkauf.getBreadPriceAtTime() * 100.0) / 100.0), (float) (Math.round( einkauf.getBestandPriceAtTime() * 100.0) / 100.0),(float) (Math.round( einkauf.getTooMuchPriceAtTime() * 100.0) / 100.0), lieferkosten, gesamt}; 
             
-            try (PDPageContentStream contentStream = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.APPEND, true, true)) {
+            try (PDPageContentStream contentStream = new PDPageContentStream(document, lastPage, PDPageContentStream.AppendMode.APPEND, true, true)) {
                 contentStream.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA_BOLD), 12);
 
                 for (int i = 0; i < labels.length; i++) {

@@ -92,6 +92,7 @@ public class GebindemanagementService {
 		amountOrdered.entrySet().stream().forEach(t -> {
 			copyOfAmount.put(t.getKey(), t.getValue());
 		});
+		
 				Set<FrischBestand> toBeDeleted = new HashSet<>();
 				HashMap<FrischBestand, Float> toBeUpdated = new HashMap<>();
 				List<DiscrepancyEntity> toBeEdited = new ArrayList<>();
@@ -246,7 +247,7 @@ public class GebindemanagementService {
 			List<DiscrepancyEntity> done = new ArrayList<>();
 			HashMap<FrischBestand, Float> amountOrdered = new HashMap<>();	
 			for(FrischBestellung b : bestellungen) {
-				if(b.getFrischbestand().getGebindegroesse() <= 1) {
+				if(b.getFrischbestand().getGebindegroesse() <= 1) { 
 				 Optional<DiscrepancyEntity> de = done.stream().filter(d -> d.getBestand().getId().equalsIgnoreCase(b.getFrischbestand().getId())).findFirst();
 				 if(de.isEmpty()) {
 					 done.add(new DiscrepancyEntity(UUID.randomUUID().toString(), b.getFrischbestand(), (int) (b.getBestellmenge()), 0f, (float) b.getBestellmenge()));
