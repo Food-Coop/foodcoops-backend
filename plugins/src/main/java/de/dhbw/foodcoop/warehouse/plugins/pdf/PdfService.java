@@ -192,11 +192,10 @@ public class PdfService {
                     .startY(710)
                     .endY(50) // Margin bottom
                     .build();
-                    d.draw(() -> document, () -> {
-                    	PDPage p = new PDPage(PDRectangle.A4);
-                    	lastPage = p;
-                    return p;
-                    }, 50);
+                    d.draw(() -> document, () -> 
+                    	 new PDPage(PDRectangle.A4)
+                    	
+                    , 50);
                     
             
                     int startYBrotEinkaufUeberschrift = (int) (d.getFinalY() - abstandZwischenTabellen);
