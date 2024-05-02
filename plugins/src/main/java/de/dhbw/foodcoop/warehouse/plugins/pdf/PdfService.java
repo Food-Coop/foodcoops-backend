@@ -194,7 +194,7 @@ public class PdfService {
                     	 new PDPage(PDRectangle.A4)
                     	
                     , 50);
-                    
+                    page = d.getTableStartPage();
             
                     int startYBrotEinkaufUeberschrift = (int) (d.getFinalY() - abstandZwischenTabellen);
                     int startYBrotEinkaufTabelle = startYBrotEinkaufUeberschrift - 10; // Etwas Platz für die Überschrift
@@ -262,7 +262,7 @@ public class PdfService {
                     bd.draw(() -> document, () -> new PDPage(PDRectangle.A4), 50);
 
             
-            
+                    page = bd.getTableStartPage();
             
             int startYLagerEinkaufUeberschrift = (int) (bd.getFinalY() - abstandZwischenTabellen);
             int startYLagerEinkaufTabelle = startYLagerEinkaufUeberschrift - 10; // Etwas Platz für die Überschrift
@@ -325,7 +325,7 @@ public class PdfService {
                     .endY(50) // Margin bottom, könnte angepasst werden basierend auf dem Inhalt
                     .build();
                     ld.draw(() -> document, () -> new PDPage(PDRectangle.A4), 50);
-                    
+                    page = ld.getTableStartPage();
                     int startYZuVielEinkaufUeberschrift = (int) (ld.getFinalY() - abstandZwischenTabellen);
                     int startYZuVielEinkaufTabelle = startYZuVielEinkaufUeberschrift - 10; // Etwas Platz für die Überschrift
                     int gesamtpreisLagerPositionY = (int) (ld.getFinalY()  - 20);
@@ -385,7 +385,7 @@ public class PdfService {
                     .endY(50) // Margin bottom, könnte angepasst werden basierend auf dem Inhalt
                     .build();
             zuVielDrawer.draw(() -> document,() -> new PDPage(PDRectangle.A4), 50);
-            
+            page = zuVielDrawer.getTableStartPage();
             int gesamtpreisZuVielPositionY = (int) (zuVielDrawer.getFinalY()  - 20);
             
             
