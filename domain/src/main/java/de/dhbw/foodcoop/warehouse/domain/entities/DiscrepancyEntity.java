@@ -8,8 +8,10 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import de.dhbw.foodcoop.warehouse.domain.shopping.Buyable;
+
 @Entity
-public class DiscrepancyEntity {
+public class DiscrepancyEntity  implements Buyable{
 
 	@Id
 	private String id;

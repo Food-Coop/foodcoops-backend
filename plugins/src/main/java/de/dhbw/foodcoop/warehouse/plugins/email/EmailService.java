@@ -25,7 +25,7 @@ public class EmailService {
         mailSender.send(message);
     }
     
-    public void sendSimpleMessage(String to, String subject, String text, byte[] pdfBytes, String pdfFileName) throws MessagingException {
+    public void sendEmailWithPDF(String to, String subject, String text, byte[] pdfBytes, String pdfFileName) throws MessagingException {
     	MimeMessage message = mailSender.createMimeMessage();
     	MimeMessageHelper helper = new MimeMessageHelper(message, true);
     	
