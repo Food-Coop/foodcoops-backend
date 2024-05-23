@@ -1,4 +1,4 @@
-package de.dhbw.foodcoop.warehouse.plugins.rest;
+ package de.dhbw.foodcoop.warehouse.plugins.rest;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
