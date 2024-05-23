@@ -9,4 +9,4 @@ syntax: glob
 .classpath
 .project
 org.*
-*/application.properties
+application.properties

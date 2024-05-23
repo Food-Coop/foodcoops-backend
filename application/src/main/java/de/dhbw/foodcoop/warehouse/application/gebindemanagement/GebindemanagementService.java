@@ -221,7 +221,7 @@ public class GebindemanagementService {
 				} else {
 					currentTry = currentTry + entry.getValue();
 					
-					//Hier müssen irgendwie alle vermerkt werden, die mit drin hängen
+					//Hier müssen alle vermerkt werden, die mit drin hängen
 					// z.B- bei 3 Salaten : 3 + 3 + 4 = 10, müssten alle bei rest auf 0
 					potentionUpdate.add(entry.getKey());
 				}
@@ -304,6 +304,7 @@ public class GebindemanagementService {
     
 	
 	//Nicht ganz sicher für was das hier genutzt wird, evtl nochmal anschaune
+	// Von Vorgänger Projekt, keine Ahnung was hier passiert, kann eigentlich raus
     public List<List<FrischBestellung>> splitBestellungList(List<FrischBestellung> bestellList){
         List<List<FrischBestellung>> bestellungListKategorie = new ArrayList<List<FrischBestellung>>();
 //        int length = bestellList.size();
@@ -333,7 +334,7 @@ public class GebindemanagementService {
         
         return bestellungListKategorie;
     }
-
+    // ebenfalls raus, wirkt sehr bug anfällig.. und nicht mehr benutzt.
     public double[][] VorschlagBerechnen(List<FrischBestellung> kategorie) {
         double[][] liste = new double[kategorie.size()][5];
         double gesamt = 0;
