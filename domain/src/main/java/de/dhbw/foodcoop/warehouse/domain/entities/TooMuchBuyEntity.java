@@ -7,8 +7,10 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import de.dhbw.foodcoop.warehouse.domain.shopping.BuyType;
+
 @Entity
-public class TooMuchBuyEntity {
+public class TooMuchBuyEntity implements BuyType {
 	@Id
 	private String id;
 	

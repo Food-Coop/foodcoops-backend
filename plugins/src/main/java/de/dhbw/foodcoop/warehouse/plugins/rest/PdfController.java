@@ -53,7 +53,7 @@ public class PdfController {
 	public void sendTotalBestellÜbersicht(@RequestBody String email) {
 		String date = LocalDate.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
 		try {
-			service.sendSimpleMessage(email, "Foodcoop MIKA - Bestellübersicht vom " + date, "Hallo, \nim Anhang befindet sich die Bestellübersicht vom " + date +".\n\nViele Grüße \nDeine Foodcoop MIKA", pdf.createUebersicht(bueService.getLastUebersicht()), "Bestelluebersicht-" + date + ".pdf");
+			service.sendEmailWithPDF(email, "Foodcoop MIKA - Bestellübersicht vom " + date, "Hallo, \nim Anhang befindet sich die Bestellübersicht vom " + date +".\n\nViele Grüße \nDeine Foodcoop MIKA", pdf.createUebersicht(bueService.getLastUebersicht()), "Bestelluebersicht-" + date + ".pdf");
 		} catch (MessagingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -64,7 +64,7 @@ public class PdfController {
 	public void sendBreadOrder(@RequestBody String email) {
 		String date = deadlineService.getByPosition(0).get().getDatum().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
 		try {
-			service.sendSimpleMessage(email, "Foodcoop MIKA - zu bestellende Brote vom " + date, "Hallo, \nim Anhang befindet sich die Liste der zu bestellenden Brote für die Deadline vom " + date +".\n\nViele Grüße \nDeine Foodcoop MIKA", pdf.createBrotUebersicht(), "Brotbestellungen-" + date + ".pdf");
+			service.sendEmailWithPDF(email, "Foodcoop MIKA - zu bestellende Brote vom " + date, "Hallo, \nim Anhang befindet sich die Liste der zu bestellenden Brote für die Deadline vom " + date +".\n\nViele Grüße \nDeine Foodcoop MIKA", pdf.createBrotUebersicht(), "Brotbestellungen-" + date + ".pdf");
 		} catch (MessagingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -75,7 +75,7 @@ public class PdfController {
 	public void sendBreadOrderWithPersons(@RequestBody String email) {
 		String date = deadlineService.getByPosition(0).get().getDatum().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
 		try {
-			service.sendSimpleMessage(email, "Foodcoop MIKA - Brotbestellungen der Mitglieder " + date, "Hallo, \nim Anhang befindet sich die Liste der einzelnen Brotbestellungen für die Deadline vom " + date +".\n\nViele Grüße \nDeine Foodcoop MIKA", pdf.createBrotUebersichtWithPersons(), "BrotbestellungenPersonen-" + date + ".pdf");
+			service.sendEmailWithPDF(email, "Foodcoop MIKA - Brotbestellungen der Mitglieder " + date, "Hallo, \nim Anhang befindet sich die Liste der einzelnen Brotbestellungen für die Deadline vom " + date +".\n\nViele Grüße \nDeine Foodcoop MIKA", pdf.createBrotUebersichtWithPersons(), "BrotbestellungenPersonen-" + date + ".pdf");
 		} catch (MessagingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -87,7 +87,7 @@ public class PdfController {
 	public void sendInventoryStatus(@RequestBody String base64Pdf, @PathVariable String email ) {
 		String date = deadlineService.getByPosition(0).get().getDatum().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
 		try {
-			service.sendSimpleMessage(email, "Foodcoop MIKA - aktueller Lagerbestand " + date, "Hallo, \nim Anhang befindet sich der aktuelle Lagerbestand.\n\nViele Grüße \nDeine Foodcoop MIKA", pdf.createByteArrayFromBase64String(base64Pdf), "Lagerbestand-" + date + ".pdf");
+			service.sendEmailWithPDF(email, "Foodcoop MIKA - aktueller Lagerbestand " + date, "Hallo, \nim Anhang befindet sich der aktuelle Lagerbestand.\n\nViele Grüße \nDeine Foodcoop MIKA", pdf.createByteArrayFromBase64String(base64Pdf), "Lagerbestand-" + date + ".pdf");
 		} catch (MessagingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -98,7 +98,7 @@ public class PdfController {
 	public void sendFreshOrder(@RequestBody String email) {
 		String date = deadlineService.getByPosition(0).get().getDatum().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
 		try {
-			service.sendSimpleMessage(email, "Foodcoop MIKA - zu bestellende Frischware vom " + date, "Hallo, \nim Anhang befindet sich die Liste der zu bestellenden Frischware für die Deadline vom " + date +".\n\nViele Grüße \nDeine Foodcoop MIKA", pdf.createFrischUebersicht(), "Frischbestellungen-" + date + ".pdf");
+			service.sendEmailWithPDF(email, "Foodcoop MIKA - zu bestellende Frischware vom " + date, "Hallo, \nim Anhang befindet sich die Liste der zu bestellenden Frischware für die Deadline vom " + date +".\n\nViele Grüße \nDeine Foodcoop MIKA", pdf.createFrischUebersicht(), "Frischbestellungen-" + date + ".pdf");
 		} catch (MessagingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

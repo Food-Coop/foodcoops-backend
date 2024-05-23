@@ -1,4 +1,4 @@
-package de.dhbw.foodcoop.warehouse.plugins.rest;
+ package de.dhbw.foodcoop.warehouse.plugins.rest;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
@@ -179,7 +179,7 @@ public class EinkaufController {
 	  	        			.replaceAll(ConstantsUtils.PLACEHOLDER_GESAMT_KOSTEN, "" + gesamt )
 	  	        			.replaceAll(ConstantsUtils.PLACEHOLDER_PERSONID, einkauf.getPersonId());
   	      
-	  	        	emailService.sendSimpleMessage(email, "Einkauf bei der FoodCoop Karlsruhe am " + LocalDate.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")), text, pdfd, fileName);
+	  	        	emailService.sendEmailWithPDF(email, "Einkauf bei der FoodCoop Karlsruhe am " + LocalDate.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")), text, pdfd, fileName);
   	        }
 		} catch (IOException | MessagingException e) {
 			// TODO Auto-generated catch block

@@ -116,6 +116,8 @@ public class EinkaufService {
         einkauf.setFreshPriceAtTime(calculatePriceForFresh(einkauf));
         einkauf.setDeliveryCostAtTime(calculateDeliveryCostForShopping(einkauf));
         
+        
+        
         BestellUebersicht be = service.getLastUebersicht();
         if(be != null) {
         	List<DiscrepancyEntity> discrepancies = be.getDiscrepancy();
@@ -130,6 +132,9 @@ public class EinkaufService {
          //	List<FrischBestellung> frischBestellungen = frischService.findByDateBetween(datum1, datum2, personId);
          	String eID = einkauf.getId();
          	List<EinkaufEntity> einkaufeFromPerson = einkaufRepository.alleAktuellenVonPerson(datum1, personId).stream().filter(t -> t.getId() != eID).collect(Collectors.toList());
+         	
+         	// Rechnet zusammen wie viel eine Person von einem Produkt genommen hat
+         	
          	HashMap<FrischBestand, Double> mapAmountForOrder = new HashMap<>();
          	 if(vergleiche != null) {
          		for (BestellungBuyEntity ebv : vergleiche) {
@@ -141,6 +146,7 @@ public class EinkaufService {
          				}
          			}
          		}
+         		//Person kann mehrere Einkäufe durchgeführt haben innerhalb einer Woche (und dabei das gleiche Produkt mehrfach gekauft haben)
          		einkaufeFromPerson.forEach(t -> {
          			if(t.getBestellungsEinkauf() != null) {
          				for(BestellungBuyEntity eb : t.getBestellungsEinkauf()) {
@@ -158,7 +164,7 @@ public class EinkaufService {
          	
          	
          	 
-         	 
+         	 //Ab hier automatische Anpassung von zu viel zu wenig
          	 if(bestellungen != null) {
          	Set<Kategorie> katSet = new HashSet<>();
          	bestellungen.forEach(t -> {
@@ -170,6 +176,7 @@ public class EinkaufService {
          				double sumOrderedFromPerson =  (Math.round( t.getBestellung().getBestellmenge() * 100.0) / 100.0); 
          				double sumTakenFromPerson = (Math.round( mapAmountForOrder.get(f.getFrischbestand()) * 100.0) / 100.0);
              	    		BestellungBuyEntity  bbe = null;
+             	    		//Schauen ob es ein Discrepancy Objekt zu dieser Bestellung gibt
              	    		for(BestellungBuyEntity bestellung : bestellungen) {
              	    			if(bestellung.getBestellung().getId().equalsIgnoreCase(t.getBestellung().getId())) {
              	    				bbe = bestellung;
@@ -195,28 +202,6 @@ public class EinkaufService {
          		//	}
          		}
          	});
-         	
-//         	for(Kategorie k : katSet) {
-//         		double sumOrderedFromPerson = (Math.round( sumByKategorie(k, bestellungen) * 100.0) / 100.0);
-//         	    double sumTakenFromPerson = (Math.round( sumBestellungBuyByKategorie(k, bestellungen, mapAmountForOrder) * 100.0) / 100.0);
-//         	    			double sumToAdjust = sumOrderedFromPerson - sumTakenFromPerson;
-//         	    			boolean isDone = true;
-//         	    			if(bestellungen != null ) {
-//         	    				for(BestellungBuyEntity b : bestellungen) {
-//         	    					if(!b.getBestellung().isDone()) {
-//         	    						isDone = false;
-//         	    						break;
-//         	    					}
-//         	    				}
-//         	    			}
-//         	    			if(isDone) {
-//         	    				sumToAdjust = -sumTakenFromPerson;
-//         	    			}
-//         	    			
-//         	    			double rest = adjustMixDiscrepency(discrepancies, sumToAdjust, k);
-//         	    		//REST BEHANDELN
-//         	    			handleRest(discrepancies, rest, k);
-//         			}
 
         		}
         		
@@ -228,6 +213,7 @@ public class EinkaufService {
        }
         // Speichere den Einkauf in der Datenbank
         return e;
+         	 
     }
 
     private double adjustNonMixDiscrepency(List<DiscrepancyEntity> discrepancies, double sumToAdjust, BestellungBuyEntity bbe ) {
@@ -249,81 +235,6 @@ public class EinkaufService {
     	return sumToAdjust;
     }
 
-    
-    private double adjustMixDiscrepency(List<DiscrepancyEntity> discrepancies, double sumToAdjust, Kategorie k) {
-    	for(DiscrepancyEntity d : discrepancies) {
-    		if(d.getZuVielzuWenig() == 0) continue;
-    		if(d.getBestand() instanceof FrischBestand) {
-    			FrischBestand frisch = (FrischBestand) d.getBestand();
-    			if(k.getId().equalsIgnoreCase(frisch.getKategorie().getId())) {
-    				if(d.getZuVielzuWenig() + sumToAdjust == 0) {
-    					d.setZuVielzuWenig(0);
-    					sumToAdjust = 0;
-    					break;
-    				}
-    				if(d.getZuVielzuWenig() < 0) {
-    					if(d.getZuVielzuWenig() + sumToAdjust > 0) {
-    						sumToAdjust = d.getZuVielzuWenig() + sumToAdjust;
-    						d.setZuVielzuWenig(0);
-    					} else if(d.getZuVielzuWenig() + sumToAdjust < 0) {
-    						d.setZuVielzuWenig((float) (d.getZuVielzuWenig() + sumToAdjust));
-    						sumToAdjust = 0;
-    					}
-    					
-    				} else {
-    					if(d.getZuVielzuWenig() + sumToAdjust < 0) {
-    						sumToAdjust = d.getZuVielzuWenig() + sumToAdjust;
-    						d.setZuVielzuWenig(0);
-    					} else if(d.getZuVielzuWenig() + sumToAdjust > 0) {
-    						d.setZuVielzuWenig((float) (d.getZuVielzuWenig() + sumToAdjust));
-    						sumToAdjust = 0;
-    					}
-    				}
-    			}
-    		}
-    	}
-    	return sumToAdjust;
-    }
-
-   private void handleRest(List<DiscrepancyEntity> discrepancies, double rest, Kategorie k) {
-	   for(DiscrepancyEntity d : discrepancies) {
-   		if(d.getZuVielzuWenig() == 0) continue;
-   		if(d.getBestand() instanceof FrischBestand) {
-   			FrischBestand frisch = (FrischBestand) d.getBestand();
-   			if(k.getId().equalsIgnoreCase(frisch.getKategorie().getId())) {
-   				d.setZuVielzuWenig(d.getZuVielzuWenig() + (float)rest);
-   				
-   			 }
-   		  }
-	   }
-   }
-
-	private double sumByKategorie(Kategorie k, List<BestellungBuyEntity> bestellungen) {
-    	return bestellungen.stream().filter( t -> {
-    			if(t.getBestellung() instanceof FrischBestellung) {
-    				FrischBestellung f = (FrischBestellung) t.getBestellung();
-    				return f.getFrischbestand().getKategorie().getId().equalsIgnoreCase(k.getId());
-    			}
-				return false;
-    		}
-    	).mapToDouble( x -> x.getBestellung().getBestellmenge()).sum();
-    		
-    	
-    }
-    
-    private double sumBestellungBuyByKategorie(Kategorie k, List<BestellungBuyEntity> bestellungen, HashMap<FrischBestand, Double> map) {
-    	double counter = 0;
-    	for(BestellungBuyEntity bbe : bestellungen) {
-    		if(bbe.getBestellung() instanceof FrischBestellung) {
-    			FrischBestellung f = (FrischBestellung) bbe.getBestellung();
-    			if(f.getFrischbestand().getKategorie().getId().equalsIgnoreCase(k.getId()))  {
-    				counter = counter +  map.get(f.getFrischbestand());
-    				
-    			}
-    		}
-    	}
-    	return counter;
-    }
     
     
     
@@ -419,11 +330,6 @@ public class EinkaufService {
     	return price;
     }
     
-//    public List<EinkaufBestellungVergleich> loadOpenOrders(String personId) {
-//    	Person p = personService.findById(personId).orElseThrow();
-//        return p.getBestellungen().stream() 
-//                .filter(b -> !b.isReeleMengeAngegeben()) 
-//                .collect(Collectors.toList());
-//    }
+
 	
 }

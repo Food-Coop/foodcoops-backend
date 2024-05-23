@@ -11,6 +11,8 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
+import de.dhbw.foodcoop.warehouse.domain.shopping.Buyable;
+
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
@@ -20,7 +22,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
     @JsonSubTypes.Type(value = Produkt.class, name="lager")
 })
 @Table(name = "bestand")
-public abstract class BestandEntity {
+public abstract class BestandEntity implements Buyable {
 
     @Id
     protected String id;
