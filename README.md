@@ -11,24 +11,74 @@ This is needed because for production the application.properties is created & wr
 The reason for this is, that the private Data of the official Keycloak/MariaDB instances like passwords, secrets etc. is not exposed in the propertie file and is being filled in when build by GitHub Actions.<br>
 An example applications.properties could look like this:
 ```java
-spring.datasource.url=jdbc:mariadb://localhost:3306/{DBNAME}
-spring.datasource.username={YOUR USERNAME}
-spring.datasource.password={YOUR PASSWORD}
-spring.datasource.driver-class-name=org.mariadb.jdbc.Driver
-spring.jpa.hibernate.ddl-auto=none
-spring.jpa.generate-ddl=true
-spring.datasource.initialization-mode=always
-spring.jpa.show-sql=true
+ spring.datasource.url=jdbc:mariadb://{ip_of_db}:3306/{dbname}
+ spring.datasource.username={username}
+ spring.datasource.password={password}
+ spring.datasource.driver−class−name=org.mariadb.jdbc.Driver
+ spring.jpa.hibernate.ddl−auto=none
+ spring.jpa.generate−ddl=true
+ spring.datasource.initialization−mode=always
+ spring.jpa.show−sql=true
+ server.port=8081
 
-keycloak.realm=Foodcoop
-keycloak.auth-server-url=http://localhost:{KEYCLOAK PORT}/
-keycloak.ssl-required=none
-keycloak.credentials.secret={SECRET OF THE KEYCLOAK CLIENT}
-keycloak.use-resource-role-mappings = true
-keycloak.resource={KEYCLOAK CLIENT NAME}
+ keycloak.realm={Realm Name}
+ keycloak.auth−server−url=http://{keycloak_ip}:{port}/
+ keycloak.ssl−required=none
+ keycloak.credentials.secret={Client Secrent}
+ keycloak.use−resource−role−mappings = true
+ keycloak.resource={Client Name}
+
+ spring.mail.host=smtp.ionos.de
+ spring.mail.port=587
+ spring.mail.username=foodcoop@orat.de
+ spring.mail.password={password}
+ spring.mail.properties.mail.smtp.auth=true
+ spring.mail.properties.mail.smtp.starttls.enable=true
 ```
+(@Oliver got the mail password, Keycloak + db have to be setup before)
 
+If you want to setup Keycloak etc you can use the following docker-compose.yml
 
+```
+version: '1'
+services:
+  frontend:
+    image: frontend
+    restart: always
+    volumes:
+      - nginx_cfg:/etc/nginx/conf.d
+    ports:
+      -  80:80
+  keycloak:
+    image: quay.io/keycloak/keycloak:19.0.1
+    restart: always
+    ports:
+      - 8089:8080
+    volumes:
+      - /root/foodcoop/keycloak_data/dataTest:/opt/jboss/keycloak/standalone/data/
+    environment:
+      - KEYCLOAK_ADMIN={admin username}
+      - KC_HTTP_ENABLED=true
+      - KEYCLOAK_ADMIN_PASSWORD={admin passwort}
+      - DB_VENDOR=mariadb
+      - KC_DB=mariadb
+      - KC_DB_USERNAME={db username}
+      - KC_DB_PASSWORD={db passwort}
+      - KC_DB_URL=jdbc:mariadb://{ip}:3306/{dbname}?allowPublicKeyRetrieval=true&useSSL=FALSE
+    command:
+      - start-dev
+  app:
+    image: foodcoops-backend
+    restart: always
+    ports:
+      - "8080:8080"
+volumes:
+  nginx_cfg:
+```
+Change Keycloak http enabled to false asap. (after you added https support.)
+MariaDB is NOT included, checkout the paper for the reason & how to set it up.
+
+After setup, swagger is running at: http://{server ip}:8080/swagger-ui/
 ## Installing, starting and stopping the application
 
 Food-coop warehouse comes prepackaged with its maven wrapper. Go to the project directory.<br>
