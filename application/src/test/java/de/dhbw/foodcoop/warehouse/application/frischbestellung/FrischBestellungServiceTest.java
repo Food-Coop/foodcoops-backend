@@ -1,12 +1,9 @@
 package de.dhbw.foodcoop.warehouse.application.frischbestellung;
 
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.lenient;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.sql.Timestamp;
-import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -16,7 +13,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import de.dhbw.foodcoop.warehouse.domain.entities.FrischBestand;
@@ -34,9 +30,9 @@ public class FrischBestellungServiceTest {
 
     @Test
     void testAll() {
-        FrischBestellung f0 = new FrischBestellung("1234", "Peter_Meier", fb, 4, ts);
-        FrischBestellung f1 = new FrischBestellung("2345", "Peter_Müller", fb, 2, ts);
-        FrischBestellung f2 = new FrischBestellung("3456", "Peter_Maier", fb, 3, ts);
+        FrischBestellung f0 = new FrischBestellung("1234", "Peter_Meier", fb, 4, ts, false);
+        FrischBestellung f1 = new FrischBestellung("2345", "Peter_Müller", fb, 2, ts, false);
+        FrischBestellung f2 = new FrischBestellung("3456", "Peter_Maier", fb, 3, ts, false);
 
         when(mockRepository.alle()).thenReturn(Arrays.asList(f0, f1, f2));
         List<FrischBestellung> whenReturn = toBeTested.all();
@@ -48,7 +44,7 @@ public class FrischBestellungServiceTest {
 
     @Test
     void testFindById() {
-        FrischBestellung frischBestellung = new FrischBestellung("1234", "Peter_Meier", fb, 4, ts);
+        FrischBestellung frischBestellung = new FrischBestellung("1234", "Peter_Meier", fb, 4, ts, false);
         
         when(mockRepository.findeMitId(frischBestellung.getId())).thenReturn(Optional.of(frischBestellung));
         Optional<FrischBestellung> whenReturn = toBeTested.findById(frischBestellung.getId());
@@ -59,9 +55,9 @@ public class FrischBestellungServiceTest {
 
     @Test
     void testSave() {
-        FrischBestellung newFrischBestellung = new FrischBestellung("1234", "Peter_Meier", fb, 4, ts);
+        FrischBestellung newFrischBestellung = new FrischBestellung("1234", "Peter_Meier", fb, 4, ts, false);
         
-        lenient().when(mockRepository.alle()).thenReturn(List.of(new FrischBestellung("1234", "Peter_Meier", fb, 4, ts)));
+        lenient().when(mockRepository.alle()).thenReturn(List.of(new FrischBestellung("1234", "Peter_Meier", fb, 4, ts, false)));
         lenient().when(mockRepository.speichern(newFrischBestellung)).thenReturn(newFrischBestellung);
         FrischBestellung returnVal = toBeTested.save(newFrischBestellung);
 
@@ -73,7 +69,7 @@ public class FrischBestellungServiceTest {
     }
 
     Einheit e1 = new Einheit("111", "Stück");
-    Kategorie k1 = new Kategorie("222", "Salat");
-    FrischBestand fb = new FrischBestand("1234", "Kopfsalat", true, "DE", 20, e1, k1, (float) 1.5);
-    Timestamp ts= Timestamp.from(Instant.now());  
+    Kategorie k1 = new Kategorie("222", "Salat", true);
+    FrischBestand fb = new FrischBestand("1234", "Kopfsalat", true, "DE", 20, e1, k1, (float) 1.5, "e.E.", false);
+    LocalDateTime ts= LocalDateTime.now();  
 }

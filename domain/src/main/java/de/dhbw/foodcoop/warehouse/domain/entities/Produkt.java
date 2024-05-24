@@ -1,49 +1,54 @@
 package de.dhbw.foodcoop.warehouse.domain.entities;
 
-import de.dhbw.foodcoop.warehouse.domain.values.Lagerbestand;
-import org.apache.commons.lang3.Validate;
-
-import javax.persistence.*;
 import java.util.Objects;
 import java.util.UUID;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+import org.apache.commons.lang3.Validate;
+
+import de.dhbw.foodcoop.warehouse.domain.values.Lagerbestand;
+
 @Entity
 @Table(name = "lagerprodukt")
-public class Produkt {
-    @Id
-    private String id;
-    @Column
-    private String name;
-    @Embedded
+public class Produkt extends BestandEntity {
+
+	@Column
+	private String produktBezeichnung;
+	
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "lagerbestand_id")
     private Lagerbestand lagerbestand;
+    
     @ManyToOne
     @JoinColumn(name = "kategorie_id")
     private Kategorie kategorie;
+    
 
-    public Produkt(String id, String name, Kategorie kategorie, Lagerbestand lagerbestand) {
+    public Produkt(String id, String name, String produktBezeichnung, Kategorie kategorie, Lagerbestand lagerbestand, float preis) {
         Validate.notBlank(id);
         Validate.notBlank(name);
         Validate.notNull(lagerbestand);
         this.id = id;
         this.name = name;
         this.kategorie = kategorie;
+        this.produktBezeichnung = produktBezeichnung;
+        this.preis = preis;
         this.lagerbestand = lagerbestand;
     }
 
-    public Produkt(String name, Kategorie kategorie, Lagerbestand lagerbestand) {
-        this(UUID.randomUUID().toString(), name, kategorie, lagerbestand);
+    public Produkt(String name, String produktBezeichnung, Kategorie kategorie, Lagerbestand lagerbestand, float preis) {
+        this(UUID.randomUUID().toString(), name,produktBezeichnung,  kategorie, lagerbestand, preis);
     }
 
     protected Produkt() {
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
 
     public Kategorie getKategorie() {
         return kategorie;
@@ -53,11 +58,29 @@ public class Produkt {
         this.kategorie = kategorie;
     }
 
-    public Lagerbestand getLagerbestand() {
+    
+
+
+	public String getProduktBezeichnung() {
+		return produktBezeichnung;
+	}
+
+	public void setProduktBezeichnung(String produktBezeichnung) {
+		this.produktBezeichnung = produktBezeichnung;
+	}
+
+	public void setLagerbestand(Lagerbestand lagerbestand) {
+		this.lagerbestand = lagerbestand;
+	}
+
+	public Lagerbestand getLagerbestand() {
         return lagerbestand;
     }
+    
 
-    @Override
+
+
+	@Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;

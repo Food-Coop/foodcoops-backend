@@ -4,4 +4,5 @@ import de.dhbw.foodcoop.warehouse.domain.values.Einheit;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface SpringDataEinheitRepository extends JpaRepository<Einheit, String> {
+	Einheit findByName(String name);
 }

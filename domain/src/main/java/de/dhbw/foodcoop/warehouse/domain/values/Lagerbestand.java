@@ -1,15 +1,22 @@
 package de.dhbw.foodcoop.warehouse.domain.values;
 
-import org.apache.commons.lang3.Validate;
+import java.util.Objects;
+import java.util.UUID;
 
 import javax.persistence.Column;
-import javax.persistence.Embeddable;
+import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import java.util.Objects;
 
-@Embeddable
+import org.apache.commons.lang3.Validate;
+
+@Entity
 public class Lagerbestand {
+	
+	@Id
+	private String id;
+	
     @ManyToOne(optional = false)
     @JoinColumn(name = "einheit_id", referencedColumnName = "id")
     private Einheit einheit;
@@ -23,6 +30,7 @@ public class Lagerbestand {
         Validate.isTrue(istLagerbestand >= 0);
         Validate.isTrue(sollLagerbestand >= 0);
         Validate.isTrue(istLagerbestand <= sollLagerbestand);
+        this.id = UUID.randomUUID().toString();
         this.einheit = einheit;
         this.istLagerbestand = istLagerbestand;
         this.sollLagerbestand = sollLagerbestand;
@@ -42,8 +50,14 @@ public class Lagerbestand {
     public Double getSollLagerbestand() {
         return sollLagerbestand;
     }
+    
+    
 
-    @Override
+    public void setIstLagerbestand(Double istLagerbestand) {
+		this.istLagerbestand = istLagerbestand;
+	}
+
+	@Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;

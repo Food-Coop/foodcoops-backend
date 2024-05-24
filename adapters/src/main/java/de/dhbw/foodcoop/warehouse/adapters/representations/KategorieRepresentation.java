@@ -3,13 +3,32 @@ package de.dhbw.foodcoop.warehouse.adapters.representations;
 public final class KategorieRepresentation {
     private final String name;
     private String id;
+    private boolean isMixable;
 
-    public KategorieRepresentation(String id, String name) {
+    public KategorieRepresentation(String id, String name, boolean isMixable) {
         this.id = id;
+        this.isMixable = isMixable;
         this.name = name;
     }
+    
+    
+    
 
-    public String getId() {
+	public boolean isMixable() {
+		return isMixable;
+	}
+
+
+
+
+	public void setMixable(boolean isMixable) {
+		this.isMixable = isMixable;
+	}
+
+
+
+
+	public String getId() {
         return id;
     }
 

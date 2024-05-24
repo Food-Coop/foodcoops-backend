@@ -19,7 +19,8 @@ public class KategorieToRepresentationMapper implements Function<Kategorie, Kate
     @Override
     public KategorieRepresentation apply(Kategorie kategorie) {
         return new KategorieRepresentation(kategorie.getId(),
-                kategorie.getName()
+                kategorie.getName(),
+                kategorie.isMixable()
         );
     }
 }

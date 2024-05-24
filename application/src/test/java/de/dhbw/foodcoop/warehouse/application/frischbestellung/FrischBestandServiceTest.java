@@ -32,9 +32,9 @@ public class FrischBestandServiceTest {
 
     @Test
     void testAll() {
-        FrischBestand f0 = new FrischBestand("1234", "Kopfsalat", true, "DE", 20, e1, k1, (float) 1.5);
-        FrischBestand f1 = new FrischBestand("2345", "Eisbergsalat", true, "DE", 10, e1, k1, (float) 2.0);
-        FrischBestand f2 = new FrischBestand("3456", "Endiviensalat", false, "DE", 25, e1, k1, (float) 2.5);
+        FrischBestand f0 = new FrischBestand("1234", "Kopfsalat", true, "DE", 20, e1, k1, (float) 1.5, "e.E.", false);
+        FrischBestand f1 = new FrischBestand("2345", "Eisbergsalat", true, "DE", 10, e1, k1, (float) 2.0, "e.E.", false);
+        FrischBestand f2 = new FrischBestand("3456", "Endiviensalat", false, "DE", 25, e1, k1, (float) 2.5, "e.E.", false);
 
         when(mockRepository.alle()).thenReturn(Arrays.asList(f0, f1, f2));
         List<FrischBestand> whenReturn = toBeTested.all();
@@ -46,7 +46,7 @@ public class FrischBestandServiceTest {
 
     @Test
     void testDeleteById() {
-        FrischBestand frischBestand = new FrischBestand("1234", "Kopfsalat", true, "DE", 20, e1, k1, (float) 1.5);
+        FrischBestand frischBestand = new FrischBestand("1234", "Kopfsalat", true, "DE", 20, e1, k1, (float) 1.5, "e.E.", false);
 
         when(mockRepository.findeMitId(frischBestand.getId())).thenReturn(Optional.empty());
         toBeTested.deleteById(frischBestand.getId());
@@ -56,7 +56,7 @@ public class FrischBestandServiceTest {
 
     @Test
     void testFindById() {
-        FrischBestand frischBestand = new FrischBestand("1234", "Kopfsalat", true, "DE", 20, e1, k1, (float) 1.5);
+        FrischBestand frischBestand = new FrischBestand("1234", "Kopfsalat", true, "DE", 20, e1, k1, (float) 1.5, "e.E.", false);
 
         when(mockRepository.findeMitId(frischBestand.getId())).thenReturn(Optional.of(frischBestand));
         Optional<FrischBestand> whenReturn = toBeTested.findById(frischBestand.getId());
@@ -66,9 +66,9 @@ public class FrischBestandServiceTest {
 
     @Test
     void testSave() {
-        FrischBestand newFrischBestand = new FrischBestand("1234", "Kopfsalat", true, "DE", 20, e1, k1, (float) 1.5);
+        FrischBestand newFrischBestand = new FrischBestand("1234", "Kopfsalat", true, "DE", 20, e1, k1, (float) 1.5, "e.E.", false);
         
-        lenient().when(mockRepository.alle()).thenReturn(List.of(new FrischBestand("1234", "Kopfsalat", true, "DE", 20, e1, k1, (float) 1.5)));
+        lenient().when(mockRepository.alle()).thenReturn(List.of(new FrischBestand("1234", "Kopfsalat", true, "DE", 20, e1, k1, (float) 1.5, "e.E.", false)));
         lenient().when(mockRepository.speichern(newFrischBestand)).thenReturn(newFrischBestand);
         FrischBestand returnVal = toBeTested.save(newFrischBestand);
 
@@ -78,11 +78,11 @@ public class FrischBestandServiceTest {
         Assertions.assertEquals("DE", returnVal.getHerkunftsland());
         Assertions.assertEquals(20, returnVal.getGebindegroesse());
         Assertions.assertEquals(new Einheit("111", "Stück"), returnVal.getEinheit());
-        Assertions.assertEquals(new Kategorie("222", "Salat"), returnVal.getKategorie());
+        Assertions.assertEquals(new Kategorie("222", "Salat", true), returnVal.getKategorie());
         Assertions.assertEquals((float)1.5, returnVal.getPreis());
     }
 
     Einheit e1 = new Einheit("111", "Stück");
-    Kategorie k1 = new Kategorie("222", "Salat");
+    Kategorie k1 = new Kategorie("222", "Salat", true);
         
 }

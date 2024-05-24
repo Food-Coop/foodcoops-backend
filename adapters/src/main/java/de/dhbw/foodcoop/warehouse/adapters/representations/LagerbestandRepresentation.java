@@ -1,7 +1,7 @@
 package de.dhbw.foodcoop.warehouse.adapters.representations;
 
 public final class LagerbestandRepresentation {
-    private final EinheitRepresentation einheit;
+    private EinheitRepresentation einheit;
     private final Double istLagerbestand;
     private final Double sollLagerbestand;
 
@@ -21,5 +21,9 @@ public final class LagerbestandRepresentation {
 
     public EinheitRepresentation getEinheit() {
         return einheit;
+    }
+    
+    public void setEinheit(EinheitRepresentation einheit) {
+    	this.einheit = einheit;
     }
 }

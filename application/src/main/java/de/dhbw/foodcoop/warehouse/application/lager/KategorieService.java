@@ -40,4 +40,6 @@ public class KategorieService {
         }
         repository.deleteById(id);
     }
+    
+
 }
